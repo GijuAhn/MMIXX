@@ -1,6 +1,8 @@
 package com.a403.mmixx.genre.model.dto;
 
 import com.a403.mmixx.genre.model.entity.Genre;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -15,6 +17,8 @@ public class GenreDetailResponseDto {
 
     private String genreInfo; // 장르 설명
 
+    @QueryProjection
+    @Builder
     public GenreDetailResponseDto(Genre entity){
         this.genreSeq = entity.getGenreSeq();
         this.genreCategory = entity.getGenreCategory();

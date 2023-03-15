@@ -6,5 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GenreRepository extends JpaRepository<Genre, Integer> {
-//    List<GenreDetailResponseDto> findAllByGenreCategory(Integer genreCategory);
+
+    /* 장르 조회 */
+    List<Genre> findAllByGenreCategory(Integer genreCategory);
+
+    /* 프리셋 조회 */
+    Preset findByGenreSeq(Integer seq);
+
 }//JenreRepository
