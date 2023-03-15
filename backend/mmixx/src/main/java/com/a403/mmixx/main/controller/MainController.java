@@ -11,7 +11,7 @@ import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 @RestController
 public class MainController {
 	@GetMapping("/")
-	public ResponseEntity getMain() {
+	public ResponseEntity main() {
 		return ResponseEntity.ok().build();
 	}
 }
