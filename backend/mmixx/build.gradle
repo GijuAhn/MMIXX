@@ -30,6 +30,21 @@ dependencies {
 	// Swagger 2.9.2 버전
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// querydsl 플러그인 통합
+	implementation "com.querydsl:querydsl-jpa"
+	implementation "com.querydsl:querydsl-core"
+	implementation "com.querydsl:querydsl-collections"
+
+	// mysql 드라이버 버전에 맞게 드라이버 설치
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.30'
+
+	// lombok
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+
 }
 
 tasks.named('test') {
