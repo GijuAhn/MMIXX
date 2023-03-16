@@ -5,7 +5,7 @@ import com.a403.mmixx.music.model.entity.Music;
 import lombok.Getter;
 
 @Getter
-public class MusicDetailResponseDto {
+public class MusicListResponseDto {
 	private Integer musicSeq;
 	private String musicName;
 	private String musicUrl; // TODO: 데이터타입 수정?
@@ -13,9 +13,11 @@ public class MusicDetailResponseDto {
 	private Integer musicLength;
 	private String musicianName;
 	private String albumName;
+	private Integer mixed;
+	private Integer edited;
 
 
-	public MusicDetailResponseDto(Music entity) {
+	public MusicListResponseDto(Music entity) {
 		this.musicSeq = entity.getMusicSeq();
 		this.musicName = entity.getMusicName();
 		this.musicUrl = entity.getMusicUrl();
@@ -23,5 +25,7 @@ public class MusicDetailResponseDto {
 		this.musicLength = entity.getMusicLength();
 		this.musicianName = entity.getMusicianName();
 		this.albumName = entity.getAlbumName();
+		this.mixed = entity.getMixed();
+		this.edited = entity.getEdited();
 	}
 }
