@@ -1,6 +1,7 @@
 package com.a403.mmixx.music.model.dto;
 
 import com.a403.mmixx.music.model.entity.Music;
+import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Getter;
 
@@ -16,7 +17,7 @@ public class MusicListResponseDto {
 	private Integer mixed;
 	private Integer edited;
 
-
+	@QueryProjection
 	public MusicListResponseDto(Music entity) {
 		this.musicSeq = entity.getMusicSeq();
 		this.musicName = entity.getMusicName();
