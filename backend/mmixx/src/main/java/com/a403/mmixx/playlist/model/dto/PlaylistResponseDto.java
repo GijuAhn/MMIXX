@@ -10,7 +10,6 @@ public class PlaylistResponseDto {
 	private String playlistName;
 	private Boolean isPrivate;
 
-
 	public PlaylistResponseDto(Playlist entity) {
 		this.playlistSeq = entity.getPlaylistSeq();
 		this.userSeq = entity.getUserSeq();

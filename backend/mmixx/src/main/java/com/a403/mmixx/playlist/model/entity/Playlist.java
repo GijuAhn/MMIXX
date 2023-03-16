@@ -24,4 +24,5 @@ public class Playlist {
 	private String playlistName;
 	@Column(nullable = false)
 	private Boolean isPrivate;
+
 }
