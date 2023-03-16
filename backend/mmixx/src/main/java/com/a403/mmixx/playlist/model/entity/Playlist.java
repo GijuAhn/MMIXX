@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @DynamicInsert
+@Table(name = "playlist")
 public class Playlist {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +25,4 @@ public class Playlist {
 	private String playlistName;
 	@Column(nullable = false)
 	private Boolean isPrivate;
-
 }
