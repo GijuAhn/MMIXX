@@ -1,5 +1,7 @@
 package com.a403.mmixx.music.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
+import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.service.MusicService;
 
@@ -47,8 +50,8 @@ public class MusicController {
 	}
 
 	@PutMapping("/{seq}")
-	public ResponseEntity<?> updateMusic(@PathVariable Integer seq, @RequestBody String musicName) { // TODO: 수정 필요. update 안됨.
-		Music music = musicService.updateMusic(seq, musicName);
+	public ResponseEntity<?> updateMusic(@PathVariable Integer seq, @RequestBody MusicUpdateRequestDto reqeustDto) {
+		Music music = musicService.updateMusic(seq, reqeustDto);
 		if (music != null) {
 			return ResponseEntity.ok(seq);
 		} else {
