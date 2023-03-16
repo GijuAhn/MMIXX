@@ -8,6 +8,8 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,17 +45,8 @@ public class Music {
 	private Integer mixed;
 	private Integer edited;
 
-	@Builder
-	public Music(Integer userSeq, String musicName, String musicUrl, Integer musicLength, Integer genreSeq) { // TODO: update 안돼서 일단 이거 추가해봄.. 수정 필요
-		this.userSeq = userSeq;
-		this.musicName = musicName;
-		this.musicUrl = musicUrl;
-		this.musicLength = musicLength;
-		this.genreSeq = genreSeq;
-	}
-
-	public void updateMusic(String musicName){
-		this.musicName = musicName;
+	public void updateMusic(MusicUpdateRequestDto requestDto){
+		this.musicName = requestDto.getMusicName();
 	}
 
 }
