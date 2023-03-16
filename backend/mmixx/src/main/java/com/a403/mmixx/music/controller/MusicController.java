@@ -36,7 +36,7 @@ public class MusicController {
 
 	@GetMapping("/search")
 	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PageableDefault(size=10) Pageable pageable, MusicCondition condition) {
-		return ResponseEntity.ok(musicService.getMusicListByCondition(condition, pageable)); // TODO
+		return ResponseEntity.ok(musicService.getMusicListByCondition(condition, pageable));
 	}
 
 	@GetMapping("/{seq}")
@@ -47,7 +47,7 @@ public class MusicController {
 	@PostMapping
 	public ResponseEntity<?> registMusic() { // TODO
 		return ResponseEntity.ok().build();
-	}
+	} // TODO
 
 	@PutMapping("/{seq}")
 	public ResponseEntity<?> updateMusic(@PathVariable Integer seq, @RequestBody MusicUpdateRequestDto reqeustDto) {
