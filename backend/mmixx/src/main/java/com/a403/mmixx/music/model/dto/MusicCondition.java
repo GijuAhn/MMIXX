@@ -6,8 +6,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class MusicCondition {
-	private String title;
-	private String content;
-	private String writer;
+	private String filter;
+	private String order;
+	private String query;
 
 }
