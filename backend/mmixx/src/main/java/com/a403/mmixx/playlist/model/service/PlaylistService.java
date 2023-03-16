@@ -16,8 +16,12 @@ public class PlaylistService {
 	private final PlaylistRepository playlistRepository;
 
 	/* 전체 플레이리스트 조회 */
+	@Transactional(readOnly = true)
 	public List<PlaylistResponseDto> getAllPlaylist() {
-		return null;
+		return playlistRepository.findAllByIsPrivate(false)
+				.stream()
+				.map(PlaylistResponseDto::new)
+				.collect(Collectors.toList());
 	}
 
 	/* 플레이리스트 삭제 */

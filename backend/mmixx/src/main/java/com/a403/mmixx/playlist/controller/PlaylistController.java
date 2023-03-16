@@ -3,6 +3,7 @@ package com.a403.mmixx.playlist.controller;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistRequestDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistResponseDto;
+import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
 
 import io.swagger.annotations.Api;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api
+@Api(tags = "플레이리스트")
 @RestController
 @RequestMapping("/playlist")
 public class PlaylistController {
@@ -23,8 +24,8 @@ public class PlaylistController {
 	
 	@ApiOperation(value = "전체 플레이리스트 조회")
 	@GetMapping
-	public List<PlaylistResponseDto> getAllPlayList() {
-		return playlistService.getAllPlaylist();
+	public ResponseEntity<?> getAllPlaylist() {
+		return ResponseEntity.ok(playlistService.getAllPlaylist());
 	}
 
 	@ApiOperation(value = "새로운 플레이리스트 생성")
