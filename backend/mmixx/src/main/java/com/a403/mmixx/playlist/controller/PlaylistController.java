@@ -3,7 +3,6 @@ package com.a403.mmixx.playlist.controller;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistRequestDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistResponseDto;
-import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
 
 import io.swagger.annotations.Api;
@@ -43,7 +42,7 @@ public class PlaylistController {
 	@ApiOperation(value = "플레이리스트에 포함된 음악 목록 조회", notes = "해당 플레이리스트에 포함된 곡의 목록을 조회한다")
 	@GetMapping("/{playlistSeq}")
 	public ResponseEntity<List<PlaylistMusicDto>> getPlaylistMusic() {
-		return null;
+		return ResponseEntity.ok(playlistService.getPlaylistMusic());
 	}
 
 	@ApiOperation(value = "플레이리스트 앨범커버")

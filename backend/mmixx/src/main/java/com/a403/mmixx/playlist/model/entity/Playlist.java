@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +26,11 @@ public class Playlist {
 	private String playlistName;
 	@Column(nullable = false)
 	private Boolean isPrivate;
+
+	public Playlist(Long playlistSeq, Long userSeq, String playlistName, Boolean isPrivate, List<?> PlaylistMusic) {
+		this.playlistSeq = playlistSeq;
+		this.userSeq = userSeq;
+		this.playlistName = playlistName;
+		this.isPrivate = isPrivate;
+	}
 }
