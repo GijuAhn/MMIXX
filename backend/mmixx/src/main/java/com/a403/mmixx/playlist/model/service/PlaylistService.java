@@ -1,5 +1,6 @@
 package com.a403.mmixx.playlist.model.service;
 
+import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistResponseDto;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistRepository;
@@ -22,6 +23,10 @@ public class PlaylistService {
 				.stream()
 				.map(PlaylistResponseDto::new)
 				.collect(Collectors.toList());
+	}
+
+	public List<PlaylistMusicDto> getPlaylistMusic() {
+		return null;
 	}
 
 	/* 플레이리스트 삭제 */
