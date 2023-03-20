@@ -1,5 +1,6 @@
 package com.a403.mmixx.music.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,13 +25,22 @@ import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
+import com.a403.mmixx.music.model.service.AwsS3Service;
 import com.a403.mmixx.music.model.service.MusicService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/music")
+@RequiredArgsConstructor
 public class MusicController {
-	@Autowired
-	private MusicService musicService;
+	private final MusicService musicService;
+	private final AwsS3Service awsS3Service;
+
+	@GetMapping("/download/{fileName}")
+	public ResponseEntity<byte[]> downloadMusic(@PathVariable String fileName) throws IOException {
+		return awsS3Service.downloadMusic(fileName);
+	}
 
 	@GetMapping
 	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PageableDefault(size=10) Pageable pageable) {
