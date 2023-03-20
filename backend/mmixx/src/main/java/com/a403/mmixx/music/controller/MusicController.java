@@ -1,5 +1,6 @@
 package com.a403.mmixx.music.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
@@ -45,9 +48,17 @@ public class MusicController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> registMusic() { // TODO
-		return ResponseEntity.ok().build();
-	} // TODO
+	public ResponseEntity<?> registMusic(@RequestParam("file") List<MultipartFile> multipartFiles) {
+		// TODO uploadMusic, List<MultipartFile>, @requestBody...?
+		// 200 : 업로드 성공
+		// 401 : (권한 없음)
+		// 413 : 파일 용량 초과
+		// 415 : 지원하지 않는 확장자
+		// 500 : 업로드 실패
+
+		return ResponseEntity.ok(musicService.registMusic(multipartFiles));
+		// return ResponseEntity.ok().build();
+	}
 
 	@PutMapping("/{seq}")
 	public ResponseEntity<?> updateMusic(@PathVariable Integer seq, @RequestBody MusicUpdateRequestDto reqeustDto) {
