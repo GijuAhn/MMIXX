@@ -1,9 +1,14 @@
-function App() {
+import { ThemeProvider } from '@emotion/react';
+
+import theme from 'styles/theme'
+import { Router } from 'router'
+
+const App = () => {
   return (
-    <div>
-      {process.env.REACT_APP_URL}
-    </div>
+    <ThemeProvider theme={theme}>
+      <Router />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
