@@ -9,8 +9,8 @@ npm install react-router-dom
 # axios ^1.3.4
 npm install axios
 
-# styled-components ^5.3.9
-npm install --save styled-components
+# @emotion/react @emotion/styled ^11.10.6
+npm install @emotion/react @emotion/styled
 
 # recoil ^0.7.7
 npm install recoil
