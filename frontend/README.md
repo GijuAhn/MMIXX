@@ -9,7 +9,7 @@ npm install react-router-dom
 # axios ^1.3.4
 npm install axios
 
-# @emotion/react @emotion/styled
+# @emotion/react @emotion/styled ^11.10.6
 npm install @emotion/react @emotion/styled
 
 # recoil ^0.7.7
