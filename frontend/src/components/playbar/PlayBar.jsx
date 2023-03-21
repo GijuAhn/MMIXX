@@ -1,16 +1,18 @@
 import styled from 'styled-components'
 import { useRecoilState } from 'recoil';
+import { useLocation } from 'react-router-dom';
 
 import { defaultWidth } from 'atom/atom';
 
 const PlayBar = () => {
+  const location = useLocation()
   const [playbarWidth, setPlaybarWidth] = useRecoilState(defaultWidth)
 
   window.addEventListener('resize', () => {
     setPlaybarWidth(window.innerWidth - 300);
   })
- 
-  if (window.location.pathname === '/mix' || window.location.pathname === '/' ) {
+  
+  if (location.pathname === '/mix' || location.pathname === '/' ) {
     return null
   }
 

@@ -5,8 +5,6 @@ import GlobalStyle from "styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
 
 import { Router } from 'router'
-import { NavBar } from "components/NavBar";
-import { PlayBar } from "components/PlayBar";
 
 const App = () => {
 
@@ -14,9 +12,7 @@ const App = () => {
     <RecoilRoot>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <NavBar />
         <Router />
-        <PlayBar />
       </ThemeProvider>
     </RecoilRoot>
   );
