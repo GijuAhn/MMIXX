@@ -1,17 +1,18 @@
-import styled from 'styled-components'
+// import styled from 'styled-components'
+import { Content } from 'components/_base/Content';
 
 const Main = () => {
   return (
-    <MainBody>
+    <Content>
       <h2>Main페이지</h2>
-    </MainBody>
+    </Content>
   );
 };
 
-const MainBody = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.color.darkAlt }
-`
+// const MainBody = styled.div`
+//   width: 100%;
+//   height: 100vh;
+//   background-color: ${({ theme }) => theme.palette.darkAlt }
+// `
 
 export default Main;
