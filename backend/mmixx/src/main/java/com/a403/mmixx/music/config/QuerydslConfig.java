@@ -1,4 +1,4 @@
-package com.a403.mmixx.music.model;
+package com.a403.mmixx.music.config;
 
 import javax.persistence.EntityManager;
 
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-public class QuerydslConfiguration {
+public class QuerydslConfig {
 	private final EntityManager em;
 
 	@Bean
