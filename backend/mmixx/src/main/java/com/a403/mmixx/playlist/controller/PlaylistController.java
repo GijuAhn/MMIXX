@@ -2,7 +2,7 @@ package com.a403.mmixx.playlist.controller;
 
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistRequestDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistResponseDto;
+import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
 
 import io.swagger.annotations.Api;
@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/playlist")
 public class PlaylistController {
-
 	@Autowired
 	private PlaylistService playlistService;
 	
@@ -35,7 +34,7 @@ public class PlaylistController {
 	
 	@ApiOperation(value = "플레이리스트 삭제")
 	@DeleteMapping("/{playlistSeq}")
-	public void deletePlaylist(@PathVariable("playlistSeq") Long playlistSeq) {
+	public void deletePlaylist(@PathVariable Long playlistSeq) {
 		playlistService.deletePlaylist(playlistSeq);
 	}
 
@@ -47,8 +46,8 @@ public class PlaylistController {
 
 	@ApiOperation(value = "플레이리스트 앨범커버")
 	@GetMapping("/{playlistSeq}/1")
-	public String getPlaylistCover() {
-		return "플레이리스트 커버 조회";
+	public String getPlaylistCover(@PathVariable("playlistSeq") Long seq) {
+		return playlistService.getPlaylistCover(seq);
 	}
 
 	@ApiOperation(value = "플레이리스트에 음악 추가")
@@ -59,13 +58,7 @@ public class PlaylistController {
 
 	@ApiOperation(value = "플레이리스트 상세편집 (수정)")
 	@PutMapping("/detail/{playlistSeq}")
-	public ResponseEntity<?> updatePlaylist() {
-		return null;
-	}
-
-	@ApiOperation(value = "플레이리스트 상세편집 (삭졔)")
-	@DeleteMapping("/detail/{playlistSeq}")
-	public ResponseEntity<?> deletePlaylist() {
+	public ResponseEntity<?> updatePlaylist(@PathVariable("playlistSeq") Long seq) {
 		return null;
 	}
 

@@ -1,5 +1,7 @@
 package com.a403.mmixx.playlist.model.entity;
 
+import com.a403.mmixx.music.model.entity.Music;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

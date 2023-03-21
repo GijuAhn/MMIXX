@@ -53,7 +53,7 @@ dependencies {
 	// lombok
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
-
+	
 	// spring-security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -70,6 +70,9 @@ dependencies {
 
 	// json
 	implementation 'org.json:json:20200518'
+
+	// AWS 접근
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }
 
