@@ -1,9 +1,21 @@
-function App() {
+import theme from "styles/theme";
+import GlobalStyle from "styles/GlobalStyle";
+import { ThemeProvider } from "styled-components";
+
+import { Router } from 'router'
+import { NavBar } from "components/navbar";
+import { PlayBar } from "components/playbar";
+
+const App = () => {
+
   return (
-    <div>
-      {process.env.REACT_APP_URL}
-    </div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <NavBar />
+      <Router />
+      <PlayBar />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
