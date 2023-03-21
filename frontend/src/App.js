@@ -1,3 +1,5 @@
+import { RecoilRoot } from "recoil";
+
 import theme from "styles/theme";
 import GlobalStyle from "styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
@@ -9,12 +11,14 @@ import { PlayBar } from "components/playbar";
 const App = () => {
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <NavBar />
-      <Router />
-      <PlayBar />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <NavBar />
+        <Router />
+        <PlayBar />
+      </ThemeProvider>
+    </RecoilRoot>
   );
 };
 

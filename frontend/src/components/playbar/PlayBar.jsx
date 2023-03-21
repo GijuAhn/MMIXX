@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const PlayBar = () => {
+
   if (window.location.pathname === '/mix' || window.location.pathname === '/' ) {
     return null
   }
@@ -14,7 +15,7 @@ const PlayBar = () => {
 
 
 const Body = styled.div`
-  width: ${window.innerWidth - 300}px;
+  width: ${props => window.innerWidth - 300}px;
   border: 1px solid blue;
   position: fixed;
   right: 0;
