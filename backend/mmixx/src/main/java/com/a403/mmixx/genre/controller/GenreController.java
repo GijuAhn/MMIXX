@@ -21,13 +21,13 @@ public class GenreController {
     @ApiOperation(value = "전체 장르 조회(대분류)", notes = "대분류 장르 리스트 가져오기 ex) pop")
     @GetMapping
     public ResponseEntity<?> getGenreList() {
-        return ResponseEntity.ok(genreService.getJenreList());
+        return ResponseEntity.ok(genreService.getGenreList());
     }//getGenreList
 
     @ApiOperation(value = "세부 장르 조회", notes = "장르의 세부 장르 리스트 가져오기 (가져올 장르 genreSeq)")
     @GetMapping("/{genreCategory}")
     public ResponseEntity<?> getGenreDetailList(@PathVariable("genreCategory") Integer seq) {
-        return ResponseEntity.ok(genreService.getJenreDetailList(seq));
+        return ResponseEntity.ok(genreService.getGenreDetailList(seq));
     }//getGenreList
 
     @ApiOperation(value = "장르 프리셋 조회", notes = "세부 장르에 해당하는 프리셋 가져오기")
