@@ -1,14 +1,27 @@
 import { Avatar } from '@mui/material'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+
+import logo from 'assets/logo.png'
 
 const NavBar = () => {
   return (
     <Nav>
       <h2>NavBar</h2>
+      <image src={logo} />
       <Avatar 
         src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         sx={{ width: 150, height: 150 }}
       />
+      <Link to="mix">
+        Mix로 이동하기
+      </Link>
+      <Link to="playlist">
+        playlist으로 이동하기
+      </Link>
+      <Link to="mymusic">
+        Mymusic으로 이동하기
+      </Link>
       <LogoutBtn>
         로그아웃
       </LogoutBtn>
