@@ -9,8 +9,8 @@ import lombok.Getter;
 public class MusicListResponseDto {
 	private Integer musicSeq;
 	private String musicName;
-	private String musicUrl; // TODO: 데이터타입 수정?
-	private String coverImage; // TODO: 데이터타입 수정?
+	private String musicUrl;
+	private String coverImage;
 	private Integer musicLength;
 	private String musicianName;
 	private String albumName;
