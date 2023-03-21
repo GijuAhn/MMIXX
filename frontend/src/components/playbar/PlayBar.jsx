@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const PlayBar = () => {
-  if (window.location.pathname === '/mix') {
+  if (window.location.pathname === '/mix' || window.location.pathname === '/' ) {
     return null
   }
 
