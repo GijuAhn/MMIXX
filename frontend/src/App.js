@@ -1,9 +1,10 @@
 import theme from "styles/theme";
+import GlobalStyle from "styles/GlobalStyle";
+import { ThemeProvider } from "styled-components";
 
 import { Router } from 'router'
-import GlobalStyle from "styles/GlobalStyle";
 import { NavBar } from "components/navbar";
-import { ThemeProvider } from "styled-components";
+import { PlayBar } from "components/playbar";
 
 const App = () => {
 
@@ -12,6 +13,7 @@ const App = () => {
       <GlobalStyle />
       <NavBar />
       <Router />
+      <PlayBar />
     </ThemeProvider>
   );
 };

@@ -1,5 +1,5 @@
 const theme = {
-  color: {
+  palette: {
     light: '#EFEEE0',
     dark: '#1D2123',
     secondary: '#FACD66',
