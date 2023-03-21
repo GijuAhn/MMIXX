@@ -4,6 +4,7 @@ const NavBar = () => {
   return (
     <Nav>
       <h2>NavBar</h2>
+      <ProfileDiv />
     </Nav>
   )
 }
@@ -11,8 +12,12 @@ const NavBar = () => {
 const Nav = styled.nav`
   width: 300px;
   height: 100vh;
-  background-color: ${({ theme }) => theme.color.dark };
+  background-color: ${({ theme }) => theme.palette.dark };
   float: left;
+`
+
+const ProfileDiv = styled.div`
+
 `
 
 export default NavBar;

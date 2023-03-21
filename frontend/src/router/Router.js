@@ -1,7 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { Main } from 'pages'
-import { Playlist } from 'pages'
+import {
+  Main, 
+  Playlist, 
+  Mix
+} from 'pages'
 
 const index = () => {
   return (
@@ -9,6 +12,7 @@ const index = () => {
       <Routes>
         <Route path="/main" element={<Main />} />
         <Route path="/playlist" element={<Playlist />} />
+        <Route path="/mix" element={<Mix />} />
       </Routes>
     </BrowserRouter>
   );
