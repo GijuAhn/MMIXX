@@ -1,4 +1,4 @@
-package com.a403.mmixx.music;
+package com.a403.mmixx.music.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
