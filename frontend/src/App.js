@@ -1,9 +1,25 @@
-function App() {
+import { RecoilRoot } from "recoil";
+
+import theme from "styles/theme";
+import GlobalStyle from "styles/GlobalStyle";
+import { ThemeProvider } from "styled-components";
+
+import { Router } from 'router'
+import { NavBar } from "components/navbar";
+import { PlayBar } from "components/playbar";
+
+const App = () => {
+
   return (
-    <div>
-      {process.env.REACT_APP_URL}
-    </div>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <NavBar />
+        <Router />
+        <PlayBar />
+      </ThemeProvider>
+    </RecoilRoot>
   );
-}
+};
 
 export default App;
