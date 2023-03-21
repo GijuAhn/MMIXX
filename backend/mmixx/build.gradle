@@ -57,6 +57,9 @@ dependencies {
 	// AWS 접근
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+	// Audio 파일 메타데이터 추출: mp3
+	implementation 'com.mpatric:mp3agic:0.9.1'
+
 }
 
 tasks.named('test') {

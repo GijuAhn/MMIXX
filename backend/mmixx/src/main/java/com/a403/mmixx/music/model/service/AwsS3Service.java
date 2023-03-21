@@ -1,13 +1,19 @@
 package com.a403.mmixx.music.model.service;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
+import com.a403.mmixx.music.model.entity.Music;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -53,7 +59,8 @@ public class AwsS3Service {
 		return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
 	}
 
-	public List<String> uploadMusic(List<MultipartFile> multipartFiles) {
+
+	public List<String> uploadMusicToS3(List<MultipartFile> multipartFiles) {
 		List<String> fileList = new ArrayList<>();
 
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -63,10 +70,10 @@ public class AwsS3Service {
 			metadata.setContentLength(file.getSize());
 			metadata.setContentType(file.getContentType());
 
-			try(InputStream inputStream = file.getInputStream()) {
+			try (InputStream inputStream = file.getInputStream()) {
 				amazonS3.putObject(new PutObjectRequest(bucket + MUSIC_FOLDER, fileName, inputStream, metadata)
-					.withCannedAcl(CannedAccessControlList.PublicRead));
-			} catch(IOException e) {
+						.withCannedAcl(CannedAccessControlList.PublicRead));
+			} catch (IOException e) {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
 			}
 
@@ -77,11 +84,11 @@ public class AwsS3Service {
 		return fileList;
 	}
 
+
 	public void deleteMusic(String fileName) {
 		// amazonS3.deleteObject(bucket, fileName);
 		amazonS3.deleteObject(new DeleteObjectRequest(bucket + MUSIC_FOLDER, fileName));
 	}
-
 
 
 	private MediaType contentType(String keyName) {
@@ -101,11 +108,47 @@ public class AwsS3Service {
 		return UUID.randomUUID().toString().concat(getFileExtension(fileName));
 	}
 
+
 	private String getFileExtension(String fileName) { // file 형식이 잘못된 경우를 확인하기 위해 만들어진 로직이며, 파일 타입과 상관없이 업로드할 수 있게 하기 위해 .의 존재 유무만 판단하였습니다.
 		try {
 			return fileName.substring(fileName.lastIndexOf("."));
 		} catch (StringIndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
 		}
+	}
+
+	public List<String> uploadCoverImageToS3(List<MultipartFile> multipartFiles) {
+		List<String> fileList = new ArrayList<>();
+
+		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
+		multipartFiles.forEach(file -> {
+			String fileName = createFileName(file.getOriginalFilename()) + "-COVER-IMAGE";
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(file.getSize());
+			metadata.setContentType(file.getContentType());
+			//	ID3v2Tag 커버 이미지 추출
+			try {
+				Mp3File mp3file = new Mp3File(file.getOriginalFilename());
+				InputStream inputStream = file.getInputStream();
+				if (mp3file.hasId3v2Tag()) {
+					ID3v2 id3v2Tag = mp3file.getId3v2Tag();
+					byte[] coverImageData = id3v2Tag.getAlbumImage();
+
+					if (coverImageData != null) {
+						System.out.println("Have album image data, length: " + coverImageData.length + " bytes");
+						System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
+					}
+				}
+				amazonS3.putObject(new PutObjectRequest(bucket + IMAGE_FOLDER, fileName, inputStream, metadata)
+						.withCannedAcl(CannedAccessControlList.PublicRead));
+
+			} catch (InvalidDataException | UnsupportedTagException | IOException e) {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+			}
+
+			fileList.add(amazonS3.getUrl(bucket + IMAGE_FOLDER, fileName).toString());
+		});
+
+		return fileList;
 	}
 }
