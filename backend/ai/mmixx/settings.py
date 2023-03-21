@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,8 +32,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # apps
+    'style_transfer',
     'music',
-    'image',
+    # 'image',
+
+    'storages',
+
+    # API
+    'rest_framework',
+    'rest_framework_swagger',
+
+    # basic
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,3 +136,21 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+########################## modified ###############################
+# DL model 불러오는 code
+MODELS = os.path.join(BASE_DIR, 'music/models')
+
+#### AWS
+AWS_ACCESS_KEY_ID = 'AKIAY2NHL6NEZPWL57H5'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_REGION = 'ap-northeast-2'
+
+## S3 Storages
+AWS_STORAGE_BUCKET_NAME = 'bucket-mp3-file-for-mmixx'
+AWS_S3_CUSTOM_DOMAIN = ''
+AWS_S3_OBJECT_PARAMETERS = {
+
+}
+DEFAULT_FILE_STORAGE = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
