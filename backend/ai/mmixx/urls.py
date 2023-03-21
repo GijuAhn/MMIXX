@@ -16,6 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.conf.urls import url, include
+from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+from music import views
+
+import music.serializers
+import music.views as views
+
+router = routers.DefaultRouter()
+router.register('music', music.serializers.MusicViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # rest_framework 
+    path('api-auth/', include('rest_framework.urls')),
+    url('api1/doc/', get_swagger_view(title='Rest API Document')),
+    url('api1/', include('music.urls')),
+    # APIView 클래스를 as_view로 라우팅 -> views에서 불러와 처리함
+    # url('api1/music', views.MusicAPIView.as_view()),
 ]
