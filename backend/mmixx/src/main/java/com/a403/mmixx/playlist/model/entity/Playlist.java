@@ -27,7 +27,7 @@ public class Playlist {
 	@Column(nullable = false)
 	private Boolean isPrivate;
 
-	public Playlist(Long playlistSeq, Long userSeq, String playlistName, Boolean isPrivate, List<?> PlaylistMusic) {
+	public void updatePlaylist(Long playlistSeq, Long userSeq, String playlistName, Boolean isPrivate) {
 		this.playlistSeq = playlistSeq;
 		this.userSeq = userSeq;
 		this.playlistName = playlistName;

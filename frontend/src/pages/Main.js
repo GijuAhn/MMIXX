@@ -1,5 +1,5 @@
 // import styled from 'styled-components'
-import { Content } from 'components/_base/Content';
+import { Content } from 'components/Content';
 
 const Main = () => {
   return (
