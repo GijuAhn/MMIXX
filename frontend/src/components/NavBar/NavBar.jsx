@@ -1,32 +1,29 @@
 import { Avatar } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { StyleLink } from 'components/Common'
 import styled from 'styled-components'
 
-import logo from 'assets/logo.png'
 
 const NavBar = () => {
   return (
     <Nav>
-      <h2>NavBar</h2>
-      <image src={logo} />
-      <Avatar 
+      <NavAvatar 
         src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
         sx={{ width: 150, height: 150 }}
       />
-      <Link to="mix">
-        Mix로 이동하기
-      </Link>
-      <Link to="playlist">
+      <StyleLink to="mix">
+        Mix 로 이동하기
+      </StyleLink>
+      <StyleLink to="playlist">
         playlist으로 이동하기
-      </Link>
-      <Link to="mymusic">
+      </StyleLink>
+      <StyleLink to="mymusic">
         Mymusic으로 이동하기
-      </Link>
+      </StyleLink>
       <LogoutBtn>
         로그아웃
       </LogoutBtn>
       {/* <ProfileDiv /> */}
-    </Nav>
+    </Nav>  
   )
 }
 
@@ -40,17 +37,17 @@ const Nav = styled.nav`
   flex-direction: column;
 `
 
-// const ProfileDiv = styled.div`
-//   border: 1px solid blue;
-//   width: 30px;
-//   height: 30px;
-//   border-radius: 50%;
-// `
+const NavAvatar = styled(Avatar)`
+  margin: 20px;
+`
 
 const LogoutBtn = styled.button`
   background-color: ${({ theme }) => theme.palette.dark };
   border: none;
-  
+  position: fixed;
+  bottom: 0;
+  padding: 20px 0;
+
   &: hover {
     color: red;
     cursor: pointer;
