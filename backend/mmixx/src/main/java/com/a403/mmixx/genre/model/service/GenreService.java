@@ -3,7 +3,6 @@ package com.a403.mmixx.genre.model.service;
 import com.a403.mmixx.genre.model.dto.GenreDetailResponseDto;
 import com.a403.mmixx.genre.model.dto.GenreResponseDto;
 import com.a403.mmixx.genre.model.dto.PresetResponseDto;
-import com.a403.mmixx.genre.model.entity.Genre;
 import com.a403.mmixx.genre.model.entity.GenreRepository;
 import com.a403.mmixx.genre.model.entity.Preset;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ public class GenreService {
     private final GenreRepository genreRepository;
 
     /* 장르 리스트 가져오기 */
-    public List<GenreResponseDto> getJenreList() {
+    public List<GenreResponseDto> getGenreList() {
 
         return genreRepository.findAllByGenreCategory(null)
                 .stream()
@@ -28,7 +27,7 @@ public class GenreService {
     }//getJenreList
 
     /* 세부 장르 리스트 가져오기 */
-    public List<GenreDetailResponseDto> getJenreDetailList(Integer genreCategory) {
+    public List<GenreDetailResponseDto> getGenreDetailList(Integer genreCategory) {
 
         return genreRepository.findAllByGenreCategory(genreCategory)
                 .stream()
