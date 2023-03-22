@@ -34,7 +34,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # apps
     'style_transfer',
-    'music',
+    # 'music',
+    # 'music.apps.MusicConfig',
     # 'image',
 
     'storages',
@@ -148,9 +149,9 @@ AWS_REGION = 'ap-northeast-2'
 
 ## S3 Storages
 AWS_STORAGE_BUCKET_NAME = 'bucket-mp3-file-for-mmixx'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_S3_CUSTOM_DOMAIN = ''
 AWS_S3_OBJECT_PARAMETERS = {
-
+    # 'ContentType' : 'image/jepg'
 }
-DEFAULT_FILE_STORAGE = ''
-MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
