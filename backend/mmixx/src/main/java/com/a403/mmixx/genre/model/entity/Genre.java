@@ -30,4 +30,4 @@ public class Genre {
     @Column(length = 500)
     private String genreInfo; // 장르 설명
 
-}//Jenre
+}//Genre
