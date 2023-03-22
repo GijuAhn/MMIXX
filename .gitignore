@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application-oauth.properties
+application-aws.yml
 
 ### STS ###
 .apt_generated
