@@ -4,7 +4,7 @@ import styled from "styled-components";
 const MusicList = () => {
   // if (window.location.pathname === "/mix" || window.location.pathname === "/") {
   //   return null;
-  // }
+  // }s
   const [loading, setLoading] = useState(true);
   const [musicList, setMusicList] = useState([]);
 
