@@ -1,5 +1,6 @@
 // import { useState } from "react";
 import styled from "styled-components";
+// import temp_img from "assets/logo.png";
 
 const MusicListItem = ({
   musicSeq,
@@ -16,7 +17,14 @@ const MusicListItem = ({
   const onMouseOver = () => {};
   return (
     <MusicItemBlock onClick={onClick} onMouseOver={onMouseOver}>
-      <img src={coverImage === null ? null : coverImage} alt=""></img>
+      <img
+        src={coverImage === "assets/logo.png" ? null : coverImage}
+        alt=""
+      ></img>
+      {/* <img
+        src={coverImage === "assets/logo.png" ? temp_img : coverImage}
+        alt=""
+      ></img> */}
       <span>{null}</span>
       <span>{musicName}</span>
       <span>{musicianName}</span>
