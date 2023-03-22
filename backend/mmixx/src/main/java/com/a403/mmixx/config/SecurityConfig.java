@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/","/css/**","/images/**","/js/**"
                         ,"/h2-console/**", "/profile").permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
