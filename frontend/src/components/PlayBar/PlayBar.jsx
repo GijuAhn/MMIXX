@@ -1,34 +1,26 @@
 import styled from 'styled-components'
-import { useRecoilState } from 'recoil';
 import { useLocation } from 'react-router-dom';
-
-import { defaultWidth } from 'atom/atom';
 
 const PlayBar = () => {
   const location = useLocation()
-  const [playbarWidth, setPlaybarWidth] = useRecoilState(defaultWidth)
 
-  window.addEventListener('resize', () => {
-    setPlaybarWidth(window.innerWidth - 300);
-  })
-  
   if (location.pathname === '/mix' || location.pathname === '/' ) {
     return null
   }
 
   return (
-    <Body playbarWidth={playbarWidth}>
+    <Div>
       <h2>PlayBar</h2>
-    </Body>
+    </Div>
   );
 };
 
 
-const Body = styled.div`
-  width: ${({playbarWidth}) => playbarWidth}px;
+const Div = styled.div`
+  width: 100%;
   border: 1px solid blue;
   position: fixed;
-  right: 0;
+  left: 300px;
   bottom: 0;
   height: 150px;
   filter: drop-shadow(0px -25px 100px rgba(16, 16, 16, 0.51));
