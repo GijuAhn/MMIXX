@@ -5,7 +5,7 @@ import os
 
 
 class MusicConfig(AppConfig):
-    path = os.path.join(settings.MODELS, 'models.p')
+    # path = os.path.join(settings.MODELS, 'models.p')
     name = 'music'
     # MODEL_PATH = Path("model")
     # predictor = Predictor(model_path = )
