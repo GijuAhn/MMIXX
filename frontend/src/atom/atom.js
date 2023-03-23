@@ -1,11 +1,17 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
-export const defaultWidth = atom({
-  key: 'defaultWidth',
-  default: window.innerWidth - 300,
+export const isLogin = atom({
+  key: 'isLogin',
+  default: false,
 })
 
-export const changePlaybarWidth = selector({
-  key: 'changePlaybarWidth',
-  get: ({get}) => { return get(defaultWidth) }
+export const userInfo = atom({
+  key: 'userInfo',
+  default: null,
+  name: 'John Smith'
 })
+
+// export const changeDefaultWidth = selector({
+//   key: 'changeDefaultWidth',
+//   get: ({get}) => { return get(defaultWidth) }
+// })

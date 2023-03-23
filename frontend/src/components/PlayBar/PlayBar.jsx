@@ -9,20 +9,20 @@ const PlayBar = () => {
   }
 
   return (
-    <Div>
+    <Wrapper>
       <h2>PlayBar</h2>
-    </Div>
+    </Wrapper>
   );
 };
 
-
-const Div = styled.div`
-  border: 1px solid blue;
+const Wrapper = styled.div`
+  height: 100px;
   position: fixed;
-  left: 200px;
+  float: right;
   bottom: 0;
-  height: 150px;
-  filter: drop-shadow(0px -25px 100px rgba(16, 16, 16, 0.51));
+  left: 200px;
+  width: calc(100% - 200px);
+  min-width: 800px;
 `
 
 export default PlayBar;
