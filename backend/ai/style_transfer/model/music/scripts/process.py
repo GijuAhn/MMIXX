@@ -5,6 +5,8 @@ import resampy
 import argparse
 import torchaudio
 import numpy as np
+from pydub import AudioSegment
+import wave
 
 import sys
 sys.path.append("C:\Pjt_2\S08P22A403\\backend\\ai\style_transfer\model\music")
@@ -93,32 +95,57 @@ if __name__ == "__main__":
         system.to("cuda")
 
     # load audio data
-    x, x_sr = torchaudio.load(args.input)
-    r, r_sr = torchaudio.load(args.reference)
+    music_path = args.input
+    preset_path = args.reference
+
+    music_response = s3.get_object(Bucket=bucket_name, Key=music_path)
+    preset_response = s3.get_object(Bucket=bucket_name, Key=preset_path)
+
+    music_bytes = music_response['Body']
+    full_music_bytes = b''.join(music_bytes)
+    with wave.open("target.wav", "wb") as inputfile:
+        inputfile.setsampwidth(2)
+        inputfile.setnchannels(1)
+        inputfile.setframerate(44100)
+        inputfile.writeframesraw(full_music_bytes)
+
+    preset_bytes = preset_response['Body']
+    full_preset_bytes = b''.join(preset_bytes)
+    with wave.open("preset.wav", "wb") as presetfile:
+        presetfile.setsampwidth(2)
+        presetfile.setnchannels(1)
+        presetfile.setframerate(44100)
+        presetfile.writeframesraw(full_preset_bytes)
+
+    x, x_sr = torchaudio.load('target.wav')
+    r, r_sr = torchaudio.load('preset.wav')
+    # print(f'x : {x}, x_sr : {x_sr}')
+    # print(f'r : {r}, r_sr : {r_sr}')
+    # print('되나되나되나되나')
 
     # resample if needed
     if x_sr != 24000:
         print("Resampling to 24000 Hz...")
-        x_24000 = torch.tensor(resampy.resample(x.reshape(-1).numpy(), x_sr, 24000))
+        x_24000 = torch.tensor(resampy.resample(x.view(-1).numpy(), x_sr, 24000))
         x_24000 = x_24000.view(1, -1)
     else:
         x_24000 = x
 
     if r_sr != 24000:
         print("Resampling to 24000 Hz...")
-        r_24000 = torch.tensor(resampy.resample(r.reshape(-1).numpy(), r_sr, 24000))
+        r_24000 = torch.tensor(resampy.resample(r.view(-1).numpy(), r_sr, 24000))
         r_24000 = r_24000.view(1, -1)
     else:
         r_24000 = r
 
     # peak normalize to -12 dBFS
-    x_24000 = x_24000[0:1, : 24000 * 300]
+    x_24000 = x_24000[0:1, : 24000 * 5]
     x_24000 /= x_24000.abs().max()
     x_24000 *= 10 ** (-12 / 20.0)
     x_24000 = x_24000.view(1, 1, -1)
 
     # peak normalize to -12 dBFS
-    r_24000 = r_24000[0:1, : 24000 * 300]
+    r_24000 = r_24000[0:1, : 24000 * 5]
     r_24000 /= r_24000.abs().max()
     r_24000 *= 10 ** (-12 / 20.0)
     r_24000 = r_24000.view(1, 1, -1)
@@ -171,8 +198,8 @@ if __name__ == "__main__":
 
     # save to disk
     dirname = os.path.dirname(args.input)
-    filename = os.path.basename(args.input).replace(".wav", "")
-    reference = os.path.basename(args.reference).replace(".wav", "")
+    filename = os.path.basename(args.input).replace(".mp3", "")
+    reference = os.path.basename(args.reference).replace(".mp3", "")
     out_filepath = os.path.join(dirname, f"{filename}_out_ref={reference}.wav")
     in_filepath = os.path.join(dirname, f"{filename}_in.wav")
     print(f"Saved output to {out_filepath}")
@@ -182,7 +209,7 @@ if __name__ == "__main__":
     # path_name = f'{filename}_out_ref={reference}.wav'
     # basic_key = 'https://bucket-mp3-file-for-mmixx.s3.ap-northeast-2.amazonaws.com/music'
     s3.put_object(Bucket=bucket_name,
-              Key="test1",
+              Key=f"music/{out_filepath}",
               Body=buffer.getvalue())
 
     # get_path("test1")

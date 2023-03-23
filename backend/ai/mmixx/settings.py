@@ -63,6 +63,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# # Set the base URL for the development server
+# if DEBUG:
+#     BASE_URL = 'http://127.0.0.1:8000/django'
+#     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+# else:
+#     BASE_URL = 'https://127.0.0.1:8000'
+#     ALLOWED_HOSTS = ['127.0.0.1:8000']
+
 ROOT_URLCONF = 'mmixx.urls'
 
 TEMPLATES = [
