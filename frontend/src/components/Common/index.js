@@ -1,1 +1,1 @@
-export { default as StyleLink } from './StyleLink'
+export { default as PlainBtn } from './PlainBtn'
