@@ -42,7 +42,8 @@ const MusicIcon = ({ musicSeq, iconName }) => {
     console.log("...music seq =", musicSeq);
   };
   return (
-    <div
+    //https://snupi.tistory.com/196
+    <button
       // onMouseEnter={onMouseEnter}
       // onMouseLeave={onMouseLeave}
       onMouseOver={onMouseOver}
@@ -50,7 +51,7 @@ const MusicIcon = ({ musicSeq, iconName }) => {
       onClick={onClick}
     >
       {isHover ? <div>{iconName}</div> : <img src={icon} alt=""></img>}
-    </div>
+    </button>
   );
 };
 
