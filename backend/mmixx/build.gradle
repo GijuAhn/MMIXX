@@ -76,6 +76,10 @@ dependencies {
 
 	// Audio 파일 메타데이터 추출: mp3
 	implementation 'com.mpatric:mp3agic:0.9.1'
+	implementation group: 'org.apache.tika', name: 'tika-parsers', version: '1.28.5'
+	implementation group: 'org.apache.tika', name: 'tika-core', version: '1.28.5'
+	implementation group: 'org', name: 'jaudiotagger', version: '2.0.3'
+
 
 }
 
