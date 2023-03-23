@@ -1,53 +1,85 @@
 // import { useState } from "react";
 import styled from "styled-components";
 // import temp_img from "assets/logo.png";
+// import PropTypes from "prop-types";
+import MusicIcon from "./MusicIcon";
 
 const MusicListItem = ({
   musicSeq,
   coverImage,
+  mixed,
   musicName,
   musicianName,
   albumName,
   musicLength,
-  musicUrl,
-  mixed,
-  edited,
+  // musicUrl,
+  // edited,
 }) => {
-  const onClick = () => {};
-  const onMouseOver = () => {};
+  // const onClick = () => {
+  //   console.log("...musicSeq:", musicSeq);
+  // };
+  // const onMouseOver = () => {};
   return (
-    <MusicItemBlock onClick={onClick} onMouseOver={onMouseOver}>
-      <img
-        src={coverImage === "assets/logo.png" ? null : coverImage}
-        alt=""
-      ></img>
-      {/* <img
-        src={coverImage === "assets/logo.png" ? temp_img : coverImage}
-        alt=""
-      ></img> */}
-      <span>{null}</span>
-      <span>{musicName}</span>
-      <span>{musicianName}</span>
-      <span>{albumName}</span>
-      <span>
-        {Math.floor((musicLength * 1000) / 60)}:{(musicLength * 1000) % 60}
-      </span>
-    </MusicItemBlock>
+    // <MusicItemBlock onClick={onClick} onMouseOver={onMouseOver}>
+    // </MusicItemBlock>
+    // <tr className={styles.row} onClick={onClick} onMouseOver={onMouseOver}>
+    // <tr onClick={onClick} onMouseOver={onMouseOver}>
+    <Tr>
+      <td>
+        {/* <img src={coverImage === null ? temp_img : coverImage} alt=""></img> */}
+        <img src={coverImage} alt=""></img>
+      </td>
+      <td>{mixed === null ? null : "M"}</td>
+      <td>{musicName}</td>
+      <td>{musicianName}</td>
+      <td>{albumName}</td>
+      <td>
+        {Math.floor(musicLength / 1000 / 60)}:
+        {Math.floor((musicLength / 1000) % 60)}
+      </td>
+      <td>
+        <MusicIcon musicSeq={musicSeq} iconName={"play"}></MusicIcon>
+      </td>
+      <td>
+        <MusicIcon musicSeq={musicSeq} iconName={"mix"}></MusicIcon>
+      </td>
+      <td>
+        <MusicIcon musicSeq={musicSeq} iconName={"download"}></MusicIcon>
+      </td>
+    </Tr>
   );
 };
+// MusicListItem.propTypes = {
+//   text: PropTypes.string.isRequired,
+//   fontSize: PropTypes.number,
+//   key: PropTypes.string.isRequired,
+//   coverImage: PropTypes.string.isRequired,
+//   musicName: PropTypes.string.isRequired,
+//   musicianName: PropTypes.string.isRequired,
+//   albumName: PropTypes.string.isRequired,
+//   musicLength: PropTypes.string.isRequired,
+//   mixed: PropTypes.string.isRequired,
+// };
 
-// const Body = styled.div`
-//   width: ${(props) => window.innerWidth - 300}px;
-//   border: 1px solid blue;
-//   position: fixed;
-//   right: 0;
-//   bottom: 0;
-//   height: 150px;
-//   filter: drop-shadow(0px -25px 100px rgba(16, 16, 16, 0.51));
-// `;
-
-const MusicItemBlock = styled.div`
-  display: flex;
+const Tr = styled.tr`
+  background-color: ${({ theme }) => theme.palette.darkgray};
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.hover};
+  }
 `;
+// const Td = styled.td`
+//   &td:first-child {
+//     border-radius: 10px 0 0 10px;
+//   }
+//   &td:last-child {
+//     border-radius: 10px 0 0 10px;
+//   }
+// `;
+// background-color: #2d3032;
+// opacity: 0.5; // -> 자식들까지 투명도 적용된다. (글자까지)
+
+// darkgray: 2D3032 인데 투명이 50
+// hover: 되면 2D3032
+// radius 15
 
 export default MusicListItem;
