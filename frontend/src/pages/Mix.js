@@ -1,10 +1,13 @@
-import React from 'react';
+import { Content, Header } from "components/Common";
 
 const Mix = () => {
   return (
-    <div>
-      <h2>Mix</h2>
-    </div>
+    <Content>
+      <Header 
+        title="Mix"
+        description="원하는 노래의 분위기 바꿔보기"  
+      />
+    </Content>
   );
 };
 

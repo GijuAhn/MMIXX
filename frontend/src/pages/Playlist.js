@@ -1,10 +1,11 @@
-import React from 'react';
+import { Content } from "components/Common";
+
 
 const Playlist = () => {
   return (
-    <div>
+    <Content>
       <h2>Playlist</h2>
-    </div>
+    </Content>
   );
 };
 

@@ -8,7 +8,7 @@ const DefaultBtn = styled.button`
   padding: 20px 0;
 
   &: hover {
-    color: red;
+    color: ${({ theme }) => theme.palette.secondary };
   }
 `
 

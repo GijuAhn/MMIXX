@@ -1,21 +1,27 @@
-import { Outlet, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
-
 import { NavBar } from 'components/NavBar'
 import { PlayBar } from 'components/PlayBar'
+import { Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
 const Template = () => {
   return (
-    <TemplateDiv>
-      <NavBar />
+    <Wrapper>
+      <Side>
+        <NavBar />
+      </Side>
       <Outlet />
       <PlayBar />
-    </TemplateDiv>
+    </Wrapper>
   )
 }
 
-const TemplateDiv = styled.div`
+const Wrapper = styled.div`
   display: grid;
-  grid-auto-rows: 200px 1200px;
+  grid-template-columns: 200px minmax(1000px, 1fr);
 `
+
+const Side = styled.div`
+  border: 2px dotted orange;
+`
+
 export default Template;
