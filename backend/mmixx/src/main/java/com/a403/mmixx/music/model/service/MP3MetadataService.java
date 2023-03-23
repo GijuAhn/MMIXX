@@ -23,22 +23,21 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
         InputStream stream = file.getInputStream();
         ParseContext parseContext = new ParseContext();
+
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
 
         // Extract the metadata fields and add them to the map
-        metadataMap.put("Title", metadata.get("title"));
-        metadataMap.put("Artist", metadata.get("xmpDM:artist"));
-        metadataMap.put("Album", metadata.get("xmpDM:album"));
-        metadataMap.put("Genre", metadata.get("xmpDM:genre"));
-        metadataMap.put("Year", metadata.get("xmpDM:releaseDate"));
+        metadataMap.put("musicName", metadata.get("title"));
+        metadataMap.put("musicLength", metadata.get("xmpDM:duration"));
+        metadataMap.put("musicianName", metadata.get("xmpDM:artist"));
+        metadataMap.put("albumName", metadata.get("xmpDM:album"));
 
-        // Extract the album art image data and save it to a file -> ALBUM_ART IS NOT INCLUDED IN THE DAMN METADATA
-//        byte[] albumArtData = metadata.get("metadata:thumbnail").getBytes();
-//        String filename = "album_art.jpg";
-//        FileOutputStream outputStream = new FileOutputStream(filename);
-//        outputStream.write(albumArtData);
-//        outputStream.close();
+        //  print all metadata
+        String[] metadataNames = metadata.names();
+        for(String name : metadataNames){
+            System.out.println(name + ": " + metadata.get(name));
+        }
 
         return metadataMap;
     }

@@ -19,7 +19,7 @@ import java.nio.file.Files;
 @Service
 public class MP3AlbumArtworkService {
 
-    public byte[] extractAlbumArtwork(MultipartFile file) throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
+    public static byte[] extractAlbumArtwork(MultipartFile file) throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
         // Convert multipart file to MP3 file
         File mp3File = Files.createTempFile("temp", ".mp3").toFile();
         file.transferTo(mp3File);
@@ -47,10 +47,9 @@ public class MP3AlbumArtworkService {
         return artworkData;
     }
 
-    private byte[] getDefaultAlbumArtwork() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
+    private static byte[] getDefaultAlbumArtwork() throws IOException {
+        ClassLoader classLoader = MP3AlbumArtworkService.class.getClassLoader();
         File file = new File(classLoader.getResource("static/default_cover.jpg").getFile());
-//        File file = new File(classLoader.getResource("src/main/resources/static/default_cover.jpg").getFile());
         return Files.readAllBytes(file.toPath());
     }
 }
