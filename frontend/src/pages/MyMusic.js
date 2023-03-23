@@ -1,5 +1,5 @@
-import { Content } from "components/Content";
-import MusicList from "components/mymusic/MusicList";
+import { Content } from "components/Common";
+import MusicList from "components/myMusic/MusicList";
 
 const MyMusic = () => {
   return (
