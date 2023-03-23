@@ -26,17 +26,19 @@ bucket_name = 'bucket-mp3-file-for-mmixx'
 # Create your views here.
 class MusicAPIView(APIView):
     def get(self, request):
-        # s3 path를 query_params로 주는지 확인해야 함.
-        music_path = request.query_params.get('music_path')
-        preset_path = request.query_params.get('preset_path')
+        # # s3 path를 query_params로 주는지 확인해야 함.
+        # music_path = request.GET.get('music_path')
+        # preset_path = request.GET.get('preset_path')
+        # music_path = 'https://bucket-mp3-file-for-mmixx.s3.ap-northeast-2.amazonaws.com/music/1fc0908e-180f-429c-aec8-8d600b374910.mp3'
+        # preset_path = 'https://bucket-mp3-file-for-mmixx.s3.ap-northeast-2.amazonaws.com/music/ba466b9d-3c76-4469-bbe7-6ceb6ef818d9.mp3'
         
-        # S3에서 data에 담긴 path에 저장되어 있는 음악, 프리셋 가져오기
-        music_bucket = bucket_name + 'music'
-        music_response = s3.get_object(music_bucket,music_path)
-        preset_response = s3.get_object(music_bucket, preset_path)
+        # # S3에서 data에 담긴 path에 저장되어 있는 음악, 프리셋 가져오기
+        # music_bucket = bucket_name + 'music'
+        # music_response = s3.get_object(music_bucket,music_path)
+        # preset_response = s3.get_object(music_bucket, preset_path)
 
-        music = music_response['Body'].read()
-        preset = preset_response['Body'].read()
+        # music = music_response['Body'].read()
+        # preset = preset_response['Body'].read()
 
         ############################# mp3 to wav ################################
         # # 1. 참고 - https://pythonbasics.org/convert-mp3-to-wav/
@@ -57,6 +59,7 @@ class MusicAPIView(APIView):
         try:
             # DeepAFx-ST의 결과로 s3에 저장한 path를 return받음 (ouyput에 저장)
             output = subprocess.run(args, check=True)
+            print('output :', output)
         except subprocess.CalledProcessError:
             return Response({'status' : 'failure'})
         
@@ -72,7 +75,7 @@ class MusicAPIView(APIView):
         results = {
             'music' : output,
         }
-
+        print('results : ', results)
         # 결과물을 serialization해서 springboot 서버로 return
         serializers = MusicSerializer(data = results)
         if serializers.is_valid():
@@ -82,10 +85,10 @@ class MusicAPIView(APIView):
     
 class ImageAPIView(APIView):
     def get(self, request):
-        image_path = request.query_params.get('image_path')
+        image_path = request.GET.get('image_path')
 
         image_bucket = bucket_name + 'images'
-        image_response = s3.get_object(image_bucket, image_path)
+        image_response = s3.get_object(bucket_name, image_path)
         image = image_response['Body'].read()
         args = ["python", "./style_transfer/model/images/main.py"]
         try:
