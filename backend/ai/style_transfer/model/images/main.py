@@ -115,8 +115,8 @@ def deprocess_image(tensor, result_height, result_width):
 if __name__ == "__main__":
     # Prepare content, stlye images
     path = os.path.abspath(os.getcwd())
-    content_image_path = keras.utils.get_file(path + '\dataset\paris.jpg', 'https://i.imgur.com/F28w3Ac.jpg')
-    style_image_path = keras.utils.get_file(path + '\dataset\starry_night.jpg', 'https://i.imgur.com/9ooB60I.jpg')
+    content_image_path = keras.utils.get_file(path + '\style_transfer\model\images\dataset\paris.jpg', 'https://i.imgur.com/F28w3Ac.jpg')
+    style_image_path = keras.utils.get_file(path + '\style_transfer\model\images\dataset\starry_night.jpg', 'https://i.imgur.com/9ooB60I.jpg')
     result_height, result_width = get_result_image_size(content_image_path, RESIZE_HEIGHT)
     print("result resolution: (%d, %d)" % (result_height, result_width))
 
