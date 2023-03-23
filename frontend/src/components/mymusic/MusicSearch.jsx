@@ -14,9 +14,9 @@ const MusicSearch = () => {
   return (
     <div>
       <MusicSearchBar></MusicSearchBar>
-      <MusicSearchFilter></MusicSearchFilter>
+     <MusicSearchFilter></MusicSearchFilter>
       <MusicSearchOrder></MusicSearchOrder>
-    </div>
+    </div> 
   );
 };
 

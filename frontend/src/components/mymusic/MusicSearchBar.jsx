@@ -15,18 +15,18 @@ const MusicSearchBar = () => {
     if (query === "") return;
   };
   return (
-    <form onSubmit={onSubmit}>
-      <Input
-        type="text"
-        value={query}
-        onChange={onChange}
-        placeholder="음악 제목으로 검색"
-      />
-      <Button type="button" onClick={resetQuery}>
-        X
-      </Button>
-      <Button>검색아이콘</Button>
-    </form>
+    <div><form onSubmit={onSubmit}>
+    <Input
+      type="text"
+      value={query}
+      onChange={onChange}
+      placeholder="음악 제목으로 검색"
+    />
+    <Button type="button" onClick={resetQuery}>
+      X
+    </Button>
+    <Button>검색아이콘</Button>
+  </form></div>
   );
 };
 
