@@ -1,8 +1,12 @@
 package com.a403.mmixx.music.model.service;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -60,14 +64,17 @@ public class MusicService {
 	}
 
 	public List<Music> registMusic(List<MultipartFile> multipartFiles) {
-//		TODO: DB에 저장하는 로직 추가
-		return getID3v2MetadataTest(multipartFiles);
-//		return getID3v2Metadata(multipartFiles);
+//		TODO: S3 에 원본 음원 + 커버 이미지 업로드
+//		TODO: EC2 DB에 저장하는 로직 추가
+		List<Music> musicContainerList = new ArrayList<>();
+		musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
+		System.out.println("musicContainerList: " + musicContainerList);
+		return musicContainerList;
 	}
 
 
 	//	Extract Metadata from ID3v2 format and music + cover image upload to S3
-	public List<Music> getID3v2Metadata(List<MultipartFile> multipartFiles) {
+	public List<Music> uploadMusicAndArtworkWithMetadata(List<MultipartFile> multipartFiles) {
 
 		List<String> musicUrlList;
 		List<String> coverImageList;
@@ -77,41 +84,30 @@ public class MusicService {
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
 
 		multipartFiles.forEach(file -> {
-			Music musicContainer = null;
+
+//			TODO: file 그대로 extractMetadata 에 넣으면 '파일을 찾을 수 없습니다' 에러 발생. inputstream 처럼 한번쓰고 휘발되는 문제인가?
+
+			Music musicContainer;
+			MP3MetadataService mp3MetadataService = new MP3MetadataService();
 			try {
 				musicContainer = new Music();
 
-				String musicName = "";
+				Map<String, String> metadataMap = mp3MetadataService.extractMetadata(file);
+
+				String musicName = metadataMap.get("musicName");
 				String musicUrl = "";
 				String coverImage = "";
-				int musicLength = 0;
-				String musicianName = "";
-				String albumName = "";
-
-				Mp3File mp3file = new Mp3File(file.getOriginalFilename());
-				if (mp3file.hasId3v2Tag()) {
-					ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-					musicName = id3v2Tag.getTitle();
-					musicianName = id3v2Tag.getArtist();
-					albumName = id3v2Tag.getAlbum();
-					musicLength = Math.toIntExact(mp3file.getLengthInSeconds());
-					byte[] coverImageData = id3v2Tag.getAlbumImage();
-
-					if (coverImageData != null) {
-						System.out.println("Have album image data, length: " + coverImageData.length + " bytes");
-						System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
-					}
-				}
+				int musicLength = Integer.parseInt(metadataMap.get("musicLength"));
+				String musicianName = metadataMap.get("musicianName");
+				String albumName = metadataMap.get("albumName");
 
 				musicContainer.setMusicName(musicName);
-				musicContainer.setMusicUrl(musicUrl);
-				musicContainer.setCoverImage(coverImage);
 				musicContainer.setMusicLength(musicLength);
 				musicContainer.setMusicianName(musicianName);
 				musicContainer.setAlbumName(albumName);
 
-			} catch (InvalidDataException | UnsupportedTagException | IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 			}
 			musicContainerList.add(musicContainer);
 		});
@@ -123,62 +119,5 @@ public class MusicService {
 
 		return musicContainerList;
 	}
-
-
-	public List<Music> getID3v2MetadataTest(List<MultipartFile> multipartFiles) {
-
-		List<String> testFileList = new ArrayList<>();
-		List<Music> musicContainerList = new ArrayList<>();
-
-		testFileList = awsS3Service.uploadFullAudioFileToS3(multipartFiles);
-		System.out.println("testFileList: " + testFileList);
-
-		multipartFiles.forEach(file -> {
-			Music musicContainer = null;
-			try {
-				musicContainer = new Music();
-
-				String musicName = "";
-				String musicUrl = "";
-				String coverImage = "";
-				int musicLength = 0;
-				String musicianName = "";
-				String albumName = "";
-
-				Mp3File mp3file = new Mp3File(file.getOriginalFilename());
-				if (mp3file.hasId3v2Tag()) {
-					ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-					musicName = id3v2Tag.getTitle();
-					System.out.println("musicName: " + musicName);
-					musicianName = id3v2Tag.getArtist();
-					System.out.println("musicianName: " + musicianName);
-					albumName = id3v2Tag.getAlbum();
-					System.out.println("albumName: " + albumName);
-					musicLength = Math.toIntExact(mp3file.getLengthInSeconds());
-					System.out.println("musicLength: " + musicLength);
-					byte[] coverImageData = id3v2Tag.getAlbumImage();
-
-					if (coverImageData != null) {
-						System.out.println("Have album image data, length: " + coverImageData.length + " bytes");
-						System.out.println("Album image mime type: " + id3v2Tag.getAlbumImageMimeType());
-					}
-				}
-
-				musicContainer.setMusicName(musicName);
-				musicContainer.setMusicUrl(musicUrl);
-				musicContainer.setCoverImage(coverImage);
-				musicContainer.setMusicLength(musicLength);
-				musicContainer.setMusicianName(musicianName);
-				musicContainer.setAlbumName(albumName);
-
-			} catch (InvalidDataException | UnsupportedTagException | IOException e) {
-				e.printStackTrace();
-			}
-			musicContainerList.add(musicContainer);
-		});
-
-		return musicContainerList;
-	}
-
 
 }
