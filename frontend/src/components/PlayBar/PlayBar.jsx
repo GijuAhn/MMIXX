@@ -17,10 +17,9 @@ const PlayBar = () => {
 
 
 const Div = styled.div`
-  width: 100%;
   border: 1px solid blue;
   position: fixed;
-  left: 300px;
+  left: 200px;
   bottom: 0;
   height: 150px;
   filter: drop-shadow(0px -25px 100px rgba(16, 16, 16, 0.51));
