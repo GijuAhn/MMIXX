@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { DefaultBtn } from ".";
 
 const Header = ({ title, description }) => {
   return (
@@ -9,6 +10,7 @@ const Header = ({ title, description }) => {
       <HeaderDesc>
         {description}
       </HeaderDesc>
+      <DefaultBtn>실험용</DefaultBtn>
     </Wrapper>
   );
 };
