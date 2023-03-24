@@ -1,8 +1,11 @@
 import styled from 'styled-components'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common";
+import { useNavigate } from 'react-router-dom';
 
 const Playlist = () => {
+  const navigate = useNavigate();
+
   return (
     <Wrapper>
       <Header 
@@ -10,7 +13,9 @@ const Playlist = () => {
         desc="내 플레이리스트 모아보기"
       />
       <Content>
-        <DefaultBtn>플레이리스트 추가</DefaultBtn>
+        <DefaultBtn onClick={ () => navigate("/playlist/create")}>
+          플레이리스트 추가
+        </DefaultBtn>
       </Content>
     </Wrapper>
   );
