@@ -236,8 +236,6 @@ if __name__ == "__main__":
               Key=f"music/{s3_filepath}",
               Body=buffer.getvalue())
 
-    # get_path("test1")
-
     torchaudio.save(out_filepath, y_hat.cpu().view(1, -1), 24000)
     torchaudio.save(in_filepath, x_24000.cpu().view(1, -1), 24000)
 
