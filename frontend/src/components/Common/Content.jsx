@@ -8,5 +8,7 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: start;
 
+  padding-left: 200px;
+
 `
 export default Content;
