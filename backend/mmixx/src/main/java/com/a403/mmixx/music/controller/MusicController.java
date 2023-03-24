@@ -58,7 +58,7 @@ public class MusicController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> registMusic(@RequestParam("file") List<MultipartFile> multipartFiles) {
+	public ResponseEntity<?> registMusic(@RequestParam("file") List<MultipartFile> multipartFiles) throws Exception {
 		// TODO uploadMusic, List<MultipartFile>, @requestBody...?
 		// 200 : 업로드 성공
 		// 401 : (권한 없음)
