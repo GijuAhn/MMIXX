@@ -1,10 +1,13 @@
-import { Content } from "components/Common";
+import { Wrapper, Header } from "components/Common";
 
 const MyMusic = () => {
   return (
-    <Content>
-      <h2>MyMusic</h2>
-    </Content>
+    <Wrapper>
+      <Header 
+        title="MyMusic"
+        desc="내 음악 들어보기"
+      />
+    </Wrapper>
   );
 };
 
