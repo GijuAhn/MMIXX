@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const Content = styled.div`
+const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.darkAlt};
   height: 100vh;
 
@@ -11,4 +11,4 @@ const Content = styled.div`
   padding-left: 200px;
 
 `
-export default Content;
+export default Wrapper;

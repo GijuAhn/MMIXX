@@ -79,7 +79,7 @@ const NavBtn = styled.button`
   background-color: ${({ theme }) => theme.palette.dark};
   color: ${({ theme }) => theme.palette.light};
   padding: 10px 20px;
-  border: 1px solid ${({theme}) => theme.palette.secondary};
+  border: 1.6px solid ${({theme}) => theme.palette.secondary};
   border-radius: 27px;
   margin: 5px auto;
   width: 90%;
