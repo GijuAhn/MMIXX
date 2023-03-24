@@ -1,6 +1,14 @@
 import styled from "styled-components"
 
-const DefaultBtn = styled.button`
+const DefaultBtn = ({ selected, children }) => {
+  return (
+    <Wrapper>
+      {children}
+    </Wrapper>
+  )
+}
+
+const Wrapper = styled.button`
   background-color: ${({theme}) => theme.palette.secondary};
   color: ${({theme}) => theme.palette.dark};
   padding: 10px 20px;
