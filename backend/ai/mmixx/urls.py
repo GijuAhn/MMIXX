@@ -32,7 +32,7 @@ urlpatterns = [
     # rest_framework 
     path('api-auth/', include('rest_framework.urls')),
     url('api1/doc/', get_swagger_view(title='Rest API Document')),
-    url('django/api1/', include('style_transfer.urls')),
+    url('api1/', include('style_transfer.urls')),
     # APIView 클래스를 as_view로 라우팅 -> views에서 불러와 처리함
     # url('api1/music', views.MusicAPIView.as_view()),
 ]
