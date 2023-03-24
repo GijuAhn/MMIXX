@@ -6,9 +6,7 @@ import styled from 'styled-components'
 const Template = () => {
   return (
     <Wrapper>
-      <Side>
-        <NavBar />
-      </Side>
+      <NavBar />
       <Outlet />
       <PlayBar />
     </Wrapper>
@@ -16,12 +14,7 @@ const Template = () => {
 }
 
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 200px minmax(1000px, 1fr);
-`
-
-const Side = styled.div`
-  border: 2px dotted orange;
+  display: flex;
 `
 
 export default Template;
