@@ -87,7 +87,7 @@ class MusicAPIView(APIView):
 
         # results에는 s3에 업로드한 결과 파일의 path를 저장
         results = {
-            'music' : 'output',
+            'music' : 'music/' + f'{music_path[6:-4]}'+'_mix.wav',
         }
         print('results : ', results)
         # 결과물을 serialization해서 springboot 서버로 return
