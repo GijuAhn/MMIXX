@@ -61,7 +61,7 @@ public class MusicController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> registMusic(@RequestPart("user") MusicRegistRequestDto user, @RequestPart("files") List<MultipartFile> multipartFiles) {
+	public ResponseEntity<?> registMusic(@RequestPart("user") MusicRegistRequestDto user, @RequestPart("files") List<MultipartFile> multipartFiles) throws Exception {
 		// 200 : 업로드 성공
 		// 401 : (권한 없음)
 		// 413 : 파일 용량 초과

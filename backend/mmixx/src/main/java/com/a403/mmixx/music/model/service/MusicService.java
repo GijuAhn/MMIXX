@@ -1,32 +1,30 @@
 package com.a403.mmixx.music.model.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.a403.mmixx.music.model.dto.*;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.a403.mmixx.music.model.dto.MusicCondition;
-import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
-import com.a403.mmixx.music.model.dto.MusicListResponseDto;
-import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.a403.mmixx.music.model.service.MP3MetadataService;
+import com.a403.mmixx.music.model.service.Utils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,7 +44,7 @@ public class MusicService {
 
 	public MusicDetailResponseDto getMusic(Integer seq) {
 		Music music = musicRepository.findById(seq)
-			.orElseThrow(() -> new IllegalArgumentException("해당 음악은 없습니다. 방 ID: " + seq)); // error code: 500
+				.orElseThrow(() -> new IllegalArgumentException("해당 음악은 없습니다. 방 ID: " + seq)); // error code: 500
 		return new MusicDetailResponseDto(music);
 	}
 
@@ -67,9 +65,62 @@ public class MusicService {
 		}
 		return music;
 	}
-	public List<String> registMusic(List<MultipartFile> multipartFiles) {
-		// TODO (파일 확장자, ... 메타 데이터 추출 및 DB에 저장)
-		// TODO 한번에 업로드? -> 몇개까지 제한?
-		return awsS3Service.uploadMusic(multipartFiles);
+
+	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
+//		TODO: EC2 DB에 musicContainerList 데이터를 저장해야 함. QueryDSL 사용
+		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
+
+		//	print musicContainerList's data, cascade
+		for (Music music : musicContainerList) {
+			System.out.println("musicName: " + music.getMusicName());
+			System.out.println("musicUrl: " + music.getMusicUrl());
+			System.out.println("coverImage: " + music.getCoverImage());
+			System.out.println("length: " + music.getMusicLength());
+			System.out.println("artist: " + music.getMusicianName());
+			System.out.println("album: " + music.getAlbumName());
+		}
+
+		return musicContainerList;
 	}
+
+
+	//	Extract Metadata from ID3v2 format and music + cover image upload to S3
+	public List<Music> uploadMusicAndArtworkWithMetadata(List<MultipartFile> multipartFiles) throws Exception {
+
+		//	Deep copy for redundant use of stream
+		List<InputStream> multipartFilesCopy1 = new ArrayList<>();
+
+		for (MultipartFile multipartFile : multipartFiles) {
+			//	save multipartFile(extend of InputStream) to ByteArrayOutputStream
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			InputStream is = multipartFile.getInputStream();
+			is.transferTo(baos);
+			InputStream multipartFileInputStreamClone1 = multipartFile.getInputStream();
+
+			multipartFilesCopy1.add(multipartFileInputStreamClone1);
+		}
+
+
+		List<Music> musicContainerList;
+		List<String> musicUrlList;
+		List<String> coverImageList;
+
+
+		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
+		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
+//		multipartFileInputStreamClone1 사용하지도 않았는데 왜 될까... 진짜 모르겠다.
+//		.tmp는 또 왜 삭제 안될까... 진짜 모르겠다. delete() 주석처리...
+//		근데 삐걱거려도 동작은 하니까...
+//		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
+		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
+
+
+		for (int i = 0; i < musicContainerList.size(); i++) {
+			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
+			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
+		}
+
+		return musicContainerList;
+	}
+
 }
