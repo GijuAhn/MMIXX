@@ -1,11 +1,11 @@
 // import styled from 'styled-components'
-import { Content } from 'components/Common';
+import { Wrapper } from 'components/Common';
 
 const Main = () => {
   return (
-    <Content>
+    <Wrapper>
       <h2>Main페이지</h2>
-    </Content>
+    </Wrapper>
   );
 };
 
