@@ -1,5 +1,6 @@
 package com.a403.mmixx.music.model.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.a403.mmixx.music.model.service.MP3MetadataService;
+import com.a403.mmixx.music.model.service.Utils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,10 +67,19 @@ public class MusicService {
 	}
 
 	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
-//		TODO: S3 에 원본 음원 + 커버 이미지 업로드
-//		TODO: EC2 DB에 저장하는 로직 추가 <- 도대체 왜... 주소를 찾지 못하는 문제 발생
+//		TODO: EC2 DB에 musicContainerList 데이터를 저장해야 함. QueryDSL 사용
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
-		System.out.println("musicContainerList: " + musicContainerList);
+
+		//	print musicContainerList's data, cascade
+		for (Music music : musicContainerList) {
+			System.out.println("musicName: " + music.getMusicName());
+			System.out.println("musicUrl: " + music.getMusicUrl());
+			System.out.println("coverImage: " + music.getCoverImage());
+			System.out.println("length: " + music.getMusicLength());
+			System.out.println("artist: " + music.getMusicianName());
+			System.out.println("album: " + music.getAlbumName());
+		}
+
 		return musicContainerList;
 	}
 
@@ -76,13 +87,33 @@ public class MusicService {
 	//	Extract Metadata from ID3v2 format and music + cover image upload to S3
 	public List<Music> uploadMusicAndArtworkWithMetadata(List<MultipartFile> multipartFiles) throws Exception {
 
+		//	Deep copy for redundant use of stream
+		List<InputStream> multipartFilesCopy1 = new ArrayList<>();
+
+		for (MultipartFile multipartFile : multipartFiles) {
+			//	save multipartFile(extend of InputStream) to ByteArrayOutputStream
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			InputStream is = multipartFile.getInputStream();
+			is.transferTo(baos);
+			InputStream multipartFileInputStreamClone1 = multipartFile.getInputStream();
+
+			multipartFilesCopy1.add(multipartFileInputStreamClone1);
+		}
+
+
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
 
-		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
+
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
+//		multipartFileInputStreamClone1 사용하지도 않았는데 왜 될까... 진짜 모르겠다.
+//		.tmp는 또 왜 삭제 안될까... 진짜 모르겠다. delete() 주석처리...
+//		근데 삐걱거려도 동작은 하니까...
+//		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
+		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
+
 
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));

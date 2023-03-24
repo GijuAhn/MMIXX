@@ -10,11 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +80,7 @@ public class MP3MetadataService {
         }
 
         // Delete temporary MP3 file
-        mp3File.delete();
+//        mp3File.delete();
         return metadataMap;
     }
 
