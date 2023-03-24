@@ -11,6 +11,12 @@ from torch.autograd import Variable
 import numpy as np
 import argparse
 
+import boto3
+s3 = boto3.client('s3',
+                aws_access_key_id='AKIAY2NHL6NEZPWL57H5',
+                aws_secret_access_key='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')
+bucket_name = 'bucket-mp3-file-for-mmixx'
+
 
 def build_loss(neural_net, optimizing_img, target_representations, content_feature_maps_index, style_feature_maps_indices, config):
     target_content_representation = target_representations[0]
@@ -50,7 +56,11 @@ def make_tuning_step(neural_net, optimizer, target_representations, content_feat
 
 
 def neural_style_transfer(config):
-    content_img_path = os.path.join(config['content_images_dir'], config['content_img_name'])
+    img_key = config['content_img_name']
+    s3.download_file(bucket_name, img_key, "input.jpg")
+    # content_img_path = os.path.join(config['content_images_dir'], config['content_img_name'])
+    content_img_path = os.path.join(os.path.abspath(os.getcwd()), "input.jpg")
+    print("content_img_path : ",content_img_path)
     style_img_path = os.path.join(config['style_images_dir'], config['style_img_name'])
 
     out_dir_name = 'combined_' + os.path.split(content_img_path)[1].split('.')[0] + '_' + os.path.split(style_img_path)[1].split('.')[0]
@@ -90,6 +100,7 @@ def neural_style_transfer(config):
     # magic numbers in general are a big no no - some things in this code are left like this by design to avoid clutter
     num_of_iterations = {
         "lbfgs": 1000,
+        # "lbfgs": 500,
         "adam": 3000,
     }
 
@@ -118,22 +129,25 @@ def neural_style_transfer(config):
                 total_loss.backward()
             with torch.no_grad():
                 print(f'L-BFGS | iteration: {cnt:03}, total loss={total_loss.item():12.4f}, content_loss={config["content_weight"] * content_loss.item():12.4f}, style loss={config["style_weight"] * style_loss.item():12.4f}, tv loss={config["tv_weight"] * tv_loss.item():12.4f}')
-                utils.save_and_maybe_display(optimizing_img, dump_path, config, cnt, num_of_iterations[config['optimizer']], should_display=False)
+                out_img_name = utils.save_and_maybe_display(optimizing_img, dump_path, config, cnt, num_of_iterations[config['optimizer']], should_display=False)
 
             cnt += 1
-            return total_loss
+            return total_loss,out_img_name
+        t_loss, out_img_name = closure()
+        optimizer.step(t_loss)
 
-        optimizer.step(closure)
-
-    return dump_path
+    return dump_path, out_img_name
 
 
 if __name__ == "__main__":
+    print("쿠다 있닝 ",torch.cuda.is_available())
     #
     # fixed args - don't change these unless you have a good reason
     #
     default_resource_dir = os.path.join(os.path.dirname(__file__), 'data')
+    print("default_resource_dir : ", default_resource_dir)
     content_images_dir = os.path.join(default_resource_dir, 'content-images')
+    print("content_images_dir : ", content_images_dir)
     style_images_dir = os.path.join(default_resource_dir, 'style-images')
     output_img_dir = os.path.join(default_resource_dir, 'output-images')
     img_format = (4, '.jpg')  # saves images in the format: %04d.jpg
@@ -178,7 +192,10 @@ if __name__ == "__main__":
     optimization_config['img_format'] = img_format
 
     # original NST (Neural Style Transfer) algorithm (Gatys et al.)
-    results_path = neural_style_transfer(optimization_config)
+    results_path, out_img_name = neural_style_transfer(optimization_config)
+    print("results_path : ",results_path)
+    print("out_img_name : ", out_img_name)
+    # s3.upload_file(bucket_name, )
 
     # uncomment this if you want to create a video from images dumped during the optimization procedure
     # create_video_from_intermediate_results(results_path, img_format)
