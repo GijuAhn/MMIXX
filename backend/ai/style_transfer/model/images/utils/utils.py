@@ -6,6 +6,12 @@ import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
+import boto3
+s3 = boto3.client('s3',
+                aws_access_key_id='AKIAY2NHL6NEZPWL57H5',
+                aws_secret_access_key='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')
+bucket_name = 'bucket-mp3-file-for-mmixx'
+
 
 from models.definitions.vgg_nets import Vgg16, Vgg19, Vgg16Experimental
 
@@ -19,9 +25,13 @@ IMAGENET_STD_NEUTRAL = [1, 1, 1]
 #
 
 def load_image(img_path, target_shape=None):
+    # s3.download_file(bucket_name, img_path, "input.jpg")
     if not os.path.exists(img_path):
         raise Exception(f'Path does not exist: {img_path}')
-    img = cv.imread(img_path)[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
+    # img_body = img_response['Body'].read()
+    # print("img_body 타입 ===== ", type(img_body))
+    # img = cv.cvtColor("input.jpg", cv.COLOR_BGR2RGB)
+    img = cv.imread("input.jpg")[:, :, ::-1]  # [:, :, ::-1] converts BGR (opencv format...) into RGB
 
     if target_shape is not None:  # resize section
         if isinstance(target_shape, int) and target_shape != -1:  # scalar -> implicitly setting the height
@@ -83,6 +93,7 @@ def save_and_maybe_display(optimizing_img, dump_path, config, img_id, num_of_ite
         dump_img += np.array(IMAGENET_MEAN_255).reshape((1, 1, 3))
         dump_img = np.clip(dump_img, 0, 255).astype('uint8')
         cv.imwrite(os.path.join(dump_path, out_img_name), dump_img[:, :, ::-1])
+        return out_img_name
 
     if should_display:
         plt.imshow(np.uint8(get_uint8_range(out_img)))

@@ -100,28 +100,28 @@ class MusicAPIView(APIView):
 class ImageAPIView(APIView):
     def get(self, request):
         # image_path = request.GET.get('image_path')
-        image_path = '/images/ecd15cfd-9e8e-48e3-9e70-d42a4a3e5d68.jpg'
-        # image_path = '/images/fedf9914-9744-4a23-9026-0d1024e2853d.jpg'
-
+        # image_path = 'images/ecd15cfd-9e8e-48e3-9e70-d42a4a3e5d68.jpg'
+        image_path = 'images/fedf9914-9744-4a23-9026-0d1024e2853d.jpg'
+        
         # 분위기에 맞는 preset을 넘겨주기?
-        preset_path = ''
+        # preset_path = ''
         # image_response = s3.get_object(bucket_name, image_path)
         # image = image_response['Body'].read()
         # print('이미지 타입 :', type(image))
         'python neural_style_transfer.py --content_img_name <content-img-name> --style_img_name <style-img-name>'
-        # args = ["python", "./style_transfer/model/images/neural_style_transfer.py", "--content_img_name", image_path, "--style_img_name", preset_path]
-        args = ["python", "./style_transfer/model/images/neural_style_transfer.py", "--content_img_name", "taj_mahal.jpg", "--style_img_name", "ben_giles.jpg"]
+        args = ["python", "./style_transfer/model/images/neural_style_transfer.py", "--content_img_name", image_path, "--style_img_name", "ben_giles.jpg"]
+        # args = ["python", "./style_transfer/model/images/neural_style_transfer.py", "--content_img_name", "taj_mahal.jpg", "--style_img_name", "ben_giles.jpg"]
         try:
             subprocess.run(args, check=True)
         except subprocess.CalledProcessError:
             return Response({'status' : 'failure'})
         
         results = {
-            'status' : "success",
+            'image' : "success",
         }
         serializers = ImageSerializer(data = results)
         if serializers.is_valid():
             # serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializers.error, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status' : 'failure'})
