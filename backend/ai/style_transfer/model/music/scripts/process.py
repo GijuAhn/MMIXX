@@ -6,13 +6,19 @@ import argparse
 import torchaudio
 import numpy as np
 from pydub import AudioSegment
-import wave
+# import wave
 
 import sys
 # path = os.path.abspath(os.getcwd()) + '\style_transfer\model\music'
 path = os.path.abspath('style_transfer/model/music')
 # sys.path.append("C:\Pjt_2\S08P22A403\\backend\\ai\style_transfer\model\music")
 print("path : ", path)
+print("getcwd path : ", os.getcwd())
+print("AudioSegment.ffmpeg : ", AudioSegment.ffmpeg)
+
+AudioSegment.converter = os.getcwd() + "\\ffmpeg.exe"
+AudioSegment.ffprobe   = os.getcwd() + '\\ffprobe.exe'
+
 sys.path.append(path)
 
 from deepafx_st.utils import DSPMode
@@ -102,27 +108,39 @@ if __name__ == "__main__":
     music_path = args.input
     preset_path = args.reference
 
-    music_response = s3.get_object(Bucket=bucket_name, Key=music_path)
-    preset_response = s3.get_object(Bucket=bucket_name, Key=preset_path)
+    # music_response = s3.get_object(Bucket=bucket_name, Key=music_path)
+    # preset_response = s3.get_object(Bucket=bucket_name, Key=preset_path)
+    # s3에서 파일 다운로드 -> file폴더에 저장
+    s3.download_file(bucket_name, music_path, 'file/target.mp3')
+    s3.download_file(bucket_name, preset_path, 'file/preset.mp3')
 
-    music_bytes = music_response['Body']
-    full_music_bytes = b''.join(music_bytes)
-    with wave.open("target.wav", "wb") as inputfile:
-        inputfile.setsampwidth(2)
-        inputfile.setnchannels(1)
-        inputfile.setframerate(44100)
-        inputfile.writeframesraw(full_music_bytes)
+    # music_bytes = music_response['Body']
+    # full_music_bytes = b''.join(music_bytes)
+    # with wave.open("target.wav", "wb") as inputfile:
+    #     inputfile.setsampwidth(2)
+    #     inputfile.setnchannels(1)
+    #     inputfile.setframerate(44100)
+    #     inputfile.writeframesraw(full_music_bytes)
 
-    preset_bytes = preset_response['Body']
-    full_preset_bytes = b''.join(preset_bytes)
-    with wave.open("preset.wav", "wb") as presetfile:
-        presetfile.setsampwidth(2)
-        presetfile.setnchannels(1)
-        presetfile.setframerate(44100)
-        presetfile.writeframesraw(full_preset_bytes)
+    # preset_bytes = preset_response['Body']
+    # full_preset_bytes = b''.join(preset_bytes)
+    # with wave.open("preset.wav", "wb") as presetfile:
+    #     presetfile.setsampwidth(2)
+    #     presetfile.setnchannels(1)
+    #     presetfile.setframerate(44100)
+    #     presetfile.writeframesraw(full_preset_bytes)
 
-    x, x_sr = torchaudio.load('target.wav')
-    r, r_sr = torchaudio.load('preset.wav')
+    print("current path : ", os.path.abspath(os.path.curdir))
+    # mp3 to wav
+    target_sound = AudioSegment.from_mp3('file/target.mp3')
+    # target_sound = target_sound.set_frame_rate(44100)
+    target_sound.export('file/target.wav', format = 'wav')
+
+    preset_sound = AudioSegment.from_mp3('file/preset.mp3')
+    preset_sound.export('file/preset.wav', format = 'wav')
+
+    x, x_sr = torchaudio.load('file/target.wav')
+    r, r_sr = torchaudio.load('file/preset.wav')
     # print(f'x : {x}, x_sr : {x_sr}')
     # print(f'r : {r}, r_sr : {r_sr}')
     # print('되나되나되나되나')
@@ -130,14 +148,14 @@ if __name__ == "__main__":
     # resample if needed
     if x_sr != 24000:
         print("Resampling to 24000 Hz...")
-        x_24000 = torch.tensor(resampy.resample(x.view(-1).numpy(), x_sr, 24000))
+        x_24000 = torch.tensor(resampy.resample(x.contiguous().view(-1).numpy(), x_sr, 24000))
         x_24000 = x_24000.view(1, -1)
     else:
         x_24000 = x
 
     if r_sr != 24000:
         print("Resampling to 24000 Hz...")
-        r_24000 = torch.tensor(resampy.resample(r.view(-1).numpy(), r_sr, 24000))
+        r_24000 = torch.tensor(resampy.resample(r.contiguous().view(-1).numpy(), r_sr, 24000))
         r_24000 = r_24000.view(1, -1)
     else:
         r_24000 = r
@@ -201,10 +219,12 @@ if __name__ == "__main__":
     x_24000 /= x_24000.abs().max()
 
     # save to disk
-    dirname = os.path.dirname(args.input)
+    # dirname = os.path.dirname(args.input)
+    dirname = 'file/'
     filename = os.path.basename(args.input).replace(".mp3", "")
     reference = os.path.basename(args.reference).replace(".mp3", "")
-    out_filepath = os.path.join(dirname, f"{filename}_out_ref={reference}.wav")
+    out_filepath = os.path.join(dirname, f"{filename}_mix.wav")
+    s3_filepath = os.path.join(os.path.dirname(args.input), f"{filename}_mix.wav")
     in_filepath = os.path.join(dirname, f"{filename}_in.wav")
     print(f"Saved output to {out_filepath}")
 
@@ -213,10 +233,8 @@ if __name__ == "__main__":
     # path_name = f'{filename}_out_ref={reference}.wav'
     # basic_key = 'https://bucket-mp3-file-for-mmixx.s3.ap-northeast-2.amazonaws.com/music'
     s3.put_object(Bucket=bucket_name,
-              Key=f"music/{out_filepath}",
+              Key=f"music/{s3_filepath}",
               Body=buffer.getvalue())
-
-    # get_path("test1")
 
     torchaudio.save(out_filepath, y_hat.cpu().view(1, -1), 24000)
     torchaudio.save(in_filepath, x_24000.cpu().view(1, -1), 24000)

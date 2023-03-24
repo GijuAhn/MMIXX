@@ -1,13 +1,13 @@
-import { Content, Header } from "components/Common";
+import { Wrapper, Header } from "components/Common";
 
 const Mix = () => {
   return (
-    <Content>
+    <Wrapper>
       <Header 
-        title="Mix"
-        description="원하는 노래의 분위기 바꿔보기"  
+        title="MIX"
+        desc="음악 믹스하기"  
       />
-    </Content>
+    </Wrapper>
   );
 };
 

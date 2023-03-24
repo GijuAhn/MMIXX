@@ -1,6 +1,7 @@
 absl-py==1.4.0
 asgiref==3.6.0
 astunparse==1.6.3
+audioread==3.0.0
 auraloss==0.3.0
 boto3==1.26.95
 botocore==1.29.95
@@ -14,6 +15,7 @@ django-rest-swagger==2.2.0
 django-storages==1.13.2
 djangorestframework==3.14.0
 ffmpeg==1.4
+ffmpeg-python==0.2.0
 ffprobe==0.5
 filelock==3.10.0
 flatbuffers==23.3.3
@@ -39,8 +41,10 @@ numba==0.56.4
 numpy==1.23.5
 oauthlib==3.2.2
 openapi-codec==1.3.2
+opencv-python==4.7.0.72
 opt-einsum==3.3.0
 packaging==23.0
+Pillow==9.4.0
 protobuf==4.22.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
@@ -57,19 +61,17 @@ s3transfer==0.6.0
 scipy==1.10.1
 simplejson==3.18.4
 six==1.16.0
+SoundFile==0.10.3.post1
 sox==1.4.1
 sqlparse==0.4.3
 sympy==1.11.1
 tensorboard==2.12.0
 tensorboard-data-server==0.7.0
 tensorboard-plugin-wit==1.8.1
-# tensorflow==2.12.0
-# tensorflow-intel==2.12.0
-# tensorflow-estimator==2.12.0
-# tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.2.0
 torch==2.0.0
 torchaudio==2.0.1
+torchvision==0.15.1
 torchmetrics==0.6.0
 typing_extensions==4.5.0
 uritemplate==4.1.1
