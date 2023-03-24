@@ -9,7 +9,8 @@ from pydub import AudioSegment
 import wave
 
 import sys
-path = os.path.abspath(os.getcwd()) + '\style_transfer\model\music'
+# path = os.path.abspath(os.getcwd()) + '\style_transfer\model\music'
+path = os.path.abspath('style_transfer/model/music')
 # sys.path.append("C:\Pjt_2\S08P22A403\\backend\\ai\style_transfer\model\music")
 print("path : ", path)
 sys.path.append(path)
