@@ -1,6 +1,7 @@
 absl-py==1.4.0
 asgiref==3.6.0
 astunparse==1.6.3
+audioread==3.0.0
 auraloss==0.3.0
 boto3==1.26.95
 botocore==1.29.95
@@ -14,6 +15,7 @@ django-rest-swagger==2.2.0
 django-storages==1.13.2
 djangorestframework==3.14.0
 ffmpeg==1.4
+ffmpeg-python==0.2.0
 ffprobe==0.5
 filelock==3.10.0
 flatbuffers==23.3.3
@@ -57,6 +59,7 @@ s3transfer==0.6.0
 scipy==1.10.1
 simplejson==3.18.4
 six==1.16.0
+SoundFile==0.10.3.post1
 sox==1.4.1
 sqlparse==0.4.3
 sympy==1.11.1
