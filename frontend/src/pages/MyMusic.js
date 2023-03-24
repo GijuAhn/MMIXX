@@ -1,13 +1,13 @@
 import { Content } from "components/Common";
-import MusicList from "components/myMusic/MusicList";
-import MusicSearch from "components/myMusic/MusicSearch";
+import Music from "components/myMusic/Music";
+import MusicUploadBtn from "components/myMusic/MusicUploadBtn";
 
 const MyMusic = () => {
   return (
     <Content>
       <h2>MyMusic</h2>
-      <MusicSearch></MusicSearch>
-      <MusicList></MusicList>
+      <MusicUploadBtn></MusicUploadBtn>
+      <Music></Music>
     </Content>
   );
 };
