@@ -129,18 +129,18 @@ def neural_style_transfer(config):
                 total_loss.backward()
             with torch.no_grad():
                 print(f'L-BFGS | iteration: {cnt:03}, total loss={total_loss.item():12.4f}, content_loss={config["content_weight"] * content_loss.item():12.4f}, style loss={config["style_weight"] * style_loss.item():12.4f}, tv loss={config["tv_weight"] * tv_loss.item():12.4f}')
-                out_img_name = utils.save_and_maybe_display(optimizing_img, dump_path, config, cnt, num_of_iterations[config['optimizer']], should_display=False)
-
+                utils.save_and_maybe_display(optimizing_img, dump_path, config, cnt, num_of_iterations[config['optimizer']], should_display=False)
+                # print("out_img_name : ", out_img_name)
             cnt += 1
-            return total_loss,out_img_name
-        t_loss, out_img_name = closure()
-        optimizer.step(t_loss)
+            return total_loss
+        # t_loss, out_img_name = closure()
+        optimizer.step(closure)
 
     return dump_path, out_img_name
 
 
 if __name__ == "__main__":
-    print("쿠다 있닝 ",torch.cuda.is_available())
+    print("쿠다 있닝 ㅜㅜㅜ 말해주지 않아도 대답은 NOPE..... 이겠지.... :  ",torch.cuda.is_available())
     #
     # fixed args - don't change these unless you have a good reason
     #
