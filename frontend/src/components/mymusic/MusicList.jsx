@@ -1,27 +1,36 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import restApi from "api/mymusic"; // TODO
+import { getMusicList, getMusicListByCondition } from "api/mymusic";
 import MusicListItem from "./MusicListItem";
 
-const MusicList = () => {
+const MusicList = ({ filter = "x", order = "x", query = "" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [musicList, setMusicList] = useState([]);
+  // const [page, setPage] = useState(1);
+  // const [getSearch, setGetSearch] = useState(false);
+  // useEffect(() => {
+  //   getMusicListByCondition(filter, order, query)
+  //     .then((result) => {
+  //       // console.log(result.content);
+  //       setMusicList(result.content);
+  //     })
+  //     .then(() => setIsLoading(false));
+  // }, [filter, order, query]);
   useEffect(() => {
-    const getMusicList = async () => {
-      const { data } = await restApi.get(`/api/music`); // 수정하기
-      return data;
-    };
     getMusicList()
-      .then((result) => setMusicList(result.content))
+      .then((result) => {
+        console.log(result.content);
+        setMusicList(result.content);
+        // setMusicList((currentArray) => [...currentArray, ...result.content]);
+      })
       .then(() => setIsLoading(false));
   }, []);
+  const getNexPage = () => {};
   return (
     <div>
       {isLoading ? (
         <strong>Loading...</strong>
       ) : (
-        // <table className={styles.row}>
-        //  <table>
         <Table>
           <tbody>
             {musicList.map((music) => (
@@ -39,14 +48,12 @@ const MusicList = () => {
           </tbody>
         </Table>
       )}
-      {/* <Body>
-        <h2>PlayBar</h2>
-      </Body> */}
     </div>
   );
 };
 
 const Table = styled.table`
+  display: block;
   border-collapse: separate;
   border-spacing: 0 10px;
   &td:first-child {

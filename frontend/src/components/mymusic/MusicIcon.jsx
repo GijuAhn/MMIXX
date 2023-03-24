@@ -23,7 +23,7 @@ const MusicIcon = ({ musicSeq, iconName }) => {
         break;
       }
     }
-  }, []);
+  }, [iconName]);
   // const onMouseEnter = () => {
   //   setIsHover(true);
   // };
