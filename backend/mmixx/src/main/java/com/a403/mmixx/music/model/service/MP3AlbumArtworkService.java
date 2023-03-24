@@ -37,7 +37,7 @@ public class MP3AlbumArtworkService {
         byte[] artworkData = artwork != null ? artwork.getBinaryData() : null;
 
         // Delete temporary MP3 file
-        mp3File.delete();
+//        mp3File.delete();
 
         // if byte[] artworkData is empty, the default album artwork will be used
         if (artworkData == null) {
