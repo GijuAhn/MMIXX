@@ -1,15 +1,12 @@
 import { useRef, useEffect } from 'react'
 import styled, { css } from "styled-components"
-import { useRecoilValue } from "recoil"
 import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { tempMusic } from "atom/atom"
 import { Switch } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 const PlaylistCreate = () => {
-  const playlist = useRecoilValue(tempMusic)
   const inputRef = useRef(null)
   const navigate = useNavigate()
 
@@ -25,8 +22,8 @@ const PlaylistCreate = () => {
         desc="플레이리스트 만들기"
       />
       <InputContent>
-        <DefaultCover coverImage={playlist.coverImage}>
-          <AlbumIcon colo="white" fontSize="large"/>
+        <DefaultCover>
+          <AlbumIcon color="white" fontSize="large"/>
         </DefaultCover>
         <RightContent>
           <Top>
