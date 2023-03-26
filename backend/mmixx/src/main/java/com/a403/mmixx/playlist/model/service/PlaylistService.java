@@ -3,16 +3,21 @@ package com.a403.mmixx.playlist.model.service;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
+import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicResponseDto;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
 import com.a403.mmixx.playlist.model.entity.PlaylistRepository;
+import com.a403.mmixx.user.model.entity.User;
+import com.a403.mmixx.user.model.entity.UserRepository;
+import com.beust.ah.A;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +26,7 @@ public class PlaylistService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+    private UserRepository userRepository;
 
     /**
      * 전체 플레이리스트 조회
@@ -48,17 +54,25 @@ public class PlaylistService {
                 .build();
     }
 
-//    /**
-//     * 플레이리스트 삭제
-//     */
-//    public void deletePlaylist(int id) {
-//        Optional<Playlist> playlist = playlistRepository.findById(id);
-//
-//        if (playlist != null) {
-//            playlistRepository.deleteById(id);
-//        }
-//    }
-//
+    public void save(PlaylistMusicRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getUserSeq())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid userSeq"));
+
+        Playlist playlist = new Playlist();
+        playlist.
+    }
+
+    /**
+     * 플레이리스트 삭제
+     */
+    public void deletePlaylist(int id) {
+        Optional<Playlist> playlist = playlistRepository.findById(id);
+
+        if (playlist != null) {
+            playlistRepository.deleteById(id);
+        }
+    }
+
 //    public String getCoverImage(int seq) {
 //        return "";
 //    }
