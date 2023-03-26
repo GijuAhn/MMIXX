@@ -1,36 +1,36 @@
 package com.a403.mmixx.playlist.model.entity;
 
+import com.a403.mmixx.user.model.entity.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
-@DynamicInsert
 @Table(name = "playlist")
 public class Playlist {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long playlistSeq;
-	@Column(nullable = false)
-	private Long userSeq;
-	@Column(length = 100, nullable = false)
+	@Column(name = "playlist_seq")
+	private int playlistSeq;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_seq")
+	private User user;
+
+	@NotNull
+	@Column(name = "playlist_name")
 	private String playlistName;
-	@Column(nullable = false)
+
+	@NotNull
+	@Column(name = "is_private")
 	private Boolean isPrivate;
 
-	public void updatePlaylist(Long playlistSeq, Long userSeq, String playlistName, Boolean isPrivate) {
-		this.playlistSeq = playlistSeq;
-		this.userSeq = userSeq;
-		this.playlistName = playlistName;
-		this.isPrivate = isPrivate;
-	}
+	@OneToMany(mappedBy = "playlist")
+	private List<PlaylistMusic> playlistMusics;
 }

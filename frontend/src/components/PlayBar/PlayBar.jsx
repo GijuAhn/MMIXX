@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
 
+import { PlayIcons } from 'components/PlayBar';
+
 const PlayBar = () => {
   const location = useLocation()
 
@@ -10,7 +12,7 @@ const PlayBar = () => {
 
   return (
     <Wrapper>
-      <h2>PlayBar</h2>
+      <PlayIcons />
     </Wrapper>
   );
 };
