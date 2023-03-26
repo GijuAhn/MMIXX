@@ -1,8 +1,16 @@
 import { useState } from "react";
+import FillBtn from "./FillBtn";
 import styled from "styled-components";
 import { registMusic } from "api/mymusic";
 
-const MusicUploadModal = ({ onClick }) => {
+const MusicUploadBtn = () => {
+  const [modalDisplay, setModalDisplay] = useState(false);
+  const onClick = () => {
+    setModalDisplay(true);
+  };
+  const onClickCloseModal = () => {
+    setModalDisplay(false);
+  };
   const [files, setFiles] = useState([]);
   const onChange = (event) => {
     // console.log(event.target.files);
@@ -32,21 +40,25 @@ const MusicUploadModal = ({ onClick }) => {
   };
   return (
     <Div>
-      <Modal>
-        <div>
-          <h2>모달</h2>
-        </div>
-        <div>
-          <input type="file" multiple onChange={onChange} />
-          <UploadBtn onClick={uploadFile}>업로드하기!!</UploadBtn>
-        </div>
-        <CloseBtn onClick={onClick}>X</CloseBtn>
-      </Modal>
+      <FillBtn onClick={onClick}>곡 업로드</FillBtn>
+      {modalDisplay ? (
+        <DivModal>
+          <Modal>
+            <div>
+              <input type="file" multiple onChange={onChange} />
+            </div>
+            <FillBtn onClick={onClickCloseModal}>취소</FillBtn>
+            <FillBtn onClick={uploadFile}>업로드</FillBtn>
+          </Modal>
+        </DivModal>
+      ) : null}
     </Div>
   );
 };
-
 const Div = styled.div`
+  // margin-left = 40px;
+`;
+const DivModal = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
@@ -60,16 +72,14 @@ const Div = styled.div`
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(1.5px);
   -webkit-backdrop-filter: blur(1.5px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
 `;
 
 const Modal = styled.div`
-  background: rgba(69, 139, 197, 0.7);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  display: block;
+  background: rgba(255, 255, 255);
   backdrop-filter: blur(13.5px);
   -webkit-backdrop-filter: blur(13.5px);
-  border-radius: 10px;
+  border-radius: 25px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   width: 400px;
   height: 500px;
@@ -77,21 +87,4 @@ const Modal = styled.div`
   top: -100px;
   padding: 10px;
 `;
-
-const CloseBtn = styled.button`
-  display: inline;
-  float: right;
-  padding-right: 10px;
-  cursor: pointer;
-  text-shadow: 1px 1px 2px gray;
-  color: white;
-`;
-const UploadBtn = styled.button`
-  display: inline;
-  float: right;
-  padding-right: 10px;
-  cursor: pointer;
-  text-shadow: 1px 1px 2px gray;
-  color: white;
-`;
-export default MusicUploadModal;
+export default MusicUploadBtn;

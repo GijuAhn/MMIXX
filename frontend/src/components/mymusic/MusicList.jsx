@@ -1,31 +1,47 @@
 import { useState, useEffect } from "react";
+import useDidMountEffect from "components/myMusic/useDidMountEffect";
 import styled from "styled-components";
 import { getMusicList, getMusicListByCondition } from "api/mymusic";
 import MusicListItem from "./MusicListItem";
 
-const MusicList = ({ filter = "x", order = "x", query = "" }) => {
+const MusicList = ({ filter, order, query }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [musicList, setMusicList] = useState([]);
+  // const [musicList, setMusicList] = useState([]);
+  const [musicList, setMusicList] = useState([
+    {
+      musicSeq: 1,
+      coverImage: null,
+      mixed: null,
+      musicName: "Ditto",
+      musicianName: "New Jeans",
+      albumName: "앨범이름",
+      musicLength: 36000,
+    },
+  ]);
   // const [page, setPage] = useState(1);
-  // const [getSearch, setGetSearch] = useState(false);
-  // useEffect(() => {
-  //   getMusicListByCondition(filter, order, query)
-  //     .then((result) => {
-  //       // console.log(result.content);
-  //       setMusicList(result.content);
-  //     })
-  //     .then(() => setIsLoading(false));
-  // }, [filter, order, query]);
+
   useEffect(() => {
-    getMusicList()
-      .then((result) => {
-        console.log(result.content);
-        setMusicList(result.content);
-        // setMusicList((currentArray) => [...currentArray, ...result.content]);
-      })
-      .then(() => setIsLoading(false));
+    // getMusicList()
+    //   .then((result) => {
+    //     console.log(result.content);
+    //     setMusicList(result.content);
+    //   })
+    //   .then(() => setIsLoading(false));
+    setIsLoading(false);
+    // length === 0이면 내가 업로드 한 곡 없음. 곡 업로드 곡 추가 해보세요
   }, []);
-  const getNexPage = () => {};
+
+  useDidMountEffect(() => {
+    console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
+    // setMusicList((currentArray) => [...currentArray, ...result.content]);
+    // getMusicListByCondition(filter, order, query).then((result) => {
+    //   // console.log(result.content);
+    //   setMusicList(result.content);
+    // });
+  }, [filter, order, query]);
+
+  // const getNexPage = () => {};
+
   return (
     <div>
       {isLoading ? (
