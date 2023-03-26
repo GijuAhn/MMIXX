@@ -1,12 +1,14 @@
 import styled from "styled-components"
 
 const MiniPlaylistCard = ({ playlist }) => {
-  const { coverImage, albumName, musicName } = playlist
+  const { coverImage, albumName } = playlist
 
   console.log(coverImage)
   return (
     <CardWrapper coverImage={coverImage}>
-      <img src="src/assets/cover_image.jpg" alt="" />
+      <PlaylistTitle>
+        {albumName}
+      </PlaylistTitle>
     </CardWrapper>
   )
 }
@@ -14,11 +16,16 @@ const MiniPlaylistCard = ({ playlist }) => {
 const CardWrapper = styled.div`
   width: 250px;
   height: 250px;
-  border: 1px dashed cornsilk;
-  background-image: url(${({ coverImage }) => coverImage});
-  // background-image: url('https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg');
+  border-radius: 5px;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.6) 90%),
+    url(${({ coverImage}) => coverImage});
   background-size: cover;
+  justify-content: start;
+  align-items: end;
 `
-
+const PlaylistTitle = styled.p`
+  padding: 10px;
+  color: ${({theme}) => theme.palette.light}
+`
 
 export default MiniPlaylistCard
