@@ -32,9 +32,6 @@ s3 = boto3.client('s3',
                 aws_secret_access_key='DvYAVRk51XhHMyx3Ohf6FN21z4O47t1jAp1/dHPJ')
 bucket_name = 'bucket-mp3-file-for-mmixx'
 
-# def get_path(path):
-#     return path
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -141,9 +138,6 @@ if __name__ == "__main__":
 
     x, x_sr = torchaudio.load('file/target.wav')
     r, r_sr = torchaudio.load('file/preset.wav')
-    # print(f'x : {x}, x_sr : {x_sr}')
-    # print(f'r : {r}, r_sr : {r_sr}')
-    # print('되나되나되나되나')
 
     # resample if needed
     if x_sr != 24000:
