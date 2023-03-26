@@ -64,8 +64,7 @@ const Top = styled.div`
 `
 
 const CardWrapper = styled.div`
-  border: 1px solid aliceblue;
-  margin-top: 10px;
+  margin-top: 15px;
   flex-wrap: wrap;
   justify-content: space-between
 `

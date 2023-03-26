@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 
+import newJeansImage from "assets/cover_image.jpg"
+
 // export const isLogin = atom({
 //   key: 'isLogin',
 //   default: false,
@@ -18,7 +20,7 @@ export const testPlaylist = atom({
       {
         musicName: 'OMG', 
         musicUrl: '',
-        coverImage: './assets/cover_image.jpg',
+        coverImage: newJeansImage,
         musicImage: 'assets/cover_image.jpg',
         musicianName: 'New Jeans',
         albumName: '앨범 제목',
@@ -34,22 +36,22 @@ export const testPlaylist = atom({
         isFavorite: true,
       },
       {
-        musicName: '사건의 지평선', 
+        musicName: 'Cupid', 
         musicUrl: '',
-        coverImage: 'https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg',
+        coverImage: 'https://preview.redd.it/fifty-fifty-the-1st-single-album-the-beginning-cupid-cover-v0-ujxvn57yg5ka1.jpg?auto=webp&s=464bef37a60cd8b6b2d0c607ecea65be3c4e85b8',
         musicImage: '',
-        musicianName: '윤하',
+        musicianName: 'FIFTY FIFTY',
         albumName: '앨범 제목',
         isFavorite: true,
       },
       {
-        musicName: '사건의 지평선', 
+        musicName: 'OMG', 
         musicUrl: '',
-        coverImage: 'https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg',
+        coverImage: 'https://images.genius.com/78a260dddd0b802059eb5e7a4d4f2f0c.1000x1000x1.jpg',
         musicImage: '',
-        musicianName: '윤하',
+        musicianName: '뉴진스',
         albumName: '앨범 제목',
-        isFavorite: true,
+        isFavorite: false,
       },
     ]
 })
