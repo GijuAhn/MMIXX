@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const DefaultBtn = styled.button`
+const PlainBtn = styled.button`
   background-color: ${({ theme }) => theme.palette.dark };
   border: none;
   position: fixed;
@@ -12,4 +12,4 @@ const DefaultBtn = styled.button`
   }
 `
 
-export default DefaultBtn;
+export default PlainBtn;

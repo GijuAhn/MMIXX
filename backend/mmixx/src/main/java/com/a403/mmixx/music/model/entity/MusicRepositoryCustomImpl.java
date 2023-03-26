@@ -70,7 +70,7 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 
 	private OrderSpecifier<?> orderByCondition(final String order) {
 
-		if (order == null || order.length() == 0) {
+		if (order == null || order.length() < 4) {
 			return QuerydslOrderByNull.getDefault();
 		}
 

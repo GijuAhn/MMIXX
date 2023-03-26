@@ -1,65 +1,44 @@
+
+
 package com.a403.mmixx.playlist.controller;
 
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistRequestDto;
-import com.a403.mmixx.playlist.model.entity.Playlist;
+import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDto;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
-
-import io.swagger.annotations.Api;
+import com.amazonaws.Response;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+ import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Api(tags = "플레이리스트")
 @RestController
 @RequestMapping("/playlist")
 public class PlaylistController {
-	@Autowired
-	private PlaylistService playlistService;
-	
-	@ApiOperation(value = "전체 플레이리스트 조회")
-	@GetMapping
-	public ResponseEntity<?> getAllPlaylist() {
-		return ResponseEntity.ok(playlistService.getAllPlaylist());
-	}
 
-	@ApiOperation(value = "새로운 플레이리스트 생성")
-	@PostMapping
-	public ResponseEntity<?> registPlaylist(@RequestBody PlaylistRequestDto requestDto) {
-		return null;
-	}
-	
-	@ApiOperation(value = "플레이리스트 삭제")
-	@DeleteMapping("/{playlistSeq}")
-	public void deletePlaylist(@PathVariable Long playlistSeq) {
-		playlistService.deletePlaylist(playlistSeq);
-	}
+    @Autowired
+    private PlaylistService playlistService;
 
-	@ApiOperation(value = "플레이리스트에 포함된 음악 목록 조회", notes = "해당 플레이리스트에 포함된 곡의 목록을 조회한다")
-	@GetMapping("/{playlistSeq}")
-	public ResponseEntity<List<PlaylistMusicDto>> getPlaylistMusic() {
-		return ResponseEntity.ok(playlistService.getPlaylistMusic());
-	}
+    @GetMapping
+    public ResponseEntity<?> getPlaylist() {
+        return ResponseEntity.ok(playlistService.getPlaylist());
+    }
 
-	@ApiOperation(value = "플레이리스트 앨범커버")
-	@GetMapping("/{playlistSeq}/1")
-	public String getPlaylistCover(@PathVariable("playlistSeq") Long seq) {
-		return playlistService.getPlaylistCover(seq);
-	}
+    @GetMapping("/{playlistSeq}")
+    public ResponseEntity<?> getPlaylistMusic(@PathVariable("playlistSeq") int seq) {
+        return ResponseEntity.ok(playlistService.getPlaylistMusic(seq));
+    }
 
-	@ApiOperation(value = "플레이리스트에 음악 추가")
-	@PostMapping("/{playlistSeq}")
-	public ResponseEntity<?> insertPlaylistMusic(@RequestBody PlaylistMusicDto musicDto) {
-		return null;
-	}
-
-	@ApiOperation(value = "플레이리스트 상세편집 (수정)")
-	@PutMapping("/detail/{playlistSeq}")
-	public ResponseEntity<?> updatePlaylist(@PathVariable("playlistSeq") Long seq) {
-		return null;
-	}
-
+    @PostMapping
+    public void save(@RequestBody PlaylistMusicRequestDto requestDto) {
+        playlistService.save(requestDto)
+    }
+    @DeleteMapping("/{playlistSeq}")
+    public void deletePlaylist(@PathVariable("playlistSeq") int seq) {
+        playlistService.deletePlaylist(seq);
+    }
+//
+//    @ApiOperation(value = "플레이리스트 커버 이미지")
+//    @GetMapping("/{playlistSeq}/1")
+//    public String getCoverImage(@PathVariable("playlistSeq") int seq){
+//        return playlistService.getCoverImage(seq);
+//    }
 }
