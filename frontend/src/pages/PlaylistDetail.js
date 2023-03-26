@@ -3,21 +3,20 @@ import styled from 'styled-components'
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { useNavigate } from 'react-router-dom';
 
-const Playlist = () => {
+const PlaylistDetail = ({ playlistSeq }) => {
   const navigate = useNavigate();
 
+  console.log(playlistSeq)
   return (
     <Wrapper>
       <Header 
-        title="My Playlist"
-        desc="내 플레이리스트 모아보기"
+        title="Playlist-Deatil"
+        desc="상세페이지"
       />
       <Content>
         <DefaultBtn onClick={ () => navigate("/playlist/create")}>
-          플레이리스트 추가
-        </DefaultBtn>
-        <DefaultBtn onClick={ () => navigate("/playlist/edit")}>
           플레이리스트 수정
+          <h1>{playlistSeq}</h1>
         </DefaultBtn>
       </Content>
     </Wrapper>
@@ -27,4 +26,4 @@ const Playlist = () => {
 const Content = styled.div`
 
 `
-export default Playlist;
+export default PlaylistDetail;
