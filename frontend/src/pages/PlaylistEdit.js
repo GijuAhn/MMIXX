@@ -1,20 +1,16 @@
 import styled, { css } from "styled-components"
 import React from 'react'
-import { useRecoilValue } from "recoil";
 import AlbumIcon from '@mui/icons-material/Album';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { tempMusic } from "atom/atom";
 
 const PlaylistEdit = () => {
-  const playlist = useRecoilValue(tempMusic)
   const inputRef = React.useRef(null);
 
   React.useEffect(() => {
     inputRef.current.select();
   }, [])
 
-  console.log(playlist)
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
       <Header 
@@ -22,12 +18,12 @@ const PlaylistEdit = () => {
         desc="플레이리스트 수정임ㅋ"
       />
       <InputContent>
-        <DefaultCover coverImage={playlist.coverImage}>
+        <DefaultCover coverImage="">
           <AlbumIcon colo="white" fontSize="large"/>
         </DefaultCover>
         <InputRight>
           <InputTitle>
-            <input type="text" ref={inputRef} autoFocus defaultValue="#플레이리스트 제목"onFocus={() => this.select()}></input>
+            <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
           </InputTitle>
           <DefaultBtn>
             곡 추가
