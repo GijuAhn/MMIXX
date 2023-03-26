@@ -5,10 +5,13 @@ import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { tempMusic } from "atom/atom"
+import { Switch } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const PlaylistCreate = () => {
   const playlist = useRecoilValue(tempMusic)
   const inputRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     inputRef.current.select()
@@ -25,14 +28,22 @@ const PlaylistCreate = () => {
         <DefaultCover coverImage={playlist.coverImage}>
           <AlbumIcon colo="white" fontSize="large"/>
         </DefaultCover>
-        <InputRight>
-          <InputTitle>
-            <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
-          </InputTitle>
-          <DefaultBtn>
-            곡 추가
-          </DefaultBtn>
-        </InputRight>
+        <RightContent>
+          <Top>
+            <InputTitle>
+              <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
+            </InputTitle>
+            <InputRivateToggle>
+              공개여부
+              <Switch defaultChecked/>
+            </InputRivateToggle>
+          </Top>
+          <Bottom>
+            <AddMusicBtn onClick={() => navigate("/playlist/select")}>
+              곡 추가
+            </AddMusicBtn>
+          </Bottom>
+        </RightContent>
       </InputContent>
     </StyleWrapper>
   );
@@ -40,7 +51,7 @@ const PlaylistCreate = () => {
 
 const StyleWrapper = styled(Wrapper)`
   ${({theme, url}) => css`
-    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.7), ${theme.palette.dark} 70%), url(${url});
+    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.8), ${theme.palette.darkAlt} 70%), url(${url});
     background-size: cover;
   `}
 `
@@ -66,22 +77,30 @@ const DefaultCover = styled.div`
   align-items: center;
 ` 
 
-const InputRight = styled.div`
+const RightContent = styled.div`
   width: 700px;
+  height: 300px;
+  display: flex;
   flex-direction: column;
-  align-items: start;
+`
 
-  * {
-    margin: 10px 0;
-  }
+const Top = styled.div`
+  flex-direction: column;
+  flex-grow: 4;
+  align-items: start;
+`
+
+const Bottom = styled.div`
+  flex-grow: 1;
+  justify-content: start;
+  align-items: end;
 `
 
 const InputTitle = styled.div`
   color: #fff;
-  font-size: 50px;
+  font-size: 45px;
   font-weight: bold;
-  justify-content: start;
-
+  
   & input {
     color: #fff;
     background-color: transparent;
@@ -89,9 +108,19 @@ const InputTitle = styled.div`
     font-weight: 800;
     border: none;
     border-bottom: 1px solid white;
+    width: 100%;
     
     :focus {
       outline: none;
   }
 `
+
+const InputRivateToggle = styled.div`
+  font-weight: light;
+  display: inline-block;
+`
+
+const AddMusicBtn = styled(DefaultBtn)`
+`
+
 export default PlaylistCreate;
