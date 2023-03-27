@@ -5,12 +5,13 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
+import { getPlaylist } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
 
-  console.log(playlists)
+  console.log(getPlaylist())
   return (
     <StyleWrapper>
       <Header 
