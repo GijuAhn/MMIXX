@@ -5,7 +5,7 @@ RUN pip install --upgrade pip
 RUN apt-get update
 RUN apt-get install apt-file -y
 RUN apt-file update
-RUN apt-get intall vim -y
+RUN apt-get install vim -y
 RUN pip install -r "requirements.txt"
 RUN apt-get install libsndfile-dev
 RUN apt-get install sox
