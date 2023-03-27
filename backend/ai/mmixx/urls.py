@@ -21,11 +21,26 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 from style_transfer import views
 
+from rest_framework.permissions import AllowAny
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 # import music.serializers
 # import music.views as views
 
 # router = routers.DefaultRouter()
 # router.register('music', music.serializers.MusicViewSet)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Python Server",
+        default_version='v1',
+        description="Music Mix API\nMusic Inst API",
+        terms_of_service="https://www.google.com/policies/terms/",
+    ),
+    public=True,
+    permission_classes=(AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +50,7 @@ urlpatterns = [
     url('api/', include('style_transfer.urls')),
     # APIView 클래스를 as_view로 라우팅 -> views에서 불러와 처리함
     # url('api1/music', views.MusicAPIView.as_view()),
+    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

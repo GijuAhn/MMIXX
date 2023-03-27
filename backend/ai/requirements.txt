@@ -23,6 +23,7 @@ Django==3.2.13
 django-rest-swagger==2.2.0
 django-storages==1.13.2
 djangorestframework==3.14.0
+drf-yasg
 ffmpeg==1.4
 ffmpeg-python==0.2.0
 ffprobe==0.5
@@ -97,13 +98,6 @@ sox==1.4.1
 spleeter==2.3.2
 sqlparse==0.4.3
 sympy==1.11.1
-tensorboard==2.12.0
-tensorboard-data-server==0.7.0
-tensorboard-plugin-wit==1.8.1
-tensorflow==2.12.0
-tensorflow-estimator==2.12.0
-tensorflow-intel==2.12.0
-tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.2.0
 threadpoolctl==3.1.0
 torch==2.0.0
