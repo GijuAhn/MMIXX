@@ -3,7 +3,6 @@ import styled from "styled-components"
 const MiniPlaylistCard = ({ playlist }) => {
   const { coverImage, albumName } = playlist
 
-  console.log(coverImage)
   return (
     <CardWrapper coverImage={coverImage}>
       <PlaylistTitle>
