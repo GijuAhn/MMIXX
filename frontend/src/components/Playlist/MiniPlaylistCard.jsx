@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-const MiniPlaylistCard = ({ playlist }) => {
+const MiniPlaylistCard = ({ playlist, onClick }) => {
   const { coverImage, albumName } = playlist
 
   return (
-    <CardWrapper coverImage={coverImage}>
+    <CardWrapper coverImage={coverImage} onClick={onClick}>
       <PlaylistTitle>
         {albumName}
       </PlaylistTitle>
@@ -21,6 +21,7 @@ const CardWrapper = styled.div`
   background-size: cover;
   justify-content: start;
   align-items: end;
+  cursor: pointer;
 `
 const PlaylistTitle = styled.p`
   padding: 10px;

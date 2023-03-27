@@ -11,7 +11,7 @@ const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
 
-  console.log(getPlaylist())
+  // console.log(getPlaylist())
   return (
     <StyleWrapper>
       <Header 
@@ -37,6 +37,7 @@ const Playlist = () => {
               <MiniPlaylistCard 
                 key={index} 
                 playlist={playlist}
+                onClick={() => navigate(`/playlist/${playlist.playlistSeq}`)}
                 />
             )
           })}

@@ -8,7 +8,6 @@ import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 
 
 const PlayControl = ({ width, height, isPlaying }) => {
-  console.log('width', width)
   return (
     <IconWrapper width={width} height={height}>
       <ShuffleRoundedIcon fontSize="small"/>

@@ -17,7 +17,8 @@ export const testPlaylist = atom({
   key: 'testPlaylist',
   default: 
     [
-      {
+      { 
+        playlistSeq: 1,
         musicName: 'OMG', 
         musicUrl: '',
         coverImage: newJeansImage,
@@ -27,6 +28,7 @@ export const testPlaylist = atom({
         isFavorite: false,
       },
       {
+        playlistSeq: 2,
         musicName: '사건의 지평선', 
         musicUrl: '',
         coverImage: 'https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg',
@@ -36,6 +38,7 @@ export const testPlaylist = atom({
         isFavorite: true,
       },
       {
+        playlistSeq: 3,
         musicName: 'Cupid', 
         musicUrl: '',
         coverImage: 'https://preview.redd.it/fifty-fifty-the-1st-single-album-the-beginning-cupid-cover-v0-ujxvn57yg5ka1.jpg?auto=webp&s=464bef37a60cd8b6b2d0c607ecea65be3c4e85b8',
@@ -45,6 +48,7 @@ export const testPlaylist = atom({
         isFavorite: true,
       },
       {
+        playlistSeq: 4,
         musicName: 'OMG', 
         musicUrl: '',
         coverImage: 'https://images.genius.com/78a260dddd0b802059eb5e7a4d4f2f0c.1000x1000x1.jpg',
