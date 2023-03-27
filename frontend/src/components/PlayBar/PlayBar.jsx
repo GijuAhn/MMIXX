@@ -31,6 +31,7 @@ const Wrapper = styled.div`
   width: calc(100% - 200px);
   min-width: 800px;
   justify-content: space-between;
+  filter: blur(50px)
 `
 
 const PlayMusicInfo = styled.div`
