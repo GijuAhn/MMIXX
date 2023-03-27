@@ -59,7 +59,6 @@ public class PlaylistService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid userSeq"));
 
         Playlist playlist = new Playlist();
-        playlist.
     }
 
     /**
