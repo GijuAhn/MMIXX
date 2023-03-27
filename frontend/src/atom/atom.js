@@ -19,47 +19,134 @@ export const testPlaylist = atom({
     [
       { 
         playlistSeq: 1,
+        userSeq: 'ABC',
         musicName: 'OMG', 
         musicUrl: '',
         coverImage: newJeansImage,
         musicImage: 'assets/cover_image.jpg',
         musicianName: 'New Jeans',
-        albumName: '앨범 제목',
+        playlistName: '뉴진스 노래 제목',
         isFavorite: false,
+        isPrivate: false,
       },
       {
         playlistSeq: 2,
+        userSeq: 'DEF',
         musicName: '사건의 지평선', 
         musicUrl: '',
         coverImage: 'https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg',
         musicImage: '',
         musicianName: '윤하',
-        albumName: '앨범 제목',
+        playlistName: '윤하 노래',
         isFavorite: true,
+        isPrivate: false,
       },
       {
         playlistSeq: 3,
+        userSeq: 'GHI',
         musicName: 'Cupid', 
         musicUrl: '',
         coverImage: 'https://preview.redd.it/fifty-fifty-the-1st-single-album-the-beginning-cupid-cover-v0-ujxvn57yg5ka1.jpg?auto=webp&s=464bef37a60cd8b6b2d0c607ecea65be3c4e85b8',
         musicImage: '',
         musicianName: 'FIFTY FIFTY',
-        albumName: '앨범 제목',
+        playlistName: '케이팝노래',
         isFavorite: true,
+        isPrivate: false,
       },
       {
         playlistSeq: 4,
+        userSeq: 'XYZ',
         musicName: 'OMG', 
         musicUrl: '',
         coverImage: 'https://images.genius.com/78a260dddd0b802059eb5e7a4d4f2f0c.1000x1000x1.jpg',
         musicImage: '',
         musicianName: '뉴진스',
-        albumName: '앨범 제목',
+        playlistName: '뉴진스 앨범 제목 !',
         isFavorite: false,
+        isPrivate: false,
       },
     ]
 })
 
+export const testPlaylistMusic = atom({
+  key: 'testPlaylistMusic',
+  default: {
+    playlistSeq: 1, 
+    playlistName: '뉴진스 노래 모음',
+    playlistMusic: [
+      {
+        musicSeq: 1,
+        sequence: 1,
+        music: {
+          userSeq: 'ABS', 
+          musicName: 'New Jeans',
+          coverImage: newJeansImage,
+          musicLength: 100,
+          musicianName: 'New Jeans',
+          albumName: '뉴진스 앨범',
+          mixed: 0,
+          edited: 0
+       }
+      },
+      {
+        musicSeq: 2,
+        sequence: 2,
+        music: {
+          userSeq: 'ABS', 
+          musicName: 'New Jeans',
+          coverImage: newJeansImage,
+          musicLength: 100,
+          musicianName: 'New Jeans',
+          albumName: '뉴진스 앨범',
+          mixed: 0,
+          edited: 0
+       }
+      },
+      {
+        musicSeq: 3,
+        sequence: 3,
+        music: {
+          userSeq: 'ABS', 
+          musicName: 'New Jeans',
+          coverImage: newJeansImage,
+          musicLength: 100,
+          musicianName: 'New Jeans',
+          albumName: '뉴진스 앨범',
+          mixed: 0,
+          edited: 0
+       }
+      },
+      {
+        musicSeq: 4,
+        sequence: 4,
+        music: {
+          userSeq: 'ABS', 
+          musicName: 'New Jeans',
+          coverImage: newJeansImage,
+          musicLength: 100,
+          musicianName: 'New Jeans',
+          albumName: '뉴진스 앨범',
+          mixed: 0,
+          edited: 0
+       }
+      },
+      {
+        musicSeq: 5,
+        sequence: 5,
+        music: {
+          userSeq: 'ABS', 
+          musicName: 'New Jeans',
+          coverImage: newJeansImage,
+          musicLength: 100,
+          musicianName: 'New Jeans',
+          albumName: '뉴진스 앨범',
+          mixed: 0,
+          edited: 0
+       }
+      }
+    ]
+  }
+})
 // export const changeDefaultWidth = selector({
 //   key: 'changeDefaultWidth',
 //   get: ({get}) => { return get(defaultWidth) }

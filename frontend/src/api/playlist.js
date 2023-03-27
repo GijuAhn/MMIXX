@@ -1,24 +1,25 @@
-// import base from './base'
-// import axios from 'axios'
+import instance from './base'
 
-// const customAxios = axios.create({
-//   baseURL: process.env.REACT_APP_TEST,
-// });
+export const getPlaylistDetail = async (seq) => {
+  try {
+    const res = await instance({
+      params: seq,
+      method: 'GET',
+    })
+    return res
+  } catch (error) {
+    return error
+  }
+}
 
-// export const getPlaylist = async() => {
-//   const data = await base.get()
-//   return 1
-//   return base;
-// }
-
-// export const getPlaylistDetail = async( params ) => {
-//   const data = await axios(params)
-
-//   return data
-// }
-
-// export const showCat = async () => {
-//   const res = await customAxios('https://api.thecatapi.com/v1/images/search')
-
-//   return res
-// }
+export const testApi = async () => {
+  try {
+    const data = await instance({
+      url: '/search',
+      method: 'GET'
+    })
+    return data 
+  } catch (error) {
+    console.log(error)
+  }
+}  

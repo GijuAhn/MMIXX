@@ -1,5 +1,10 @@
 import axios from 'axios'
 
-export const client =  axios.create({
-  baseURL: process.env.REACT_API_TEST
+const instance =  axios.create({
+  baseURL: process.env.REACT_APP_TEST,
+  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
 })
+
+export default instance;
