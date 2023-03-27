@@ -1,34 +1,46 @@
+import { useRef, useEffect } from 'react'
 import styled, { css } from "styled-components"
-import React from 'react'
-import AlbumIcon from '@mui/icons-material/Album';
+import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
+import { Switch } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
-const PlaylistEdit = () => {
-  const inputRef = React.useRef(null);
+const PlaylistCreate = ({ playlist }) => {
+  const inputRef = useRef(null)
+  const navigate = useNavigate()
 
-  React.useEffect(() => {
-    inputRef.current.select();
-  }, [])
+  useEffect(() => {
+    inputRef.current.select()
+    inputRef.current.focus()
+  })
 
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
       <Header 
-        title="New Playlist"
-        desc="플레이리스트 수정임ㅋ"
+        title="Edit Playlist"
+        desc="플레이리스트 수정"
       />
       <InputContent>
-        <DefaultCover coverImage="">
-          <AlbumIcon colo="white" fontSize="large"/>
+        <DefaultCover>
+          <AlbumIcon color="white" fontSize="large"/>
         </DefaultCover>
-        <InputRight>
-          <InputTitle>
-            <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
-          </InputTitle>
-          <DefaultBtn>
-            곡 추가
-          </DefaultBtn>
-        </InputRight>
+        <RightContent>
+          <Top>
+            <InputTitle>
+              <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
+            </InputTitle>
+            <InputRivateToggle>
+              공개여부
+              <Switch defaultChecked/>
+            </InputRivateToggle>
+          </Top>
+          <Bottom>
+            <AddMusicBtn onClick={() => navigate("/playlist/select")}>
+              곡 추가
+            </AddMusicBtn>
+          </Bottom>
+        </RightContent>
       </InputContent>
     </StyleWrapper>
   );
@@ -36,7 +48,7 @@ const PlaylistEdit = () => {
 
 const StyleWrapper = styled(Wrapper)`
   ${({theme, url}) => css`
-    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.7), ${theme.palette.dark} 70%), url(${url});
+    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.8), ${theme.palette.darkAlt} 70%), url(${url});
     background-size: cover;
   `}
 `
@@ -62,22 +74,30 @@ const DefaultCover = styled.div`
   align-items: center;
 ` 
 
-const InputRight = styled.div`
+const RightContent = styled.div`
   width: 700px;
+  height: 300px;
+  display: flex;
   flex-direction: column;
-  align-items: start;
+`
 
-  * {
-    margin: 10px 0;
-  }
+const Top = styled.div`
+  flex-direction: column;
+  flex-grow: 4;
+  align-items: start;
+`
+
+const Bottom = styled.div`
+  flex-grow: 1;
+  justify-content: start;
+  align-items: end;
 `
 
 const InputTitle = styled.div`
   color: #fff;
-  font-size: 50px;
+  font-size: 45px;
   font-weight: bold;
-  justify-content: start;
-
+  
   & input {
     color: #fff;
     background-color: transparent;
@@ -85,9 +105,19 @@ const InputTitle = styled.div`
     font-weight: 800;
     border: none;
     border-bottom: 1px solid white;
+    width: 100%;
     
     :focus {
       outline: none;
   }
 `
-export default PlaylistEdit;
+
+const InputRivateToggle = styled.div`
+  font-weight: light;
+  display: inline-block;
+`
+
+const AddMusicBtn = styled(DefaultBtn)`
+`
+
+export default PlaylistCreate;
