@@ -27,7 +27,9 @@ import com.a403.mmixx.music.model.service.MP3MetadataService;
 import com.a403.mmixx.music.model.service.Utils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MusicService {
@@ -67,17 +69,19 @@ public class MusicService {
 	}
 
 	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
-//		TODO: EC2 DB에 musicContainerList 데이터를 저장해야 함. QueryDSL 사용
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
+
+		log.info("musicContainerList: " + musicContainerList);
+		musicRepository.saveAll(musicContainerList);
 
 		//	print musicContainerList's data, cascade
 		for (Music music : musicContainerList) {
-			System.out.println("musicName: " + music.getMusicName());
-			System.out.println("musicUrl: " + music.getMusicUrl());
-			System.out.println("coverImage: " + music.getCoverImage());
-			System.out.println("length: " + music.getMusicLength());
-			System.out.println("artist: " + music.getMusicianName());
-			System.out.println("album: " + music.getAlbumName());
+			log.info("musicName: " + music.getMusicName());
+			log.info("musicUrl: " + music.getMusicUrl());
+			log.info("coverImage: " + music.getCoverImage());
+			log.info("length: " + music.getMusicLength());
+			log.info("artist: " + music.getMusicianName());
+			log.info("album: " + music.getAlbumName());
 		}
 
 		return musicContainerList;
@@ -108,9 +112,6 @@ public class MusicService {
 
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
-//		multipartFileInputStreamClone1 사용하지도 않았는데 왜 될까... 진짜 모르겠다.
-//		.tmp는 또 왜 삭제 안될까... 진짜 모르겠다. delete() 주석처리...
-//		근데 삐걱거려도 동작은 하니까...
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
 
