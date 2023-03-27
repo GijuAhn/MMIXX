@@ -8,8 +8,8 @@ RUN apt-file update
 RUN apt-get install vim -y
 RUN pip install -r "requirements.txt"
 RUN apt-get install libsndfile-dev -y
-RUN apt-get install sox
-RUN apt-get install ffmpeg
-RUN apt-get install wget
+RUN apt-get install sox -y
+RUN apt-get install ffmpeg -y
+RUN apt-get install wget -y
 EXPOSE 9999
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:9999"]
