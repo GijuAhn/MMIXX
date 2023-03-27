@@ -2,7 +2,9 @@
 import styled from "styled-components";
 // import temp_img from "assets/logo.png";
 // import PropTypes from "prop-types";
-import MusicIcon from "./MusicIcon";
+import DownloadIcon from "./MusicDownloadIcon";
+import MixIcon from "./MusicMixIcon";
+import PlayIcon from "./MusicPlayIcon";
 
 const MusicListItem = ({
   musicSeq,
@@ -25,27 +27,29 @@ const MusicListItem = ({
     // <tr className={styles.row} onClick={onClick} onMouseOver={onMouseOver}>
     // <tr onClick={onClick} onMouseOver={onMouseOver}>
     <Tr>
-      <td>
+      <Td>
+        [img]
         {/* <img src={coverImage === null ? temp_img : coverImage} alt=""></img> */}
-        <img src={coverImage} alt=""></img>
-      </td>
-      <td>{mixed === null ? null : "M"}</td>
-      <td>{musicName}</td>
-      <td>{musicianName}</td>
-      <td>{albumName}</td>
-      <td>
+        {/* <img src={coverImage} alt=""></img> */}
+      </Td>
+      <Td>{mixed === null ? null : "M"}</Td>
+      <Td>{musicName}</Td>
+      <Td>{musicianName}</Td>
+      <Td>{albumName}</Td>
+      <Td>
         {Math.floor(musicLength / 1000 / 60)}:
         {Math.floor((musicLength / 1000) % 60)}
-      </td>
-      <td>
-        <MusicIcon musicSeq={musicSeq} iconName={"play"}></MusicIcon>
-      </td>
-      <td>
-        <MusicIcon musicSeq={musicSeq} iconName={"mix"}></MusicIcon>
-      </td>
-      <td>
-        <MusicIcon musicSeq={musicSeq} iconName={"download"}></MusicIcon>
-      </td>
+      </Td>
+      {/* <td style="display:none"> */}
+      <Td>
+        <PlayIcon musicSeq={musicSeq}></PlayIcon>
+      </Td>
+      <Td>
+        <MixIcon musicSeq={musicSeq}></MixIcon>
+      </Td>
+      <Td>
+        <DownloadIcon musicSeq={musicSeq}></DownloadIcon>
+      </Td>
     </Tr>
   );
 };
@@ -67,19 +71,13 @@ const Tr = styled.tr`
     background-color: ${({ theme }) => theme.palette.hover};
   }
 `;
-// const Td = styled.td`
-//   &td:first-child {
-//     border-radius: 10px 0 0 10px;
-//   }
-//   &td:last-child {
-//     border-radius: 10px 0 0 10px;
-//   }
-// `;
-// background-color: #2d3032;
-// opacity: 0.5; // -> 자식들까지 투명도 적용된다. (글자까지)
-
-// darkgray: 2D3032 인데 투명이 50
-// hover: 되면 2D3032
-// radius 15
+const Td = styled.td`
+  &:first-child {
+    border-radius: 15px 0 0 15px;
+  }
+  &:last-child {
+    border-radius: 0 15px 15px 0;
+  }
+`;
 
 export default MusicListItem;
