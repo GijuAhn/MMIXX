@@ -6,7 +6,7 @@ import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-const PlaylistCreate = ({ playlist }) => {
+const PlaylistDetail = () => {
   const inputRef = useRef(null)
   const navigate = useNavigate()
 
@@ -120,4 +120,4 @@ const InputRivateToggle = styled.div`
 const AddMusicBtn = styled(DefaultBtn)`
 `
 
-export default PlaylistCreate;
+export default PlaylistDetail;

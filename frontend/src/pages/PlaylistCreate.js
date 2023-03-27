@@ -30,10 +30,10 @@ const PlaylistCreate = () => {
             <InputTitle>
               <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
             </InputTitle>
-            <InputRivateToggle>
+            <InputPrivateToggle>
               공개여부
               <Switch defaultChecked/>
-            </InputRivateToggle>
+            </InputPrivateToggle>
           </Top>
           <Bottom>
             <AddMusicBtn onClick={() => navigate("/playlist/select")}>
@@ -112,7 +112,7 @@ const InputTitle = styled.div`
   }
 `
 
-const InputRivateToggle = styled.div`
+const InputPrivateToggle = styled.div`
   font-weight: light;
   display: inline-block;
 `

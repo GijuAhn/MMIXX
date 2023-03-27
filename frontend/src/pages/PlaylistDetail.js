@@ -1,57 +1,64 @@
-import { useRef, useEffect, useState } from 'react'
+import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
+import { useRecoilValue } from 'recoil'
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-// import { getPlaylistDetail } from 'api/playlist'
+import { testPlaylistMusic } from 'atom/atom'
 
-const PlaylistCreate = () => {
-  const inputRef = useRef(null)
+const PlaylistEdit = () => {
   const navigate = useNavigate()
-  // const location = useLocation()
+
+  // 임시 데이터
+  const location = useLocation()
+  const playlistSeq = location.pathname.split('/')[2]
+  const { 
+    playlistName, 
+    playlistMusic
+  } = useRecoilValue(testPlaylistMusic)
+  const [coverImage, setCoverImage] = useState(null)
 
   useEffect(() => {
-    inputRef.current.select()
-    inputRef.current.focus()
-  })
-
-  // useEffect(() => {
-  //   const playlistSeq = location.pathname.split('/')[2]
-  //   getPlaylistDetail({
-  //     url: `https://j8a403.p.ssafy.io/api/playlist/${playlistSeq}`,
-  //     method: 'GET',
-  //   })
-  // }, [])
+    setCoverImage(playlistMusic[0].music.coverImage)
+  }, [playlistMusic])
 
   return (
-    <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
+    <StyleWrapper url="">
       <Header 
-        title="New Playlist"
-        desc="새 플레이리스트 만들기"
+        title="플레이리스트 상세 보기"
+        desc=""
+        fontSize="24px"
       />
-      <InputContent>
-        <DefaultCover>
-          <AlbumIcon color="white" fontSize="large"/>
-        </DefaultCover>
+      <InfoContent>
+        <PlaylistCover coverImage={coverImage}>
+          {!coverImage &&
+            <AlbumIcon color="white" fontSize="large"/>
+          }
+        </PlaylistCover>
         <RightContent>
           <Top>
-            <InputTitle>
-              <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
-            </InputTitle>
-            <InputRivateToggle>
+            <PlaylistTitle>
+              <input type="text" defaultValue={playlistName}></input>
+            </PlaylistTitle>
+            <PrivateToggle>
               공개여부
               <Switch defaultChecked/>
-            </InputRivateToggle>
+            </PrivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select")}>
-              곡 추가
-            </AddMusicBtn>
+            <PlayCircleFilledRoundedIcon 
+              fontSize="large"
+            />
+            <DefaultBtn onClick={() => navigate("/playlist/edit")}>
+              플레이리스트 수정
+            </DefaultBtn>
           </Bottom>
         </RightContent>
-      </InputContent>
+      </InfoContent>
+
     </StyleWrapper>
   );
 };
@@ -63,7 +70,7 @@ const StyleWrapper = styled(Wrapper)`
   `}
 `
 
-const InputContent = styled.div`
+const InfoContent = styled.div`
   height: 350px;
   width: 1100px;
   overflow: hidden;
@@ -74,14 +81,20 @@ const InputContent = styled.div`
   justify-content: start;
 `
 
-const DefaultCover = styled.div`
+const PlaylistCover = styled.div`
   width: 300px;
   height: 300px;
-  background-color: ${({theme}) => theme.palette.dark};
+  background-color: ${({theme, coverImage}) => coverImage || theme.palette.dark};
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${({coverImage}) => 
+    coverImage && `
+    background-image: url(${coverImage});
+    background-size: cover;
+  `}
 ` 
 
 const RightContent = styled.div`
@@ -103,18 +116,17 @@ const Bottom = styled.div`
   align-items: end;
 `
 
-const InputTitle = styled.div`
+const PlaylistTitle = styled.div`
   color: #fff;
   font-size: 45px;
   font-weight: bold;
   
   & input {
-    color: #fff;
+    color: ${({theme}) => theme.palette.alt};
     background-color: transparent;
     font-size: 50px;
     font-weight: 800;
     border: none;
-    border-bottom: 1px solid white;
     width: 100%;
     
     :focus {
@@ -122,12 +134,9 @@ const InputTitle = styled.div`
   }
 `
 
-const InputRivateToggle = styled.div`
+const PrivateToggle = styled.div`
   font-weight: light;
   display: inline-block;
 `
 
-const AddMusicBtn = styled(DefaultBtn)`
-`
-
-export default PlaylistCreate;
+export default PlaylistEdit;
