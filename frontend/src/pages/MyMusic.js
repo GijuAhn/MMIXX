@@ -1,5 +1,5 @@
 import { Wrapper, Header } from "components/Common";
-import Music from "components/myMusic/Music";
+import Music from "components/mymusic";
 
 const MyMusic = () => {
   return (
