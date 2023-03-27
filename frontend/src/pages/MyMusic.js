@@ -1,12 +1,11 @@
 import { Wrapper, Header } from "components/Common";
+import Music from "components/myMusic/Music";
 
 const MyMusic = () => {
   return (
     <Wrapper>
-      <Header 
-        title="MyMusic"
-        desc="내 음악 들어보기"
-      />
+      <Header title="MyMusic" desc="내 음악 들어보기" />
+      <Music></Music>
     </Wrapper>
   );
 };
