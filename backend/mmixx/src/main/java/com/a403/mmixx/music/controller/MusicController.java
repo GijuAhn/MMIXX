@@ -64,13 +64,14 @@ public class MusicController {
 
 	@PostMapping
 	public ResponseEntity<?> registMusic(@RequestPart("user") MusicRegistRequestDto user, @RequestPart("files") List<MultipartFile> multipartFiles) throws Exception {
+		// TODO: 파일 업로드 S3 & EC2 DB
 		// 200 : 업로드 성공
 		// 401 : (권한 없음)
 		// 413 : 파일 용량 초과
 		// 415 : 지원하지 않는 확장자
 		// 500 : 업로드 실패
 
-		
+
 		return ResponseEntity.ok(musicService.registMusic(multipartFiles));
 	}
 

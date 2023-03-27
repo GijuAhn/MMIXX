@@ -71,18 +71,18 @@ public class MusicService {
 	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
 
-		log.info("musicContainerList: " + musicContainerList);
-		musicRepository.saveAll(musicContainerList);
+//		log.info("musicContainerList: " + musicContainerList);
+//		musicRepository.saveAll(musicContainerList);
 
 		//	print musicContainerList's data, cascade
-		for (Music music : musicContainerList) {
-			log.info("musicName: " + music.getMusicName());
-			log.info("musicUrl: " + music.getMusicUrl());
-			log.info("coverImage: " + music.getCoverImage());
-			log.info("length: " + music.getMusicLength());
-			log.info("artist: " + music.getMusicianName());
-			log.info("album: " + music.getAlbumName());
-		}
+//		for (Music music : musicContainerList) {
+//			log.info("musicName: " + music.getMusicName());
+//			log.info("musicUrl: " + music.getMusicUrl());
+//			log.info("coverImage: " + music.getCoverImage());
+//			log.info("length: " + music.getMusicLength());
+//			log.info("artist: " + music.getMusicianName());
+//			log.info("album: " + music.getAlbumName());
+//		}
 
 		return musicContainerList;
 	}
