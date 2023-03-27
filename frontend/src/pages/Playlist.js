@@ -7,11 +7,12 @@ import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
 import { getPlaylist, showCat } from 'api/playlist';
 import { client } from 'api/base';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
+  const [playlistCoverImage, setPlaylistCoverImage] = useState(null);
 
   // useEffect(() => {
   //   (async () => {
@@ -20,7 +21,6 @@ const Playlist = () => {
   //   })()
   // }, [])
 
-  console.log(process.env.REACT_APP_TEST)
   return (
     <StyleWrapper>
       <Header 
