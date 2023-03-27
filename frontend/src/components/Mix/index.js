@@ -1,2 +1,3 @@
 // export { default as Carousel } from './Carousel'
-export { default as MusicCard } from './MusicCard'
+export { default as PresetCard } from './PresetCard'
+export { default as MusicInfo } from './MusicInfo'

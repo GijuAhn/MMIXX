@@ -10,32 +10,50 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-const  MusicCard = (props) => {
-  const preset_name = props.preset_name
-  const preset_summary = props.preset_summary
-  const preset_info = props.preset_info
+// 참조
+// https://mui.com/material-ui/react-card/
+
+const styles = {
+  image : {
+    margin:10,
+  }
+}
+
+const PresetCard = (props) => {
+  // const preset_name = props.preset_name
+  // const preset_summary = props.preset_summary
+  // const preset_info = props.preset_info
   const preset_image = props.preset_image
   const theme = useTheme();
   return (
-    <Card sx={{ display: 'flex' }}>
+    <Card sx={{ display: 'flex', maxWidth: 345}}>
       {/* 프리셋 이미지 */}
-      <CardMedia           
+      <CardMedia        
+        style={styles.image}  
         component="img"
         sx={{ width: 151 }}
         image={ preset_image }
         alt="Live from space album cover"
       />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <CardContent sx={{ flex: '1 0 auto' }}>
+        <CardContent>
           <Typography component="div" variant="h5">
-            { preset_name }
+            {/* { preset_name } */}
+            PRESET NAME
           </Typography>
           <Typography variant="subtitle1" color="text.secondary" component="div">
-            {preset_summary}
+            {/* { preset_summary } */}
+            PRESET_SUMMARY
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" component="div">
-            {preset_info}
+          <Typography variant="body2" color="text.secondary" component="div">
+            {/* { preset_info } */}
+            PRESET_INFO
           </Typography>
+          {/* <div sx = {{display: 'flex', flexDirection: 'column'}}>
+            <p>PRESET_NAME</p>
+            <p>PRESET_SUMMARY</p>
+            <p>PRESET_INFO</p>
+          </div> */}
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton aria-label="previous">
@@ -53,4 +71,4 @@ const  MusicCard = (props) => {
   );
 }
 
-export default MusicCard
+export default PresetCard
