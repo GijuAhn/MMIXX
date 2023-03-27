@@ -1,30 +1,20 @@
 package com.a403.mmixx.music.model.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import javax.transaction.Transactional;
 
 import com.a403.mmixx.music.model.dto.*;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
-import com.a403.mmixx.music.model.service.MP3MetadataService;
-import com.a403.mmixx.music.model.service.Utils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,8 +58,13 @@ public class MusicService {
 		return music;
 	}
 
-	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
+	public List<Music> registMusic(MusicRegistRequestDto user, List<MultipartFile> multipartFiles) throws Exception {
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
+
+		//	set userSeq into musicContainerList
+		for (Music music : musicContainerList) {
+			music.setUserSeq(user.getUserSeq());
+		}
 
 		log.info("musicContainerList: " + musicContainerList);
 		musicRepository.saveAll(musicContainerList);
@@ -112,16 +107,25 @@ public class MusicService {
 
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
+
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
+//		C:\Users\SSAFY\AppData\Local\Temp\tomcat.5555.6401783967014632574\work\Tomcat\localhost\api\ upload_c84fc623_5e93_45cd_b1b0_ae7e377fa2d4_00000000.tmp
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
 
 
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
 			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
+			musicContainerList.get(i).setGenreSeq(0);
 		}
 
 		return musicContainerList;
 	}
 
+	public String mixMusic(Integer seq) {
+		//	return music_url stored in MySQL DB
+		Music music = musicRepository.findById(seq).orElse(null);
+		String musicUrl = music.getMusicUrl();
+		return musicUrl;
+	}
 }
