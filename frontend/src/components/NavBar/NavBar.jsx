@@ -4,6 +4,7 @@ import { useLocation, Link } from 'react-router-dom'
 
 import { PlainBtn } from 'components/Common'
 
+const isLogin = false;
 
 const NavBar = () => {
   const location = useLocation();
@@ -14,33 +15,40 @@ const NavBar = () => {
   ] 
 
   return (
-    <Wrapper>
-      <NavProfile>
-        <NavAvatar 
-          src=''
-          sx={{ width: 100, height: 100 }}
-        />  
-        <p>
-          사용자 이름
-        </p>
-      </NavProfile>
-      <NavList>
-        {navList && navList.map((item, idx) => {
-          return (
-            <NavItem key={idx} to={item.path}>
-              <NavBtn selected={'/' + item.path === location.pathname}>
-                {item.name}
-              </NavBtn>
-            </NavItem>
-          )
-        })}
-      </NavList>
-      <LogOut>
-        <PlainBtn>
-          로그아웃
-        </PlainBtn>
-      </LogOut> 
-    </Wrapper>
+    <>
+      {isLogin ?
+        <Wrapper>
+          <NavProfile>
+            <NavAvatar 
+              src=''
+              sx={{ width: 100, height: 100 }}
+            />  
+            <p>
+              사용자 이름
+            </p>
+          </NavProfile>
+          <NavList>
+            {navList && navList.map((item, idx) => {
+              return (
+                <NavItem key={idx} to={item.path}>
+                  <NavBtn selected={'/' + item.path === location.pathname}>
+                    {item.name}
+                  </NavBtn>
+                </NavItem>
+              )
+            })}
+          </NavList>
+          <LogOut>
+            <PlainBtn>
+              로그아웃
+            </PlainBtn>
+          </LogOut> 
+        </Wrapper>
+        :
+        <LoginWrapper>
+        </LoginWrapper>
+      }
+    </>
   )
 }
 
@@ -109,4 +117,6 @@ const LogOut = styled.div`
   flex-grow: 0.5;
 `
 
+const LoginWrapper = styled.div`
+`
 export default NavBar;
