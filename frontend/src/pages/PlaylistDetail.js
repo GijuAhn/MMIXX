@@ -5,25 +5,25 @@ import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { getPlaylistDetail } from 'api/playlist'
+// import { getPlaylistDetail } from 'api/playlist'
 
 const PlaylistCreate = () => {
   const inputRef = useRef(null)
   const navigate = useNavigate()
-  const location = useLocation()
+  // const location = useLocation()
 
   useEffect(() => {
     inputRef.current.select()
     inputRef.current.focus()
   })
 
-  useEffect(() => {
-    const playlistSeq = location.pathname.split('/')[2]
-    getPlaylistDetail({
-      url: `https://j8a403.p.ssafy.io/api/playlist/${playlistSeq}`,
-      method: 'GET',
-    })
-  }, [])
+  // useEffect(() => {
+  //   const playlistSeq = location.pathname.split('/')[2]
+  //   getPlaylistDetail({
+  //     url: `https://j8a403.p.ssafy.io/api/playlist/${playlistSeq}`,
+  //     method: 'GET',
+  //   })
+  // }, [])
 
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">

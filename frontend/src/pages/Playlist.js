@@ -5,13 +5,22 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
-import { getPlaylist } from 'api/playlist';
+import { getPlaylist, showCat } from 'api/playlist';
+import { client } from 'api/base';
+import { useEffect } from 'react';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
 
-  // console.log(getPlaylist())
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await client.get('search')
+  //     console.log(data)
+  //   })()
+  // }, [])
+
+  console.log(process.env.REACT_APP_TEST)
   return (
     <StyleWrapper>
       <Header 
