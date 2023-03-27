@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
 
-import { PlayIcons } from 'components/PlayBar';
+import { PlayControl } from 'components/PlayBar';
 
 const PlayBar = () => {
   const location = useLocation()
@@ -12,7 +12,12 @@ const PlayBar = () => {
 
   return (
     <Wrapper>
-      <PlayIcons />
+      <PlayMusicInfo />
+      <PlayControl 
+        width="30%"
+        height="30%"
+      />
+      <VolumeControl />
     </Wrapper>
   );
 };
@@ -25,6 +30,21 @@ const Wrapper = styled.div`
   left: 200px;
   width: calc(100% - 200px);
   min-width: 800px;
+  justify-content: space-between;
+  filter: blur(50px)
+`
+
+const PlayMusicInfo = styled.div`
+  border: 1px solid yellow;
+  width: 100px;
+`
+
+const CoverImage = styled.img`
+`
+
+const VolumeControl = styled.div`
+  border: 1px solid green;
+  width: 100px;
 `
 
 export default PlayBar;

@@ -5,12 +5,22 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
+import { getPlaylist, showCat } from 'api/playlist';
+import { client } from 'api/base';
+import { useEffect, useState } from 'react';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
+  const [playlistCoverImage, setPlaylistCoverImage] = useState(null);
 
-  console.log(playlists)
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await client.get('search')
+  //     console.log(data)
+  //   })()
+  // }, [])
+
   return (
     <StyleWrapper>
       <Header 
@@ -36,6 +46,7 @@ const Playlist = () => {
               <MiniPlaylistCard 
                 key={index} 
                 playlist={playlist}
+                onClick={() => navigate(`/playlist/${playlist.playlistSeq}`)}
                 />
             )
           })}
