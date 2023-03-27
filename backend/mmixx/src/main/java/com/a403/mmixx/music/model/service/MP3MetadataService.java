@@ -27,7 +27,12 @@ public class MP3MetadataService {
         for (MultipartFile multipartFile : multipartFiles) {
             Music musicContainer = new Music();
             Map<String, String> metadataMap = extractMetadata(multipartFile);
-            musicContainer.setMusicName(metadataMap.get("musicName"));
+            //  if musicName is null, set musicName to its own file name
+            if (metadataMap.get("musicName") == null) {
+                musicContainer.setMusicName(multipartFile.getOriginalFilename());
+            } else {
+                musicContainer.setMusicName(metadataMap.get("musicName"));
+            }
             musicContainer.setMusicLength((int) Math.ceil(Double.valueOf(metadataMap.get("musicLength")) * 1000));
             musicContainer.setMusicianName(metadataMap.get("musicianName"));
             musicContainer.setAlbumName(metadataMap.get("albumName"));
@@ -80,6 +85,7 @@ public class MP3MetadataService {
         }
 
         // Delete temporary MP3 file
+        // TODO: cleanup '.tmp' garbage files...
 //        mp3File.delete();
         return metadataMap;
     }
