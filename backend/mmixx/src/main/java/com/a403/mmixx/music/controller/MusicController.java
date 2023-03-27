@@ -70,6 +70,7 @@ public class MusicController {
 		// 415 : 지원하지 않는 확장자
 		// 500 : 업로드 실패
 
+		
 		return ResponseEntity.ok(musicService.registMusic(multipartFiles));
 	}
 
