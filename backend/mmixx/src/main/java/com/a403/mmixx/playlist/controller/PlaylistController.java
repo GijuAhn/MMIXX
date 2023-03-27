@@ -29,7 +29,7 @@ public class PlaylistController {
 
     @PostMapping
     public void save(@RequestBody PlaylistMusicRequestDto requestDto) {
-        playlistService.save(requestDto)
+        playlistService.save(requestDto);
     }
     @DeleteMapping("/{playlistSeq}")
     public void deletePlaylist(@PathVariable("playlistSeq") int seq) {
