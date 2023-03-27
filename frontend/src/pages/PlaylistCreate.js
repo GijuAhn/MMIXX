@@ -1,9 +1,9 @@
 import { useRef, useEffect } from 'react'
 import styled, { css } from "styled-components"
 import AlbumIcon from '@mui/icons-material/Album'
+import { Switch } from '@mui/material'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { Switch } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 const PlaylistCreate = () => {
