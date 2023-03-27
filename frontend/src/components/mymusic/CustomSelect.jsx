@@ -33,7 +33,7 @@ const CustomSelect = ({ options, selectKind, setSelect }) => {
   };
 
   return (
-    <Div ref={wrapperRef}>
+    <Section ref={wrapperRef}>
       <LightOutlineBtn onClick={onClick} active={show}>
         {selected}
       </LightOutlineBtn>
@@ -48,11 +48,12 @@ const CustomSelect = ({ options, selectKind, setSelect }) => {
           )
         )}
       </Ul>
-    </Div>
+    </Section>
   );
 };
-const Div = styled.div`
+const Section = styled.section`
   display: block;
+  padding: 0;
   // position: relative;
 `;
 
