@@ -105,27 +105,9 @@ if __name__ == "__main__":
     music_path = args.input
     preset_path = args.reference
 
-    # music_response = s3.get_object(Bucket=bucket_name, Key=music_path)
-    # preset_response = s3.get_object(Bucket=bucket_name, Key=preset_path)
     # s3에서 파일 다운로드 -> file폴더에 저장
     s3.download_file(bucket_name, music_path, 'file/target.mp3')
     s3.download_file(bucket_name, preset_path, 'file/preset.mp3')
-
-    # music_bytes = music_response['Body']
-    # full_music_bytes = b''.join(music_bytes)
-    # with wave.open("target.wav", "wb") as inputfile:
-    #     inputfile.setsampwidth(2)
-    #     inputfile.setnchannels(1)
-    #     inputfile.setframerate(44100)
-    #     inputfile.writeframesraw(full_music_bytes)
-
-    # preset_bytes = preset_response['Body']
-    # full_preset_bytes = b''.join(preset_bytes)
-    # with wave.open("preset.wav", "wb") as presetfile:
-    #     presetfile.setsampwidth(2)
-    #     presetfile.setnchannels(1)
-    #     presetfile.setframerate(44100)
-    #     presetfile.writeframesraw(full_preset_bytes)
 
     print("current path : ", os.path.abspath(os.path.curdir))
     # mp3 to wav
@@ -155,13 +137,13 @@ if __name__ == "__main__":
         r_24000 = r
 
     # peak normalize to -12 dBFS
-    x_24000 = x_24000[0:1, : 24000 * 5]
+    x_24000 = x_24000[0:1, : 24000 * 300]
     x_24000 /= x_24000.abs().max()
     x_24000 *= 10 ** (-12 / 20.0)
     x_24000 = x_24000.view(1, 1, -1)
 
     # peak normalize to -12 dBFS
-    r_24000 = r_24000[0:1, : 24000 * 5]
+    r_24000 = r_24000[0:1, : 24000 * 300]
     r_24000 /= r_24000.abs().max()
     r_24000 *= 10 ** (-12 / 20.0)
     r_24000 = r_24000.view(1, 1, -1)
