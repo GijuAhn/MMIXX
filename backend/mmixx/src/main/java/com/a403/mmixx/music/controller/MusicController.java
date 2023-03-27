@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
+import com.a403.mmixx.music.model.dto.MusicRegistRequestDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.service.AwsS3Service;
@@ -60,8 +63,7 @@ public class MusicController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> registMusic(@RequestParam("file") List<MultipartFile> multipartFiles) throws Exception {
-		// TODO uploadMusic, List<MultipartFile>, @requestBody...?
+	public ResponseEntity<?> registMusic(@RequestPart("user") MusicRegistRequestDto user, @RequestPart("files") List<MultipartFile> multipartFiles) throws Exception {
 		// 200 : 업로드 성공
 		// 401 : (권한 없음)
 		// 413 : 파일 용량 초과
@@ -69,7 +71,6 @@ public class MusicController {
 		// 500 : 업로드 실패
 
 		return ResponseEntity.ok(musicService.registMusic(multipartFiles));
-		// return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{seq}")

@@ -1,12 +1,10 @@
 package com.a403.mmixx.playlist.model.entity;
 
+import com.a403.mmixx.user.model.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -14,8 +12,15 @@ import javax.persistence.Table;
 @Table(name = "favorite")
 public class Favorite {
     @Id
-    @GeneratedValue
-    private Long favoriteSeq;
-    private Long userSeq;
-    private Long playlistSeq;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "favorite_seq")
+    private int favoriteSeq;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_seq")
+    private Playlist playlist;
 }
