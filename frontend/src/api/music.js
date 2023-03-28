@@ -16,7 +16,7 @@ export const uploadMetaData = async () => {
   })
 }
 
-export const downloadMetaData = async (fileName) => {
+export const downloadMetaData = async ( fileName ) => {
   return await instance(`/music/download/${fileName}`, {
     headers: {
       "Content-Type": "multipart/form-data",

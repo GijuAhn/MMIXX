@@ -13,7 +13,7 @@ export const getPlaylistDetail = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}`)
 }
 
-export const postPlaylist = async (playlist) => {
+export const postPlaylist = async ( playlist ) => {
   return await instance.post('/playlist', { data: playlist })
 }
 
@@ -25,6 +25,6 @@ export const getPlaylistCoverImage = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}/1`)
 }
 
-export const insertMusicInPlaylist = async (playlistSeq) => {
+export const insertMusicInPlaylist = async ( playlistSeq ) => {
   return await instance.post(`/playlist/${playlistSeq}`)
 }
