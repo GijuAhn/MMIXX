@@ -9,12 +9,21 @@ import javax.transaction.Transactional;
 import com.a403.mmixx.music.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
+import com.a403.mmixx.music.model.entity.Preset;
+import com.a403.mmixx.music.model.entity.PresetRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MusicService {
 	private final MusicRepository musicRepository;
+	private final PresetRepository presetRepository;
 	private final AwsS3Service awsS3Service;
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable) {
