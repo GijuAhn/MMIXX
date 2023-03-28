@@ -11,7 +11,7 @@ const DefaultBtn = styled.button`
   transition: all 0.1s ease-in-out;
   width: ${({width}) => width ? width : 'auto'};
 
-  &: hover {
+  &:hover {
     transform: scale(1.1);
     filter: brightness(1.05);
   };

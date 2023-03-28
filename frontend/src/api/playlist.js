@@ -23,7 +23,7 @@ export const getPlaylistDetail = async (playlistSeq) => {
 
 export const postPlaylist = async (playlist) => {
   return await instance.post({
-    url: 'playlist',
+    url: '/playlist',
     data: {
       playlist
     }
