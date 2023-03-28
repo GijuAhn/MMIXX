@@ -1,10 +1,20 @@
 // import styled from 'styled-components'
 import { Wrapper } from 'components/Common';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from 'react';
 
 const Main = () => {
+
+  useEffect(() => {
+    AOS.init()
+  })
+  
   return (
     <Wrapper>
-      <h2>Main페이지</h2>
+      <div style={{ border: '1px solid red'}} data-aos="fade-up">
+        asdfasdf
+      </div>
     </Wrapper>
   );
 };
