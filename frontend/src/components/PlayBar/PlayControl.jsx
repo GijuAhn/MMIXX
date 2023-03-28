@@ -29,7 +29,7 @@ const IconWrapper = styled.div`
   border: 1px solid red;
   justify-content: space-around;
   
-  & > *:not(:third-child) {
+  * {
     border: 1px dotted pink;
   }
 `

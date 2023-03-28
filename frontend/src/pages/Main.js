@@ -4,7 +4,6 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import { Wrapper, DefaultBtn } from 'components/Common';
-import Footer from 'components/Common/Footer';
 
 const Main = () => {
 
