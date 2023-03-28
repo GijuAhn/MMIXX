@@ -8,18 +8,12 @@ export const getGenre = async () => {
 
 export const getGenreDetail = async (genreCategory) => {
   return await instance({
-    url: '/genre',
-    params: {
-      genreCategory
-    }
+    url: `/genre/${genreCategory}`
   })
 }
 
 export const getPreset = async (genreSeq) => {
   return await instance({
-    url: '/preset',
-    params: {
-      genreSeq
-    }
+    url: `/genre/preset/${genreSeq}`
   })
 }

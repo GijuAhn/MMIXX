@@ -2,7 +2,7 @@ import instance from './base'
 
 export const uploadMusic = async () => {
   return await instance.post({
-    url: 'music',
+    url: '/music',
     headers: {
       "Content-Type": "multipart/form-data",
     }
