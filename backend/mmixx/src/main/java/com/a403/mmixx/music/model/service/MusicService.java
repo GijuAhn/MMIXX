@@ -9,12 +9,21 @@ import javax.transaction.Transactional;
 import com.a403.mmixx.music.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
+import com.a403.mmixx.music.model.entity.Preset;
+import com.a403.mmixx.music.model.entity.PresetRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MusicService {
 	private final MusicRepository musicRepository;
+	private final PresetRepository presetRepository;
 	private final AwsS3Service awsS3Service;
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable) {
@@ -167,6 +177,9 @@ public class MusicService {
 
 			System.out.println("Success Music Mix");
 			System.out.println("response : " + response);
+			response = response.replace("{\"music\":\"", "");
+			response = response.replace("\"}", "");
+			System.out.println("response : " + response);
 			System.out.println("response.toString() : " + response.toString());
 //			response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
 		} catch (HttpStatusCodeException e) {
@@ -176,7 +189,29 @@ public class MusicService {
 				response = "API Fail";
 			}
 		}
-		System.out.println("*** 7 ***");
+		System.out.println("*** 7 ***"); // DB 저장
+		
+		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
+//		String new_music_name = response.replace("music/", "");
+		String new_music_name = music.getMusicName().replace(".mp3", "_mix.mp3");
+		System.out.println("new_music_path : " + new_music_path);
+		System.out.println("new_music_name : " + new_music_name);
+		
+		Music new_music = new Music();
+		
+		new_music.setAlbumName(music.getAlbumName());
+		new_music.setCoverImage(music.getCoverImage());
+		new_music.setEdited(music.getEdited());
+		new_music.setMixed(music.getMusicSeq());
+		new_music.setGenreSeq(music.getGenreSeq());
+		new_music.setMusicLength(music.getMusicLength());
+		new_music.setMusicName(new_music_name);
+		new_music.setMusicUrl(new_music_path);
+		new_music.setMusicianName(music.getMusicianName());
+		new_music.setUserSeq(music.getUserSeq());
+		new_music.setPresetSeq(music.getPresetSeq());
+		
+		musicRepository.save(new_music);
 //		String test = "hello";
 		return response.toString();
 //		return test;
