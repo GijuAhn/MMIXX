@@ -1,14 +1,15 @@
-import instance from './base'
+import base from './base'
+
+const instance = base({
+  url: '/playlist'
+})
 
 export const getPlaylists = async () => {
-  return await instance({
-    url: '/playlist'
-  })
+  return await instance()
 }
 
 export const getPlaylistDetail = async (playlistSeq) => {
   return await instance({
-    url: '/playlist',
     params: {
       playlistSeq
     }
