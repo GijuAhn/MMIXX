@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import styled from 'styled-components';
 
 // 참조
 // https://mui.com/material-ui/react-card/
@@ -36,7 +37,7 @@ const PresetCard = (props) => {
         alt="Live from space album cover"
       />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <CardContent>
+        <CardContent sx={{ display: 'flex', flexDirection: 'row' }}>
           <Typography component="div" variant="h5">
             {/* { preset_name } */}
             PRESET NAME
@@ -49,11 +50,6 @@ const PresetCard = (props) => {
             {/* { preset_info } */}
             PRESET_INFO
           </Typography>
-          {/* <div sx = {{display: 'flex', flexDirection: 'column'}}>
-            <p>PRESET_NAME</p>
-            <p>PRESET_SUMMARY</p>
-            <p>PRESET_INFO</p>
-          </div> */}
         </CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton aria-label="previous">
@@ -72,3 +68,7 @@ const PresetCard = (props) => {
 }
 
 export default PresetCard
+
+const ContentWrapper = styled.div`
+  
+`
