@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Wrapper, Header } from "components/Common";
-import { MusicSearchBar, MusicUpload, MusicList } from "components/mymusic";
+import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
@@ -20,7 +20,7 @@ const MyMusic = () => {
       </Content>
 
       <Content>
-        <MusicUpload></MusicUpload>
+        <MusicUploadBtn></MusicUploadBtn>
         <DivRight>
           <CustomSelect
             options={filterOptions}
@@ -50,11 +50,11 @@ const Content = styled.div`
   flex-direction: column;
 `;
 
-const Div = styled.div`
-  // display: flex;
-  // justify-content: start;
-  // padding: 30px 40px 30px;
-`;
+// const Div = styled.div`
+//   // display: flex;
+//   // justify-content: start;
+//   // padding: 30px 40px 30px;
+// `;
 const DivRight = styled.div`
   justify-content: end;
   margin-right: 15px;

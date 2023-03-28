@@ -53,7 +53,8 @@ const CustomSelect = ({ options, selectKind, setSelect }) => {
 };
 const Section = styled.section`
   display: block;
-  padding: 0;
+  margin-left: 20px;
+  // padding: 0;
   // position: relative;
 `;
 
