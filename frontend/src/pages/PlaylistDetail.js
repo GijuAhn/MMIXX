@@ -10,7 +10,7 @@ import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
 import { getPlaylistDetail } from "api/playlist"
 
-const PlaylistEdit = () => {
+const PlaylistDetail = () => {
   const navigate = useNavigate()
 
   // 임시 데이터
@@ -25,7 +25,7 @@ const PlaylistEdit = () => {
   useEffect(() => {
     getPlaylistDetail()
   }, [])
-  
+
   useEffect(() => {
     setCoverImage(playlistMusic[0].music.coverImage)
   }, [playlistMusic])
@@ -33,7 +33,7 @@ const PlaylistEdit = () => {
   return (
     <StyleWrapper url="">
       <Header 
-        title="플레이리스트 상세 보기"
+        title="플레이리스트 상세 보기2"
         desc=""
         fontSize="24px"
       />
@@ -144,4 +144,4 @@ const PrivateToggle = styled.div`
   display: inline-block;
 `
 
-export default PlaylistEdit;
+export default PlaylistDetail;
