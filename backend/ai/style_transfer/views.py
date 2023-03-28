@@ -22,10 +22,13 @@ s3 = boto3.client('s3',
 bucket_name = 'bucket-mp3-file-for-mmixx'
 # Create your views here.
 class MusicAPIView(APIView):
-    def get(self, request):
+    def post(self, request):
         # # s3 path를 query_params로 주는지 확인해야 함.
+        print("request.data : ", request.data)
         music_path = request.data['music_path']
         preset_path = request.data['preset_path']
+        print("music_path : ", music_path)
+        print("preset_path : ", preset_path)
         # music_path = request.GET.get('music_path')
         # preset_path = request.GET.get('preset_path')
         # music_path = 'music/ba466b9d-3c76-4469-bbe7-6ceb6ef818d9.mp3'
@@ -51,8 +54,10 @@ class MusicAPIView(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class InstAPIView(APIView):
-    def get(self, request):
+    def post(self, request):
+        print("request.data : ", request.data)
         music_path = request.data['music_path']
+        print("music_path : ", music_path)
         # music_path = request.GET.get('image_path')
         # music_path = 'music/ba466b9d-3c76-4469-bbe7-6ceb6ef818d9.mp3'
         if music_path[-3:] == "mp3":
