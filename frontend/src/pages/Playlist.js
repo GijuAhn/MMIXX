@@ -5,8 +5,8 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
-import { testApi } from 'api/playlist';
 import { useEffect, useState } from 'react';
+import { getPlaylists } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
@@ -14,7 +14,9 @@ const Playlist = () => {
   const [data, setData] = useState('')
 
   useEffect(() => {
-    testApi().then(res => setData(res))
+    getPlaylists()
+      .then(res => setData(res))
+      .catch(err => console.log(err))
   }, [])
 
   useEffect(() => {
