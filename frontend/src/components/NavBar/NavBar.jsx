@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useLocation, Link } from 'react-router-dom'
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
+import { handleLogin } from 'api/base'
 
 const NavBar = () => {
   const location = useLocation();
@@ -13,6 +14,11 @@ const NavBar = () => {
   ] 
 
   const isLogin = false;
+
+  const onClickLogin = () => {
+    handleLogin()
+      .then(res => console.log(res))
+  }
 
   return (
     <Wrapper>
@@ -47,8 +53,9 @@ const NavBar = () => {
       :
       <LoginWrapper>
         <DefaultBtn
-          width="150px">
-          즐겨찾기
+          width="150px"
+          onClick={onClickLogin}>
+          로그인 하기
         </DefaultBtn>
       </LoginWrapper>
       }
