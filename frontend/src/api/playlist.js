@@ -10,12 +10,14 @@ export const testApi = async () => {
 }  
 
 export const getPlaylists = async () => {
-  return await instance()
+  return await instance({
+    url: '/playlist'
+  })
 }
 
 export const getPlaylistDetail = async (playlistSeq) => {
   return await instance({
-    url: `/${playlistSeq}`
+    url: `/playlist/${playlistSeq}`
   })
 }
 
