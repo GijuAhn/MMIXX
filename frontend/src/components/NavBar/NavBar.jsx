@@ -48,7 +48,7 @@ const NavBar = () => {
       <LoginWrapper>
         <DefaultBtn
           width="150px">
-          즐겨찾기
+          로그인 하기
         </DefaultBtn>
       </LoginWrapper>
       }
