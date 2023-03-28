@@ -39,8 +39,8 @@ const PlayMusicInfo = styled.div`
   width: 100px;
 `
 
-const CoverImage = styled.img`
-`
+// const CoverImage = styled.img`
+// `
 
 const VolumeControl = styled.div`
   border: 1px solid green;
