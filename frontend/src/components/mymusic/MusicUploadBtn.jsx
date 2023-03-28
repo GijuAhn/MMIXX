@@ -1,5 +1,6 @@
 import { useState } from "react";
 import FillBtn from "./FillBtn";
+import { DefaultBtn } from "components/Common";
 import styled from "styled-components";
 import { registMusic } from "api/mymusic";
 
@@ -40,7 +41,9 @@ const MusicUploadBtn = () => {
   };
   return (
     <Div>
-      <FillBtn onClick={onClick}>곡 업로드</FillBtn>
+      <DefaultBtn onClick={onClick} width="110px">
+        곡 업로드
+      </DefaultBtn>
       {modalDisplay ? (
         <DivModal>
           <Modal>
