@@ -2,8 +2,8 @@ import { Avatar } from '@mui/material'
 import styled from 'styled-components'
 import { useLocation, Link } from 'react-router-dom'
 
-import { PlainBtn } from 'components/Common'
-
+import { DefaultBtn, PlainBtn } from 'components/Common'
+import { handleLogin } from 'api/base'
 
 const NavBar = () => {
   const location = useLocation();
@@ -13,33 +13,52 @@ const NavBar = () => {
     {name: 'MY MUSIC', path: 'mymusic'},
   ] 
 
+  const isLogin = false;
+
+  const onClickLogin = () => {
+    handleLogin()
+      .then(res => console.log(res))
+  }
+
   return (
     <Wrapper>
-      <NavProfile>
-        <NavAvatar 
-          src=''
-          sx={{ width: 100, height: 100 }}
-        />  
-        <p>
-          사용자 이름
-        </p>
-      </NavProfile>
-      <NavList>
-        {navList && navList.map((item, idx) => {
-          return (
-            <NavItem key={idx} to={item.path}>
-              <NavBtn selected={'/' + item.path === location.pathname}>
-                {item.name}
-              </NavBtn>
-            </NavItem>
-          )
-        })}
-      </NavList>
-      <LogOut>
-        <PlainBtn>
-          로그아웃
-        </PlainBtn>
-      </LogOut> 
+      {isLogin ?
+      <>
+        <NavProfile>
+          <NavAvatar 
+            src=''
+            sx={{ width: 100, height: 100 }}
+          />  
+          <p>
+            사용자 이름
+          </p>
+        </NavProfile>
+        <NavList>
+          {navList && navList.map((item, idx) => {
+            return (
+              <NavItem key={idx} to={item.path}>
+                <NavBtn selected={'/' + item.path === location.pathname}>
+                  {item.name}
+                </NavBtn>
+              </NavItem>
+            )
+          })}
+        </NavList>
+        <LogOut>
+          <PlainBtn>
+            로그아웃
+          </PlainBtn>
+        </LogOut> 
+      </>
+      :
+      <LoginWrapper>
+        <DefaultBtn
+          width="150px"
+          onClick={onClickLogin}>
+          로그인 하기
+        </DefaultBtn>
+      </LoginWrapper>
+      }
     </Wrapper>
   )
 }
@@ -52,6 +71,7 @@ const Wrapper = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
+  justify-content: ${({isLogin}) => !isLogin && 'start'};
 `
 
 const NavProfile = styled.div`
@@ -109,4 +129,7 @@ const LogOut = styled.div`
   flex-grow: 0.5;
 `
 
+const LoginWrapper = styled.div`
+  border: 1px solid pink;
+`
 export default NavBar;
