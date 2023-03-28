@@ -1,33 +1,25 @@
 package com.a403.mmixx.music.model.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 import javax.transaction.Transactional;
 
 import com.a403.mmixx.music.model.dto.*;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
-import com.a403.mmixx.music.model.service.MP3MetadataService;
-import com.a403.mmixx.music.model.service.Utils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MusicService {
@@ -66,18 +58,25 @@ public class MusicService {
 		return music;
 	}
 
-	public List<Music> registMusic(List<MultipartFile> multipartFiles) throws Exception {
-//		TODO: EC2 DB에 musicContainerList 데이터를 저장해야 함. QueryDSL 사용
+	public List<Music> registMusic(MusicRegistRequestDto user, List<MultipartFile> multipartFiles) throws Exception {
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
+
+		//	set userSeq into musicContainerList
+		for (Music music : musicContainerList) {
+			music.setUserSeq(user.getUserSeq());
+		}
+
+		log.info("musicContainerList: " + musicContainerList);
+		musicRepository.saveAll(musicContainerList);
 
 		//	print musicContainerList's data, cascade
 		for (Music music : musicContainerList) {
-			System.out.println("musicName: " + music.getMusicName());
-			System.out.println("musicUrl: " + music.getMusicUrl());
-			System.out.println("coverImage: " + music.getCoverImage());
-			System.out.println("length: " + music.getMusicLength());
-			System.out.println("artist: " + music.getMusicianName());
-			System.out.println("album: " + music.getAlbumName());
+			log.info("musicName: " + music.getMusicName());
+			log.info("musicUrl: " + music.getMusicUrl());
+			log.info("coverImage: " + music.getCoverImage());
+			log.info("length: " + music.getMusicLength());
+			log.info("artist: " + music.getMusicianName());
+			log.info("album: " + music.getAlbumName());
 		}
 
 		return musicContainerList;
@@ -108,19 +107,81 @@ public class MusicService {
 
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
-//		multipartFileInputStreamClone1 사용하지도 않았는데 왜 될까... 진짜 모르겠다.
-//		.tmp는 또 왜 삭제 안될까... 진짜 모르겠다. delete() 주석처리...
-//		근데 삐걱거려도 동작은 하니까...
+
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
+//		C:\Users\SSAFY\AppData\Local\Temp\tomcat.5555.6401783967014632574\work\Tomcat\localhost\api\ upload_c84fc623_5e93_45cd_b1b0_ae7e377fa2d4_00000000.tmp
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
 
 
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
 			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
+			musicContainerList.get(i).setGenreSeq(0);
 		}
 
 		return musicContainerList;
 	}
 
+	public String mixMusic(MusicMixRequestDto requestDto) {
+		System.out.println("*** Start ***");
+		//	return music_url stored in MySQL DB
+		int music_seq = requestDto.getMusic_seq();
+		int preset_seq = requestDto.getPreset_seq();
+		System.out.println("music_seq : " + music_seq);
+		System.out.println("preset_seq : " + preset_seq);
+
+		System.out.println("*** 1 ***");
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		Preset preset = presetRepository.findById(preset_seq).orElse(null);
+
+		System.out.println("*** 2 ***");
+		String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+		String preset_path = preset.getPresetUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+		System.out.println("music_path : " + music_path);
+		System.out.println("preset_path : " + preset_path);
+
+		System.out.println("*** 3 ***");
+		RestTemplate restTemplate = new RestTemplate();
+		String response = "";
+
+		System.out.println("*** 4 ***");
+		String url = "https://j8a403.p.ssafy.io/django/api/mix";
+		//		String url = "http://127.0.0.1:8000/api/mix";
+		String data = "{ \"music_path\" : \"" + music_path + "\", \"preset_path\" : \"" + preset_path + "\"}";
+
+		try {
+			System.out.println("*** 5 ***");
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+//			MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+//			body.add("music_path", musicUrl);
+
+			HttpEntity<?> requestMessage = new HttpEntity<>(data, headers);
+//			HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+//			System.out.println(response);
+			HttpMethod method = HttpMethod.POST;
+//			response = restTemplate.getForObject(url, String.class, data);
+			System.out.println("*** 6 ***");
+			response = restTemplate.postForEntity(url, requestMessage, String.class).getBody();
+
+			System.out.println("Success Music Mix");
+			System.out.println("response : " + response);
+			System.out.println("response.toString() : " + response.toString());
+//			response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
+		} catch (HttpStatusCodeException e) {
+			if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
+				System.out.println("not found");
+			} else {
+				response = "API Fail";
+			}
+		}
+		System.out.println("*** 7 ***");
+//		String test = "hello";
+		return response.toString();
+//		return test;
+
+
+//		return musicUrl;
+	}
 }

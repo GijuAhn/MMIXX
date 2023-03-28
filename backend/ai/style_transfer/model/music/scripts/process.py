@@ -16,8 +16,8 @@ print("path : ", path)
 print("getcwd path : ", os.getcwd())
 print("AudioSegment.ffmpeg : ", AudioSegment.ffmpeg)
 
-AudioSegment.converter = os.getcwd() + "\\ffmpeg.exe"
-AudioSegment.ffprobe   = os.getcwd() + '\\ffprobe.exe'
+# AudioSegment.converter = os.getcwd() + "\\ffmpeg.exe"
+# AudioSegment.ffprobe   = os.getcwd() + '\\ffprobe.exe'
 
 sys.path.append(path)
 

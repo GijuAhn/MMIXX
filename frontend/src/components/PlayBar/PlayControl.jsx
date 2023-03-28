@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
-import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
+// import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
 import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded';
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
@@ -29,7 +29,7 @@ const IconWrapper = styled.div`
   border: 1px solid red;
   justify-content: space-around;
   
-  & > *:not(:third-child) {
+  * {
     border: 1px dotted pink;
   }
 `

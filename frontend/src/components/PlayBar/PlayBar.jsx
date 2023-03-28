@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
 
-import { PlayControl } from 'components/PlayBar';
+// import { PlayControl } from 'components/PlayBar';
 
 const PlayBar = () => {
   const location = useLocation()
@@ -13,10 +13,7 @@ const PlayBar = () => {
   return (
     <Wrapper>
       <PlayMusicInfo />
-      <PlayControl 
-        width="30%"
-        height="30%"
-      />
+      <audio></audio>
       <VolumeControl />
     </Wrapper>
   );
@@ -29,22 +26,25 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 200px;
   width: calc(100% - 200px);
-  min-width: 800px;
+  min-width: 1000px;
   justify-content: space-between;
-  filter: blur(50px)
+  border: 1px solid red;
+  padding-left: 20px;
+  padding-right: 20px;
 `
 
 const PlayMusicInfo = styled.div`
   border: 1px solid yellow;
-  width: 100px;
+  width: 200px;
+  height: 100%;
 `
 
-const CoverImage = styled.img`
-`
+// const CoverImage = styled.img`
+// `
 
 const VolumeControl = styled.div`
   border: 1px solid green;
-  width: 100px;
+  width: 200px;
 `
 
 export default PlayBar;
