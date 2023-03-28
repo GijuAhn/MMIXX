@@ -1,11 +1,13 @@
 import { Avatar } from '@mui/material'
 import styled from 'styled-components'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useNavigate } from 'react-router-dom'
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
 import { handleLogin } from 'api/base'
+import logo from 'assets/logo.png'
 
 const NavBar = () => {
+  const navigate = useNavigate()
   const location = useLocation();
   const navList = [
     {name: 'MIX', path: 'mix'},
@@ -13,7 +15,7 @@ const NavBar = () => {
     {name: 'MY MUSIC', path: 'mymusic'},
   ] 
 
-  const isLogin = false;
+  const isLogin = true;
 
   const onClickLogin = () => {
     handleLogin()
@@ -22,6 +24,7 @@ const NavBar = () => {
 
   return (
     <Wrapper>
+      <LogoImage logo={logo} onClick={() => navigate('/')}/>
       {isLogin ?
       <>
         <NavProfile>
@@ -72,6 +75,15 @@ const Wrapper = styled.nav`
   top: 0;
   left: 0;
   justify-content: ${({isLogin}) => !isLogin && 'start'};
+`
+
+const LogoImage = styled.div`
+  background-image: url(${logo});
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+  margin: 10px auto 0;
+  cursor: pointer;
 `
 
 const NavProfile = styled.div`
@@ -130,6 +142,5 @@ const LogOut = styled.div`
 `
 
 const LoginWrapper = styled.div`
-  border: 1px solid pink;
 `
 export default NavBar;
