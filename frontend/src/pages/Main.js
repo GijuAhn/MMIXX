@@ -49,8 +49,10 @@ const StyleWrapper = styled(Wrapper)`
     // 모든 자식 요소의 높이를 합산한 값에 60px를 더한 결과를 반환합니다.
     return `100% / ${childCount} * ${childCount} + 60px`;
   }});
+
   > div {
     height: 80vh;
+    cursor: default;
   }
 
   > div:first-child {

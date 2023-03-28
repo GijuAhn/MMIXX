@@ -79,7 +79,7 @@ export const testPlaylistMusic = atom({
         sequence: 1,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
