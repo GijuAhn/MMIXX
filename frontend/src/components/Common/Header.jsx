@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const Header = ({ title, desc }) => {
+const Header = ({ title, desc, fontSize }) => {
   return (
     <Wrapper>
       <p>
-        <Title>{title}</Title>
+        <Title fontSize={fontSize}>{title}</Title>
         <Desc>{desc}</Desc>
       </p>
     </Wrapper>
@@ -13,13 +13,13 @@ const Header = ({ title, desc }) => {
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100%;
+  width: 100%;  
   justify-content: start;
   padding: 30px 40px 30px;
 `
 const Title = styled.span`
   font-weight: bold;
-  font-size: 24px;
+  font-size: ${({fontSize}) => fontSize ? fontSize : "24px"};
   color: ${({theme}) => theme.palette.secondary};
   letter-spacing: -1px;
   font-weight: bold;

@@ -18,6 +18,7 @@ application-aws.yml
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+backend/.metadata/
 
 ### IntelliJ IDEA ###
 .idea

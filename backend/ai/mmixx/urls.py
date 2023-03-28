@@ -24,12 +24,19 @@ from style_transfer import views
 from rest_framework.permissions import AllowAny
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_yasg.generators import OpenAPISchemaGenerator
 
 # import music.serializers
 # import music.views as views
 
 # router = routers.DefaultRouter()
 # router.register('music', music.serializers.MusicViewSet)
+
+class SchemaGenerator(OpenAPISchemaGenerator):
+  def get_schema(self, request=None, public=False):
+    schema = super(SchemaGenerator, self).get_schema(request, public)
+    schema.basePath = '/django/api/'
+    return schema
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -40,6 +47,8 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(AllowAny,),
+    generator_class=SchemaGenerator,
+
 )
 
 urlpatterns = [
