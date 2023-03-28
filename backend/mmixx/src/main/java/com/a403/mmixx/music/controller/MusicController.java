@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
+import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
 import com.a403.mmixx.music.model.dto.MusicRegistRequestDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
