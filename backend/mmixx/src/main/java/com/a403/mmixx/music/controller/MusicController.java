@@ -38,9 +38,10 @@ public class MusicController {
 
 
 	//	Send REST API request to Django python server for AI processing
-	@PostMapping("/mix/{seq}")
-	public String mixMusic(@PathVariable Integer seq) throws Exception {
-		return musicService.mixMusic(seq);
+	@PostMapping("/mix")
+	public String mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
+		System.out.println("Music Mix Start");
+		return musicService.mixMusic(requestDto);
 	}
 
 	@GetMapping("/download/{fileName}")
