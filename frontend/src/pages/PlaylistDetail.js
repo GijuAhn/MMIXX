@@ -33,7 +33,7 @@ const PlaylistDetail = () => {
   return (
     <StyleWrapper url="">
       <Header 
-        title="플레이리스트 상세 보기2"
+        title="플레이리스트 상세 보기"
         desc=""
         fontSize="24px"
       />
@@ -46,7 +46,7 @@ const PlaylistDetail = () => {
         <RightContent>
           <Top>
             <PlaylistTitle>
-              <input type="text" defaultValue={playlistName}></input>
+              <p>{playlistName}</p>
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
@@ -126,13 +126,15 @@ const PlaylistTitle = styled.div`
   font-size: 45px;
   font-weight: bold;
   
-  & input {
+  & p {
     color: ${({theme}) => theme.palette.alt};
     background-color: transparent;
     font-size: 50px;
     font-weight: 800;
     border: none;
     width: 100%;
+    margin: 0;
+    padding: 0;
     
     :focus {
       outline: none;
