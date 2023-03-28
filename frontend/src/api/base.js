@@ -1,16 +1,18 @@
 import axios from 'axios'
 
-const base =  axios.create({
-  baseURL: process.env.REACT_APP_BASEURL,
+const instance =  axios.create({
+  baseURL: process.env.REACT_APP_TEST,
   // headers: {
   //   'Authorization': `Bearer ${localStorage.getItem('token')}`
   // }
 })
 
+instance.defaults.headers.common['Authorization'] = 'token';
+
 export const handleLogin = async () => {
-  return await base({
+  return await instance({
     url: '/api/oauth2/authorization/google?access_type=offline&prompt=consent'
   })
 }
 
-export default base;
+export default instance;
