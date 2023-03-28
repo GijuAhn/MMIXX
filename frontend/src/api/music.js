@@ -1,8 +1,7 @@
 import instance from './base'
 
 export const uploadMusic = async () => {
-  return await instance.post({
-    url: '/music',
+  return await instance.post('/music', {
     headers: {
       "Content-Type": "multipart/form-data",
     }
@@ -10,8 +9,7 @@ export const uploadMusic = async () => {
 }
 
 export const uploadMetaData = async () => {
-  return await instance.post({
-    url: '/music',
+  return await instance.post('/music', {
     headers: {
       "Content-Type": "multipart/form-data",
     }
@@ -19,8 +17,7 @@ export const uploadMetaData = async () => {
 }
 
 export const downloadMetaData = async (fileName) => {
-  return await instance({
-    url: `/music/download/${fileName}`,
+  return await instance(`/music/download/${fileName}`, {
     headers: {
       "Content-Type": "multipart/form-data",
     }
