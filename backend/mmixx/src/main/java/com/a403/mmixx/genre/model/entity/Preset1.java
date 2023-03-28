@@ -12,7 +12,7 @@ import javax.persistence.*;
 @ToString
 @DynamicInsert
 @Table(name = "preset")
-public class Preset {
+public class Preset1 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer presetSeq; // 프리셋 일련번호
