@@ -1,12 +1,12 @@
 import { Wrapper, Header } from "components/Common";
 // import { Carousel } from "components/Mix/carousel";
-
 import { Carousel } from 'react-carousel3';
 import { PresetCard } from "components/Mix";
 import { MusicInfo } from "components/Mix";
 import { Button } from "@mui/material";
 import { PlainBtn } from "components/Common";
 import { DefaultBtn } from "components/Common";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const style = {
   width: 400,
@@ -14,6 +14,7 @@ const style = {
 };
 
 const Mix = () => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <Header 
@@ -48,7 +49,9 @@ const Mix = () => {
         </div>
       </Carousel>
       </div>
-      <DefaultBtn>변환하기</DefaultBtn>
+      <DefaultBtn 
+        onClick={ () => navigate("/mix/result")}
+      >변환하기</DefaultBtn>
     </Wrapper>
   );
 };
