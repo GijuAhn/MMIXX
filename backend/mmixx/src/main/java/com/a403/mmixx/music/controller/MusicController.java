@@ -27,6 +27,8 @@ import com.a403.mmixx.music.model.service.MusicService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/music")
 @RequiredArgsConstructor
@@ -36,28 +38,34 @@ public class MusicController {
 
 	//	Send REST API request to Django python server for AI processing
 	@RequestMapping(value = "/mix/{seq}", method = RequestMethod.POST)
-	public void mixMusic(@PathVariable Integer seq) throws Exception {
+	public ResponseEntity<String> mixMusic(@PathVariable Integer seq) throws Exception {
+		String jsonS3Address = musicService.mixMusic(seq);
+//		TODO: JSON Address를 Request Body 에 담아서 아래 mixingMusicUrl 로 보낸다.
 
+		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/mix";
+
+		return ResponseEntity.status(200).body(jsonS3Address);
 	}
 
-//	@PostMapping("/split/{seq}")
-//	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
-//		RestTemplate restTemplate = new RestTemplate();
-//
-//		//	Set the headers for the HTTP request
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//		//	Set the request body with the JSON object
-//		String jsonS3Address = musicService.mixMusic(seq);
-//		HttpEntity<String> entity = new HttpEntity<String>(jsonS3Address, headers);
-//
-//		//	Send the HTTP request to the python django server
-//		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
-//		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
-//
-//		return ResponseEntity.ok(response);
-//	}
+	@PostMapping("/split/{seq}")
+	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
+		RestTemplate restTemplate = new RestTemplate();
+
+		//	Set the headers for the HTTP request
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		//	Set the request body with the JSON object
+		String jsonS3Address = musicService.mixMusic(seq);
+		HttpEntity<String> entity = new HttpEntity<String>(jsonS3Address, headers);
+		//	TODO: Request BOdy 에 넣어야 함.
+
+		//	Send the HTTP request to the python django server
+		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
+		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
+
+		return ResponseEntity.ok(response);
+	}
 
 
 	@GetMapping("/download/{fileName}")
