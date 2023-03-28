@@ -1,10 +1,12 @@
-import { useState } from "react";
-import Icon from "./Icon";
+import IconBtn from "./IconBtn";
+import MixIcon from "assets/mix.png";
 
 const MusicMixIcon = ({ musicSeq }) => {
   const onClick = () => {
     console.log(musicSeq);
   };
-  return <Icon onClick={onClick} iconName="mix"></Icon>;
+
+  return <IconBtn onClick={onClick} icon={MixIcon} iconName="MIX"></IconBtn>;
 };
+
 export default MusicMixIcon;
