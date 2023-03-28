@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 import { useRecoilValue } from 'recoil'
@@ -8,19 +8,24 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
+import { getPlaylistDetail } from "api/playlist"
 
 const PlaylistEdit = () => {
   const navigate = useNavigate()
 
   // 임시 데이터
-  const location = useLocation()
-  const playlistSeq = location.pathname.split('/')[2]
+  // const location = useLocation()
+  // const playlistSeq = location.pathname.split('/')[2]
   const { 
     playlistName, 
     playlistMusic
   } = useRecoilValue(testPlaylistMusic)
   const [coverImage, setCoverImage] = useState(null)
 
+  useEffect(() => {
+    getPlaylistDetail()
+  }, [])
+  
   useEffect(() => {
     setCoverImage(playlistMusic[0].music.coverImage)
   }, [playlistMusic])
