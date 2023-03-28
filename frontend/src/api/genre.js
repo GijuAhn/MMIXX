@@ -1,11 +1,14 @@
 import instance from './base'
 
 export const getGenre = async () => {
-  return await instance()
+  return await instance({
+    url: '/genre',
+  })
 }
 
 export const getGenreDetail = async (genreCategory) => {
   return await instance({
+    url: '/genre',
     params: {
       genreCategory
     }
