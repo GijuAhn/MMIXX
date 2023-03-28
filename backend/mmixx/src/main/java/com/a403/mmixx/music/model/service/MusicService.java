@@ -122,10 +122,66 @@ public class MusicService {
 		return musicContainerList;
 	}
 
-	public String mixMusic(Integer seq) {
+	public String mixMusic(MusicMixRequestDto requestDto) {
+		System.out.println("*** Start ***");
 		//	return music_url stored in MySQL DB
-		Music music = musicRepository.findById(seq).orElse(null);
-		String musicUrl = music.getMusicUrl();
-		return musicUrl;
+		int music_seq = requestDto.getMusic_seq();
+		int preset_seq = requestDto.getPreset_seq();
+		System.out.println("music_seq : " + music_seq);
+		System.out.println("preset_seq : " + preset_seq);
+
+		System.out.println("*** 1 ***");
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		Preset preset = presetRepository.findById(preset_seq).orElse(null);
+
+		System.out.println("*** 2 ***");
+		String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+		String preset_path = preset.getPresetUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+		System.out.println("music_path : " + music_path);
+		System.out.println("preset_path : " + preset_path);
+
+		System.out.println("*** 3 ***");
+		RestTemplate restTemplate = new RestTemplate();
+		String response = "";
+
+		System.out.println("*** 4 ***");
+		String url = "https://j8a403.p.ssafy.io/django/api/mix";
+		//		String url = "http://127.0.0.1:8000/api/mix";
+		String data = "{ \"music_path\" : \"" + music_path + "\", \"preset_path\" : \"" + preset_path + "\"}";
+
+		try {
+			System.out.println("*** 5 ***");
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+//			MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+//			body.add("music_path", musicUrl);
+
+			HttpEntity<?> requestMessage = new HttpEntity<>(data, headers);
+//			HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
+//			System.out.println(response);
+			HttpMethod method = HttpMethod.POST;
+//			response = restTemplate.getForObject(url, String.class, data);
+			System.out.println("*** 6 ***");
+			response = restTemplate.postForEntity(url, requestMessage, String.class).getBody();
+
+			System.out.println("Success Music Mix");
+			System.out.println("response : " + response);
+			System.out.println("response.toString() : " + response.toString());
+//			response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
+		} catch (HttpStatusCodeException e) {
+			if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
+				System.out.println("not found");
+			} else {
+				response = "API Fail";
+			}
+		}
+		System.out.println("*** 7 ***");
+//		String test = "hello";
+		return response.toString();
+//		return test;
+
+
+//		return musicUrl;
 	}
 }
