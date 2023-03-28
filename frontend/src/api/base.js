@@ -7,4 +7,10 @@ const instance =  axios.create({
   // }
 })
 
+export const handleLogin = async () => {
+  return await instance({
+    url: 'oauth2/authorization/google?access_type=offline&prompt=consent'
+  })
+}
+
 export default instance;
