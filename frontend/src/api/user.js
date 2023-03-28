@@ -1,12 +1,12 @@
 import instance from './base'
 
-export const getUser = async (userSeq) => {
+export const getUser = async ( userSeq ) => {
   return await instance({
     url: `/user/${userSeq}`
   })
 }
 
-export const removeUser = async (userSeq) => {
+export const removeUser = async ( userSeq ) => {
   return await instance.delete({
     url: `/user/${userSeq}`
   })
