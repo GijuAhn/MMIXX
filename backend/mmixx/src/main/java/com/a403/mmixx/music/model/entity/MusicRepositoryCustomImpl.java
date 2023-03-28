@@ -26,6 +26,7 @@ import static com.a403.mmixx.music.model.entity.QMusic.*;
 @RequiredArgsConstructor
 public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
+
 	@Override
 	public Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable) {
 		List<MusicListResponseDto> content = queryFactory

@@ -1,9 +1,9 @@
 import { useRef, useEffect } from 'react'
 import styled, { css } from "styled-components"
 import AlbumIcon from '@mui/icons-material/Album'
+import { Switch } from '@mui/material'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { Switch } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 const PlaylistCreate = () => {
@@ -30,10 +30,10 @@ const PlaylistCreate = () => {
             <InputTitle>
               <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
             </InputTitle>
-            <InputRivateToggle>
+            <InputPrivateToggle>
               공개여부
               <Switch defaultChecked/>
-            </InputRivateToggle>
+            </InputPrivateToggle>
           </Top>
           <Bottom>
             <AddMusicBtn onClick={() => navigate("/playlist/select")}>
@@ -112,7 +112,7 @@ const InputTitle = styled.div`
   }
 `
 
-const InputRivateToggle = styled.div`
+const InputPrivateToggle = styled.div`
   font-weight: light;
   display: inline-block;
 `

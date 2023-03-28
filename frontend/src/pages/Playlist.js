@@ -5,21 +5,23 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
 import { testPlaylist } from 'atom/atom';
-import { getPlaylist, showCat } from 'api/playlist';
-import { client } from 'api/base';
 import { useEffect, useState } from 'react';
+import { testApi } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
-  const [playlistCoverImage, setPlaylistCoverImage] = useState(null);
+  const [data, setData] = useState('')
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const { data } = await client.get('search')
-  //     console.log(data)
-  //   })()
-  // }, [])
+  useEffect(() => {
+    testApi()
+      .then(res => setData(res))
+      .catch(err => console.log(err))
+  }, [])
+
+  useEffect(() => {
+    console.log('결과값 확인 : ', data) 
+  }, [data]);
 
   return (
     <StyleWrapper>
