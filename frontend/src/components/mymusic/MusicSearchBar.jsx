@@ -30,24 +30,41 @@ const MusicSearchBar = ({ setQuery }) => {
     setFocus(false);
   };
   return (
-    <div>
-      <Form onSubmit={onSubmit} focus={focus}>
-        <img src={searchIcon} alt="" width="14"></img>
-        <Input
-          onFocus={onFocus}
-          onBlur={onBlur}
-          type="text"
-          value={input}
-          onChange={onChange}
-          placeholder="곡 제목으로 검색"
-        />
-        <IconBtn type="button" onClick={resetInput} show={show}>
-          <img src={xIcon} alt="" width="10"></img>
-        </IconBtn>
-      </Form>
-    </div>
+    <Form onSubmit={onSubmit} focus={focus}>
+      <img src={searchIcon} alt="" width="14"></img>
+      <Input
+        onFocus={onFocus}
+        onBlur={onBlur}
+        type="text"
+        value={input}
+        onChange={onChange}
+        placeholder="곡 제목으로 검색"
+      />
+      <IconBtn type="button" onClick={resetInput} show={show}>
+        <img src={xIcon} alt="" width="10"></img>
+      </IconBtn>
+    </Form>
   );
 };
+const Form = styled.form`
+  background-color: ${({ theme }) => theme.palette.darkgray};
+  color: ${({ theme }) => theme.palette.light};
+  padding: 10px 20px;
+  border: 1.6px solid ${({ theme }) => theme.palette.light};
+  ${({ focus, theme }) =>
+    focus &&
+    `
+    border: 1.6px solid ${theme.palette.secondary};
+  `};
+  border-radius: 27px;
+  // margin: 5px auto;
+  height: 40px;
+  // text-align: left;
+  display: flex;
+  align-items: center;
+  width: 400px;
+`;
+
 const Input = styled.input`
   background-color: transparent;
   border: 0 solid transparent;
@@ -58,24 +75,6 @@ const Input = styled.input`
   &: focus {
     outline: none;
   }
-`;
-const Form = styled.form`
-  background-color: ${({ theme }) => theme.palette.darkgray};
-  color: ${({ theme }) => theme.palette.light};
-  padding: 10px 10px;
-  border: 1.6px solid ${({ theme }) => theme.palette.light};
-  ${({ focus, theme }) =>
-    focus &&
-    `
-    border: 1.6px solid ${theme.palette.secondary};
-  `};
-  border-radius: 27px;
-  margin: 5px auto;
-  height: 40px;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  width: 350px;
 `;
 
 const IconBtn = styled.button`
@@ -89,4 +88,5 @@ const IconBtn = styled.button`
   }
   visibility: ${(props) => (props.show ? "visible" : "hidden")};
 `;
+
 export default MusicSearchBar;

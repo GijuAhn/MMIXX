@@ -1,11 +1,13 @@
 import { Avatar } from '@mui/material'
 import styled from 'styled-components'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useNavigate } from 'react-router-dom'
 
-import { PlainBtn } from 'components/Common'
-
+import { DefaultBtn, PlainBtn } from 'components/Common'
+import { handleLogin } from 'api/base'
+import logo from 'assets/logo.png'
 
 const NavBar = () => {
+  const navigate = useNavigate()
   const location = useLocation();
   const navList = [
     {name: 'MIX', path: 'mix'},
@@ -13,33 +15,53 @@ const NavBar = () => {
     {name: 'MY MUSIC', path: 'mymusic'},
   ] 
 
+  const isLogin = true;
+
+  const onClickLogin = () => {
+    handleLogin()
+      .then(res => console.log(res))
+  }
+
   return (
     <Wrapper>
-      <NavProfile>
-        <NavAvatar 
-          src=''
-          sx={{ width: 100, height: 100 }}
-        />  
-        <p>
-          사용자 이름
-        </p>
-      </NavProfile>
-      <NavList>
-        {navList && navList.map((item, idx) => {
-          return (
-            <NavItem key={idx} to={item.path}>
-              <NavBtn selected={'/' + item.path === location.pathname}>
-                {item.name}
-              </NavBtn>
-            </NavItem>
-          )
-        })}
-      </NavList>
-      <LogOut>
-        <PlainBtn>
-          로그아웃
-        </PlainBtn>
-      </LogOut> 
+      <LogoImage logo={logo} onClick={() => navigate('/')}/>
+      {isLogin ?
+      <>
+        <NavProfile>
+          <NavAvatar 
+            src=''
+            sx={{ width: 100, height: 100 }}
+          />  
+          <p>
+            사용자 이름
+          </p>
+        </NavProfile>
+        <NavList>
+          {navList && navList.map((item, idx) => {
+            return (
+              <NavItem key={idx} to={item.path}>
+                <NavBtn selected={'/' + item.path === location.pathname}>
+                  {item.name}
+                </NavBtn>
+              </NavItem>
+            )
+          })}
+        </NavList>
+        <LogOut>
+          <PlainBtn>
+            로그아웃
+          </PlainBtn>
+        </LogOut> 
+      </>
+      :
+      <LoginWrapper>
+        <DefaultBtn
+          width="150px"
+          onClick={onClickLogin}>
+          로그인 하기
+        </DefaultBtn>
+      </LoginWrapper>
+      }
     </Wrapper>
   )
 }
@@ -52,6 +74,16 @@ const Wrapper = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
+  justify-content: ${({isLogin}) => !isLogin && 'start'};
+`
+
+const LogoImage = styled.div`
+  background-image: url(${logo});
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+  margin: 10px auto 0;
+  cursor: pointer;
 `
 
 const NavProfile = styled.div`
@@ -109,4 +141,6 @@ const LogOut = styled.div`
   flex-grow: 0.5;
 `
 
+const LoginWrapper = styled.div`
+`
 export default NavBar;

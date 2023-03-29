@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
+import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
 import com.a403.mmixx.music.model.dto.MusicRegistRequestDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
@@ -37,14 +38,10 @@ public class MusicController {
 	private final AwsS3Service awsS3Service;
 
 	//	Send REST API request to Django python server for AI processing
-	@RequestMapping(value = "/mix/{seq}", method = RequestMethod.POST)
-	public ResponseEntity<String> mixMusic(@PathVariable Integer seq) throws Exception {
-		String jsonS3Address = musicService.mixMusic(seq);
-//		TODO: JSON Address를 Request Body 에 담아서 아래 mixingMusicUrl 로 보낸다.
-
-		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/mix";
-
-		return ResponseEntity.status(200).body(jsonS3Address);
+	@PostMapping("/mix")
+	public String mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
+		System.out.println("Music Mix Start");
+		return musicService.mixMusic(requestDto);
 	}
 
 	@PostMapping("/split/{seq}")
