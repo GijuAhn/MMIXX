@@ -36,8 +36,9 @@ public class MusicService {
 	private final PresetRepository presetRepository;
 	private final AwsS3Service awsS3Service;
 
-	public Page<MusicListResponseDto> getMusicList(Pageable pageable) {
-		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
+	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
+//		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
+		return musicRepository.findByUserSeq(user_seq, pageable).map(MusicListResponseDto::new);
 	}
 
 	public Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable) {

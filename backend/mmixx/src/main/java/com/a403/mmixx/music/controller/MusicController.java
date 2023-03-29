@@ -73,11 +73,10 @@ public class MusicController {
 		}
 	}
 
-
-	@ApiOperation(value = "음악 리스트 조회", notes = "")
-	@GetMapping
-	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PageableDefault(size=10) Pageable pageable) {
-		return ResponseEntity.ok(musicService.getMusicList(pageable));
+	@ApiOperation(value = "음악 리스트 조회", notes = "user_seq로 회원의 모든 음악 조회")
+	@GetMapping("/{user_seq}")
+	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PathVariable Integer user_seq, @PageableDefault(size=10) Pageable pageable) {
+		return ResponseEntity.ok(musicService.getMusicList(pageable, user_seq));
 	}
 
 	@ApiOperation(value = "음악 검색", notes = "")
@@ -87,7 +86,7 @@ public class MusicController {
 	}
 
 	@ApiOperation(value = "음악 상세 내용 조회", notes = "")
-	@GetMapping("/{seq}")
+	@GetMapping("/detail/{seq}")
 	public ResponseEntity<MusicDetailResponseDto> getMusic(@PathVariable Integer seq) {
 		return ResponseEntity.ok(musicService.getMusic(seq));
 	}
