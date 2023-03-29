@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components'
-import { Box } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -8,6 +7,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { testPlaylistMusic } from 'atom/atom';
 import { useRecoilValue } from 'recoil';
+import theme from 'styles/theme';
 
 const ResultCard = () => {
 
@@ -16,26 +16,26 @@ const ResultCard = () => {
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   return (
     <ResultCardWrapper>
-      <Card sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Card>
         <CoverImage>
           <img src={coverImage} alt={musicName} />
         </CoverImage>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pl: 1, pb: 1 }}>
+        <Content>
           <h2>{ musicName }</h2>
           <p>{ musicianName }</p>
-          <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-            <IconButton aria-label="previous">
-              {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-            </IconButton>
-            <IconButton aria-label="play/pause">
-              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-            </IconButton>
-            <IconButton aria-label="next">
-              {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-            </IconButton>
-          </Box>
-        </Box>
+        </Content>
       </Card>
+      <PlayBar>
+        <IconButton aria-label="previous">
+          {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
+        </IconButton>
+        <IconButton aria-label="play/pause">
+          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+        </IconButton>
+        <IconButton aria-label="next">
+          {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
+        </IconButton>
+      </PlayBar>
     </ResultCardWrapper>
   )
 }
@@ -44,16 +44,24 @@ export default ResultCard
 
 const ResultCardWrapper = styled.div`
   display: flex;
-  flexDirection: column;
+  flex-direction: column;
   border: 1px solid;
-  borderColor: white;
+  border-radius: 5px;
   width: 400px;
   height: 300px;
 `
 
 const Card = styled.div`
   display: flex;
-  flexDirection: row;
+  flex-direction: row;
+  padding: 10px;
+`
+const Content = styled.div`
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  pl: 1;
+  pb: 1;
 `
 
 const CoverImage = styled.div`
@@ -61,10 +69,15 @@ const CoverImage = styled.div`
   width: 330px;
   height: 200px;
   overflow: hidden;
-  border-radius: 3px;
-
+  border-radius: 5px;
   img {
     width: 100%;
     height: 100%;
   }
+`
+const PlayBar = styled.div`
+  display: 'flex', 
+  align-items: 'center', 
+  pl: 1, 
+  pb: 1
 `
