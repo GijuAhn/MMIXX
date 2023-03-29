@@ -41,8 +41,8 @@ public class MusicService {
 		return musicRepository.findByUserSeq(user_seq, pageable).map(MusicListResponseDto::new);
 	}
 
-	public Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable) {
-		return musicRepository.getMusicListByCondition(condition, pageable);
+	public Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable) {
+		return musicRepository.getMusicListByCondition(user_seq, condition, pageable);
 	}
 
 	public MusicDetailResponseDto getMusic(Integer seq) {
