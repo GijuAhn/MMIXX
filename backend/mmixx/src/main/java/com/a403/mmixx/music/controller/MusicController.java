@@ -61,8 +61,8 @@ public class MusicController {
 		return awsS3Service.downloadMusic(music_seq);
 	}
 
-	@PostMapping("/split/{seq}")
-	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
+//	@PostMapping("/split/{seq}")
+//	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
 //		RestTemplate restTemplate = new RestTemplate();
 //
 //		//	Set the headers for the HTTP request
@@ -79,7 +79,7 @@ public class MusicController {
 //		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
 
 //		return ResponseEntity.ok(response);
-	}
+//	}
 
 
 	@ApiOperation(value = "음악 리스트 조회", notes = "")
