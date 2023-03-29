@@ -7,16 +7,17 @@ import lombok.Setter;
 
 import java.util.List;
 
+//  플레이리스트 내 음악 상세조회시 사용되는 DTO
 @Getter
 @Setter
 @NoArgsConstructor
-public class PlaylistMusicResponseDto {
+public class PlaylistMusicDetailResponseDtoForRetrieve {
     private int playlistSeq;
     private List<PlaylistMusicDto> playlistMusics;
 
     @Builder
-    public PlaylistMusicResponseDto(int playlistSeq, List<PlaylistMusicDto> playlistMusic) {
+    public PlaylistMusicDetailResponseDtoForRetrieve(int playlistSeq, List<PlaylistMusicDto> playlistMusics) {
         this.playlistSeq = playlistSeq;
-        this.playlistMusics = playlistMusic;
+        this.playlistMusics = playlistMusics;
     }
 }

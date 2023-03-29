@@ -1,11 +1,13 @@
 package com.a403.mmixx.playlist.model.entity;
 
 import com.a403.mmixx.music.model.entity.Music;
+import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.LinkedList;
 
 @Entity
 @Getter
@@ -20,10 +22,11 @@ public class PlaylistMusic {
     @JoinColumn(name = "playlist_seq")
     private Playlist playlist;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "music_seq")
-    private Music music;
+    private Integer musicSeq;
 
     @NotNull
+    @Column(name = "sequence")
     private Integer sequence;
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,5 @@ public class Playlist {
 	@NotNull
 	@Column(name = "is_private")
 	private Boolean isPrivate;
-
-	@OneToMany(mappedBy = "playlist")
-	private List<PlaylistMusic> playlistMusics;
+	
 }

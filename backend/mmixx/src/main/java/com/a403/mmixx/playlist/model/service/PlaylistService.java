@@ -1,21 +1,21 @@
 package com.a403.mmixx.playlist.model.service;
 
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicResponseDto;
+import com.a403.mmixx.playlist.model.dto.*;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
+import com.a403.mmixx.playlist.model.entity.PlaylistMusicRepository;
 import com.a403.mmixx.playlist.model.entity.PlaylistRepository;
 import com.a403.mmixx.user.model.entity.User;
 import com.a403.mmixx.user.model.entity.UserRepository;
-import com.beust.ah.A;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,9 +29,104 @@ public class PlaylistService {
     private UserRepository userRepository;
 
     /**
+     * DTO로 빈 플레이리스트 생성.
+     * 최초 생성시 playlist만 생성하고, playlistMusic은 updatePlaylistMusic에서 생성
+     */
+    public void createEmptyPlaylist(PlaylistMusicRequestDtoForCreateAndModify requestDto) {
+        User user = userRepository.findById(requestDto.getUserSeq())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid userSeq"));
+
+        Playlist playlist = new Playlist();
+
+        playlist.setUser(user);
+        playlist.setPlaylistName(requestDto.getPlaylistName());
+        playlist.setIsPrivate(requestDto.isPrivate());
+
+        playlistRepository.save(playlist);
+    }
+
+    /**
+     * JSON 객체를 받아 빈 플레이리스트 생성.
+     * 최초 생성시 playlist만 생성하고, playlistMusic은 updatePlaylistMusic에서 생성
+     */
+    @Transactional
+    public void createEmptyPlaylistByJSON(JsonObject jsonObjectForCreatePlaylist) {
+
+        String playlistName = jsonObjectForCreatePlaylist.get("playlist_name").getAsString();
+        Boolean isPrivate = jsonObjectForCreatePlaylist.get("is_private").getAsBoolean();
+        Integer userSeq = jsonObjectForCreatePlaylist.get("user_seq").getAsInt();
+        Integer playlistSeq = jsonObjectForCreatePlaylist.get("playlist_seq").getAsInt();
+        JsonArray playlistMusic = jsonObjectForCreatePlaylist.get("playlist_music").getAsJsonArray();
+
+        Playlist playlist = new Playlist();
+        playlist.setUser(userRepository.findById(userSeq).orElseThrow(() -> new IllegalArgumentException("Invalid userSeq")));
+        playlist.setPlaylistName(playlistName);
+        playlist.setIsPrivate(isPrivate);
+//        playlist.setPlaylistSeq(playlistSeq); //auto-increment
+        playlistRepository.save(playlist);
+
+    }
+
+
+    /**
+     * 플레이리스트에 곡 추가
+     * 새 playlist = 기존 playlist + 새로 추가된 playlist
+     * 기존 playlist 를 삭제하고, 새 playlist 를 통째로 저장
+     */
+    public void addMusicToPlaylist(JsonObject jsonObjectForAddMusic) {
+
+        //  if jsonObject is null, return
+        if (jsonObjectForAddMusic == null) {
+            return;
+        }
+
+        PlaylistMusicRepository playlistMusicRepository = null;
+
+        Integer playlist_seq = jsonObjectForAddMusic.get("playlistSeq").getAsInt();
+        JsonArray originMusicList = jsonObjectForAddMusic.get("playlist_music").getAsJsonArray();
+        JsonArray concatMusicList = jsonObjectForAddMusic.get("music").getAsJsonArray();
+
+        List<PlaylistMusicDto> newPlaylistMusicList = new LinkedList<>();
+        //  기존 곡을 newPlaylistMusicList 에 담는다.
+        Integer maxSequence = 0;
+        for (int i = 0; i < originMusicList.size(); i++) {
+            Integer music_seq = originMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
+            Integer sequence = originMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
+            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence);
+            if (maxSequence < sequence) {
+                maxSequence = sequence;
+            }
+            newPlaylistMusicList.add(temp);
+        }
+
+        for (int i = 0; i < concatMusicList.size(); i++) {
+            Integer music_seq = concatMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
+            Integer sequence = concatMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
+            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence + maxSequence);
+            newPlaylistMusicList.add(temp);
+        }
+
+        playlistMusicRepository.deleteByPlaylistSeq(playlist_seq);
+
+        for (int i = 0; i < newPlaylistMusicList.size(); i++) {
+            PlaylistMusicDto temp = newPlaylistMusicList.get(i);
+            playlistMusicRepository.insertByPlaylistSeqAndMusicSeqAndSequence(playlist_seq, temp.getMusicSeq(), temp.getSequence());
+        }
+    }
+
+
+    /**
+     * 플레이리스트 수정(업데이트), 곡 추가
+     */
+    public void updatePlaylistMusic(PlaylistMusicRequestDtoForCreateAndModify requestDto) {
+    }
+
+
+
+    /**
      * 전체 플레이리스트 조회
      */
-    public List<PlaylistDto> getPlaylist() {
+    public List<PlaylistDto> getGlobalPlaylist() {
         return playlistRepository.findByIsPrivateFalse().stream()
                 .map(PlaylistDto::new).collect(Collectors.toList());
     }
@@ -39,7 +134,7 @@ public class PlaylistService {
     /**
      * 플레이리스트에 속한 노래 목록 조회
      */
-    public PlaylistMusicResponseDto getPlaylistMusic(int seq) {
+    public PlaylistMusicDetailResponseDtoForRetrieve getPlaylistMusic(int seq) {
         Playlist playlist = playlistRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("Invalid playlistSeq"));
         List<PlaylistMusic> playlistMusic = playlistRepository.findByPlaylistSeq(seq);
@@ -48,18 +143,12 @@ public class PlaylistService {
                 .map(pm -> new PlaylistMusicDto(pm))
                 .collect(Collectors.toList());
 
-        return PlaylistMusicResponseDto.builder()
+        return PlaylistMusicDetailResponseDtoForRetrieve.builder()
                 .playlistSeq(seq)
-                .playlistMusic(playlistMusicDtos)
+                .playlistMusics(playlistMusicDtos)
                 .build();
     }
 
-    public void save(PlaylistMusicRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserSeq())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid userSeq"));
-
-        Playlist playlist = new Playlist();
-    }
 
     /**
      * 플레이리스트 삭제
@@ -72,7 +161,5 @@ public class PlaylistService {
         }
     }
 
-//    public String getCoverImage(int seq) {
-//        return "";
-//    }
+
 }
