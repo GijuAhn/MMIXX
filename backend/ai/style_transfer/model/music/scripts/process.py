@@ -200,7 +200,7 @@ if __name__ == "__main__":
     filename = os.path.basename(args.input).replace(".mp3", "")
     reference = os.path.basename(args.reference).replace(".mp3", "")
     out_filepath = os.path.join(dirname, f"{filename}_mix.wav")
-    s3_filepath = os.path.join(os.path.dirname(args.input), f"{filename}_mix.wav")
+    s3_filepath = os.path.join('music/', f"{filename}_mix.wav")
     in_filepath = os.path.join(dirname, f"{filename}_in.wav")
     print(f"Saved output to {out_filepath}")
 
@@ -208,8 +208,9 @@ if __name__ == "__main__":
     torchaudio.save(buffer, y_hat.cpu().view(1, -1), 24000, format="wav")
     # path_name = f'{filename}_out_ref={reference}.wav'
     # basic_key = 'https://bucket-mp3-file-for-mmixx.s3.ap-northeast-2.amazonaws.com/music'
+    print("s3_filepath : ", s3_filepath);
     s3.put_object(Bucket=bucket_name,
-              Key=f"music/{s3_filepath}",
+              Key=s3_filepath,
               Body=buffer.getvalue())
 
     torchaudio.save(out_filepath, y_hat.cpu().view(1, -1), 24000)
