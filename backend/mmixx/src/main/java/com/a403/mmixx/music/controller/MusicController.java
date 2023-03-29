@@ -26,10 +26,13 @@ import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.service.AwsS3Service;
 import com.a403.mmixx.music.model.service.MusicService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Api(tags = {"음악", "api"})
 @RestController
 @RequestMapping("/music")
 @RequiredArgsConstructor
@@ -38,53 +41,59 @@ public class MusicController {
 	private final AwsS3Service awsS3Service;
 
 	//	Send REST API request to Django python server for AI processing
+	@ApiOperation(value = "음악 스타일 변환", notes = "")
 	@PostMapping("/mix")
 	public String mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
 		System.out.println("Music Mix Start");
 		return musicService.mixMusic(requestDto);
 	}
-
-	@PostMapping("/split/{seq}")
-	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
-
-		//	Set the headers for the HTTP request
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		//	Set the request body with the JSON object
-		String jsonS3Address = musicService.mixMusic(seq);
-		HttpEntity<String> entity = new HttpEntity<String>(jsonS3Address, headers);
-		//	TODO: Request BOdy 에 넣어야 함.
-
-		//	Send the HTTP request to the python django server
-		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
-		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
-
-		return ResponseEntity.ok(response);
+	
+	@ApiOperation(value = "음악 다운로드", notes = "")
+	@GetMapping("/download/{music_seq}")
+	public ResponseEntity<byte[]> downloadMusic(@PathVariable Integer music_seq) throws IOException {
+		return awsS3Service.downloadMusic(music_seq);
 	}
 
+//	@PostMapping("/split/{seq}")
+//	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
+//		RestTemplate restTemplate = new RestTemplate();
+//
+//		//	Set the headers for the HTTP request
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//		//	Set the request body with the JSON object
+//		String jsonS3Address = musicService.mixMusic(seq);
+//		HttpEntity<String> entity = new HttpEntity<String>(jsonS3Address, headers);
+//		//	TODO: Request BOdy 에 넣어야 함.
+//
+//		//	Send the HTTP request to the python django server
+//		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
+//		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
+//
+//		return ResponseEntity.ok(response);
+//	}
 
-	@GetMapping("/download/{fileName}")
-	public ResponseEntity<byte[]> downloadMusic(@PathVariable String fileName) throws IOException {
-		return awsS3Service.downloadMusic(fileName);
-	}
 
+	@ApiOperation(value = "음악 리스트 조회", notes = "")
 	@GetMapping
 	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PageableDefault(size=10) Pageable pageable) {
 		return ResponseEntity.ok(musicService.getMusicList(pageable));
 	}
 
+	@ApiOperation(value = "음악 검색", notes = "")
 	@GetMapping("/search")
 	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PageableDefault(size=10) Pageable pageable, MusicCondition condition) {
 		return ResponseEntity.ok(musicService.getMusicListByCondition(condition, pageable));
 	}
 
+	@ApiOperation(value = "음악 상세 내용 조회", notes = "")
 	@GetMapping("/{seq}")
 	public ResponseEntity<MusicDetailResponseDto> getMusic(@PathVariable Integer seq) {
 		return ResponseEntity.ok(musicService.getMusic(seq));
 	}
 
+	@ApiOperation(value = "음악 업로드", notes = "")
 	@PostMapping
 	public ResponseEntity<?> registMusic(@RequestPart("user") MusicRegistRequestDto user, @RequestPart("files") List<MultipartFile> multipartFiles) throws Exception {
 		// 200 : 업로드 성공
@@ -95,6 +104,7 @@ public class MusicController {
 		return ResponseEntity.ok(musicService.registMusic(user, multipartFiles));
 	}
 
+	@ApiOperation(value = "음악 제목 수정", notes = "")
 	@PutMapping("/{seq}")
 	public ResponseEntity<?> updateMusic(@PathVariable Integer seq, @RequestBody MusicUpdateRequestDto reqeustDto) {
 		Music music = musicService.updateMusic(seq, reqeustDto);
@@ -105,6 +115,7 @@ public class MusicController {
 		}
 	}
 
+	@ApiOperation(value = "음악 삭제", notes = "")
 	@DeleteMapping("/{seq}")
 	public ResponseEntity<?> deleteMusic(@PathVariable Integer seq) {
 		Music music = musicService.deleteMusic(seq);
