@@ -45,6 +45,8 @@ const Button = styled.button`
   width: 40px;
   height: 40px;
   font-size: 12px;
+  font-weight: 200;
+  font-family: "Heebo", sans-serif;
   // height: 20px;
   // border: 1.1px solid transparent;
   // border-radius: 50%;
