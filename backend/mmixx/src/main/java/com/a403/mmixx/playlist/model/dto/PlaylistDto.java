@@ -4,6 +4,9 @@ import com.a403.mmixx.playlist.model.entity.Playlist;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedList;
+
+// 플레이리스트의 DTO
 @Getter
 @Setter
 public class PlaylistDto {
