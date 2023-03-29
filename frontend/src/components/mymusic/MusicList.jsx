@@ -3,8 +3,11 @@ import useDidMountEffect from "components/mymusic/useDidMountEffect";
 import { getMusicList, getMusicListByCondition } from "api/mymusic";
 // import MusicListItem from "./MusicListItem";
 import CustomTable from "./CustomTable";
+import upIcon from "assets/up-arrow.png";
+import styled from "styled-components";
 
 const MusicList = ({ filter, order, query }) => {
+  const [showUpIcon, setShowUpIcon] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [noArray, setNoArray] = useState("음악 목록이 없습니다.");
   const [musicList, setMusicList] = useState([]);
@@ -35,6 +38,31 @@ const MusicList = ({ filter, order, query }) => {
       })
       .then(() => setIsLoading(false));
   }, []);
+
+  // const getNextPage = () => {
+  //   const didMount = useRef(false);
+
+  //   useEffect(() => {
+  //     // if (didMount.current) func();
+  //     // else didMount.current = true;
+  //   }, []);
+  // };
+  // const getFirstPageByCondition = () => {
+  //   const didMount = useRef(false);
+
+  //   useEffect(() => {
+  //     if (didMount.current) func();
+  //     else didMount.current = true;
+  //   }, deps);
+  // };
+  // const getNextPageByCondition = () => {
+  //   const didMount = useRef(false);
+
+  //   useEffect(() => {
+  //     if (didMount.current) func();
+  //     else didMount.current = true;
+  //   }, deps);
+  // };
   useDidMountEffect(() => {
     if (hasCondition.current) return;
     getMusicList(page.current)
@@ -68,6 +96,14 @@ const MusicList = ({ filter, order, query }) => {
   // }, [page]);
   useEffect(() => {
     const onScroll = () => {
+      // 기능 1. up-arrow icon 나타나기/사라지기
+      if (window.scrollY > 100) {
+        setShowUpIcon(true);
+      } else {
+        setShowUpIcon(false);
+      }
+
+      // 기능 2. 스크롤 내리면 다음 페이지 부르기
       if (isLast.current) {
         console.log("last page");
         return;
@@ -103,6 +139,10 @@ const MusicList = ({ filter, order, query }) => {
   // const getNexPage = () => {};
   // setMusicList((currentArray) => [...currentArray, ...result.content]);
 
+  const onClickUpIcon = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -112,8 +152,22 @@ const MusicList = ({ filter, order, query }) => {
       ) : (
         <CustomTable musicList={musicList}></CustomTable>
       )}
+      <Button
+        onClick={onClickUpIcon}
+        visible={showUpIcon ? "visible" : "hidden"}
+      >
+        <img src={upIcon} width="55" alt=""></img>
+      </Button>
     </div>
   );
 };
+
+const Button = styled.button`
+  position: fixed;
+  bottom: 120px;
+  background-color: transparent;
+  right: 30px;
+  visibility: ${(props) => props.visible};
+`;
 
 export default MusicList;
