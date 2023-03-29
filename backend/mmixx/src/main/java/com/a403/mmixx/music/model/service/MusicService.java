@@ -222,4 +222,70 @@ public class MusicService {
 
 //		return musicUrl;
 	}
+	
+	public MusicSplitResponseDto splitMusic(Integer music_seq) {
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		if(music != null) {			
+			RestTemplate restTemplate = new RestTemplate();
+			String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+			String response = "";
+
+			String url = "https://j8a403.p.ssafy.io/django/api/mix/inst";
+			String data = "{ \"music_path\" : \"" + music_path + "\"}";
+			
+			try {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+
+				HttpEntity<?> requestMessage = new HttpEntity<>(data, headers);
+				response = restTemplate.postForEntity(url, requestMessage, String.class).getBody();
+
+				System.out.println("Success Music Split");
+				System.out.println("response : " + response);
+				response = response.replace("{\"music\":\"", "");
+				response = response.replace("\"}", "");
+				System.out.println("response : " + response);
+				System.out.println("response.toString() : " + response.toString());
+//				response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
+			} catch (HttpStatusCodeException e) {
+				if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
+					System.out.println("not found");
+				} else {
+					response = "API Fail";
+				}
+			}
+			
+			String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
+			String format = response.substring(response.length() - 3, response.length());
+			String new_music_name = "";
+			if(format.equals("mp3")) {
+				new_music_name = music.getMusicName().replace(".mp3", "_inst.mp3");
+			} else {
+				new_music_name = music.getMusicName().replace(".wav", "_inst.wav");
+			}
+			System.out.println("new_music_path : " + new_music_path);
+			System.out.println("new_music_name : " + new_music_name);
+			
+			Music new_music = new Music();
+			
+			new_music.setAlbumName(music.getAlbumName());
+			new_music.setCoverImage(music.getCoverImage());
+			new_music.setEdited(music.getEdited());
+			new_music.setMixed(music.getMusicSeq());
+			new_music.setGenreSeq(music.getGenreSeq());
+			new_music.setMusicLength(music.getMusicLength());
+			new_music.setMusicName(new_music_name);
+			new_music.setMusicUrl(new_music_path);
+			new_music.setMusicianName(music.getMusicianName());
+			new_music.setUserSeq(music.getUserSeq());
+			new_music.setPresetSeq(music.getPresetSeq());
+			
+			musicRepository.save(new_music);
+			
+			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music_path);
+			return responseDto;
+		} else {
+			return null;
+		}
+	}
 }
