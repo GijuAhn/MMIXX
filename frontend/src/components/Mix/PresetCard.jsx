@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-// import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 
 import IconButton from '@mui/material/IconButton';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -14,7 +11,6 @@ import theme from 'styles/theme';
 import styled from 'styled-components';
 import { testPlaylistMusic } from 'atom/atom';
 import { useRecoilValue } from 'recoil';
-import { Padding } from '@mui/icons-material';
 
 // 참조
 // https://mui.com/material-ui/react-card/
@@ -31,22 +27,23 @@ const PresetCard = (props) => {
 
   return (
     <Card>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       `<CoverImage>
           <img src={coverImage} alt={musicName} />
       </CoverImage>
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ display: 'grid', padding: 2}}>
-          <div style={{ color: `${theme.palette.secondary}`, fontSize: 25, fontWeight: 'bold', justifyContent: 'flex-start' }}>
+        <Content>
+          <div style={{ color: `${theme.palette.secondary}`, fontSize: 35, fontWeight: 'bolder',justifyContent: 'flex-start' }}>
             { preset_name }
             {/* PRESET NAME */}
           </div>
-          <div style={{ color: `${theme.palette.light}`, fontWeight: 'bolder', justifyContent: 'flex-start' }}>
+          <div style={{ color: `${theme.palette.light}`, fontSize: 25, fontWeight: 'bold', justifyContent: 'flex-start' }}>
             { musicName }
           </div>
           <div style={{ color: `${theme.palette.light}`, fontWeight: 'normal',justifyContent: 'flex-start' }}>
             { musicianName }
           </div>
-        </Box>
+        </Content>
+      </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <IconButton aria-label="previous">
             {tm.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
@@ -58,7 +55,6 @@ const PresetCard = (props) => {
             {tm.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
           </IconButton>
         </Box>
-      </Box>
     </Card>
   );
 }
@@ -67,13 +63,13 @@ export default PresetCard
 
 const Card = styled.div`
   display: flex; 
+  flex-direction: column;
   maxWidth: 500; 
   height: 300px; 
   border: 3px solid ${theme.palette.secondary};
-  background-color: ${theme.palette.darkgray};
   border-radius: 10px;
+  background-color: ${theme.palette.dark};
   padding: 5px;
-  transparent: 0
 `
 const CoverImage = styled.div`
   object-fit: cover;
@@ -86,4 +82,9 @@ const CoverImage = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+const Content = styled.div`
+ display: flex;
+ flex-direction: column;
+ padding: 10px
 `

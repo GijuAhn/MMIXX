@@ -21,7 +21,7 @@ const MixResult = () => {
         <ResultCard>
         </ResultCard>
       </Mixed>
-      
+
       <DefaultBtn
         onClick={ () => navigate('/mymusic') }
       >
@@ -34,7 +34,11 @@ const MixResult = () => {
 export default MixResult
 
 const ResultWrapper = styled(Wrapper)`
-  background: linear-gradient(45deg ${theme.palette.darkgray} 0%, ${theme.palette.secondary} 50%, ${theme.palette.light} 100% });
+  background: linear-gradient(
+    135deg, 
+    ${theme.palette.dark} 45%, 
+    // ${theme.palette.secondary} 75%, 
+    ${theme.palette.light} 100%);
 `
 
 const Original = styled.div`
