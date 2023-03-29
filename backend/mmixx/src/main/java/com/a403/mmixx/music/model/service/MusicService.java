@@ -256,7 +256,8 @@ public class MusicService {
 			}
 			
 			String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
-			String format = response.substring(response.length() - 3, response.length());
+			String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+			System.out.println("format : " + format);
 			String new_music_name = "";
 			if(format.equals("mp3")) {
 				new_music_name = music.getMusicName().replace(".mp3", "_inst.mp3");
@@ -270,8 +271,8 @@ public class MusicService {
 			
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
-			new_music.setEdited(music.getEdited());
-			new_music.setMixed(music.getMusicSeq());
+			new_music.setEdited(music.getMusicSeq());
+			new_music.setMixed(music.getMixed());
 			new_music.setGenreSeq(music.getGenreSeq());
 			new_music.setMusicLength(music.getMusicLength());
 			new_music.setMusicName(new_music_name);
