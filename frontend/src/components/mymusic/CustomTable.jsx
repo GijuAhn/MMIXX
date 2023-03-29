@@ -21,12 +21,17 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
               ></CoverImage>
             </Td>
             <Td>{music.mixed === null ? null : "M"}</Td>
-            <Td>{music.musicName}</Td>
+            <Td>
+              {music.musicName.substr(0, music.musicName.lastIndexOf("."))}
+            </Td>
             <Td>{music.musicianName}</Td>
             <Td>{music.albumName}</Td>
             <Td>
               {Math.floor(music.musicLength / 1000 / 60)}:
-              {Math.floor((music.musicLength / 1000) % 60)}
+              {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
+                2,
+                "0"
+              )}
             </Td>
             {hasIcon ? (
               <Td>
