@@ -80,9 +80,9 @@ public class MusicController {
 	}
 
 	@ApiOperation(value = "음악 검색", notes = "")
-	@GetMapping("/search")
-	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PageableDefault(size=10) Pageable pageable, MusicCondition condition) {
-		return ResponseEntity.ok(musicService.getMusicListByCondition(condition, pageable));
+	@GetMapping("/search/{user_seq}")
+	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PathVariable Integer user_seq, MusicCondition condition, @PageableDefault(size=10) Pageable pageable) {
+		return ResponseEntity.ok(musicService.getMusicListByCondition(user_seq, condition, pageable));
 	}
 
 	@ApiOperation(value = "음악 상세 내용 조회", notes = "")
