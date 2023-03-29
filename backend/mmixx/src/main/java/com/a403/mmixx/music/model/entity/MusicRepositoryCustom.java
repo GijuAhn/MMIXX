@@ -7,5 +7,5 @@ import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 
 public interface MusicRepositoryCustom {
-	Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable);
+	Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable);
 }
