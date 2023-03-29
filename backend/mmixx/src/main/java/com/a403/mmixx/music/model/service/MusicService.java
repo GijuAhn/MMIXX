@@ -132,7 +132,7 @@ public class MusicService {
 		return musicContainerList;
 	}
 
-	public String mixMusic(MusicMixRequestDto requestDto) {
+	public MusicMixResponseDto mixMusic(MusicMixRequestDto requestDto) {
 		System.out.println("*** Start ***");
 		//	return music_url stored in MySQL DB
 		int music_seq = requestDto.getMusic_seq();
@@ -212,8 +212,11 @@ public class MusicService {
 		new_music.setPresetSeq(music.getPresetSeq());
 		
 		musicRepository.save(new_music);
+		
+		String result = "{ \"music_url\" : \"" + music.getMusicUrl() + "\", \"mixed_music_url\" : \"" + new_music.getMusicUrl() + "\"}";
+		MusicMixResponseDto responseDto = new MusicMixResponseDto(music.getMusicUrl(), new_music.getMusicUrl());
 //		String test = "hello";
-		return response.toString();
+		return responseDto;
 //		return test;
 
 
