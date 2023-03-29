@@ -22,6 +22,7 @@ import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
 import com.a403.mmixx.music.model.dto.MusicMixResponseDto;
 import com.a403.mmixx.music.model.dto.MusicRegistRequestDto;
+import com.a403.mmixx.music.model.dto.MusicSplitResponseDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.service.AwsS3Service;
@@ -60,26 +61,17 @@ public class MusicController {
 	public ResponseEntity<byte[]> downloadMusic(@PathVariable Integer music_seq) throws IOException {
 		return awsS3Service.downloadMusic(music_seq);
 	}
-
-//	@PostMapping("/split/{seq}")
-//	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
-//		RestTemplate restTemplate = new RestTemplate();
-//
-//		//	Set the headers for the HTTP request
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//		//	Set the request body with the JSON object
-//		String jsonS3Address = musicService.mixMusic(seq);
-//		HttpEntity<String> entity = new HttpEntity<String>(jsonS3Address, headers);
-//		//	TODO: Request BOdy 에 넣어야 함.
-//
-//		//	Send the HTTP request to the python django server
-//		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
-//		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
-
-//		return ResponseEntity.ok(response);
-//	}
+	
+	@ApiOperation(value = "음악 배경음 추출(보컬 제거)")
+	@GetMapping("/split/{music_seq}")
+	public ResponseEntity<?> splitMusic(@PathVariable Integer music_seq) throws Exception {
+		MusicSplitResponseDto responseDto = musicService.splitMusic(music_seq);
+		if(responseDto != null) {
+			return ResponseEntity.ok(responseDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 
 	@ApiOperation(value = "음악 리스트 조회", notes = "")
