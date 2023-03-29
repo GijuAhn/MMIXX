@@ -1,33 +1,78 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+// import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
+import { Box } from '@mui/material';
+import styled from 'styled-components';
+import { testPlaylistMusic } from 'atom/atom';
+import { useRecoilValue } from 'recoil';
+import theme from 'styles/theme';
+import { useState } from 'react';
 
 const MusicInfo = (props) => {
-  const music_name = props.music_name
-  const music_singer = props.music_singer
+  // const music_name = props.music_name
+  // const music_singer = props.music_singer
+  const [hidden, setHidden] = useState(false)
+  const playlist = useRecoilValue(testPlaylistMusic)
+  const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            { music_name }
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            { music_singer }
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <div>
+      { !hidden && (<MiniCover
+        onMouseEnter={ () => setHidden(true)}
+        >
+        <img src={coverImage} alt={musicName} />
+      </MiniCover>)}
+
+      { hidden && (
+        <Card onMouseOut={ () => setHidden(false)}>
+          <CoverImage>
+            <img src={coverImage} alt={musicName} />
+          </CoverImage>
+          <Box style={{ display: 'grid' }}>
+            <Box sx={{ color: `${theme.palette.dark}`, fontSize: 20, fontWeight: 'medium' }}>
+              {/* { music_name } */}
+              { musicName }
+            </Box>
+            <Box sx={{ color:`${theme.palette.dark}` }}>
+              {/* { music_singer } */}
+              { musicianName }
+            </Box>
+          </Box>
+        </Card>
+      )}
+    </div>
   );
 }
 
 export default MusicInfo
+
+const Card = styled.div`
+  display: flex;
+  flexDirection: column;
+  Width: 230px;
+  Height: 100px;
+  background-color: ${theme.palette.light}
+`
+
+const CoverImage = styled.div`
+  object-fit: cover;
+  width: 150px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 3px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`
+const MiniCover = styled.div`
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 70%;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`
