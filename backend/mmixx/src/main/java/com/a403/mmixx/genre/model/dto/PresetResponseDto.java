@@ -1,6 +1,6 @@
 package com.a403.mmixx.genre.model.dto;
 
-import com.a403.mmixx.genre.model.entity.Preset;
+import com.a403.mmixx.genre.model.entity.Preset1;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class PresetResponseDto {
     private Integer musicLength; // 음악 길이
     private Integer genreSeq; // 장르 일련번호
 
-    public PresetResponseDto(Preset entity){
+    public PresetResponseDto(Preset1 entity){
         this.presetSeq = entity.getPresetSeq();
         this.musicName = entity.getMusicName();
         this.musicUrl = entity.getMusicUrl();

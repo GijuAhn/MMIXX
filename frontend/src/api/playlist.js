@@ -1,24 +1,30 @@
-// import base from './base'
-// import axios from 'axios'
+import instance from './base'
 
-// const customAxios = axios.create({
-//   baseURL: process.env.REACT_APP_TEST,
-// });
+// 임시 테스트용 (고양이 사진 API)
+export const testApi = async () => {
+  return await instance('https://jsonplaceholder.typicode.com/posts/1')
+}  
 
-// export const getPlaylist = async() => {
-//   const data = await base.get()
-//   return 1
-//   return base;
-// }
+export const getPlaylists = async () => {
+  return await instance('/playlist')
+}
 
-// export const getPlaylistDetail = async( params ) => {
-//   const data = await axios(params)
+export const getPlaylistDetail = async ( playlistSeq ) => {
+  return await instance(`/playlist/${playlistSeq}`)
+}
 
-//   return data
-// }
+export const postPlaylist = async ( playlist ) => {
+  return await instance.post('/playlist', { data: playlist })
+}
 
-// export const showCat = async () => {
-//   const res = await customAxios('https://api.thecatapi.com/v1/images/search')
+export const favoritePlaylists = async () => {
+  return await instance('/playlist/favorite')
+}
 
-//   return res
-// }
+export const getPlaylistCoverImage = async ( playlistSeq ) => {
+  return await instance(`/playlist/${playlistSeq}/1`)
+}
+
+export const insertMusicInPlaylist = async ( playlistSeq ) => {
+  return await instance.post(`/playlist/${playlistSeq}`)
+}

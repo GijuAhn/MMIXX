@@ -24,3 +24,10 @@ export const getMusicListByCondition = async (
 
 export const registMusic = async (data, config) =>
   await base.post(`/api/music`, data, config);
+
+export const downloadMusic = async (fileName) => {
+  const res = await base.get(`/api/music/download/${fileName}`, {
+    responseType: "blob",
+  });
+  return res;
+};

@@ -28,7 +28,7 @@ public class User {
     private String userName; // 이름
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 100, nullable = false)
+    @Column(length = 10, nullable = false)
     private Role role; // 권한
 
     @Column(length = 1000)
@@ -46,6 +46,16 @@ public class User {
         this.userName = userName;
         this.profileImageUrl = profileImageUrl;
 
+        return this;
+    }
+
+    public User tokenUpdate(String token) {
+        this.token = token;
+        return this;
+    }
+
+    public User seqUpdate(Integer userSeq) {
+        this.userSeq = userSeq;
         return this;
     }
 

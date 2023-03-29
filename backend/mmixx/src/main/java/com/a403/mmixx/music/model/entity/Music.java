@@ -44,6 +44,7 @@ public class Music {
 	private Integer genreSeq;
 	private Integer mixed;
 	private Integer edited;
+	private Integer presetSeq;
 
 	public void updateMusic(MusicUpdateRequestDto requestDto){
 		this.musicName = requestDto.getMusicName();
