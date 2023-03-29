@@ -193,7 +193,7 @@ public class MusicService {
 		
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
 //		String new_music_name = response.replace("music/", "");
-		String new_music_name = music.getMusicName().replace(".mp3", "_mix.mp3");
+		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
 		System.out.println("new_music_path : " + new_music_path);
 		System.out.println("new_music_name : " + new_music_name);
 		
