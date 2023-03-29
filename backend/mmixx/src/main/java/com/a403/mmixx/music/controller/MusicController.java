@@ -20,6 +20,7 @@ import com.a403.mmixx.music.model.dto.MusicCondition;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
+import com.a403.mmixx.music.model.dto.MusicMixResponseDto;
 import com.a403.mmixx.music.model.dto.MusicRegistRequestDto;
 import com.a403.mmixx.music.model.dto.MusicUpdateRequestDto;
 import com.a403.mmixx.music.model.entity.Music;
@@ -43,9 +44,15 @@ public class MusicController {
 	//	Send REST API request to Django python server for AI processing
 	@ApiOperation(value = "음악 스타일 변환", notes = "")
 	@PostMapping("/mix")
-	public String mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
+	public ResponseEntity<?> mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
 		System.out.println("Music Mix Start");
-		return musicService.mixMusic(requestDto);
+		MusicMixResponseDto response = musicService.mixMusic(requestDto);
+		if(response != null) {
+			return ResponseEntity.ok(response);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+		
 	}
 	
 	@ApiOperation(value = "음악 다운로드", notes = "")
@@ -54,8 +61,8 @@ public class MusicController {
 		return awsS3Service.downloadMusic(music_seq);
 	}
 
-//	@PostMapping("/split/{seq}")
-//	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
+	@PostMapping("/split/{seq}")
+	public ResponseEntity<?> splitMusic(@PathVariable Integer seq) throws Exception {
 //		RestTemplate restTemplate = new RestTemplate();
 //
 //		//	Set the headers for the HTTP request
@@ -70,9 +77,9 @@ public class MusicController {
 //		//	Send the HTTP request to the python django server
 //		String mixingMusicUrl = "https://j8a403.p.ssafy.io/django/api/split";
 //		String response = restTemplate.postForObject(mixingMusicUrl, entity, String.class);
-//
+
 //		return ResponseEntity.ok(response);
-//	}
+	}
 
 
 	@ApiOperation(value = "음악 리스트 조회", notes = "")
