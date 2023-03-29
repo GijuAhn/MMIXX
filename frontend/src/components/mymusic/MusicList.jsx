@@ -73,6 +73,7 @@ const MusicList = ({ filter, order, query }) => {
       })
       .then(() => setIsLoading(false));
   }, [scroll]);
+  
   useDidMountEffect(() => {
     console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
     // setPage(1);
