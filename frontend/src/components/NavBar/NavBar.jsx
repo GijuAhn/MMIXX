@@ -1,24 +1,15 @@
 import { Avatar } from '@mui/material'
 import styled from 'styled-components'
-import { useLocation, Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
-import { handleLogin } from 'api/base'
 import logo from 'assets/logo.png'
-
-const navList = [
-  // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
-  {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" color="primary"/>},
-  {name: 'PLAYLIST', path: 'playlist', icon: <PlaylistPlaySharpIcon fontSize="small" />},
-  {name: 'MY MUSIC', path: 'mymusic', icon: <MusicNoteSharpIcon fontSize="small" />},
-]
 
 const NavBar = () => {
   const navigate = useNavigate()
-  const location = useLocation();
   
   const isLogin = true;
 
@@ -67,6 +58,9 @@ const NavBar = () => {
 }
 
 const NavMenu = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const navList = [
     // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
     {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" />},
@@ -78,7 +72,9 @@ const NavMenu = () => {
     <TestUl>
       {navList && navList.map((item, index) => {
         return (
-          <TestLi key={'testli' + index}>
+          <TestLi key={'testli' + index} 
+            onClick={() => navigate(item.path)}
+            selected={'/' + item.path === location.pathname}>
             {item.icon}
             {item.name}
           </TestLi>
@@ -121,46 +117,46 @@ const NavAvatar = styled(Avatar)`
   margin-bottom: 15px;
 `
 
-const NavList = styled.div`
-  flex-direction: column;
-  justify-content: start;
-  flex-grow: 4;
-`
+// const NavList = styled.div`
+//   flex-direction: column;
+//   justify-content: start;
+//   flex-grow: 4;
+// `
 
-const NavItem = styled(Link)`
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-`
+// const NavItem = styled(Link)`
+//   width: 100%;
+//   text-align: center;
+//   text-decoration: none;
+// `
 
-const NavBtn = styled.button`
-  background-color: ${({ theme }) => theme.palette.dark};
-  color: ${({ theme }) => theme.palette.light};
-  padding: 10px 20px;
-  border: 1.3px solid ${({theme}) => theme.palette.secondary};
-  border-radius: 27px;
-  margin: 5px auto;
-  width: 90%;
-  font-weight: bold;
-  font-size: 14px;
-  height: 40px;
-  text-align: left;
-  font-family: 'Heebo', sans-serif;
-  display: flex;
-  align-items: center;
+// const NavBtn = styled.button`
+//   background-color: ${({ theme }) => theme.palette.dark};
+//   color: ${({ theme }) => theme.palette.light};
+//   padding: 10px 20px;
+//   border: 1.3px solid ${({theme}) => theme.palette.secondary};
+//   border-radius: 27px;
+//   margin: 5px auto;
+//   width: 90%;
+//   font-weight: bold;
+//   font-size: 14px;
+//   height: 40px;
+//   text-align: left;
+//   font-family: 'Heebo', sans-serif;
+//   display: flex;
+//   align-items: center;
 
-  ${({ selected, theme }) => 
-    selected &&`
-      background-color: ${theme.palette.secondary};
-      color: ${theme.palette.dark};
-    `
-  };
+//   ${({ selected, theme }) => 
+//     selected &&`
+//       background-color: ${theme.palette.secondary};
+//       color: ${theme.palette.dark};
+//     `
+//   };
 
-  &: hover {
-    background-color: ${({ theme }) => theme.palette.secondary};
-    color: ${({ theme }) => theme.palette.dark};
-  }
-`
+//   &: hover {
+//     background-color: ${({ theme }) => theme.palette.secondary};
+//     color: ${({ theme }) => theme.palette.dark};
+//   }
+// `
 
 const LogOut = styled.div`
   align-self: end;
@@ -184,23 +180,27 @@ const TestLi = styled.li`
   list-style: none;
   display: flex;
   align-items: center;
-  padding: 10px 10px;
+  padding: 12px 17px;
   justify-content: space-between;
   // display: inline-flex;
   // vertical-align: middle;
   text-align: left;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 25px;
   animation: 1s ease-in-out 0s 1 normal forwards;
 
   &:hover {
-    // background-color: ${({ theme }) => theme.palette.secondary};
     color: ${({ theme }) => theme.palette.secondary};
+    background-color: ${({ theme }) => theme.palette.darkAlt};
   }
-`
 
-const StyleAlbumIcon = styled(AlbumIcon)`
-  color: black;
+  ${({ selected, theme }) => 
+    selected &&`
+      color: ${theme.palette.secondary};
+      background-color: ${theme.palette.dark};
+    `
+  };
+
 `
 
 export default NavBar;

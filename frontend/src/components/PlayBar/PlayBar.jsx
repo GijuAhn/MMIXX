@@ -5,6 +5,7 @@ import { PlayIcons } from 'components/PlayBar';
 import { useRecoilValue } from 'recoil';
 import { testPlaylistMusic } from 'atom/atom';
 import VolumeControl from './VolumeControl'
+import PlayControl from './PlayControl'
 
 const PlayBar = () => {
   const location = useLocation()
@@ -30,6 +31,7 @@ const PlayBar = () => {
       <PlayIcons
         width="30%"
       />
+      <PlayControl />
       <VolumeWrapper>
         <VolumeControl />
       </VolumeWrapper>
