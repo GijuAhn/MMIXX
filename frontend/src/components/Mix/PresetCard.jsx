@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
@@ -12,48 +12,46 @@ import styled from 'styled-components';
 import { testPlaylistMusic } from 'atom/atom';
 import { useRecoilValue } from 'recoil';
 
-// 참조
-// https://mui.com/material-ui/react-card/
-
-const PresetCard = (props) => {
+const PresetCard = (props, {presetSeqFunc}) => {
   const preset_name = props.preset_name
-  // const preset_summary = props.preset_summary
-  // const preset_info = props.preset_info
-  // const preset_image = props.preset_image
+  const presetSeq = props.presetSeq
+  // const musicName = props.musicName
+  // const musicianName = props.musicianName
+  // const coverImage = props.coverImage
   const tm = useTheme();
 
   const playlist = useRecoilValue(testPlaylistMusic)
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
 
   return (
-    <Card>
+    <Card onClick={() => props.presetSeqFunc(presetSeq) }>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      `<CoverImage>
+        <CoverImage>
           <img src={coverImage} alt={musicName} />
-      </CoverImage>
+        </CoverImage>
         <Content>
-          <div style={{ color: `${theme.palette.secondary}`, fontSize: 35, fontWeight: 'bolder',justifyContent: 'flex-start' }}>
+          <div style={{ color: `${theme.palette.secondary}`, fontSize: 35, fontWeight: 'bolder', justifyContent: 'flex-start' }}>
             { preset_name }
             {/* PRESET NAME */}
           </div>
           <div style={{ color: `${theme.palette.light}`, fontSize: 25, fontWeight: 'bold', justifyContent: 'flex-start' }}>
             { musicName }
           </div>
-          <div style={{ color: `${theme.palette.light}`, fontWeight: 'normal',justifyContent: 'flex-start' }}>
+          <div style={{ color: `${theme.palette.light}`, fontWeight: 'normal', justifyContent: 'flex-start' }}>
             { musicianName }
           </div>
         </Content>
       </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          <IconButton aria-label="previous">
+          {/* <IconButton aria-label="previous">
             {tm.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-          </IconButton>
+          </IconButton> */}
           <IconButton aria-label="play/pause">
             <PlayArrowIcon sx={{ height: 38, width: 38 }} />
           </IconButton>
-          <IconButton aria-label="next">
+          {/* <IconButton aria-label="next">
             {tm.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-          </IconButton>
+          </IconButton> */}
         </Box>
     </Card>
   );
@@ -64,19 +62,19 @@ export default PresetCard
 const Card = styled.div`
   display: flex; 
   flex-direction: column;
-  maxWidth: 500; 
-  height: 300px; 
+  width: 30vw; 
+  height: 40vh; 
   border: 3px solid ${theme.palette.secondary};
   border-radius: 10px;
   background-color: ${theme.palette.dark};
-  padding: 5px;
+  padding: 3vw;
 `
 const CoverImage = styled.div`
   object-fit: cover;
-  width: 370px;
-  height: 200px;
+  width: 25vw;
+  height: 22vh;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 1vw;
 
   img {
     width: 100%;
@@ -86,5 +84,5 @@ const CoverImage = styled.div`
 const Content = styled.div`
  display: flex;
  flex-direction: column;
- padding: 10px
+ padding-left: 3vw
 `
