@@ -1,32 +1,69 @@
-import React from "react";
-import { Wrapper, Header, DefaultBtn } from "components/Common";
-import { useNavigate } from "react-router-dom";
-import { ResultCard } from "components/Mix";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
 import styled from "styled-components";
+
+import { Wrapper, Header, DefaultBtn } from "components/Common";
+import { ResultCard } from "components/Mix";
 import theme from "styles/theme";
+
+import { musicMix } from "api/mix";
 
 const MixResult = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [result, setResult] = useState('')
+  const musicSeq = location.state && location.state.musicSeq;
+  const presetSeq = location.state && location.state.presetSeq;
+
+  useEffect(() => {
+    // musicMix(musicSeq, presetSeq)
+    musicMix(musicSeq, presetSeq).then(
+      response => setResult(response.data)
+    ).catch( error => console.log(error))
+  }, [])
   return (
     <ResultWrapper>
       <Header 
         title="MIX Result"
         desc="음악 믹스 결과"  
         />
-      <Original>
-        <ResultCard>
-        </ResultCard>
-      </Original>
-      <Mixed>
-        <ResultCard>
-        </ResultCard>
-      </Mixed>
-
-      <DefaultBtn
+      { !result && (
+        <InProgress>
+          <CircularProgress 
+            style={{ alignItems: 'center', justifyContent: 'center'}}
+            />
+          <p>음악을 변환하고 있습니다. 잠시만 기다려주세요.</p>
+        </InProgress>
+      )}
+      { result && (
+        <ContentWrapper>
+          <Original>
+            <ResultCard 
+              musicUrl={result.origin_music.musicUrl}
+              musicName={result.origin_music.musicName}
+              musicianName={result.origin_music.musicianName}
+              coverImage={result.origin_music.coverImage}
+            >
+            </ResultCard>
+          </Original>
+          <Mixed>
+            <ResultCard 
+              musicUrl={result.mixed_music.musicUrl}
+              musicName={result.mixed_music.musicName}
+              musicianName={result.mixed_music.musicianName}
+              coverImage={result.mixed_music.coverImage}
+            >
+            </ResultCard>
+          </Mixed>
+        </ContentWrapper>
+      )}
+      { result && (<DefaultBtn
         onClick={ () => navigate('/mymusic') }
       >
         확인
-      </DefaultBtn>
+      </DefaultBtn>)}
+
     </ResultWrapper>
   )
 }
@@ -40,20 +77,25 @@ const ResultWrapper = styled(Wrapper)`
     // ${theme.palette.secondary} 75%, 
     ${theme.palette.light} 100%);
 `
-
-const Original = styled.div`
-  width: 400px;
-  height: 300px;
-  position: absolute;
-  top: 9rem;
-  left: 15rem;
-  align-item: center;
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 80vw;
+  height: 75vh;
+`
+const Original = styled(ContentWrapper)`
+  align-items: start;
   justify-content: flex-start;
 `
-const Mixed = styled.div`
-  position: absolute;
-  bottom: 13vh;
-  right: 5vw;
-  align-item: center;
+const Mixed = styled(ContentWrapper)`
+  align-items: end;
   justify-content: flex-end;
+`
+const InProgress = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  height: 75vh;
+  align-items: center;
+  justify-content: center;
 `
