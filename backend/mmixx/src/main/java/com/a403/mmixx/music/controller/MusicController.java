@@ -27,9 +27,11 @@ import com.a403.mmixx.music.model.service.AwsS3Service;
 import com.a403.mmixx.music.model.service.MusicService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @RestController
 @RequestMapping("/music")
 @RequiredArgsConstructor

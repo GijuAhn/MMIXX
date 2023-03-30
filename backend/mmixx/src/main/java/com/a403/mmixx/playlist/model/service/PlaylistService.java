@@ -11,7 +11,9 @@ import com.a403.mmixx.user.model.entity.UserRepository;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +22,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlaylistService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+    @Autowired
+    private PlaylistMusicRepository playlistMusicRepository;
     private UserRepository userRepository;
 
     /**
@@ -45,73 +50,73 @@ public class PlaylistService {
         playlistRepository.save(playlist);
     }
 
+
     /**
      * JSON 객체를 받아 빈 플레이리스트 생성.
      * 최초 생성시 playlist만 생성하고, playlistMusic은 updatePlaylistMusic에서 생성
      */
     @Transactional
-    public void createEmptyPlaylistByJSON(JsonObject jsonObjectForCreatePlaylist) {
+    public Playlist createEmptyPlaylistByJSON(JsonObject jsonObjectForCreatePlaylist, int userSeq) {
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!userSeq = " + userSeq);
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!userSeq= " + userSeq);
+
+        Playlist playlist = new Playlist();
 
         String playlistName = jsonObjectForCreatePlaylist.get("playlist_name").getAsString();
         Boolean isPrivate = jsonObjectForCreatePlaylist.get("is_private").getAsBoolean();
-        Integer userSeq = jsonObjectForCreatePlaylist.get("user_seq").getAsInt();
-        Integer playlistSeq = jsonObjectForCreatePlaylist.get("playlist_seq").getAsInt();
-        JsonArray playlistMusic = jsonObjectForCreatePlaylist.get("playlist_music").getAsJsonArray();
 
-        Playlist playlist = new Playlist();
         playlist.setUser(userRepository.findById(userSeq).orElseThrow(() -> new IllegalArgumentException("Invalid userSeq")));
         playlist.setPlaylistName(playlistName);
         playlist.setIsPrivate(isPrivate);
-//        playlist.setPlaylistSeq(playlistSeq); //auto-increment
-        playlistRepository.save(playlist);
 
+        playlistRepository.save(playlist);
+        return playlist;
     }
 
 
     /**
      * 플레이리스트에 곡 추가
-     * 새 playlist = 기존 playlist + 새로 추가된 playlist
-     * 기존 playlist 를 삭제하고, 새 playlist 를 통째로 저장
      */
     public void addMusicToPlaylist(JsonObject jsonObjectForAddMusic) {
 
-        //  if jsonObject is null, return
-        if (jsonObjectForAddMusic == null) {
-            return;
-        }
-
-        PlaylistMusicRepository playlistMusicRepository = null;
-
-        Integer playlist_seq = jsonObjectForAddMusic.get("playlistSeq").getAsInt();
-        JsonArray originMusicList = jsonObjectForAddMusic.get("playlist_music").getAsJsonArray();
-        JsonArray concatMusicList = jsonObjectForAddMusic.get("music").getAsJsonArray();
-
-        List<PlaylistMusicDto> newPlaylistMusicList = new LinkedList<>();
-        //  기존 곡을 newPlaylistMusicList 에 담는다.
-        Integer maxSequence = 0;
-        for (int i = 0; i < originMusicList.size(); i++) {
-            Integer music_seq = originMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
-            Integer sequence = originMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
-            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence);
-            if (maxSequence < sequence) {
-                maxSequence = sequence;
-            }
-            newPlaylistMusicList.add(temp);
-        }
-
-        for (int i = 0; i < concatMusicList.size(); i++) {
-            Integer music_seq = concatMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
-            Integer sequence = concatMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
-            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence + maxSequence);
-            newPlaylistMusicList.add(temp);
-        }
-
-        playlistMusicRepository.deleteByPlaylistSeq(playlist_seq);
-
-        for (int i = 0; i < newPlaylistMusicList.size(); i++) {
-            PlaylistMusicDto temp = newPlaylistMusicList.get(i);
-            playlistMusicRepository.insertByPlaylistSeqAndMusicSeqAndSequence(playlist_seq, temp.getMusicSeq(), temp.getSequence());
-        }
+//        //  if jsonObject is null, return
+//        if (jsonObjectForAddMusic == null) {
+//            return;
+//        }
+//
+//        PlaylistMusicRepository playlistMusicRepository = null;
+//
+//        Integer playlist_seq = jsonObjectForAddMusic.get("playlistSeq").getAsInt();
+//        JsonArray originMusicList = jsonObjectForAddMusic.get("playlist_music").getAsJsonArray();
+//        JsonArray concatMusicList = jsonObjectForAddMusic.get("music").getAsJsonArray();
+//
+//        List<PlaylistMusicDto> newPlaylistMusicList = new LinkedList<>();
+//        //  기존 곡을 newPlaylistMusicList 에 담는다.
+//        Integer maxSequence = 0;
+//        for (int i = 0; i < originMusicList.size(); i++) {
+//            Integer music_seq = originMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
+//            Integer sequence = originMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
+//            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence);
+//            if (maxSequence < sequence) {
+//                maxSequence = sequence;
+//            }
+//            newPlaylistMusicList.add(temp);
+//        }
+//
+//        for (int i = 0; i < concatMusicList.size(); i++) {
+//            Integer music_seq = concatMusicList.get(i).getAsJsonObject().get("musicSeq").getAsInt();
+//            Integer sequence = concatMusicList.get(i).getAsJsonObject().get("sequence").getAsInt();
+//            PlaylistMusicDto temp = new PlaylistMusicDto(music_seq, sequence + maxSequence);
+//            newPlaylistMusicList.add(temp);
+//        }
+//
+//        //  기존 playlistMusic 삭제
+//
+//        for (int i = 0; i < newPlaylistMusicList.size(); i++) {
+//            PlaylistMusicDto temp = newPlaylistMusicList.get(i);
+//            playlistMusicRepository.insertByPlaylistSeqAndMusicSeqAndSequence(playlist_seq, temp.getMusicSeq(), temp.getSequence());
+//        }
     }
 
 
