@@ -115,11 +115,11 @@ public class MusicController {
 	}
 
 	@ApiOperation(value = "음악 삭제", notes = "")
-	@DeleteMapping("/{seq}")
-	public ResponseEntity<?> deleteMusic(@PathVariable Integer seq) {
-		Music music = musicService.deleteMusic(seq);
+	@DeleteMapping("/{music_seq}")
+	public ResponseEntity<?> deleteMusic(@PathVariable Integer music_seq) {
+		Music music = musicService.deleteMusic(music_seq);
 		if (music != null) {
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok("SUCCESS");
 		} else {
 			return ResponseEntity.notFound().build();
 		}
