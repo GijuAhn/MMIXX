@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
+import com.a403.mmixx.music.model.dto.MusicCountResponseDto;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
@@ -122,6 +123,13 @@ public class MusicController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	@ApiOperation(value = "음악 개수 조회", notes = "user_seq로 회원의 조건별 음원 개수 조회")
+	@GetMapping("/count/{user_seq}")
+	public ResponseEntity<?> countMusic(@PathVariable Integer user_seq) {
+		MusicCountResponseDto responseDto = musicService.countMusic(user_seq);
+		return ResponseEntity.ok(responseDto);
 	}
 
 }
