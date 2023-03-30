@@ -19,10 +19,10 @@ const NavBar = () => {
     { name: "MY MUSIC", path: "mymusic" },
   ];
 
-  const isLogin = localStorage.getItem('isLogin')=='true' ? true : false;
+  const isLogin = (localStorage.getItem('isLogin') && localStorage.getItem('isLogin')=='true') ? true : false;
   // console.log(isLogin);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
