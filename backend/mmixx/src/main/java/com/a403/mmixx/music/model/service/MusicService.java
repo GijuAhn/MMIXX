@@ -93,7 +93,6 @@ public class MusicService {
 		return musicContainerList;
 	}
 
-
 	//	Extract Metadata from ID3v2 format and music + cover image upload to S3
 	public List<Music> uploadMusicAndArtworkWithMetadata(List<MultipartFile> multipartFiles) throws Exception {
 
@@ -202,7 +201,7 @@ public class MusicService {
 		
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
-		new_music.setEdited(music.getEdited());
+		new_music.setEdited(null);
 		new_music.setMixed(music.getMusicSeq());
 		new_music.setGenreSeq(music.getGenreSeq());
 		new_music.setMusicLength(music.getMusicLength());
@@ -273,7 +272,7 @@ public class MusicService {
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
 			new_music.setEdited(music.getMusicSeq());
-			new_music.setMixed(music.getMixed());
+			new_music.setMixed(null);
 			new_music.setGenreSeq(music.getGenreSeq());
 			new_music.setMusicLength(music.getMusicLength());
 			new_music.setMusicName(new_music_name);
@@ -289,5 +288,15 @@ public class MusicService {
 		} else {
 			return null;
 		}
+	}
+	
+	public MusicCountResponseDto countMusic(Integer user_seq) {
+		int allCnt = musicRepository.countByUserSeq(user_seq);
+		int originCnt = musicRepository.countByUserSeqAndMixedNullAndEditedNull(user_seq);
+		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
+		int instCnt = musicRepository.countByUserSeqAndEditedNotNullAndEditedGreaterThan(user_seq, 0);
+		
+		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
+		return responseDto;
 	}
 }
