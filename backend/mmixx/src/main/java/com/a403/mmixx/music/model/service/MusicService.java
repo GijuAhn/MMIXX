@@ -45,6 +45,9 @@ public class MusicService {
 	}
 
 	public MusicDetailResponseDto getMusic(Integer seq) {
+
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		Music music = musicRepository.findById(seq)
 				.orElseThrow(() -> new IllegalArgumentException("해당 음악은 없습니다. 방 ID: " + seq)); // error code: 500
 		return new MusicDetailResponseDto(music);

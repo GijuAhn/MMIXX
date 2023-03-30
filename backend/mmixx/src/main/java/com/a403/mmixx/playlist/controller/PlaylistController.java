@@ -18,13 +18,13 @@ public class PlaylistController {
     private PlaylistService playlistService;
 
     // 빈 플레이리스트 생성
-    @PostMapping
-    public void createEmptyPlaylist(@RequestBody JsonObject jsonObjectForCreatePlaylist) {
-        playlistService.createEmptyPlaylistByJSON(jsonObjectForCreatePlaylist);
+    @PostMapping("/{userSeq}")
+    public ResponseEntity<?> createEmptyPlaylist(@RequestBody JsonObject jsonObjectForCreatePlaylist, @PathVariable int userSeq) {
+        return ResponseEntity.ok(playlistService.createEmptyPlaylistByJSON(jsonObjectForCreatePlaylist, userSeq));
     }
 
-    // 플레이리스트에 곡 추가 (Insert), 프론트로부터 JSON 객체를 받는다.
-    @PostMapping("/{playlistSeq}")
+    // 플레이리스트에 곡 추가 (Insert), JSON 객체를 받는다.
+    @PostMapping("/{userSeq}/{playlistSeq}")
     public void addMusicToPlaylist(@RequestBody JsonObject jsonObjectForAddMusic) {
         playlistService.addMusicToPlaylist(jsonObjectForAddMusic);
     }
