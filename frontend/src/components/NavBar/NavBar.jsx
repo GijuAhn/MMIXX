@@ -1,26 +1,26 @@
 import { Avatar } from '@mui/material'
 import styled from 'styled-components'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
+import AlbumIcon from '@mui/icons-material/Album'
+import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
+import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
 import { handleLogin } from 'api/base'
 import logo from 'assets/logo.png'
 
+const navList = [
+  // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
+  {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" color="primary"/>},
+  {name: 'PLAYLIST', path: 'playlist', icon: <PlaylistPlaySharpIcon fontSize="small" />},
+  {name: 'MY MUSIC', path: 'mymusic', icon: <MusicNoteSharpIcon fontSize="small" />},
+]
+
 const NavBar = () => {
   const navigate = useNavigate()
   const location = useLocation();
-  const navList = [
-    {name: 'MIX', path: 'mix'},
-    {name: 'PLAYLIST', path: 'playlist'},
-    {name: 'MY MUSIC', path: 'mymusic'},
-  ] 
-
+  
   const isLogin = true;
-
-  const onClickLogin = () => {
-    handleLogin()
-      .then(res => console.log(res))
-  }
 
   return (
     <Wrapper>
@@ -36,7 +36,8 @@ const NavBar = () => {
             사용자 이름
           </p>
         </NavProfile>
-        <NavList>
+        <NavMenu />
+        {/* <NavList>
           {navList && navList.map((item, idx) => {
             return (
               <NavItem key={idx} to={item.path}>
@@ -46,7 +47,7 @@ const NavBar = () => {
               </NavItem>
             )
           })}
-        </NavList>
+        </NavList> */}
         <LogOut>
           <PlainBtn>
             로그아웃
@@ -56,13 +57,34 @@ const NavBar = () => {
       :
       <LoginWrapper>
         <DefaultBtn
-          width="150px"
-          onClick={onClickLogin}>
+          width="150px">
           로그인 하기
         </DefaultBtn>
       </LoginWrapper>
       }
     </Wrapper>
+  )
+}
+
+const NavMenu = () => {
+  const navList = [
+    // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
+    {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" />},
+    {name: 'PLAYLIST', path: 'playlist', icon: <PlaylistPlaySharpIcon fontSize="small" />},
+    {name: 'MY MUSIC', path: 'mymusic', icon: <MusicNoteSharpIcon fontSize="small" />},
+  ]
+
+  return (
+    <TestUl>
+      {navList && navList.map((item, index) => {
+        return (
+          <TestLi key={'testli' + index}>
+            {item.icon}
+            {item.name}
+          </TestLi>
+        )
+      })}
+    </TestUl>
   )
 }
 
@@ -75,6 +97,10 @@ const Wrapper = styled.nav`
   top: 0;
   left: 0;
   justify-content: ${({isLogin}) => !isLogin && 'start'};
+  // min-height: 100vh;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const LogoImage = styled.div`
@@ -143,4 +169,38 @@ const LogOut = styled.div`
 
 const LoginWrapper = styled.div`
 `
+
+const TestUl = styled.ul`
+  border: 1px solid pink;
+  list-style: url(${({icon}) => icon});
+  width: 180px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`
+
+const TestLi = styled.li`
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px;
+  justify-content: space-between;
+  // display: inline-flex;
+  // vertical-align: middle;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 5px;
+  animation: 1s ease-in-out 0s 1 normal forwards;
+
+  &:hover {
+    // background-color: ${({ theme }) => theme.palette.secondary};
+    color: ${({ theme }) => theme.palette.secondary};
+  }
+`
+
+const StyleAlbumIcon = styled(AlbumIcon)`
+  color: black;
+`
+
 export default NavBar;
