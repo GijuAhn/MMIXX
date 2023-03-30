@@ -18,8 +18,8 @@ const VolumeControl = ({ audioElement }) => {
             border: 'none',
           },
           '& .MuiSlider-thumb': {
-            width: 24,
-            height: 24,
+            width: 20,
+            height: 20,
             backgroundColor: '#fff',
             '&:before': {
               boxShadow: '0 4px 8px rgba(0,0,0,0.4)',

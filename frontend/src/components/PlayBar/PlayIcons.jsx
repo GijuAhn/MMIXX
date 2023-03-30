@@ -6,7 +6,6 @@ import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
 import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded';
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
-import AlbumIcon from '@mui/icons-material/Album'
 
 // import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3'
 import Retro from 'assets/music/NewJeans-Retro.mp3'
@@ -52,7 +51,6 @@ const PlayControl = ({ width, height }) => {
       }
       <SkipNextRoundedIcon />
       <RepeatOneRoundedIcon />
-      <StyleAlbumIcon color="red"/>
     </IconWrapper>
   )
 }
@@ -86,7 +84,4 @@ const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
   transition: all 0.1s ease-in-out;
 `
 
-const StyleAlbumIcon = styled(AlbumIcon)`
-  color: black;
-`
 export default PlayControl;
