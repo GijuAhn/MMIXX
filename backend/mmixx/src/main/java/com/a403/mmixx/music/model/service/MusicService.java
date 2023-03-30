@@ -61,10 +61,13 @@ public class MusicService {
 	}
 
 	@Transactional
-	public Music deleteMusic(Integer seq) {
-		Music music = musicRepository.findById(seq).orElse(null);
+	public Music deleteMusic(Integer music_seq) {
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		String filename = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/", "");
+		System.out.println("filename : " + filename);
 		if (music != null) {
-			musicRepository.deleteById(seq);
+			awsS3Service.deleteMusic(filename);
+			musicRepository.deleteById(music_seq);
 		}
 		return music;
 	}
