@@ -13,4 +13,7 @@ import lombok.NoArgsConstructor;
 public class OAuthLoginDto {
     private boolean isSigned;
     private UserDto user;
+    private int playListCnt;
+    private int uploadCnt;
+    private int mixCnt;
 }//OAuthLoginDto
