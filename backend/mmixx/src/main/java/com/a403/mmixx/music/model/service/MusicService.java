@@ -187,7 +187,7 @@ public class MusicService {
 		
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
-		new_music.setEdited(null);
+		new_music.setInst(null);
 		new_music.setMixed(music.getMusicSeq());
 		new_music.setGenreSeq(music.getGenreSeq());
 		new_music.setMusicLength(music.getMusicLength());
@@ -252,7 +252,7 @@ public class MusicService {
 			
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
-			new_music.setEdited(music.getMusicSeq());
+			new_music.setInst(music.getMusicSeq());
 			new_music.setMixed(null);
 			new_music.setGenreSeq(music.getGenreSeq());
 			new_music.setMusicLength(music.getMusicLength());
@@ -273,9 +273,9 @@ public class MusicService {
 	
 	public MusicCountResponseDto countMusic(Integer user_seq) {
 		int allCnt = musicRepository.countByUserSeq(user_seq);
-		int originCnt = musicRepository.countByUserSeqAndMixedNullAndEditedNull(user_seq);
+		int originCnt = musicRepository.countByUserSeqAndMixedNullAndInstNull(user_seq);
 		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
-		int instCnt = musicRepository.countByUserSeqAndEditedNotNullAndEditedGreaterThan(user_seq, 0);
+		int instCnt = musicRepository.countByUserSeqAndInstNotNullAndInstGreaterThan(user_seq, 0);
 		
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;
