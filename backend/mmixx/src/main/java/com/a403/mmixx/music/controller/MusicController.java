@@ -53,7 +53,6 @@ public class MusicController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
-		
 	}
 	
 	@ApiOperation(value = "음악 다운로드", notes = "")
@@ -130,5 +129,10 @@ public class MusicController {
 		MusicCountResponseDto responseDto = musicService.countMusic(user_seq);
 		return ResponseEntity.ok(responseDto);
 	}
-
+	
+	@ApiOperation(value = "프리셋 전체 조회")
+	@GetMapping("/preset")
+	public ResponseEntity<?> findAllPreset() {
+		return ResponseEntity.ok(musicService.findAllPreset());
+	}
 }

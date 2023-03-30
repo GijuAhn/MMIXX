@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React from 'react';
 import Box from '@mui/material/Box';
 
 import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 import theme from 'styles/theme';
 
 import styled from 'styled-components';
@@ -18,7 +15,6 @@ const PresetCard = (props, {presetSeqFunc}) => {
   // const musicName = props.musicName
   // const musicianName = props.musicianName
   // const coverImage = props.coverImage
-  const tm = useTheme();
 
   const playlist = useRecoilValue(testPlaylistMusic)
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
@@ -32,7 +28,6 @@ const PresetCard = (props, {presetSeqFunc}) => {
         <Content>
           <div style={{ color: `${theme.palette.secondary}`, fontSize: 35, fontWeight: 'bolder', justifyContent: 'flex-start' }}>
             { preset_name }
-            {/* PRESET NAME */}
           </div>
           <div style={{ color: `${theme.palette.light}`, fontSize: 25, fontWeight: 'bold', justifyContent: 'flex-start' }}>
             { musicName }
@@ -40,19 +35,14 @@ const PresetCard = (props, {presetSeqFunc}) => {
           <div style={{ color: `${theme.palette.light}`, fontWeight: 'normal', justifyContent: 'flex-start' }}>
             { musicianName }
           </div>
+          <div style={{ justifyContent: 'flex-start' }}>
+            <IconButton aria-label="play/pause">
+              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+            </IconButton>
+            {/* <PlayIcons /> */}
+          </div>
         </Content>
       </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-          {/* <IconButton aria-label="previous">
-            {tm.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-          </IconButton> */}
-          <IconButton aria-label="play/pause">
-            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-          </IconButton>
-          {/* <IconButton aria-label="next">
-            {tm.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-          </IconButton> */}
-        </Box>
     </Card>
   );
 }
@@ -71,8 +61,8 @@ const Card = styled.div`
 `
 const CoverImage = styled.div`
   object-fit: cover;
-  width: 25vw;
-  height: 22vh;
+  width: 30vw;
+  height: 25vh;
   overflow: hidden;
   border-radius: 1vw;
 
