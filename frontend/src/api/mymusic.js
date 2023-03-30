@@ -12,7 +12,7 @@ export const getMusicList = async ({ userSeq, page = 1 }) =>
   await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
 
 export const getMusicListByCondition = async ({
-  userSeq = 1,
+  userSeq,
   filter = "",
   order = "",
   query = "",
@@ -37,5 +37,5 @@ export const downloadMusic = async (musicSeq) => {
 //     responseType: "blob",
 //   });
 
-export const countMusic = async (userSeq = 1) =>
+export const countMusic = async ({ userSeq }) =>
   await instance.get(`${musicUrl}/count/${userSeq}`);
