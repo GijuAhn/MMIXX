@@ -143,7 +143,10 @@ public class AwsS3Service {
 
 	public void deleteMusic(String fileName) {
 		// amazonS3.deleteObject(bucket, fileName);
-		amazonS3.deleteObject(new DeleteObjectRequest(bucket + MUSIC_FOLDER, fileName));
+		System.out.println("AWS S3 filename : " + fileName);
+		amazonS3.deleteObject(new DeleteObjectRequest(bucket, "music/" + fileName));
+		
+//		amazonS3.deleteObject(new DeleteObjectRequest(bucket + "/music", fileName));
 	}
 
 

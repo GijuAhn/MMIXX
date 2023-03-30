@@ -61,10 +61,13 @@ public class MusicService {
 	}
 
 	@Transactional
-	public Music deleteMusic(Integer seq) {
-		Music music = musicRepository.findById(seq).orElse(null);
+	public Music deleteMusic(Integer music_seq) {
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		String filename = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/", "");
+		System.out.println("filename : " + filename);
 		if (music != null) {
-			musicRepository.deleteById(seq);
+			awsS3Service.deleteMusic(filename);
+			musicRepository.deleteById(music_seq);
 		}
 		return music;
 	}
@@ -133,69 +136,52 @@ public class MusicService {
 	}
 
 	public MusicMixResponseDto mixMusic(MusicMixRequestDto requestDto) {
-		System.out.println("*** Start ***");
-		//	return music_url stored in MySQL DB
+		log.info("***** Music Mix Start *****");
 		int music_seq = requestDto.getMusic_seq();
 		int preset_seq = requestDto.getPreset_seq();
-		System.out.println("music_seq : " + music_seq);
-		System.out.println("preset_seq : " + preset_seq);
-
-		System.out.println("*** 1 ***");
+		log.info("music_seq : " + music_seq);
+		log.info("preset_seq : " + preset_seq);
+		
 		Music music = musicRepository.findById(music_seq).orElse(null);
 		Preset preset = presetRepository.findById(preset_seq).orElse(null);
 
-		System.out.println("*** 2 ***");
 		String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
 		String preset_path = preset.getPresetUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
-		System.out.println("music_path : " + music_path);
-		System.out.println("preset_path : " + preset_path);
-
-		System.out.println("*** 3 ***");
+		log.info("music_path : " + music_path);
+		log.info("preset_path : " + preset_path);
+		
 		RestTemplate restTemplate = new RestTemplate();
 		String response = "";
 
-		System.out.println("*** 4 ***");
 		String url = "https://j8a403.p.ssafy.io/django/api/mix";
-		//		String url = "http://127.0.0.1:8000/api/mix";
 		String data = "{ \"music_path\" : \"" + music_path + "\", \"preset_path\" : \"" + preset_path + "\"}";
 
 		try {
-			System.out.println("*** 5 ***");
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 
-//			MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-//			body.add("music_path", musicUrl);
-
 			HttpEntity<?> requestMessage = new HttpEntity<>(data, headers);
-//			HttpEntity<String> response = restTemplate.postForEntity(url, requestMessage, String.class);
-//			System.out.println(response);
-			HttpMethod method = HttpMethod.POST;
-//			response = restTemplate.getForObject(url, String.class, data);
-			System.out.println("*** 6 ***");
 			response = restTemplate.postForEntity(url, requestMessage, String.class).getBody();
 
-			System.out.println("Success Music Mix");
-			System.out.println("response : " + response);
+			log.info("***** Music Mix Success *****");
+			log.info("response : " + response);
 			response = response.replace("{\"music\":\"", "");
 			response = response.replace("\"}", "");
-			System.out.println("response : " + response);
-			System.out.println("response.toString() : " + response.toString());
-//			response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
+			log.info("response : " + response);
+			log.info("response.toString() : " + response.toString());
 		} catch (HttpStatusCodeException e) {
 			if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
-				System.out.println("not found");
+				log.info("not found");
 			} else {
-				response = "API Fail";
+				return null;
 			}
 		}
-		System.out.println("*** 7 ***"); // DB 저장
 		
+		log.info("***** Music Mix DB 저장 *****");
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
-//		String new_music_name = response.replace("music/", "");
 		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
-		System.out.println("new_music_path : " + new_music_path);
-		System.out.println("new_music_name : " + new_music_name);
+		log.info("new_music_path : " + new_music_path);
+		log.info("new_music_name : " + new_music_name);
 		
 		Music new_music = new Music();
 		
@@ -213,14 +199,9 @@ public class MusicService {
 		
 		musicRepository.save(new_music);
 		
-		String result = "{ \"music_url\" : \"" + music.getMusicUrl() + "\", \"mixed_music_url\" : \"" + new_music.getMusicUrl() + "\"}";
-		MusicMixResponseDto responseDto = new MusicMixResponseDto(music.getMusicUrl(), new_music.getMusicUrl());
-//		String test = "hello";
+//		String result = "{ \"music_url\" : \"" + music.getMusicUrl() + "\", \"mixed_music_url\" : \"" + new_music.getMusicUrl() + "\"}";
+		MusicMixResponseDto responseDto = new MusicMixResponseDto(music.getMusicUrl(), new_music.getMusicUrl(), music, new_music);
 		return responseDto;
-//		return test;
-
-
-//		return musicUrl;
 	}
 	
 	public MusicSplitResponseDto splitMusic(Integer music_seq) {
