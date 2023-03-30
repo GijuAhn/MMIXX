@@ -28,9 +28,6 @@ const PlayBar = () => {
           <p>{musicianName}</p>
         </MusicInfo>
       </PlayMusicInfo>
-      <PlayIcons
-        width="30%"
-      />
       <PlayControl />
       <VolumeWrapper>
         <VolumeControl />
@@ -88,6 +85,10 @@ const MusicInfo = styled.div`
     font-weight: lighter;
     font-size: 12px;
   }
+`
+const PlayCenter = styled.div`
+  flex-direction: column;
+  padding: 0 50px;
 `
 
 const VolumeWrapper = styled.div`
