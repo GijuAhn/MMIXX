@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { PlayIcons } from 'components/PlayBar';
 import { useRecoilValue } from 'recoil';
 import { testPlaylistMusic } from 'atom/atom';
+import VolumeControl from './VolumeControl'
 
 const PlayBar = () => {
   const location = useLocation()
@@ -14,7 +15,7 @@ const PlayBar = () => {
   if (location.pathname === '/mix' || location.pathname === '/' ) {
     return null
   }
-
+  
   return (
     <Wrapper>
       <PlayMusicInfo>
@@ -29,7 +30,9 @@ const PlayBar = () => {
       <PlayIcons
         width="30%"
       />
-      <VolumeControl />
+      <VolumeWrapper>
+        <VolumeControl />
+      </VolumeWrapper>
     </Wrapper>
   );
 };
@@ -85,7 +88,7 @@ const MusicInfo = styled.div`
   }
 `
 
-const VolumeControl = styled.div`
+const VolumeWrapper = styled.div`
   // border: 1px solid green;
   width: 200px;
 `
