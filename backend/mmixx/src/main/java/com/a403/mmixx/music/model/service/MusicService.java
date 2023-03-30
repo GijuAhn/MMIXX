@@ -36,12 +36,13 @@ public class MusicService {
 	private final PresetRepository presetRepository;
 	private final AwsS3Service awsS3Service;
 
-	public Page<MusicListResponseDto> getMusicList(Pageable pageable) {
-		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
+	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
+//		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
+		return musicRepository.findByUserSeq(user_seq, pageable).map(MusicListResponseDto::new);
 	}
 
-	public Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable) {
-		return musicRepository.getMusicListByCondition(condition, pageable);
+	public Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable) {
+		return musicRepository.getMusicListByCondition(user_seq, condition, pageable);
 	}
 
 	public MusicDetailResponseDto getMusic(Integer seq) {
@@ -92,7 +93,6 @@ public class MusicService {
 		return musicContainerList;
 	}
 
-
 	//	Extract Metadata from ID3v2 format and music + cover image upload to S3
 	public List<Music> uploadMusicAndArtworkWithMetadata(List<MultipartFile> multipartFiles) throws Exception {
 
@@ -132,7 +132,7 @@ public class MusicService {
 		return musicContainerList;
 	}
 
-	public String mixMusic(MusicMixRequestDto requestDto) {
+	public MusicMixResponseDto mixMusic(MusicMixRequestDto requestDto) {
 		System.out.println("*** Start ***");
 		//	return music_url stored in MySQL DB
 		int music_seq = requestDto.getMusic_seq();
@@ -193,7 +193,7 @@ public class MusicService {
 		
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
 //		String new_music_name = response.replace("music/", "");
-		String new_music_name = music.getMusicName().replace(".mp3", "_mix.mp3");
+		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
 		System.out.println("new_music_path : " + new_music_path);
 		System.out.println("new_music_name : " + new_music_name);
 		
@@ -201,7 +201,7 @@ public class MusicService {
 		
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
-		new_music.setEdited(music.getEdited());
+		new_music.setEdited(null);
 		new_music.setMixed(music.getMusicSeq());
 		new_music.setGenreSeq(music.getGenreSeq());
 		new_music.setMusicLength(music.getMusicLength());
@@ -212,11 +212,91 @@ public class MusicService {
 		new_music.setPresetSeq(music.getPresetSeq());
 		
 		musicRepository.save(new_music);
+		
+		String result = "{ \"music_url\" : \"" + music.getMusicUrl() + "\", \"mixed_music_url\" : \"" + new_music.getMusicUrl() + "\"}";
+		MusicMixResponseDto responseDto = new MusicMixResponseDto(music.getMusicUrl(), new_music.getMusicUrl());
 //		String test = "hello";
-		return response.toString();
+		return responseDto;
 //		return test;
 
 
 //		return musicUrl;
+	}
+	
+	public MusicSplitResponseDto splitMusic(Integer music_seq) {
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		if(music != null) {			
+			RestTemplate restTemplate = new RestTemplate();
+			String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+			String response = "";
+
+			String url = "https://j8a403.p.ssafy.io/django/api/mix/inst";
+			String data = "{ \"music_path\" : \"" + music_path + "\"}";
+			
+			try {
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+
+				HttpEntity<?> requestMessage = new HttpEntity<>(data, headers);
+				response = restTemplate.postForEntity(url, requestMessage, String.class).getBody();
+
+				System.out.println("Success Music Split");
+				System.out.println("response : " + response);
+				response = response.replace("{\"music\":\"", "");
+				response = response.replace("\"}", "");
+				System.out.println("response : " + response);
+				System.out.println("response.toString() : " + response.toString());
+//				response = restTemplate.exchange(url, method, requestMessage, String.class).getBody();
+			} catch (HttpStatusCodeException e) {
+				if(e.getStatusCode() == HttpStatus.NOT_FOUND) {
+					System.out.println("not found");
+				} else {
+					response = "API Fail";
+				}
+			}
+			
+			String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
+			String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+			System.out.println("format : " + format);
+			String new_music_name = "";
+			if(format.equals("mp3")) {
+				new_music_name = music.getMusicName().replace(".mp3", "_inst.mp3");
+			} else {
+				new_music_name = music.getMusicName().replace(".wav", "_inst.wav");
+			}
+			System.out.println("new_music_path : " + new_music_path);
+			System.out.println("new_music_name : " + new_music_name);
+			
+			Music new_music = new Music();
+			
+			new_music.setAlbumName(music.getAlbumName());
+			new_music.setCoverImage(music.getCoverImage());
+			new_music.setEdited(music.getMusicSeq());
+			new_music.setMixed(null);
+			new_music.setGenreSeq(music.getGenreSeq());
+			new_music.setMusicLength(music.getMusicLength());
+			new_music.setMusicName(new_music_name);
+			new_music.setMusicUrl(new_music_path);
+			new_music.setMusicianName(music.getMusicianName());
+			new_music.setUserSeq(music.getUserSeq());
+			new_music.setPresetSeq(music.getPresetSeq());
+			
+			musicRepository.save(new_music);
+			
+			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music_path);
+			return responseDto;
+		} else {
+			return null;
+		}
+	}
+	
+	public MusicCountResponseDto countMusic(Integer user_seq) {
+		int allCnt = musicRepository.countByUserSeq(user_seq);
+		int originCnt = musicRepository.countByUserSeqAndMixedNullAndEditedNull(user_seq);
+		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
+		int instCnt = musicRepository.countByUserSeqAndEditedNotNullAndEditedGreaterThan(user_seq, 0);
+		
+		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
+		return responseDto;
 	}
 }
