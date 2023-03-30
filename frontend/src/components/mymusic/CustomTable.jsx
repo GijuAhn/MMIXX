@@ -21,7 +21,7 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
               ></CoverImage>
             </Td>
             <Td weight="400">
-              {/* {music.mixed === null || music.mixed === 0 ? null : "M"} */}M
+              {/* {music.mixed === null || music.mixed === 0 ? null : "M"} */}
             </Td>
             <Td>
               {music.musicName.substr(0, music.musicName.lastIndexOf("."))}
