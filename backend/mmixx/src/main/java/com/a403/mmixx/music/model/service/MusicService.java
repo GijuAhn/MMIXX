@@ -135,6 +135,7 @@ public class MusicService {
 		return musicContainerList;
 	}
 
+	@Transactional
 	public MusicMixResponseDto mixMusic(MusicMixRequestDto requestDto) {
 		log.info("***** Music Mix Start *****");
 		int music_seq = requestDto.getMusic_seq();
@@ -204,6 +205,7 @@ public class MusicService {
 		return responseDto;
 	}
 	
+	@Transactional
 	public MusicSplitResponseDto splitMusic(Integer music_seq) {
 		Music music = musicRepository.findById(music_seq).orElse(null);
 		if(music != null) {			
@@ -279,5 +281,9 @@ public class MusicService {
 		
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;
+	}
+	
+	public List<Preset> findAllPreset() {
+		return presetRepository.findAll();
 	}
 }

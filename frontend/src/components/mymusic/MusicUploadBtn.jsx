@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { DefaultBtn } from "components/Common";
 import styled from "styled-components";
-import { registMusic } from "api/mymusic";
+import { uploadMusic } from "api/mymusic";
 import upload from "assets/upload.png";
 import musicFile from "assets/music-file.png";
 import cancel from "assets/cancel.png";
@@ -76,7 +76,7 @@ const MusicUploadBtn = () => {
       "user",
       new Blob([JSON.stringify(user)], { type: "application/json" })
     );
-    registMusic(formData, config)
+    uploadMusic(formData, config)
       .then((response) => {
         console.log(response);
       })

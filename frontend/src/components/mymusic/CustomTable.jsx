@@ -21,10 +21,13 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
               ></CoverImage>
             </Td>
             <Td weight="400">
-              {/* {music.mixed === null || music.mixed === 0 ? null : "M"} */}
+              {/* {music.mixed !== null ? "M" : music.edited !== null ? "Ⅰ" : null} */}
+              M i I Inst. inst. Ⅰ
             </Td>
             <Td>
-              {music.musicName.substr(0, music.musicName.lastIndexOf("."))}
+              {music.musicName.includes(".")
+                ? music.musicName.substr(0, music.musicName.lastIndexOf("."))
+                : music.musicName}
             </Td>
             <Td>
               {music.musicianName === null ||
@@ -52,7 +55,15 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
             ) : null}
             {hasIcon ? (
               <Td>
-                <Mix musicSeq={music.musicSeq}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.substr(
+                    0,
+                    music.musicName.lastIndexOf(".")
+                  )}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {hasIcon ? (
