@@ -15,6 +15,8 @@ import com.a403.mmixx.user.model.entity.User;
 import com.a403.mmixx.user.model.entity.UserRepository;
 import com.beust.ah.A;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlaylistService {
@@ -94,6 +97,20 @@ public class PlaylistService {
     	} else {
     		return "EXIST";
     	}
-    	
+    }
+    
+    @Transactional
+    public String deleteFavorite(int user_seq, int playlist_seq) {
+    	try {
+    		log.info("****** Favorite DB Delete Start ******");
+    		favoriteRepository.deleteByUserSeqAndPlaylistSeq(user_seq, playlist_seq);
+    		log.info("****** Favorite DB Delete End ******");
+    	} catch(Exception e) {
+    		System.out.println(e);
+    		e.printStackTrace();
+    		return "FAIL";
+    	}
+    	log.info("****** Favorite DB Delete SUCCESS ******");
+    	return "SUCCESS";
     }
 }
