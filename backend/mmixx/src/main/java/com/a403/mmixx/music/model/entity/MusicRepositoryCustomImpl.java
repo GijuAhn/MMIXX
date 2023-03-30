@@ -64,15 +64,15 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 		}
 
 		if(filter.equals("mix")) {
-			return music.mixed.ne(0).and(music.mixed.isNotNull());
+			return music.mixed.isNotNull();
 		}
 		
 		if(filter.equals("inst")) {
-			return music.edited.ne(0).and(music.edited.isNotNull());
+			return music.inst.isNotNull();
 		}
 
 		if(filter.equals("origin")) {
-			return music.edited.eq(0).and(music.edited.isNull()).and(music.mixed.eq(0)).and(music.mixed.isNull());
+			return music.inst.isNull().and(music.mixed.isNull());
 		}
 
 		return null;
