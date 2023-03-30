@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import DefaultCoverImage from "assets/cover_image.jpg"; // 기본 커버 수정하기
+import DefaultCoverImage from "assets/default-cover-image.jpg";
 import Play from "./MusicPlayIcon";
 import Mix from "./MusicMixIcon";
 import Extract from "./MusicExtractIcon";
@@ -20,13 +20,33 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
                 }
               ></CoverImage>
             </Td>
-            <Td>{music.mixed === null ? null : "M"}</Td>
-            <Td>{music.musicName}</Td>
-            <Td>{music.musicianName}</Td>
-            <Td>{music.albumName}</Td>
+            <Td weight="400">
+              {/* {music.mixed !== null ? "M" : music.edited !== null ? "Ⅰ" : null} */}
+              M i I Inst. inst. Ⅰ
+            </Td>
+            <Td>
+              {music.musicName.includes(".")
+                ? music.musicName.substr(0, music.musicName.lastIndexOf("."))
+                : music.musicName}
+            </Td>
+            <Td>
+              {music.musicianName === null ||
+              music.musicianName.replace(/\s/g, "").length === 0
+                ? "-"
+                : music.musicianName}
+            </Td>
+            <Td>
+              {music.albumName === null ||
+              music.albumName.replace(/\s/g, "").length === 0
+                ? "-"
+                : music.albumName}
+            </Td>
             <Td>
               {Math.floor(music.musicLength / 1000 / 60)}:
-              {Math.floor((music.musicLength / 1000) % 60)}
+              {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
+                2,
+                "0"
+              )}
             </Td>
             {hasIcon ? (
               <Td>
@@ -35,7 +55,15 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
             ) : null}
             {hasIcon ? (
               <Td>
-                <Mix musicSeq={music.musicSeq}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.substr(
+                    0,
+                    music.musicName.lastIndexOf(".")
+                  )}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {hasIcon ? (
@@ -70,6 +98,9 @@ const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 10px;
   width: 85%;
+  font-size: 14px;
+  font-weight: 400;
+  // font-family: "Heebo", sans-serif;
 `;
 
 const Tr = styled.tr`
@@ -83,6 +114,9 @@ const Tr = styled.tr`
 `;
 
 const Td = styled.td`
+  font-size: 14px;
+  font-weight: ${(props) => props.weight || "200"};
+  font-family: "Heebo", sans-serif;
   &:first-child {
     border-radius: 15px 0 0 15px;
     // margin-left: 10px;
