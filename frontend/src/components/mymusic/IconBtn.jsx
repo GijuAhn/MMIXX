@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // import PropTypes from "prop-types";
 
-const IconBtn = ({ icon, iconName, iconWidth = 25, onClick }) => {
+const IconBtn = ({ icon, iconName, iconHeight = 25, onClick }) => {
   // const [icon] = useState(require(`assets/${iconName}.png`).default);
   // const icon = require(`assets/${iconName}.png`);
   const [isHover, setIsHover] = useState(false);
@@ -29,7 +29,7 @@ const IconBtn = ({ icon, iconName, iconWidth = 25, onClick }) => {
       {isHover ? (
         iconName
       ) : (
-        <img src={icon} alt="" width={iconWidth} />
+        <img src={icon} alt="" height={iconHeight} />
         // <img
         //   src={require(`assets/${iconName}.png`).default}
         //   alt=""
