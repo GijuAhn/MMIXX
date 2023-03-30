@@ -12,7 +12,9 @@ import {
   PlaylistEdit,
   Login,
   LoginSuccess,
-  NotFound 
+  NotFound, 
+  Test,
+  MixResult,
 } from 'pages'
 
 const index = () => {
@@ -22,6 +24,7 @@ const index = () => {
         <Route path="/" element={<Template />}>
           <Route path="" element={<Main />} />
           <Route path="mix" element={<Mix />} />
+          <Route path="mix/result" element={<MixResult />} />
           <Route path="mymusic" element={<MyMusic />} />
           <Route path="playlist" element={<Playlist />} />
           <Route path="playlist/create" element={<PlaylistCreate />} />
@@ -29,8 +32,9 @@ const index = () => {
           <Route path="playlist/edit" element={<PlaylistEdit />} />
           <Route path="playlist/select" element={<PlaylistSelectMusic />} />
           <Route path="login" element={<Login />} />
-          <Route path="login/success" element={<LoginSuccess />} />
-          <Route path="*" element={<NotFound />} />          
+          <Route path="login/success" element={<LoginSuccess />} />       
+          <Route path="playlist/test" element={<Test />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
