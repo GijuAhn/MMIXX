@@ -1,6 +1,5 @@
 package com.a403.mmixx.playlist.model.entity;
 
-import com.a403.mmixx.user.model.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,12 +14,20 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "favorite_seq")
     private int favoriteSeq;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "playlist_seq")
-    private Playlist playlist;
+    @Column(nullable = false)
+    private int userSeq;
+    @Column(nullable = false)
+    private int playlistSeq;
+    
+    public Favorite(int userSeq, int playlistSeq) {
+    	this.userSeq = userSeq;
+    	this.playlistSeq = playlistSeq;
+    }
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_seq")
+//    private User user;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "playlist_seq")
+//    private Playlist playlist;
 }

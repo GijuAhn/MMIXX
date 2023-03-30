@@ -1,10 +1,13 @@
 package com.a403.mmixx.playlist.model.service;
 
+import com.a403.mmixx.playlist.model.dto.FavoriteRequestDto;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicResponseDto;
+import com.a403.mmixx.playlist.model.entity.Favorite;
+import com.a403.mmixx.playlist.model.entity.FavoriteRepository;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
 import com.a403.mmixx.playlist.model.entity.PlaylistRepository;
@@ -26,7 +29,12 @@ public class PlaylistService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+    
+    @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private FavoriteRepository favoriteRepository;
 
     /**
      * 전체 플레이리스트 조회
@@ -75,4 +83,17 @@ public class PlaylistService {
 //    public String getCoverImage(int seq) {
 //        return "";
 //    }
+    
+    @Transactional
+    public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
+    	Favorite favo = favoriteRepository.findByUserSeqAndPlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+    	if(favo == null) {
+    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+        	favoriteRepository.save(favorite);
+        	return "SUCCESS";
+    	} else {
+    		return "EXIST";
+    	}
+    	
+    }
 }
