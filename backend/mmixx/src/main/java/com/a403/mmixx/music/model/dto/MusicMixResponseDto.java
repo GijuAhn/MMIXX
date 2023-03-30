@@ -1,14 +1,15 @@
 package com.a403.mmixx.music.model.dto;
 
+import com.a403.mmixx.music.model.entity.Music;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class MusicMixResponseDto {
 	private String music_url;
 	private String mixed_music_url;
-	
-	public MusicMixResponseDto(String music_url, String mixed_music_url) {
-		this.music_url = music_url;
-		this.mixed_music_url = mixed_music_url;
-	}
+	private Music origin_music;
+	private Music mixed_music;
 }

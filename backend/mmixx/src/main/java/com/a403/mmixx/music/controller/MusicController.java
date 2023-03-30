@@ -47,7 +47,6 @@ public class MusicController {
 	@ApiOperation(value = "음악 스타일 변환", notes = "")
 	@PostMapping("/mix")
 	public ResponseEntity<?> mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
-		System.out.println("Music Mix Start");
 		MusicMixResponseDto response = musicService.mixMusic(requestDto);
 		if(response != null) {
 			return ResponseEntity.ok(response);
