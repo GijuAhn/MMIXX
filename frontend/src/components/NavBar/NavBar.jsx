@@ -80,8 +80,8 @@ const Wrapper = styled.nav`
 const LogoImage = styled.div`
   background-image: url(${logo});
   background-size: cover;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   margin: 10px auto 0;
   cursor: pointer;
 `
