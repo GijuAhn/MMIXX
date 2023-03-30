@@ -52,7 +52,15 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
             ) : null}
             {hasIcon ? (
               <Td>
-                <Mix musicSeq={music.musicSeq}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.substr(
+                    0,
+                    music.musicName.lastIndexOf(".")
+                  )}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {hasIcon ? (
