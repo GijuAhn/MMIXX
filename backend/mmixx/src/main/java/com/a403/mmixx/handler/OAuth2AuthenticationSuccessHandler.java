@@ -34,10 +34,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
             , Authentication authentication) throws IOException {
-        // 기존에 쿠키에 저장된 토근이 있을 경우 삭제
-        if(CookieUtils.getCookie(request, REFRESH_TOKEN) != null) {
-            CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
-        }
+//        // 기존에 쿠키에 저장된 토근이 있을 경우 삭제
+//        if(CookieUtils.getCookie(request, REFRESH_TOKEN) != null) {
+//            CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
+//        }
+
 
         // redirect 할 url을 지정해준다
         String targetUrl = determineTargetUrl(request, response, authentication);
@@ -48,14 +49,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
 //        response.sendRedirect(targetUrl);
-//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response
             , Authentication authentication) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        String targetUrl = request.getContextPath() + "/";
+        String targetUrl = "http://localhost:3000/login/success";
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
@@ -66,7 +67,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         response.setHeader(AUTH, accessJwt);
         response.setHeader(REFRESH_TOKEN, refreshJwt);
-        CookieUtils.addCookie(response,REFRESH_TOKEN, refreshJwt, REFRESH_PERIOD);
+//        CookieUtils.addCookie(response,REFRESH_TOKEN, refreshJwt, REFRESH_PERIOD);
 
         user.tokenUpdate(refreshJwt);
         userRepository.save(user);
@@ -80,6 +81,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .profileImageUrl(user.getProfileImageUrl())
                         .userName(user.getUserName())
                         .build())
+                .playListCnt(0)
+                .uploadCnt(0)
+                .mixCnt(0)
                 .build();
 
         try{
@@ -91,7 +95,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-//                .queryParam("access-token", accessJwt)
+                .queryParam("token", accessJwt)
+                .queryParam("no", user.getUserSeq())
                 .build().toUriString();
     }
 

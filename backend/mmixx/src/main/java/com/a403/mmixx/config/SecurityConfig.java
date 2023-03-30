@@ -19,6 +19,9 @@ import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResp
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -55,7 +58,8 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors().configurationSource(corsConfigurationSource())
+                .and()
 //                .httpBasic().disable() // rest 방식이므로 http 기본 설정 disable
                 .csrf().disable() // token 방식이기 때문에 csrf disable
                 .formLogin().disable() // form 로그인 형식 disable
@@ -65,7 +69,7 @@ public class SecurityConfig {
 //                .and()
 //                // URL 별 권한 접근 제어 관리 옵션 시작점
 //                .authorizeRequests()
-//                .antMatchers(HttpMethod.OPTIONS, "/*/**").permitAll()
+//                .antMatchers(HttpMethod.OPTIONS, "/*/**").permitAll() // Preflight Request 허용해주기
 //                .antMatchers(PERMIT_URL_ARRAY).permitAll()
 //                .antMatchers(HttpMethod.POST, "/user").permitAll()
 //                .anyRequest().authenticated()
@@ -100,6 +104,26 @@ public class SecurityConfig {
     }
 
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+
+        configuration.addAllowedHeader("Authorization");
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("refresh-token");
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Content-Type");
+        configuration.addExposedHeader("refresh-token");
+
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>

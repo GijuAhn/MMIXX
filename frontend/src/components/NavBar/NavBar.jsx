@@ -5,6 +5,9 @@ import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { DefaultBtn, PlainBtn } from 'components/Common'
 import { handleLogin } from 'api/base'
 import logo from 'assets/logo.png'
+import axios from "axios"
+import { useEffect, useState } from "react"
+
 
 const NavBar = () => {
   const navigate = useNavigate()
@@ -15,11 +18,15 @@ const NavBar = () => {
     {name: 'MY MUSIC', path: 'mymusic'},
   ] 
 
-  const isLogin = true;
+  const isLogin = localStorage.getItem('isLogin')=='true' ? true : false;
+  // console.log(isLogin);
+
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const onClickLogin = () => {
-    handleLogin()
-      .then(res => console.log(res))
+    // handleLogin()
+    //   .then(res => console.log(res))
+    window.location.href = "/login";    
   }
 
   return (
@@ -29,11 +36,12 @@ const NavBar = () => {
       <>
         <NavProfile>
           <NavAvatar 
-            src=''
-            sx={{ width: 100, height: 100 }}
+            src={user.profileImageUrl}
+              sx={{ width: 100, height: 100 }}
+              referrerPolicy='no-referrer' // 안 하면 가끔 403 오류 발생..
           />  
           <p>
-            사용자 이름
+            {user.userName}
           </p>
         </NavProfile>
         <NavList>
@@ -60,6 +68,7 @@ const NavBar = () => {
           onClick={onClickLogin}>
           로그인 하기
         </DefaultBtn>
+          {/* <GoogleLoginBtn/> */}
       </LoginWrapper>
       }
     </Wrapper>
