@@ -1,33 +1,41 @@
-// import base from "./base";
+// import instance from './base'
 import axios from "axios";
 
-const base = axios.create({
+const instance = axios.create({
   baseURL: "http://localhost:5555",
 });
 
-export const getMusicList = async (page = 1) => {
-  const { data } = await base.get(`/api/music?page=${page}`);
-  return data;
-};
+const musicUrl = `/api/music`;
 
-export const getMusicListByCondition = async (
-  filter = "x",
-  order = "x",
+// TODO: user, return 수정하기
+export const getMusicList = async ({ userSeq, page = 1 }) =>
+  await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
+
+export const getMusicListByCondition = async ({
+  userSeq = 1,
+  filter = "",
+  order = "",
   query = "",
-  page = 1
-) => {
-  const { data } = await base.get(
-    `/api/music/search?filter=${filter}&order=${order}&query=${query}&page=${page}`
+  page = 1,
+}) =>
+  await instance.get(
+    `${musicUrl}/search/${userSeq}?filter=${filter}&order=${order}&query=${query}&page=${page}`
   );
-  return data;
-};
 
-export const registMusic = async (data, config) =>
-  await base.post(`/api/music`, data, config);
+export const uploadMusic = async (data, config) =>
+  await instance.post(`${musicUrl}`, data, config);
 
-export const downloadMusic = async (fileName) => {
-  const res = await base.get(`/api/music/download/${fileName}`, {
+export const downloadMusic = async (musicSeq) => {
+  const res = await instance.get(`${musicUrl}/download/${musicSeq}`, {
     responseType: "blob",
   });
   return res;
 };
+
+// export const downloadMusic = async (musicSeq) =>
+//   await instance.get(`${musicUrl}/download/${musicSeq}`, {
+//     responseType: "blob",
+//   });
+
+export const countMusic = async (userSeq = 1) =>
+  await instance.get(`${musicUrl}/count/${userSeq}`);
