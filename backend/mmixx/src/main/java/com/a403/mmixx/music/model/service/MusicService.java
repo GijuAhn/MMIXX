@@ -282,4 +282,8 @@ public class MusicService {
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;
 	}
+	
+	public List<Preset> findAllPreset() {
+		return presetRepository.findAll();
+	}
 }
