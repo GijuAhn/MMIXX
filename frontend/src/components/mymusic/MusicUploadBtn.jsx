@@ -225,40 +225,6 @@ const Td = styled.td`
   padding-left: 3px;
 `;
 
-// const Ul = styled.ul`
-//   list-style: none;
-//   color: ${({ theme }) => theme.palette.dark};
-//   // font-size: 25px;
-//   // font-weight: bold;
-//   // font-family: "Heebo", sans-serif;
-//   // text-align: left;
-//   text-align: center;
-//   float: left;
-// `;
-
-// const LiFileIcon = styled.li`
-//   text-align: center;
-//   float: left;
-//   width: 40px;
-// `;
-
-// const Li = styled.li`
-//   color: ${({ theme }) => theme.palette.dark};
-//   font-size: 20px;
-//   font-weight: 300;
-//   font-family: "Heebo", sans-serif;
-//   // margin: 5px auto 5px auto;
-//   text-align: left;
-//   float: left;
-//   width: 100px;
-// `;
-
-// const LiCancelIcon = styled.li`
-//   text-align: center;
-//   float: left;
-//   width: 30px;
-// `;
-
 const ButtonCancel = styled.section`
   background-color: transparent;
   width: 21px;
