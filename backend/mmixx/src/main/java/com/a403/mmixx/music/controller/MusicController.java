@@ -3,17 +3,11 @@ package com.a403.mmixx.music.controller;
 import java.io.IOException;
 import java.util.List;
 
-import com.amazonaws.http.apache.request.impl.HttpGetWithBody;
-import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
@@ -33,8 +27,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Api(tags = {"음악", "api"})
 @RestController
 @RequestMapping("/music")
@@ -47,14 +39,12 @@ public class MusicController {
 	@ApiOperation(value = "음악 스타일 변환", notes = "")
 	@PostMapping("/mix")
 	public ResponseEntity<?> mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
-		System.out.println("Music Mix Start");
 		MusicMixResponseDto response = musicService.mixMusic(requestDto);
 		if(response != null) {
 			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
-		
 	}
 	
 	@ApiOperation(value = "음악 다운로드", notes = "")
@@ -115,11 +105,11 @@ public class MusicController {
 	}
 
 	@ApiOperation(value = "음악 삭제", notes = "")
-	@DeleteMapping("/{seq}")
-	public ResponseEntity<?> deleteMusic(@PathVariable Integer seq) {
-		Music music = musicService.deleteMusic(seq);
+	@DeleteMapping("/{music_seq}")
+	public ResponseEntity<?> deleteMusic(@PathVariable Integer music_seq) {
+		Music music = musicService.deleteMusic(music_seq);
 		if (music != null) {
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok("SUCCESS");
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -131,5 +121,5 @@ public class MusicController {
 		MusicCountResponseDto responseDto = musicService.countMusic(user_seq);
 		return ResponseEntity.ok(responseDto);
 	}
-
+	
 }

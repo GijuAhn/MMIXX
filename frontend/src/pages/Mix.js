@@ -1,105 +1,149 @@
-import { Wrapper, Header } from "components/Common";
-// import { Carousel } from "components/Mix/carousel";
+import styled from "styled-components";
 import { Carousel } from 'react-carousel3';
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { Wrapper, Header } from "components/Common";
 import { PresetCard } from "components/Mix";
 import { MusicInfo } from "components/Mix";
 import { useState, useEffect } from "react";
-// import { Button } from "@mui/material";
-// import { PlainBtn } from "components/Common";
 import { DefaultBtn } from "components/Common";
-import { Navigate, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { getPreset, getGenreDetail } from 'api/genre';
-import { BorderColor } from "@mui/icons-material";
-import { musicMix } from "api/mix";
-const style = {
-  width: 400,
-  height: 300,
-};
-const musicInfo = {
-  position: "absolute",
-  top: "7rem",
-  left: "-26rem"
-  // border: '2px solid',
-  // BorderColor: 'white'
-}
-const btn = {
-  position: "absolute",
-  bottom: "5rem",
-  right: "5rem"
-}
+
+import { getPreset } from 'api/genre';
 
 const Mix = () => {
   const navigate = useNavigate();
-  const [presetData, setPresetData] = useState('')
+  const location = useLocation();
+
+  const coverImage = location.state && location.state.coverImage;
+  const musicName = location.state && location.state.musicName;
+  const musicianName = location.state && location.state.musicianName;
+  const musicSeq = location.state && location.state.musicSeq;
+  const musicSelected = !location.state
+  const [presetSeq, setPresetSeq] = useState('');
+  const [presetData, setPresetData] = useState('');
+
+  const presetSeqFunc = (x) => {
+    setPresetSeq(x)
+    console.log('선택한 프리셋 번호 : ',x)
+  }
+
   useEffect(() => {
-    getPreset(1)
-      .then(res => setPresetData(res), console.log(presetData))
-      .catch(err => console.log(err))
-  }, [])
+    getPreset(1).then(
+      res => setPresetData(res), console.log(presetData)
+      ).catch(err => console.log(err))
+  }, [presetData])
+
   useEffect(() => {
     console.log('결과값 확인 : ', presetData) 
   }, [presetData]);
+
   return (
     <Wrapper>
       <Header 
         title="MIX"
         desc="음악 믹스하기"  
         />
-        {/* 우측 상단에 띄워놓을 동그래미 */}
-      <div style={musicInfo}>
-      <MusicInfo>
-      </MusicInfo>
-      </div>
-      {/* <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          // background: 'linear-gradient(to bottom, #16235e 0%, #020223 100%)',
-        }}
-      > */}
-      <Carousel height={500} width={600} xOrigin={150} yOrigin={60} yRadius={30} autoPlay={false}>
+      <Music>
+        { musicSelected && (<DefaultBtn
+          onClick={ () => navigate('/playlist/select') }
+          >
+          곡 선택
+        </DefaultBtn>)}
+          {/* 우측 상단에 띄워놓을 동그래미 */}
+        { !musicSelected && (<div>
+          <MusicInfo
+            // props 보내기
+            coverImage={coverImage}
+            musicName={musicName}
+            musicianName={musicianName}
+            >
+          </MusicInfo>
+        </div>)}
+      </Music>
+      <p> 원하는 프리셋을 선택하세요. </p>
+      <Carousel height={400} width={800} xOrigin={120} yOrigin={-40} yRadius={0} autoPlay={false}>
         {/* // const preset_name = props.preset_name
             // const preset_summary = props.preset_summary
             // const preset_info = props.preset_info
             const preset_image = props.preset_image */}
-        <div key={1} style={style}>
+
+        {/* 컴포넌트 반복 코드 */}
+        {/* {presetData.map((preset) => 
+          <div key={preset.presetSeq} style={presetStyle} onClick={() => setPresetSeq(preset.presetSeq)}>
+            <PresetCard
+              preset_name={preset.presetName}
+              preset_image={preset.presetImg}
+            ></PresetCard>
+          </div>
+        )} */}
+        <div key={1} style={presetStyle}>
           <PresetCard
+            presetSeqFunc={presetSeqFunc}
             preset_name='밝은'
-            preset_image=''
+            presetSeq={1}
           ></PresetCard>
         </div>
-        <div key={2} style={style}>
+        <div key={2} style={presetStyle}>
           <PresetCard
+            presetSeqFunc={presetSeqFunc}
             preset_name='신나는'
+            presetSeq={2}
           ></PresetCard>
         </div>
-        <div key={3} style={style}>
+        <div key={3} style={presetStyle}>
           <PresetCard
+            presetSeqFunc={presetSeqFunc}
             preset_name='편안한'
+            presetSeq={3}
           ></PresetCard>
         </div>
-        <div key={4} style={style}>
+        <div key={4} style={presetStyle}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
           <PresetCard
-            preset_name='조용한'
+            presetSeqFunc={presetSeqFunc}
+            preset_name='강렬한'
+            presetSeq={4}
           ></PresetCard>
         </div>
-        <div key={5} style={style}>
+        <div key={5} style={presetStyle}>
           <PresetCard
+            presetSeqFunc={presetSeqFunc}
             preset_name='힘있는'
+            presetSeq={5}
           ></PresetCard>
         </div>
       </Carousel>
-      {/* </div> */}
-      <DefaultBtn 
-        style={btn}
-        onClick={ () => {
-          navigate("/mix/result")
-          musicMix(1, 2)
-        }}
-      >변환하기</DefaultBtn>
+      
+      <ButtonStyle>
+        <DefaultBtn 
+          onClick={ () => {
+            navigate('/mix/result', { state: { musicSeq:musicSeq, presetSeq:presetSeq } })
+          }}
+        >변환하기</DefaultBtn>
+      </ButtonStyle>
     </Wrapper>
   );
 };
 
 export default Mix;
+
+const Music = styled.div`
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
+  padding-top: 5vh;
+  padding-left: 5vw;
+`
+const presetStyle = {
+  width: 400,
+  height: 250,
+  border: '5px',
+  borderColor: 'white',
+}
+
+const ButtonStyle = styled.div`
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  padding-bottom: 2vh;
+  padding-right: 6vw;
+`

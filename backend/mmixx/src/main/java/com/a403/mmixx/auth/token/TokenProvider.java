@@ -81,7 +81,12 @@ public class TokenProvider implements InitializingBean {
                 .setHeaderParam("typ", "JWT")
                 // payload 설정 : 유효기간(Expriration), 토큰 제목(Subject), 데이터(Claim) 등 정보 셋팅)
                 .claim("id", userSeq)
+                .claim("name", principalDetails.getUser().getUserName())
+                .claim("img", principalDetails.getUser().getProfileImageUrl())
                 .claim(AUTHORITIES_KEY, role)
+                .claim("plyCnt", 0) // 플레이리스트 수
+                .claim("upCnt", 0) // 업로드 수
+                .claim("mixCnt",0) // 믹스 수
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expire)) // 토큰 유효기간
                 .setSubject(subject) // 토큰 제목 설정 ex) access-token, refresh-token
