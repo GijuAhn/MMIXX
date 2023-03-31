@@ -7,10 +7,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
-  padding-left: 200px;
-
+  margin-left: 200px;
+  border: 1px solid aqua;
+  
   @media (max-width: 768px) {
-    padding-left: 0;
+    margin-left: 0;
   }
 `
 export default Wrapper;

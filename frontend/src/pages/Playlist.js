@@ -60,6 +60,7 @@ const Playlist = () => {
 
 const StyleWrapper = styled(Wrapper)`
   height: 100%;
+  border: 1px solid aqua;
 `
 
 const Content = styled.div`

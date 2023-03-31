@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   width: 100%;  
   justify-content: start;
   padding: 30px 40px 30px;
+  border: 1px solid aqua;
 `
 const Title = styled.span`
   font-weight: bold;
