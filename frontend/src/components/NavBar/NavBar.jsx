@@ -6,26 +6,42 @@ import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
-import logo from 'assets/logo.png'
+// import logo from 'assets/logo.png'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
+import { useRecoilValue } from 'recoil';
+import { isLogIn, test, userInfo } from 'atom/atom';
+import { handleLogout } from "api/base";
 
 const NavBar = () => {
   const navigate = useNavigate()
+  const atomIsLogin = useRecoilValue(isLogIn)
+  const atomUser = useRecoilValue(userInfo)
+  const atomTest = useRecoilValue(test)
 
+  console.log(atomTest)
   const isLogin =
-    localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
+    atomIsLogin
+    // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
       ? true
       : false;
 
-  const user = localStorage.getItem("user")
+  const user = atomUser
+    // localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
+    if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";//"http://localhost:5555/api/user/login";
+    else {
+      handleLogout().then(() => {
+        localStorage.clear();
+        console.log("로그아웃");
+        window.location.reload();
+      })
+    }
   };
 
   return (
@@ -34,7 +50,7 @@ const NavBar = () => {
         {/* <LogoImage img={logo} alt="logo"/> */}
         <LogoText img={logoText} alt="logoText" />
       </NavLogo>
-      {isLogin ?
+      {atomIsLogin ?
       <>
         {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavProfile>
@@ -43,8 +59,8 @@ const NavBar = () => {
             sx={{ width: 80, height: 80 }}
             referrerPolicy='no-referrer'
           />  
-          {/* <p>{user ? user.userName : '사람 이름'}</p> */}
-          <p>사람 이름</p>
+          <p>{user ? user.userName : '사람 이름'}</p>
+          {/* <p>사람 이름</p> */}
         </NavProfile>
         {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavMenu />
@@ -60,7 +76,7 @@ const NavBar = () => {
           })}
         </NavList> */}
         <LogOut>
-          <PlainBtn>
+          <PlainBtn onClick={onClickLogin}>
             로그아웃
           </PlainBtn>
         </LogOut> 
