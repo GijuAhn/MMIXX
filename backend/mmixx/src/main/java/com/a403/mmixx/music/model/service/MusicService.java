@@ -115,7 +115,6 @@ public class MusicService {
 		List<String> musicUrlList;
 		List<String> coverImageList;
 
-
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
 
