@@ -17,7 +17,7 @@ const NavBar = () => {
   const isLogin =
     localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
       ? true
-      : true;
+      : false;
 
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
@@ -36,6 +36,7 @@ const NavBar = () => {
       </NavLogo>
       {isLogin ?
       <>
+        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavProfile>
           <NavAvatar 
             src={user ? user.profileImageUrl : ''}
@@ -45,6 +46,7 @@ const NavBar = () => {
           {/* <p>{user ? user.userName : '사람 이름'}</p> */}
           <p>사람 이름</p>
         </NavProfile>
+        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavMenu />
         {/* <NavList>
           {navList && navList.map((item, idx) => {
@@ -206,6 +208,7 @@ const LogOut = styled.div`
 `
 
 const LoginWrapper = styled.div`
+  margin-top: 20px;
 `
 
 const TestUl = styled.ul`
