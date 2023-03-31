@@ -1,6 +1,9 @@
 package com.a403.mmixx.playlist.model.entity;
 
 import com.a403.mmixx.user.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.ArrayExpression;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +11,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -19,10 +23,12 @@ public class Playlist {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "playlist_seq")
-	private int playlistSeq;
+	private Integer playlistSeq;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_seq")
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_seq", referencedColumnName = "userSeq", nullable = false)
+	@JsonIgnore
+//	private Integer userSeq;
 	private User user;
 
 	@NotNull
@@ -35,8 +41,11 @@ public class Playlist {
 
 	@OneToMany(mappedBy = "playlist")
 	private List<PlaylistMusic> playlistMusics;
-	
+
 	public Playlist(int playlistSeq) {
 		this.playlistSeq = playlistSeq;
+	}
+	public int getUserSeq() {
+		return user.getUserSeq();
 	}
 }
