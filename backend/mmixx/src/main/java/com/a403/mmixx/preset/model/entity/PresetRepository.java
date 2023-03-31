@@ -1,4 +1,4 @@
-package com.a403.mmixx.music.model.entity;
+package com.a403.mmixx.preset.model.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
