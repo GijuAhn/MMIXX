@@ -11,12 +11,15 @@ const MyMusic = () => {
   const [order, setOrder] = useState("");
 
   // // [Test] 곡 선택하기 (radio)
-  // const [selectedRadio, SetSelectedRadio] = useState({
+  // const [selectedRadio, setSelectedRadio] = useState({
   //   musicSeq: null,
   //   coverImage: null,
   //   musicName: null,
   //   musicianName: null,
   // });
+
+  // [Test] 곡 선택하기 (check box)
+  const [checkedList, setCheckedList] = useState([]);
 
   return (
     <Wrapper>
@@ -44,14 +47,22 @@ const MyMusic = () => {
         </DivRight>
       </Content>
 
-      <MusicList filter={filter} order={order} query={query}></MusicList>
+      {/* <MusicList filter={filter} order={order} query={query}></MusicList> */}
 
       {/* [Test] 곡 선택하기 (radio) */}
       {/* {selectedRadio.musicSeq}
       {selectedRadio.coverImage}
       {selectedRadio.musicName}
       {selectedRadio.musicianName}
-      <MusicList radio={true} checkRadio={SetSelectedRadio}></MusicList> */}
+      <MusicList radio={true} checkRadio={setSelectedRadio}></MusicList> */}
+
+      {/* [Test] 여러 곡 선택하기 (check box) */}
+      {/* {checkedList &&
+        checkedList.map((item) => (
+          <div key={item.musicSeq}>{item.musicSeq}</div>
+        ))} */}
+      <button onClick={() => console.log(checkedList)}>추가하기</button>
+      <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList>
     </Wrapper>
   );
 };

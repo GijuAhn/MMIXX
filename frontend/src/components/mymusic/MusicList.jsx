@@ -6,7 +6,15 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
 
-const MusicList = ({ filter, order, query, radio = false, checkRadio }) => {
+const MusicList = ({
+  filter,
+  order,
+  query,
+  radio = false,
+  checkRadio,
+  checkBox = false,
+  checkMusicList,
+}) => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
 
@@ -82,7 +90,6 @@ const MusicList = ({ filter, order, query, radio = false, checkRadio }) => {
   // 3. 첫 렌더링을 제외하고, 조건을 검색하면 페이징 된 음악 리스트를 가져온다.
   useEffect(() => {
     if (didMount3.current) {
-      if (!hasCondition.current) return;
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
       page.current = 1;
       hasCondition.current = true;
@@ -183,6 +190,8 @@ const MusicList = ({ filter, order, query, radio = false, checkRadio }) => {
           musicList={musicList}
           radio={radio}
           checkRadio={checkRadio}
+          checkBox={checkBox}
+          checkMusicList={checkMusicList}
         ></CustomTable>
       )}
       <Button
