@@ -126,7 +126,7 @@ public class MusicService {
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
 			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
-			musicContainerList.get(i).setGenreSeq(null);
+//			musicContainerList.get(i).setGenre(null);
 		}
 
 		return musicContainerList;
@@ -187,7 +187,7 @@ public class MusicService {
 		new_music.setCoverImage(music.getCoverImage());
 		new_music.setInst(null);
 		new_music.setMixed(music.getMusicSeq());
-		new_music.setGenreSeq(music.getGenreSeq());
+		new_music.setGenre(music.getGenre());
 		new_music.setMusicLength(music.getMusicLength());
 		new_music.setMusicName(new_music_name);
 		new_music.setMusicUrl(new_music_path);
@@ -253,7 +253,7 @@ public class MusicService {
 			new_music.setCoverImage(music.getCoverImage());
 			new_music.setInst(music.getMusicSeq());
 			new_music.setMixed(null);
-			new_music.setGenreSeq(music.getGenreSeq());
+			new_music.setGenre(music.getGenre());
 			new_music.setMusicLength(music.getMusicLength());
 			new_music.setMusicName(new_music_name);
 			new_music.setMusicUrl(new_music_path);
