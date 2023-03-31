@@ -1,12 +1,13 @@
 import { Avatar } from '@mui/material'
 import styled from 'styled-components'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
 import logo from 'assets/logo.png'
+import logoText from 'assets/logo_text.png'
 
 const NavBar = () => {
   const navigate = useNavigate()
@@ -15,13 +16,16 @@ const NavBar = () => {
 
   return (
     <Wrapper>
-      <LogoImage logo={logo} onClick={() => navigate('/')}/>
+      <NavLogo onClick={() => navigate('/')}>
+        <LogoImage img={logo} alt="logo"/>
+        <LogoText img={logoText} alt="logoText" />
+      </NavLogo>
       {isLogin ?
       <>
         <NavProfile>
           <NavAvatar 
             src=''
-            sx={{ width: 100, height: 100 }}
+            sx={{ width: 80, height: 80 }}
           />  
           <p>
             사용자 이름
@@ -47,7 +51,7 @@ const NavBar = () => {
       </>
       :
       <LoginWrapper>
-        <DefaultBtn
+        <DefaultBtn 
           width="150px">
           로그인 하기
         </DefaultBtn>
@@ -94,23 +98,36 @@ const Wrapper = styled.nav`
   left: 0;
   justify-content: ${({isLogin}) => !isLogin && 'start'};
   // min-height: 100vh;
+  
   @media (max-width: 768px) {
     display: none;
   }
 `
 
-const LogoImage = styled.div`
-  background-image: url(${logo});
-  background-size: cover;
-  width: 50px;
+const NavLogo = styled.div`
   height: 50px;
-  margin: 10px auto 0;
+  justify-content: space-evenly;
+`
+
+const LogoImage = styled.div`
+  background-image: url(${({img}) => img});
+  background-size: cover;
   cursor: pointer;
+  height: 40px;
+  width: 40px;
+`
+
+const LogoText = styled.div`
+  background-image: url(${({img}) => img});
+  background-size: cover;
+  cursor: pointer;
+  height: 30px;
+  width: 100px;
 `
 
 const NavProfile = styled.div`
   flex-direction: column;
-  flex-grow: 0.5;
+  flex-grow: 1;
 `
 
 const NavAvatar = styled(Avatar)`
@@ -159,28 +176,26 @@ const NavAvatar = styled(Avatar)`
 // `
 
 const LogOut = styled.div`
-  align-self: end;
-  flex-grow: 0.5;
 `
 
 const LoginWrapper = styled.div`
 `
 
 const TestUl = styled.ul`
-  border: 1px solid pink;
   list-style: url(${({icon}) => icon});
   width: 180px;
   height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: start;
+  flex-grow: 4;
 `
 
 const TestLi = styled.li`
   list-style: none;
   display: flex;
   align-items: center;
-  padding: 12px 17px;
+  padding: 15px 17px;
   justify-content: space-between;
   // display: inline-flex;
   // vertical-align: middle;
