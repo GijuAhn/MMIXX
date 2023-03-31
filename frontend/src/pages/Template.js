@@ -8,7 +8,8 @@ const Template = () => {
     <Wrapper>
       <StyledNavBar />
       <Outlet />
-      <PlayBar />
+      <TestDiv />
+      {/* <PlayBar /> */}
     </Wrapper>
   )
 }
@@ -23,4 +24,13 @@ const StyledNavBar = styled(NavBar)`
   }
 `
 
+const TestDiv = styled(PlayBar)`
+  position: fixed;
+  bottom: 0;
+  left: 200px;
+  width: 100%;
+  height: 100px;
+  border: 1px solid red;
+  backdrop-filter: blur(10px);
+`
 export default Template;
