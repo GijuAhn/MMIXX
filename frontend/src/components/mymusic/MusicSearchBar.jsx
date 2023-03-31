@@ -70,7 +70,9 @@ const Input = styled.input`
   background-color: transparent;
   border: 0 solid transparent;
   font-size: 14px;
+  font-weight: 200;
   font-family: "Heebo", sans-serif;
+  color: ${({ theme }) => theme.palette.light};
   margin-left: 10px;
   width: 90%;
   &: focus {
