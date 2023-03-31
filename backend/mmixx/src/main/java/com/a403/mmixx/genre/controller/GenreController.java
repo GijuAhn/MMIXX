@@ -30,10 +30,4 @@ public class GenreController {
         return ResponseEntity.ok(genreService.getGenreDetailList(seq));
     }//getGenreList
 
-    @ApiOperation(value = "장르 프리셋 조회", notes = "세부 장르에 해당하는 프리셋 가져오기")
-    @GetMapping("/preset/{genreSeq}")
-    public ResponseEntity<?> getPreset(@PathVariable("genreSeq") Integer seq) {
-        return ResponseEntity.ok(genreService.getPreset(seq));
-    }//getGenreList
-
 }//JenreController

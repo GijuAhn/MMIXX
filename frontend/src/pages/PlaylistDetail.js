@@ -31,7 +31,7 @@ const PlaylistDetail = () => {
   }, [playlistMusic])
 
   return (
-    <StyleWrapper url="">
+    <StyleWrapper url={coverImage}>
       <Header 
         title="플레이리스트 상세 보기"
         desc=""
