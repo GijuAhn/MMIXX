@@ -14,6 +14,8 @@ const CustomTable = ({
   hasIcon = true,
   radio = false,
   checkRadio,
+  checkBox = false,
+  checkMusicList,
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -21,46 +23,80 @@ const CustomTable = ({
   const musicianName = useRef(null);
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
+  const checkedList = useRef([]);
+
   const onCheck = (event) => {
-    musicSeq.current =
-      event.target.attributes.getNamedItem("seq") === null
-        ? null
-        : event.target.attributes.getNamedItem("seq").value;
-    coverImage.current =
-      event.target.attributes.getNamedItem("cover") === null
-        ? null
-        : event.target.attributes.getNamedItem("cover").value;
-    musicName.current =
-      event.target.attributes.getNamedItem("title") === null
-        ? null
-        : event.target.attributes.getNamedItem("title").value;
-    musicianName.current =
-      event.target.attributes.getNamedItem("musician") === null
-        ? null
-        : event.target.attributes.getNamedItem("musician").value;
+    if (radio) {
+      musicSeq.current =
+        event.target.attributes.getNamedItem("seq") === null
+          ? null
+          : event.target.attributes.getNamedItem("seq").value;
+      coverImage.current =
+        event.target.attributes.getNamedItem("cover") === null
+          ? null
+          : event.target.attributes.getNamedItem("cover").value;
+      musicName.current =
+        event.target.attributes.getNamedItem("title") === null
+          ? null
+          : event.target.attributes.getNamedItem("title").value;
+      musicianName.current =
+        event.target.attributes.getNamedItem("musician") === null
+          ? null
+          : event.target.attributes.getNamedItem("musician").value;
 
-    // setMusicSeqState(musicSeq.current);
+      // setMusicSeqState(musicSeq.current);
 
-    // console.log(
-    //   musicSeq.current,
-    //   coverImage.current,
-    //   musicName.current,
-    //   musicianName.current
-    // );
+      // console.log(
+      //   musicSeq.current,
+      //   coverImage.current,
+      //   musicName.current,
+      //   musicianName.current
+      // );
 
-    checkRadio({
-      musicSeq: musicSeq.current,
-      coverImage: coverImage.current,
-      musicName: musicName.current,
-      musicianName: musicianName.current,
-    });
+      checkRadio({
+        musicSeq: musicSeq.current,
+        coverImage: coverImage.current,
+        musicName: musicName.current,
+        musicianName: musicianName.current,
+      });
+    } else if (checkBox) {
+      // console.log(event.target.src);
+      // console.log(unCheck);
+      // console.log(Check);
+
+      if (event.target.src.includes("check-selected")) {
+        event.target.setAttribute("src", unCheck);
+      } else {
+        event.target.setAttribute("src", Check);
+      }
+
+      const newMusicSeq =
+        event.target.attributes.getNamedItem("seq") === null
+          ? null
+          : event.target.attributes.getNamedItem("seq").value;
+
+      const deletedIndex = checkedList.current.findIndex(
+        (item) => item.musicSeq === newMusicSeq
+      );
+
+      // console.log("deletedIndex", deletedIndex);
+      if (deletedIndex === -1) {
+        // console.log("추가!");
+        checkedList.current.push({ musicSeq: newMusicSeq });
+      } else {
+        // console.log("삭제!");
+        checkedList.current.splice(deletedIndex, 1);
+      }
+      // console.log(checkedList.current);
+      checkMusicList(checkedList.current);
+    }
   };
   return (
     <Table>
       <tbody>
         {musicList.map((music) => (
           <Tr key={music.musicSeq}>
-            {radio ? (
+            {radio || checkBox ? (
               <Radio>
                 <img
                   onClick={onCheck}
@@ -111,12 +147,12 @@ const CustomTable = ({
                 "0"
               )}
             </Td>
-            {!radio ? (
+            {!radio && !checkBox ? (
               <Td>
                 <Play musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {!radio ? (
+            {!radio && !checkBox ? (
               <Td>
                 <Mix
                   musicSeq={music.musicSeq}
@@ -129,12 +165,12 @@ const CustomTable = ({
                 ></Mix>
               </Td>
             ) : null}
-            {!radio ? (
+            {!radio && !checkBox ? (
               <Td>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {!radio ? (
+            {!radio && !checkBox ? (
               <Td>
                 <Download musicSeq={music.musicSeq}></Download>
               </Td>
