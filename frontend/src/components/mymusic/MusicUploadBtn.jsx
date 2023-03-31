@@ -83,8 +83,8 @@ const MusicUploadBtn = () => {
       .then(setFileList([]));
   };
   return (
-    <Div>
-      <DefaultBtn onClick={onClick} width="110px">
+    <div>
+      <DefaultBtn onClick={onClick} width='110px'>
         곡 업로드
       </DefaultBtn>
       {modalDisplay ? (
@@ -92,31 +92,31 @@ const MusicUploadBtn = () => {
           <Modal ref={wrapperRef}>
             {fileList.length === 0 ? (
               <DivUpload
-                cursor="pointer"
+                cursor='pointer'
                 onClick={() => {
                   input.current?.click();
                 }}
               >
                 <DivText>
-                  <img src={upload} width="85" alt=""></img>
+                  <img src={upload} width='85' alt=''></img>
                   <Text>
                     <U>이곳을 클릭</U>하여 파일을 업로드하세요
                   </Text>
                 </DivText>
               </DivUpload>
             ) : (
-              <DivUpload cursor="default">
+              <DivUpload cursor='default'>
                 <table>
                   <tbody>
                     {Array.from(fileList).map((file, index) => (
                       <Tr key={index}>
                         <td>
-                          <img src={musicFile} width="25" alt="" />
+                          <img src={musicFile} width='25' alt='' />
                         </td>
                         <Td>{file.name}</Td>
                         <td>
                           <ButtonCancel onClick={onClickFileCancel}>
-                            <img id={index} src={cancel} width="20" alt="" />
+                            <img id={index} src={cancel} width='20' alt='' />
                           </ButtonCancel>
                         </td>
                       </Tr>
@@ -127,28 +127,26 @@ const MusicUploadBtn = () => {
             )}
             <input
               ref={input}
-              type="file"
+              type='file'
               style={{ display: "none" }}
               multiple
               onChange={onChange}
             />
             <div>
-              <Button onClick={onClickCloseModal} outline width="100px">
+              <Button onClick={onClickCloseModal} outline width='100px'>
                 취소
               </Button>
-              <Button onClick={uploadFile} width="100px">
+              <Button onClick={uploadFile} width='100px'>
                 업로드
               </Button>
             </div>
           </Modal>
         </DivModal>
       ) : null}
-    </Div>
+    </div>
   );
 };
-const Div = styled.div`
-  // margin-left = 40px;
-`;
+
 const DivModal = styled.div`
   width: 100%;
   height: 100%;
@@ -174,11 +172,10 @@ const Modal = styled.div`
   // -webkit-backdrop-filter: blur(13.5px);
   border-radius: 20px;
   // border: 1px solid rgba(255, 255, 255, 0.18);
-  width: 600px;
-  height: 450px;
+  width: 625px;
+  height: 445px;
   position: relative;
   top: -30px;
-  padding: 10px;
   flex-direction: column;
 `;
 
@@ -186,7 +183,8 @@ const DivUpload = styled.div`
   background-color: ${({ theme }) => theme.palette.light};
   width: 550px;
   height: 300px;
-  margin-top: 0;
+  height: 330px;
+  margin: 37px auto auto auto; // margin 상 우 하 좌
   border: 2px dashed ${({ theme }) => theme.palette.dark};
   border-radius: 10px;
   &: hover {
@@ -203,6 +201,7 @@ const Text = styled.div`
   font-size: 16px;
   font-weight: bold;
   font-family: "Heebo", sans-serif;
+  padding-top: 10px;
 `;
 
 const U = styled.u`
@@ -223,6 +222,7 @@ const Td = styled.td`
   font-family: "Heebo", sans-serif;
   text-align: left;
   width: 300px;
+  padding-left: 3px;
 `;
 
 // const Ul = styled.ul`
@@ -279,14 +279,12 @@ const Button = styled.button`
   font-weight: 300;
   font-family: "Heebo", sans-serif;
   width: ${({ width }) => (width ? width : "auto")};
-  margin: 0 auto;
 
-  // transition: background 0.1s ease-in-out, border 0.1s ease-in-out;
-
-  // &: hover {
-  //   border: 3px solid ${({ theme }) => theme.palette.secondary};
-  //   background-color: ${({ theme }) => theme.palette.secondary};
-  // }
+  margin: 15px 10px auto 10px;
+  transition: border 0.1s ease-in-out;
+  &:hover {
+    border: 3px solid ${({ theme }) => theme.palette.darkgray};
+  }
 
   ${({ outline }) =>
     outline &&
