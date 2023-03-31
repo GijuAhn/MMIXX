@@ -48,7 +48,7 @@ const PlaylistCreate = () => {
 
 const StyleWrapper = styled(Wrapper)`
   ${({theme, url}) => css`
-    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.8), ${theme.palette.darkAlt} 70%), url(${url});
+    background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.5), ${theme.palette.darkAlt} 70%), url(${url});
     background-size: cover;
   `}
 `
