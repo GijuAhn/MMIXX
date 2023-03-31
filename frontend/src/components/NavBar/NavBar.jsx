@@ -10,16 +10,24 @@ import { DefaultBtn, PlainBtn } from 'components/Common'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
+import { useRecoilValue } from 'recoil';
+import { isLogIn, test, userInfo } from 'atom/atom';
 
 const NavBar = () => {
   const navigate = useNavigate()
+  const atomIsLogin = useRecoilValue(isLogIn)
+  const atomUser = useRecoilValue(userInfo)
+  const atomTest = useRecoilValue(test)
 
+  console.log(atomTest)
   const isLogin =
-    localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
+    atomIsLogin
+    // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
       ? true
       : false;
 
-  const user = localStorage.getItem("user")
+  const user = atomUser
+    // localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
@@ -34,7 +42,7 @@ const NavBar = () => {
         {/* <LogoImage img={logo} alt="logo"/> */}
         <LogoText img={logoText} alt="logoText" />
       </NavLogo>
-      {isLogin ?
+      {atomIsLogin ?
       <>
         {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavProfile>
