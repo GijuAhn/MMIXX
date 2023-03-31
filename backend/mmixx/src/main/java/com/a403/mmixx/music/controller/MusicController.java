@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
+import com.a403.mmixx.music.model.dto.MusicCountResponseDto;
 import com.a403.mmixx.music.model.dto.MusicDetailResponseDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.dto.MusicMixRequestDto;
@@ -46,14 +47,12 @@ public class MusicController {
 	@ApiOperation(value = "음악 스타일 변환", notes = "")
 	@PostMapping("/mix")
 	public ResponseEntity<?> mixMusic(@RequestBody MusicMixRequestDto requestDto) throws Exception {
-		System.out.println("Music Mix Start");
 		MusicMixResponseDto response = musicService.mixMusic(requestDto);
 		if(response != null) {
 			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
-		
 	}
 	
 	@ApiOperation(value = "음악 다운로드", notes = "")
@@ -63,7 +62,7 @@ public class MusicController {
 	}
 	
 	@ApiOperation(value = "음악 배경음 추출(보컬 제거)")
-	@GetMapping("/split/{music_seq}")
+	@GetMapping("/inst/{music_seq}")
 	public ResponseEntity<?> splitMusic(@PathVariable Integer music_seq) throws Exception {
 		MusicSplitResponseDto responseDto = musicService.splitMusic(music_seq);
 		if(responseDto != null) {
@@ -73,21 +72,20 @@ public class MusicController {
 		}
 	}
 
-
-	@ApiOperation(value = "음악 리스트 조회", notes = "")
-	@GetMapping
-	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PageableDefault(size=10) Pageable pageable) {
-		return ResponseEntity.ok(musicService.getMusicList(pageable));
+	@ApiOperation(value = "음악 리스트 조회", notes = "user_seq로 회원의 모든 음악 조회")
+	@GetMapping("/{user_seq}")
+	public ResponseEntity<Page<MusicListResponseDto>> getMusicList(@PathVariable Integer user_seq, @PageableDefault(size=10) Pageable pageable) {
+		return ResponseEntity.ok(musicService.getMusicList(pageable, user_seq));
 	}
 
 	@ApiOperation(value = "음악 검색", notes = "")
-	@GetMapping("/search")
-	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PageableDefault(size=10) Pageable pageable, MusicCondition condition) {
-		return ResponseEntity.ok(musicService.getMusicListByCondition(condition, pageable));
+	@GetMapping("/search/{user_seq}")
+	public ResponseEntity<Page<MusicListResponseDto>> getMusicListByCondition(@PathVariable Integer user_seq, MusicCondition condition, @PageableDefault(size=10) Pageable pageable) {
+		return ResponseEntity.ok(musicService.getMusicListByCondition(user_seq, condition, pageable));
 	}
 
 	@ApiOperation(value = "음악 상세 내용 조회", notes = "")
-	@GetMapping("/{seq}")
+	@GetMapping("/detail/{seq}")
 	public ResponseEntity<MusicDetailResponseDto> getMusic(@PathVariable Integer seq) {
 		return ResponseEntity.ok(musicService.getMusic(seq));
 	}
@@ -115,14 +113,26 @@ public class MusicController {
 	}
 
 	@ApiOperation(value = "음악 삭제", notes = "")
-	@DeleteMapping("/{seq}")
-	public ResponseEntity<?> deleteMusic(@PathVariable Integer seq) {
-		Music music = musicService.deleteMusic(seq);
+	@DeleteMapping("/{music_seq}")
+	public ResponseEntity<?> deleteMusic(@PathVariable Integer music_seq) {
+		Music music = musicService.deleteMusic(music_seq);
 		if (music != null) {
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.ok("SUCCESS");
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
+	
+	@ApiOperation(value = "음악 개수 조회", notes = "user_seq로 회원의 조건별 음원 개수 조회")
+	@GetMapping("/count/{user_seq}")
+	public ResponseEntity<?> countMusic(@PathVariable Integer user_seq) {
+		MusicCountResponseDto responseDto = musicService.countMusic(user_seq);
+		return ResponseEntity.ok(responseDto);
+	}
+	
+	@ApiOperation(value = "프리셋 전체 조회")
+	@GetMapping("/preset")
+	public ResponseEntity<?> findAllPreset() {
+		return ResponseEntity.ok(musicService.findAllPreset());
+	}
 }

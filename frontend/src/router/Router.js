@@ -10,8 +10,11 @@ import {
   PlaylistSelectMusic,
   PlaylistDetail,
   PlaylistEdit,
-  NotFound,
-  Test
+  Login,
+  LoginSuccess,
+  NotFound, 
+  Test,
+  MixResult,
 } from 'pages'
 
 const index = () => {
@@ -21,12 +24,15 @@ const index = () => {
         <Route path="/" element={<Template />}>
           <Route path="" element={<Main />} />
           <Route path="mix" element={<Mix />} />
+          <Route path="mix/result" element={<MixResult />} />
           <Route path="mymusic" element={<MyMusic />} />
           <Route path="playlist" element={<Playlist />} />
           <Route path="playlist/create" element={<PlaylistCreate />} />
           <Route path="playlist/:playlistSeq" element={<PlaylistDetail />} />
           <Route path="playlist/edit" element={<PlaylistEdit />} />
           <Route path="playlist/select" element={<PlaylistSelectMusic />} />
+          <Route path="login" element={<Login />} />
+          <Route path="login/success" element={<LoginSuccess />} />       
           <Route path="playlist/test" element={<Test />} />
           <Route path="*" element={<NotFound />} />
         </Route>
