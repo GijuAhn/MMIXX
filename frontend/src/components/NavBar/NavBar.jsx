@@ -4,22 +4,21 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
+import { useRecoilValue } from 'recoil';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
 // import logo from 'assets/logo.png'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
-import { useRecoilValue } from 'recoil';
 import { isLogIn, test, userInfo } from 'atom/atom';
 
 const NavBar = () => {
   const navigate = useNavigate()
   const atomIsLogin = useRecoilValue(isLogIn)
   const atomUser = useRecoilValue(userInfo)
-  const atomTest = useRecoilValue(test)
 
-  console.log(atomTest)
+  // console.log(atomTest)
   const isLogin =
     atomIsLogin
     // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
