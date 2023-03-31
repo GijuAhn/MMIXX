@@ -1,22 +1,21 @@
-import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { isLogIn, userInfo } from "atom/atom";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import axios from "axios";
 
 
 const LoginSuccess = () => {
-    const [user, setUser] = useState('');
+    // const [user, setUser] = useState('');
     
     // 현재 url 의 쿼리스트링을 변경
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     
-    const setSortParams = () => {
-        searchParams.set('sort', 'clear');
-        setSearchParams(searchParams);
-    };
+    // const setSortParams = () => {
+    //     searchParams.set('sort', 'clear');
+    //     setSearchParams(searchParams);
+    // };
 
     // 특정한 key의 value를 가져오는 메서드, 해당 key 의 value 가 두개라면 제일 먼저 나온 value 만 리턴
     const token = searchParams.get("token");
@@ -40,13 +39,13 @@ const LoginSuccess = () => {
         })
     }
 
-    const [atomUser, setUserInfo] = useRecoilState(userInfo);
-    const [isLogin, setIsLogin] = useRecoilState(isLogIn);
+    const [ setUserInfo ] = useSetRecoilState(userInfo);
+    const [ setIsLogin ] = useSetRecoilState(isLogIn);
     useEffect(() => {
         // console.log("dddddddddd");
          getUser(seq).then(res => {
             // console.log(res.data);
-            setUser(res.data);
+            // setUser(res.data);
             return res.data
          }).then(res => {
              localStorage.setItem('user', JSON.stringify(res));
@@ -58,7 +57,7 @@ const LoginSuccess = () => {
              window.location.href = "/"
          })
 
-    }, []);
+    });
     
 
 };
