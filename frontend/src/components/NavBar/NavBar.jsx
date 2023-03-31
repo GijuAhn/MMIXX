@@ -1,30 +1,23 @@
-import { Avatar } from "@mui/material";
-import styled from "styled-components";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { Avatar } from '@mui/material'
+import styled from 'styled-components'
+import { useLocation, useNavigate } from 'react-router-dom'
+import AlbumIcon from '@mui/icons-material/Album'
+import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
+import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-import { DefaultBtn, PlainBtn } from "components/Common";
-import MusicCount from "components/mymusic/MusicCount";
-import { handleLogin } from "api/base";
-import logo from "assets/logo.png";
+import { DefaultBtn, PlainBtn } from 'components/Common'
+import logo from 'assets/logo.png'
+import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
+import MusicCount from "components/mymusic/MusicCount";
 
 const NavBar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const navList = [
-    { name: "MIX", path: "mix" },
-    { name: "PLAYLIST", path: "playlist" },
-    { name: "MY MUSIC", path: "mymusic" },
-  ];
+  const navigate = useNavigate()
 
   const isLogin =
     localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
       ? true
       : false;
-  // console.log(isLogin);
 
   const user = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
@@ -37,124 +30,235 @@ const NavBar = () => {
 
   return (
     <Wrapper>
-      <LogoImage logo={logo} onClick={() => navigate("/")} />
-      {isLogin ? (
-        <>
-          <NavProfile>
-            <NavAvatar
-              src={user.profileImageUrl}
-              sx={{ width: 100, height: 100 }}
-              referrerPolicy='no-referrer' // 안 하면 가끔 403 오류 발생..
-            />
-            <p>{user.userName}</p>
-          </NavProfile>
-          <NavList>
-            {navList &&
-              navList.map((item, idx) => {
-                return (
-                  <NavItem key={idx} to={item.path}>
-                    <NavBtn selected={"/" + item.path === location.pathname}>
-                      {item.name}
-                      {item.name === "MY MUSIC" ? (
-                        <Arrow
-                          src={arrow}
-                          selected={"/" + item.path === location.pathname}
-                          alt=''
-                        ></Arrow>
-                      ) : null}
-                    </NavBtn>
-                  </NavItem>
-                );
-              })}
-            {location.pathname === "/mymusic" ? (
-              <MusicCount></MusicCount>
-            ) : null}
-          </NavList>
-          <LogOut>
-            <PlainBtn>로그아웃</PlainBtn>
-          </LogOut>
-        </>
-      ) : (
-        <LoginWrapper>
-          <DefaultBtn width='150px' onClick={onClickLogin}>
-            로그인 하기
-          </DefaultBtn>
-        </LoginWrapper>
-      )}
+      <NavLogo onClick={() => navigate('/')}>
+        {/* <LogoImage img={logo} alt="logo"/> */}
+        <LogoText img={logoText} alt="logoText" />
+      </NavLogo>
+      {isLogin ?
+      <>
+        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
+        <NavProfile>
+          <NavAvatar 
+            src={user ? user.profileImageUrl : ''}
+            sx={{ width: 80, height: 80 }}
+            referrerPolicy='no-referrer'
+          />  
+          {/* <p>{user ? user.userName : '사람 이름'}</p> */}
+          <p>사람 이름</p>
+        </NavProfile>
+        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
+        <NavMenu />
+        {/* <NavList>
+          {navList && navList.map((item, idx) => {
+            return (
+              <NavItem key={idx} to={item.path}>
+                <NavBtn selected={'/' + item.path === location.pathname}>
+                  {item.name}
+                </NavBtn>
+              </NavItem>
+            )
+          })}
+        </NavList> */}
+        <LogOut>
+          <PlainBtn>
+            로그아웃
+          </PlainBtn>
+        </LogOut> 
+      </>
+      :
+      <LoginWrapper>
+        <DefaultBtn 
+          width="150px">
+          로그인 하기
+        </DefaultBtn>
+      </LoginWrapper>
+      }
     </Wrapper>
-  );
-};
+  )
+}
+
+const NavMenu = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const navList = [
+    // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
+    {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" />},
+    {name: 'PLAYLIST', path: 'playlist', icon: <PlaylistPlaySharpIcon fontSize="small" />},
+    {name: 'MY MUSIC', path: 'mymusic', icon: <MusicNoteSharpIcon fontSize="small" />},
+  ]
+
+  return (
+    <TestUl>
+      {navList && navList.map((item, index) => {
+        return (
+          <TestLi key={'testli' + index} 
+            onClick={() => navigate(item.path)}
+            selected={'/' + item.path === location.pathname}>
+            {item.icon}
+            <span>{item.name}</span>
+            {item.name === "MY MUSIC" ? (
+              <Arrow
+                src={arrow}
+                selected={"/" + item.path === location.pathname}
+                alt=''
+              ></Arrow>
+            ) : null}
+          </TestLi>
+        )
+      })}
+      <div>
+        {location.pathname === "/mymusic" ? (
+          <MusicCount></MusicCount>
+        ) : null}
+      </div>
+    </TestUl>
+  )
+}
 
 const Wrapper = styled.nav`
   height: 100vh;
-  background-color: ${({ theme }) => theme.palette.dark};
+  background-color: ${({ theme }) => theme.palette.dark };
   flex-direction: column;
   width: 200px;
   position: fixed;
   top: 0;
   left: 0;
-  justify-content: ${({ isLogin }) => !isLogin && "start"};
-`;
+  justify-content: ${({isLogin}) => !isLogin && 'start'};
+  // min-height: 100vh;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
 
-const LogoImage = styled.div`
-  background-image: url(${logo});
-  background-size: cover;
-  width: 50px;
+const NavLogo = styled.div`
   height: 50px;
-  margin: 10px auto 0;
+  justify-content: space-evenly;
+`
+
+// const LogoImage = styled.div`
+//   background-image: url(${({img}) => img});
+//   background-size: cover;
+//   cursor: pointer;
+//   height: 40px;
+//   width: 40px;
+// `
+
+const LogoText = styled.div`
+  background-image: url(${({img}) => img});
+  background-size: cover;
   cursor: pointer;
-`;
+  height: 30px;
+  width: 100px;
+  margin-top: 10px;
+`
 
 const NavProfile = styled.div`
   flex-direction: column;
-  flex-grow: 0.5;
-`;
+  flex-grow: 0.7;
+`
 
 const NavAvatar = styled(Avatar)`
   margin-bottom: 15px;
-`;
+`
 
-const NavList = styled.div`
+// const NavList = styled.div`
+//   flex-direction: column;
+//   justify-content: start;
+//   flex-grow: 4;
+// `
+
+// const NavItem = styled(Link)`
+//   width: 100%;
+//   text-align: center;
+//   text-decoration: none;
+// `
+
+// const NavBtn = styled.button`
+//   background-color: ${({ theme }) => theme.palette.dark};
+//   color: ${({ theme }) => theme.palette.light};
+//   padding: 10px 20px;
+//   border: 1.3px solid ${({theme}) => theme.palette.secondary};
+//   border-radius: 27px;
+//   margin: 5px auto;
+//   width: 90%;
+//   font-weight: bold;
+//   font-size: 14px;
+//   height: 40px;
+//   text-align: left;
+//   font-family: 'Heebo', sans-serif;
+//   display: flex;
+//   align-items: center;
+
+//   ${({ selected, theme }) => 
+//     selected &&`
+//       background-color: ${theme.palette.secondary};
+//       color: ${theme.palette.dark};
+//     `
+//   };
+
+//   &: hover {
+//     background-color: ${({ theme }) => theme.palette.secondary};
+//     color: ${({ theme }) => theme.palette.dark};
+//   }
+// `
+
+
+const LogOut = styled.div`
+`
+
+const LoginWrapper = styled.div`
+  margin-top: 20px;
+`
+
+const TestUl = styled.ul`
+  list-style: url(${({icon}) => icon});
+  width: 180px;
+  height: 200px;
+  display: flex;
   flex-direction: column;
   justify-content: start;
   flex-grow: 4;
-`;
+`
 
-const NavItem = styled(Link)`
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-`;
-
-const NavBtn = styled.button`
-  background-color: ${({ theme }) => theme.palette.dark};
-  color: ${({ theme }) => theme.palette.light};
-  padding: 10px 20px;
-  border: 1.3px solid ${({ theme }) => theme.palette.secondary};
-  border-radius: 27px;
-  margin: 5px auto;
-  width: 90%;
-  font-weight: bold;
-  font-size: 14px;
-  height: 40px;
-  text-align: left;
-  font-family: "Heebo", sans-serif;
+const TestLi = styled.li`
+  list-style: none;
   display: flex;
   align-items: center;
+  padding: 10px 17px;
+  // justify-content: start;
+  // display: inline-flex;
+  // vertical-align: middle;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 25px;
+  margin: 3px 0;
+  animation: 1s ease-in-out 0s 1 normal forwards;
 
-  ${({ selected, theme }) =>
-    selected &&
-    `
-      background-color: ${theme.palette.secondary};
-      color: ${theme.palette.dark};
-    `};
-
-  &: hover {
+  &:hover {
     background-color: ${({ theme }) => theme.palette.secondary};
-    color: ${({ theme }) => theme.palette.dark};
-  }
-`;
+    color: ${({ theme }) => theme.palette.darkAlt};
 
+    span {
+      color: ${({ theme }) => theme.palette.darkAlt};
+    }
+  }
+
+  ${({ selected, theme }) => 
+    selected &&`
+    background-color: ${theme.palette.secondary};
+    color: ${theme.palette.dark};
+
+    span {
+      color: ${theme.palette.darkAlt};
+    }
+    `
+  }
+
+  span {
+    margin-left: 10px;
+  }
+`
 const Arrow = styled.img`
   width: 12px;
   margin-left: auto;
@@ -166,10 +270,4 @@ const Arrow = styled.img`
     `};
 `;
 
-const LogOut = styled.div`
-  align-self: end;
-  flex-grow: 0.5;
-`;
-
-const LoginWrapper = styled.div``;
 export default NavBar;

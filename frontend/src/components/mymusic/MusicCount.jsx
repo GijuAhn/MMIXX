@@ -43,9 +43,11 @@ const fadeIn = keyframes`
 `;
 
 const Table = styled.table`
-  position: absolute;
-  top: 390px;
-  width: 75%;
+  // position: absolute;
+  // top: 400px;
+  width: 85%;
+  margin: 0 auto;
+  height: 100px;
   // border: 1px dotted red;
 
   animation-duration: 0.15s;
