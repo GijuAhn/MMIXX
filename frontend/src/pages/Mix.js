@@ -31,7 +31,7 @@ const Mix = () => {
     getPreset(1).then(
       res => setPresetData(res), console.log(presetData)
       ).catch(err => console.log(err))
-  }, [])
+  }, [presetData])
 
   useEffect(() => {
     console.log('결과값 확인 : ', presetData) 

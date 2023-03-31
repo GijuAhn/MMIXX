@@ -1,14 +1,17 @@
 import Slider from '@mui/material/Slider';
 
+// 1. 마우스가 바를 선택하고 놨을 때 지정된 값부터 노래를 다시 재생한다 -> 노래가 시작되는 순서?! 
+
+
 const PlaySlider = () => {
   return (
     <Slider
       aria-label="time-indicator"
       size="small"
-      // value={position}
+      value={32}
       min={0}
       step={1}
-      // max={duration}
+      max={200}
       // onChange={(_, value) => setPosition(value)}
       sx={{
         // color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
