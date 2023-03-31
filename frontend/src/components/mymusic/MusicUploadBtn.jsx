@@ -75,7 +75,7 @@ const MusicUploadBtn = () => {
     const userInfo = { userSeq: user ? user.userSeq : 0 };
     const config = { headers: { "content-type": "multipart/form-data" } };
     for (let i = 0, len = fileList.length; i < len; i++) {
-      formData.append("fileList", fileList[i]);
+      formData.append("files", fileList[i]);
     }
     formData.append(
       "user",
