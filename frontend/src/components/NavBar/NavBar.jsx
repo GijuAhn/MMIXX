@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 import { DefaultBtn, PlainBtn } from "components/Common";
 import MusicCount from "components/mymusic/MusicCount";
-import { handleLogin } from "api/base";
+import { handleLogout } from "api/base";
 import logo from "assets/logo.png";
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 
@@ -32,7 +32,14 @@ const NavBar = () => {
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    window.location.href = "/login";
+    if (!isLogin) window.location.href = "/login";
+    else {
+      handleLogout().then(() => {
+        localStorage.clear();
+        console.log("로그아웃");
+        window.location.reload();
+      })
+    }
   };
 
   return (
@@ -71,7 +78,7 @@ const NavBar = () => {
             ) : null}
           </NavList>
           <LogOut>
-            <PlainBtn>로그아웃</PlainBtn>
+            <PlainBtn onClick={onClickLogin}>로그아웃</PlainBtn>
           </LogOut>
         </>
       ) : (

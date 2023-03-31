@@ -22,13 +22,13 @@ const LoginSuccess = () => {
     const token = searchParams.get("token");
     const seq = searchParams.get("no");
 
-    localStorage.setItem('auth', token);
-    localStorage.setItem('isLogin', 'true');
+    
     // console.log(token);
 
     const instance =  axios.create({
-        baseURL: process.env.REACT_APP_BASE_URL, // 서버용
+        // baseURL: process.env.REACT_APP_BASE_URL, // 서버용
         // baseURL: 'http://localhost:5555/api', // 로컬 테스트용
+        baseURL: 'https://j8a403.p.ssafy.io/api',
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -50,6 +50,8 @@ const LoginSuccess = () => {
             return res.data
          }).then(res => {
              localStorage.setItem('user', JSON.stringify(res));
+             localStorage.setItem('auth', token);
+             localStorage.setItem('isLogin', 'true');
              setUserInfo(res);
              setIsLogin(true);
          }).then(res => {
