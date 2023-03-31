@@ -39,8 +39,8 @@ const NavBar = () => {
     else {
       handleLogout().then(() => {
         localStorage.clear();
-        console.log("로그아웃");
-        window.location.reload();
+        // console.log("로그아웃");
+        window.location.href = "/";
       })
     }
   };
