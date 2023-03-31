@@ -11,10 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
-import com.a403.mmixx.music.model.entity.Preset;
-import com.a403.mmixx.music.model.entity.PresetRepository;
+import com.a403.mmixx.preset.model.entity.Preset;
+import com.a403.mmixx.preset.model.entity.PresetRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,7 +115,6 @@ public class MusicService {
 		List<String> musicUrlList;
 		List<String> coverImageList;
 
-
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
 
@@ -129,7 +126,7 @@ public class MusicService {
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
 			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
-			musicContainerList.get(i).setGenreSeq(0);
+			musicContainerList.get(i).setGenreSeq(null);
 		}
 
 		return musicContainerList;
@@ -283,7 +280,4 @@ public class MusicService {
 		return responseDto;
 	}
 	
-	public List<Preset> findAllPreset() {
-		return presetRepository.findAll();
-	}
 }

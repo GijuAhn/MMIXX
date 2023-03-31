@@ -12,7 +12,7 @@ const instance =  axios.create({
 instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('auth')}`
 
 export const handleLogout = async () => {
-  return await instance.post({
+  return await instance({
     url: `/logout`
   })
 }
