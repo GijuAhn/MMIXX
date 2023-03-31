@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { countMusic } from "api/mymusic";
 import styled, { keyframes } from "styled-components";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "atom/atom";
 
 const MusicCount = () => {
+  const atomUser = useRecoilValue(userInfo);
+  const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
   const [allCnt, setAllCnt] = useState(0);
   const [mixedCnt, setMixedCnt] = useState(0);
   const [instCnt, setInstCnt] = useState(0);
 
   useEffect(() => {
-    countMusic({ userSeq: 1 }).then(({ data }) => {
+    countMusic({ userSeq: user ? user.userSeq : 0 }).then(({ data }) => {
       setAllCnt(data.allCnt);
       setMixedCnt(data.mixedCnt);
       setInstCnt(data.instCnt);
