@@ -10,7 +10,7 @@ export const getPlaylists = async () => {
 }
 
 export const getPlaylistDetail = async ( playlistSeq ) => {
-  return await instance(`/playlist/${playlistSeq}`)
+  return await instance(`/music/${playlistSeq}`)
 }
 
 export const postPlaylist = async ( playlist ) => {
