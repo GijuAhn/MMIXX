@@ -21,7 +21,7 @@ const MixResult = () => {
     musicMix(musicSeq, presetSeq).then(
       response => setResult(response.data)
     ).catch( error => console.log(error))
-  }, [])
+  }, [musicSeq, presetSeq])
   return (
     <ResultWrapper>
       <Header 
