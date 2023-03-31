@@ -48,15 +48,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
-//        response.sendRedirect(targetUrl);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        response.sendRedirect(targetUrl);
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response
             , Authentication authentication) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        String targetUrl = "/login/success";
+//        log.info("**** path : {}", request.getScheme() + "://" + request.getServerName());
+//        String targetUrl = request.getScheme() + "://" + request.getServerName() +":3000/login/success";
+        String targetUrl = request.getScheme() + "://" + request.getServerName() + "/login/success";
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
