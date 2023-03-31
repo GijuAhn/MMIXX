@@ -82,7 +82,10 @@ const CustomTable = ({
       // console.log("deletedIndex", deletedIndex);
       if (deletedIndex === -1) {
         // console.log("추가!");
-        checkedList.current.push({ musicSeq: newMusicSeq });
+        checkedList.current.push({
+          musicSeq: newMusicSeq,
+          sequence: newMusicSeq,
+        });
       } else {
         // console.log("삭제!");
         checkedList.current.splice(deletedIndex, 1);

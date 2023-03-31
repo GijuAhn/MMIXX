@@ -57,10 +57,6 @@ const MyMusic = () => {
       <MusicList radio={true} checkRadio={setSelectedRadio}></MusicList> */}
 
       {/* [Test] 여러 곡 선택하기 (check box) */}
-      {/* {checkedList &&
-        checkedList.map((item) => (
-          <div key={item.musicSeq}>{item.musicSeq}</div>
-        ))} */}
       <button onClick={() => console.log(checkedList)}>추가하기</button>
       <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList>
     </Wrapper>
