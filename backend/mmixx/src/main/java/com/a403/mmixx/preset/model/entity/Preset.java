@@ -1,4 +1,4 @@
-package com.a403.mmixx.music.model.entity;
+package com.a403.mmixx.preset.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,10 +17,16 @@ public class Preset {
     private Integer presetSeq;
     @Column(length = 100, nullable = false)
     private String presetName;
+    @Column(length = 100)
+    private String musicName;
+    @Column()
+    private int musicLength;
+    @Column(length = 100)
+    private String musicianName;
+    @Column(length = 100)
+    private String albumName;
     @Column(length = 500, nullable = false)
     private String presetUrl;
     @Column(length = 500, nullable = false)
     private String coverImage;
-    @Column(nullable = false)
-    private int musicLength;
 }

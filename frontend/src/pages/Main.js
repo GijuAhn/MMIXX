@@ -9,7 +9,7 @@ const Main = () => {
 
   useEffect(() => {
     AOS.init()
-  })
+  }, [])
 
   return (
     <StyleWrapper>
@@ -65,7 +65,7 @@ const StyleWrapper = styled(Wrapper)`
 `
 
 const First = styled.div`
-  font-size: 100px;
+  font-size: 3rem;
   font-weight: 900;
   text-align: center;
 `

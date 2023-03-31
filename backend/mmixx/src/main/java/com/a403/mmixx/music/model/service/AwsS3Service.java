@@ -51,7 +51,7 @@ public class AwsS3Service {
 
 	private final AmazonS3 amazonS3;
 	private final MusicRepository musicRepository;
-	private final String MUSIC_FOLDER = "/music/";
+	private final String MUSIC_FOLDER = "/music";
 	private final String IMAGE_FOLDER = "/images";
 
 	public ResponseEntity<byte[]> downloadMusic(int music_seq) throws IOException {
@@ -143,7 +143,10 @@ public class AwsS3Service {
 
 	public void deleteMusic(String fileName) {
 		// amazonS3.deleteObject(bucket, fileName);
-		amazonS3.deleteObject(new DeleteObjectRequest(bucket + MUSIC_FOLDER, fileName));
+		System.out.println("AWS S3 filename : " + fileName);
+		amazonS3.deleteObject(new DeleteObjectRequest(bucket, "music/" + fileName));
+		
+//		amazonS3.deleteObject(new DeleteObjectRequest(bucket + "/music", fileName));
 	}
 
 

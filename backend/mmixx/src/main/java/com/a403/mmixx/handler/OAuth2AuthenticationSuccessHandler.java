@@ -10,6 +10,7 @@ import com.a403.mmixx.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -30,14 +31,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private static final String REFRESH_TOKEN = "refresh-token";
     private static final String AUTH = "Authorization";
     private static final int REFRESH_PERIOD = 60 * 60 * 24 * 14;
+    @Value("${mmixx.server}")
+    private String SERVER_URL;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
             , Authentication authentication) throws IOException {
-        // 기존에 쿠키에 저장된 토근이 있을 경우 삭제
-        if(CookieUtils.getCookie(request, REFRESH_TOKEN) != null) {
-            CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
-        }
+//        // 기존에 쿠키에 저장된 토근이 있을 경우 삭제
+//        if(CookieUtils.getCookie(request, REFRESH_TOKEN) != null) {
+//            CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
+//        }
+
 
         // redirect 할 url을 지정해준다
         String targetUrl = determineTargetUrl(request, response, authentication);
@@ -47,7 +51,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
-//        response.sendRedirect(targetUrl);
+        response.sendRedirect(targetUrl);
 //        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -55,7 +59,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             , Authentication authentication) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        String targetUrl = request.getContextPath() + "/";
+//        log.info("**** path : {}", request.getScheme() + "://" + request.getServerName());
+//        String targetUrl = request.getScheme() + "://" + request.getServerName() +":3000/login/success";
+//        String targetUrl = request.getRequestURL().toString()
+//                .replace(request.getRequestURI(),"");
+
+        String targetUrl = "http://" + request.getServerName();
+        if(request.getServerName().toString().indexOf(SERVER_URL) > -1) targetUrl += "/login/success";
+        else targetUrl += ":3000/login/success";
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
@@ -66,7 +77,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         response.setHeader(AUTH, accessJwt);
         response.setHeader(REFRESH_TOKEN, refreshJwt);
-        CookieUtils.addCookie(response,REFRESH_TOKEN, refreshJwt, REFRESH_PERIOD);
+//        CookieUtils.addCookie(response,REFRESH_TOKEN, refreshJwt, REFRESH_PERIOD);
 
         user.tokenUpdate(refreshJwt);
         userRepository.save(user);
@@ -80,6 +91,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .profileImageUrl(user.getProfileImageUrl())
                         .userName(user.getUserName())
                         .build())
+                .playListCnt(0)
+                .uploadCnt(0)
+                .mixCnt(0)
                 .build();
 
         try{
@@ -91,7 +105,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-//                .queryParam("access-token", accessJwt)
+                .queryParam("token", accessJwt)
+                .queryParam("no", user.getUserSeq())
                 .build().toUriString();
     }
 

@@ -2,15 +2,33 @@ import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
 
-// export const isLogin = atom({
-//   key: 'isLogin',
-//   default: false,
-// })
+const localStorageEffect = key => ({setSelf, onSet}) => {
+  const savedValue = localStorage.getItem(key)
+  if (savedValue != null) {
+    setSelf(JSON.parse(savedValue));
+  }
+
+  onSet((newValue, _, isReset) => {
+    isReset
+      ? localStorage.removeItem(key)
+      : localStorage.setItem(key, JSON.stringify(newValue));
+  });
+};
+
+export const isLogIn = atom({
+  key: 'isLogIn',
+  default: false,//localStorage.getItem('isLogin')==true ? true : false,
+  effects: [
+    localStorageEffect('isLogin')
+  ]
+})
 
 export const userInfo = atom({
   key: 'userInfo',
-  default: null,
-  name: 'John Smith'
+  default: null,//localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
+  effects: [
+    localStorageEffect('user')
+  ]
 })
 
 export const testPlaylist = atom({

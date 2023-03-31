@@ -11,3 +11,9 @@ export const removeUser = async ( userSeq ) => {
     url: `/user/${userSeq}`
   })
 }
+
+export const logoutUser = async ( ) => {
+  return await instance.post({
+    url: `/logout`
+  })
+}
