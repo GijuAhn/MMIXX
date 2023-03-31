@@ -56,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             , Authentication authentication) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        String targetUrl = "http://localhost:3000/login/success";
+        String targetUrl = "/login/success";
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();
