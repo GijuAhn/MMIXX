@@ -34,13 +34,13 @@ const NavBar = () => {
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    // if (!isLogin) window.location.href = "http://localhost:5555/api/user/login";
-    if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
+    if (!isLogin) window.location.href = "http://localhost:5555/api/user/login";
+    // if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
     else {
       handleLogout().then(() => {
         localStorage.clear();
-        console.log("로그아웃");
-        window.location.reload();
+        // console.log("로그아웃");
+        window.location.href = "/";
       })
     }
   };
