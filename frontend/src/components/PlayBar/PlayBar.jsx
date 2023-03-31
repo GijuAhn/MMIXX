@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
 
-import { PlayIcons } from 'components/PlayBar';
 import { useRecoilValue } from 'recoil';
 import { testPlaylistMusic } from 'atom/atom';
 import VolumeControl from './VolumeControl'
@@ -28,7 +27,7 @@ const PlayBar = () => {
           <p>{musicianName}</p>
         </MusicInfo>
       </PlayMusicInfo>
-      <PlayControl />
+      <PlayControl style={{ border: '1px solid red'}}/>
       <VolumeWrapper>
         <VolumeControl />
       </VolumeWrapper>
@@ -44,10 +43,14 @@ const Wrapper = styled.div`
   left: 200px;
   width: calc(100% - 200px);
   min-width: 1000px;
-  justify-content: space-between;
-  padding-left: 50px;
-  padding-right: 50px;
+  justify-content: space-evenly;
+  padding-left: 30px;
+  padding-right: 30px;
   border: 1px dotted pink;
+
+  @media (max-width: 768px) {
+    left: 0;
+  }
 `
 
 const PlayMusicInfo = styled.div`
@@ -85,10 +88,6 @@ const MusicInfo = styled.div`
     font-weight: lighter;
     font-size: 12px;
   }
-`
-const PlayCenter = styled.div`
-  flex-direction: column;
-  padding: 0 50px;
 `
 
 const VolumeWrapper = styled.div`

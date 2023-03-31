@@ -5,7 +5,7 @@ import { PlayIcons } from '.'
 const PlayControl = () => {
   return (
     <Wrapper>
-      <PlayIcons />
+      <PlayIcons width="50%"/>
       <PlaySlider />
     </Wrapper>
   )
@@ -13,6 +13,7 @@ const PlayControl = () => {
 
 const Wrapper = styled.div`
   flex-direction: column;
+  width: 700px;
 `
 
 export default PlayControl;

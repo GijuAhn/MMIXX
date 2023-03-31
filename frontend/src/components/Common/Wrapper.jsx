@@ -8,5 +8,9 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   padding-left: 200px;
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+  }
 `
 export default Wrapper;
