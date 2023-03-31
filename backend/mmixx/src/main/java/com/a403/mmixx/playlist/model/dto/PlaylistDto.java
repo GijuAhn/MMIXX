@@ -26,13 +26,15 @@ public class PlaylistDto {
 
     @JsonProperty("user_seq")
     private int userSeq;
+
     @JsonProperty("playlist_music")
     private LinkedList<PlaylistMusicDto> playlistMusic;
 
     public PlaylistDto(Playlist entity) {
         this.playlistName = entity.getPlaylistName();
         this.isPrivate = entity.getIsPrivate();
-        this.userSeq = entity.getUserSeq();
+//        this.userSeq = entity.getUserSeq();
+        this.userSeq = entity.getUser().getUserSeq();
         this.playlistMusic = new LinkedList<>();
     }
 

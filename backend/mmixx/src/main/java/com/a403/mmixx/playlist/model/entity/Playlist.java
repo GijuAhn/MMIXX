@@ -1,6 +1,7 @@
 package com.a403.mmixx.playlist.model.entity;
 
 import com.a403.mmixx.user.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.ArrayExpression;
 import lombok.Getter;
@@ -22,9 +23,11 @@ public class Playlist {
 	@Column(name = "playlist_seq")
 	private Integer playlistSeq;
 
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_seq")
-	private Integer userSeq;
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "user_seq", referencedColumnName = "userSeq", nullable = false)
+	@JsonIgnore
+//	private Integer userSeq;
+	private User user;
 
 	@NotNull
 	@Column(name = "playlist_name")
@@ -34,4 +37,7 @@ public class Playlist {
 	@Column(name = "is_private")
 	private Boolean isPrivate;
 
+	public int getUserSeq() {
+		return user.getUserSeq();
+	}
 }
