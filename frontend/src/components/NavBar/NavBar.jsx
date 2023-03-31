@@ -25,7 +25,7 @@ const NavBar = () => {
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    window.location.href = "/login";
+    window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
   };
 
   return (
@@ -68,7 +68,7 @@ const NavBar = () => {
       :
       <LoginWrapper>
         <DefaultBtn 
-          width="150px">
+          width="150px" onClick={onClickLogin}>
           로그인 하기
         </DefaultBtn>
       </LoginWrapper>
