@@ -6,7 +6,7 @@ import styled from 'styled-components'
 const Template = () => {
   return (
     <Wrapper>
-      <NavBar />
+      <StyledNavBar />
       <Outlet />
       <PlayBar />
     </Wrapper>
@@ -14,7 +14,13 @@ const Template = () => {
 }
 
 const Wrapper = styled.div`
-  display: flex;
+  // display: flex;
+`
+
+const StyledNavBar = styled(NavBar)`
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `
 
 export default Template;

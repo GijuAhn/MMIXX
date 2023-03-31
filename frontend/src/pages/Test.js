@@ -12,10 +12,10 @@ const Test = () => {
     audioElement.play();
   }
 
-  setTimeout(() => {
-    console.log(audioElement.duration)
-    console.log(audioElement.currentTime)
-  }, 1000)
+  // setInterval(() => {
+  //   console.log(audioElement.duration)
+  //   console.log(audioElement.currentTime)
+  // }, 1000)
 
   return (
     <Wrapper>
