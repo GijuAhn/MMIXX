@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { countMusic } from "api/mymusic";
 import styled, { keyframes } from "styled-components";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "atom/atom";
 
 const MusicCount = () => {
+  const atomUser = useRecoilValue(userInfo);
+  const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
   const [allCnt, setAllCnt] = useState(0);
   const [mixedCnt, setMixedCnt] = useState(0);
   const [instCnt, setInstCnt] = useState(0);
 
   useEffect(() => {
-    countMusic({ userSeq: 1 }).then(({ data }) => {
+    countMusic({ userSeq: user ? user.userSeq : 0 }).then(({ data }) => {
       setAllCnt(data.allCnt);
       setMixedCnt(data.mixedCnt);
       setInstCnt(data.instCnt);
@@ -17,28 +22,32 @@ const MusicCount = () => {
 
   return (
     <Table>
-      <Tr>
-        <Td>내가 업로드한 곡</Td>
-        <Cnt>{allCnt}</Cnt>
-      </Tr>
-      <Tr>
-        <Td>내가 믹스한 곡</Td>
-        <Cnt>{mixedCnt}</Cnt>
-      </Tr>
-      <Tr>
-        <Td>내가 추출한 Inst??...?</Td>
-        <Cnt>{instCnt}</Cnt>
-      </Tr>
+      <tbody>
+        <Tr>
+          <Td>내가 업로드한 곡</Td>
+          <Cnt>{allCnt}</Cnt>
+        </Tr>
+        <Tr>
+          <Td>내가 믹스한 곡</Td>
+          <Cnt>{mixedCnt}</Cnt>
+        </Tr>
+        <Tr>
+          <Td>내가 추출한 Inst??...?</Td>
+          <Cnt>{instCnt}</Cnt>
+        </Tr>
+      </tbody>
     </Table>
   );
 };
 
 const fadeIn = keyframes`
   from {
-    opacity: 0
+    opacity: 0;
+    transform: translateY(-5%);
   }
   to {
-    opacity: 1
+    opacity: 1;
+    transform: translateY(0);
   }
 `;
 
