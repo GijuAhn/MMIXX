@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
 
@@ -21,13 +21,6 @@ export const isLogIn = atom({
   effects: [
     localStorageEffect('isLogin')
   ]
-})
-
-export const test = selector({
-  key: 'test',
-  get: ({ get }) => {
-    return get(isLogIn)
-  }
 })
 
 export const userInfo = atom({

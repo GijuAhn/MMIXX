@@ -13,6 +13,7 @@ const PlaylistCreate = () => {
   useEffect(() => {
     inputRef.current.select()
     inputRef.current.focus()
+    console.log(inputRef.current.value)
   })
 
   return (
@@ -36,7 +37,12 @@ const PlaylistCreate = () => {
             </InputPrivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select")}>
+            <AddMusicBtn onClick={() => navigate("/playlist/select", {
+              state : {
+                playlistTitle: inputRef.current.value,
+                isPrivate: false,
+              } 
+              })}>
               곡 추가
             </AddMusicBtn>
           </Bottom>

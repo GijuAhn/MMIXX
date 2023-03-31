@@ -1,15 +1,21 @@
 import { Wrapper } from 'components/Common';
-// import styled from 'styled-components'
-// import Retro from 'assets/music/NewJeans-Retro.mp3';
+import styled from 'styled-components'
+import { useRecoilState } from 'recoil';
+
 import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3';
+import { nowPlaying } from 'atom/music';
 
 const Test = () => {
-  // const audioElement = new Audio("https://ipaudio3.club/wp-content/uploads/HARFREE/Dale%2001%20-%20Sorcerer's%20Stone/Chapter%2001%20-%20The%20Boy%20Who%20Lived.mp3?_=1")
   const audioElement = new Audio(Remix)
-  // const audioElement = new Audio("https://www.youtube.com/watch?v=jT0Lh-N3TSg")
-  
+  const [ atomTest, setAtomTest ] = useRecoilState(nowPlaying)
+
   const playAudio = () => {
     audioElement.play();
+  }
+  
+  const changeAtomValueTest = () => {
+    setAtomTest(atomTest + 1)
+    console.log(atomTest) 
   }
 
   // setInterval(() => {
@@ -18,18 +24,25 @@ const Test = () => {
   // }, 1000)
 
   return (
-    <Wrapper>
+    <Wrapper style={{ backgroundImage: "url('https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80')"}}>
       <button style={{ color: 'red'}} onClick={() => playAudio()}>
         {Remix}
       </button>
+      <button onClick={changeAtomValueTest}>
+        recoil 테스트용 
+      </button>
+      <TestDiv />
     </Wrapper>
   )
 }
 
-// const Audio = styled.audio`
-//   display: block;
-//   background-color: yellow;
-//   border-radius: 3px;
-// `
+const TestDiv = styled.div`
+  position: fixed;
+
+  width: 300px;
+  height: 300px;
+  // border: 1px solid red;
+  backdrop-filter: blur(10px);
+`
 
 export default Test;
