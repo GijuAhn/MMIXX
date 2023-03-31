@@ -7,8 +7,8 @@ import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded';
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
 import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 
-// import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3'
-import Retro from 'assets/music/NewJeans-Retro.mp3'
+import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3'
+// import Retro from 'assets/music/NewJeans-Retro.mp3'
 
 const PlayControl = ({ width, height }) => {
   const [ isPlaying, setIsPlaying ] = useState(false)
@@ -19,6 +19,7 @@ const PlayControl = ({ width, height }) => {
       audioElement.pause()
       setIsPlaying(false)
     } else {
+      audioElement.currentTime = 32
       audioElement.play()
       setIsPlaying(true)
       console.log(isPlaying)
@@ -33,7 +34,7 @@ const PlayControl = ({ width, height }) => {
   // }, 1000)
 
   useEffect(() => {
-    setAudioElement(new Audio(Retro))
+    setAudioElement(new Audio(Remix))
   }, [])
 
   return (

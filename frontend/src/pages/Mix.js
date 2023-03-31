@@ -44,7 +44,6 @@ const Mix = () => {
         desc="음악 믹스하기"  
         />
       <Music>
-        <button>노래 정지시키기</button>
         { musicSelected && (<DefaultBtn
           onClick={ () => navigate('/playlist/select') }
           >

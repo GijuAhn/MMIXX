@@ -23,19 +23,17 @@ export const isLogIn = atom({
   ]
 })
 
-export const test = selector({
-  key: 'test',
-  get: ({ get }) => {
-    return get(isLogIn)
-  }
-})
-
 export const userInfo = atom({
   key: 'userInfo',
   default: null,//localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
   effects: [
     localStorageEffect('user')
   ]
+})
+
+export const nowPlaying = atom({
+  key: 'nowPlaying',
+  default: 11
 })
 
 export const testPlaylist = atom({
