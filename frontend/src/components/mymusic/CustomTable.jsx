@@ -5,13 +5,76 @@ import Mix from "./MusicMixIcon";
 import Extract from "./MusicExtractIcon";
 import Download from "./MusicDownloadIcon";
 
-const CustomTable = ({ musicList, hasIcon = true }) => {
+import unCheck from "assets/check.png";
+import Check from "assets/check-selected.png";
+import { useRef } from "react";
+
+const CustomTable = ({
+  musicList,
+  hasIcon = true,
+  radio = false,
+  checkRadio,
+}) => {
+  const musicSeq = useRef(null);
+  const coverImage = useRef(null);
+  const musicName = useRef(null);
+  const musicianName = useRef(null);
+  // const [musicSeqState, setMusicSeqState] = useState(-1);
+
+  const onCheck = (event) => {
+    musicSeq.current =
+      event.target.attributes.getNamedItem("seq") === null
+        ? null
+        : event.target.attributes.getNamedItem("seq").value;
+    coverImage.current =
+      event.target.attributes.getNamedItem("cover") === null
+        ? null
+        : event.target.attributes.getNamedItem("cover").value;
+    musicName.current =
+      event.target.attributes.getNamedItem("title") === null
+        ? null
+        : event.target.attributes.getNamedItem("title").value;
+    musicianName.current =
+      event.target.attributes.getNamedItem("musician") === null
+        ? null
+        : event.target.attributes.getNamedItem("musician").value;
+
+    // setMusicSeqState(musicSeq.current);
+
+    // console.log(
+    //   musicSeq.current,
+    //   coverImage.current,
+    //   musicName.current,
+    //   musicianName.current
+    // );
+
+    checkRadio({
+      musicSeq: musicSeq.current,
+      coverImage: coverImage.current,
+      musicName: musicName.current,
+      musicianName: musicianName.current,
+    });
+  };
   return (
     <Table>
       <tbody>
         {musicList.map((music) => (
           <Tr key={music.musicSeq}>
-            <Td>
+            {radio ? (
+              <Radio>
+                <img
+                  onClick={onCheck}
+                  seq={music.musicSeq}
+                  cover={music.coverImage}
+                  title={music.musicName}
+                  musician={music.musicianName}
+                  src={musicSeq.current == music.musicSeq ? Check : unCheck}
+                  alt=''
+                  width='23'
+                />
+              </Radio>
+            ) : null}
+            <TdRound>
               <CoverImage
                 coverImage={
                   music.coverImage === null
@@ -19,8 +82,8 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
                     : music.coverImage
                 }
               ></CoverImage>
-            </Td>
-            <Td weight="400">
+            </TdRound>
+            <Td weight='400'>
               {/* {music.mixed !== null ? "M" : music.edited !== null ? "Ⅰ" : null} */}
               M i I Inst. inst. Ⅰ
             </Td>
@@ -48,12 +111,12 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
                 "0"
               )}
             </Td>
-            {hasIcon ? (
+            {!radio ? (
               <Td>
                 <Play musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {hasIcon ? (
+            {!radio ? (
               <Td>
                 <Mix
                   musicSeq={music.musicSeq}
@@ -66,12 +129,12 @@ const CustomTable = ({ musicList, hasIcon = true }) => {
                 ></Mix>
               </Td>
             ) : null}
-            {hasIcon ? (
+            {!radio ? (
               <Td>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {hasIcon ? (
+            {!radio ? (
               <Td>
                 <Download musicSeq={music.musicSeq}></Download>
               </Td>
@@ -113,14 +176,24 @@ const Tr = styled.tr`
   // font-family: "Heebo", sans-serif;
 `;
 
+const Radio = styled.td`
+  background-color: ${({ theme }) => theme.palette.darkAlt};
+`;
+
+const TdRound = styled.td`
+  // background-color: green;
+  border-radius: 15px 0 0 15px;
+`;
+
 const Td = styled.td`
+  // background-color: green;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;
-  &:first-child {
-    border-radius: 15px 0 0 15px;
-    // margin-left: 10px;
-  }
+  // &:first-child {
+  //   border-radius: 15px 0 0 15px;
+  //   // margin-left: 10px;
+  // }
   &:last-child {
     border-radius: 0 15px 15px 0;
   }

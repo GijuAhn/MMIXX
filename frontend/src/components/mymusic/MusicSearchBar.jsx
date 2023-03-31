@@ -31,17 +31,17 @@ const MusicSearchBar = ({ setQuery }) => {
   };
   return (
     <Form onSubmit={onSubmit} focus={focus}>
-      <img src={searchIcon} alt="" width="14"></img>
+      <img src={searchIcon} alt='' width='14'></img>
       <Input
         onFocus={onFocus}
         onBlur={onBlur}
-        type="text"
+        type='text'
         value={input}
         onChange={onChange}
-        placeholder="곡 제목으로 검색"
+        placeholder='곡 제목으로 검색'
       />
-      <IconBtn type="button" onClick={resetInput} show={show}>
-        <img src={xIcon} alt="" width="10"></img>
+      <IconBtn type='button' onClick={resetInput} show={show}>
+        <img src={xIcon} alt='' width='10'></img>
       </IconBtn>
     </Form>
   );
@@ -63,6 +63,7 @@ const Form = styled.form`
   display: flex;
   align-items: center;
   width: 400px;
+  transition: all 0.1s ease-in-out;
 `;
 
 const Input = styled.input`
