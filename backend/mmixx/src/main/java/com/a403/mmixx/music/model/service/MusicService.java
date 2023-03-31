@@ -127,7 +127,7 @@ public class MusicService {
 		for (int i = 0; i < musicContainerList.size(); i++) {
 			musicContainerList.get(i).setMusicUrl(musicUrlList.get(i));
 			musicContainerList.get(i).setCoverImage(coverImageList.get(i));
-			musicContainerList.get(i).setGenreSeq(0);
+			musicContainerList.get(i).setGenreSeq(null);
 		}
 
 		return musicContainerList;
