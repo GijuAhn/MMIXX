@@ -10,7 +10,4 @@ public interface GenreRepository extends JpaRepository<Genre, Integer> {
     /* 장르 조회 */
     List<Genre> findAllByGenreCategory(Integer genreCategory);
 
-    /* 프리셋 조회 */
-    Preset1 findByGenreSeq(Integer seq);
-
 }//GenreRepository
