@@ -8,7 +8,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: start;
   margin-left: 200px;
-  border: 1px solid aqua;
   
   @media (max-width: 768px) {
     margin-left: 0;

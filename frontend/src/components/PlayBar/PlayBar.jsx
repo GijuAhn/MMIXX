@@ -36,22 +36,35 @@ const PlayBar = () => {
 };
 
 const Wrapper = styled.div`
-  height: 100px;
+  backdrop-filter: blur(10px);
   position: fixed;
-  float: right;
   bottom: 0;
   left: 200px;
   width: calc(100% - 200px);
   min-width: 1000px;
   justify-content: space-evenly;
-  padding-left: 30px;
-  padding-right: 30px;
-  border: 1px dotted pink;
-
-  @media (max-width: 768px) {
-    left: 0;
-  }
+  padding: 10px 30px;
+  background-color: ${({theme}) => theme.palette.darkgray};
 `
+
+// const Wrapper = styled.div`
+//   height: 100px;
+//   position: fixed;
+//   bottom: 0;
+//   left: 200px;
+//   width: calc(100% - 200px);
+//   min-width: 1000px;
+//   justify-content: space-evenly;
+//   padding-left: 30px;
+//   padding-right: 30px;
+//   border: 1px dotted pink;
+
+//   backdrop-filter: blur(10px);
+
+//   @media (max-width: 768px) {
+//     left: 0;
+//   }
+// `
 
 const PlayMusicInfo = styled.div`
   width: 200px;

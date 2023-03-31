@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
 
@@ -29,11 +29,6 @@ export const userInfo = atom({
   effects: [
     localStorageEffect('user')
   ]
-})
-
-export const nowPlaying = atom({
-  key: 'nowPlaying',
-  default: 11
 })
 
 export const testPlaylist = atom({

@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
-export const testPlaying = atom({
-  key: 'testPlaying',
-  default: 11
+export const nowPlaying = atom({
+  key: 'nowPlaying',
+  default: null,
 })

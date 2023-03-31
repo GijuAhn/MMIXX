@@ -24,6 +24,8 @@ const PlayControl = ({ width, height }) => {
       setIsPlaying(true)
       console.log(isPlaying)
       // audioElement.currentTime(30)
+      audioElement.volume = 1
+      console.log(audioElement.volume)
     }
   }
 
