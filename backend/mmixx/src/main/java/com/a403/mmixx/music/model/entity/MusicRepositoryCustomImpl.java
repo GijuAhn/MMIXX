@@ -28,11 +28,12 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public Page<MusicListResponseDto> getMusicListByCondition(MusicCondition condition, Pageable pageable) {
+	public Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable) {
+		
 		List<MusicListResponseDto> content = queryFactory
 			.select(new QMusicListResponseDto(music))
 			.from(music)
-			.where(musicNameContains(condition.getQuery()), musicMixedIs(condition.getFilter()))
+			.where(musicUser(user_seq), musicNameContains(condition.getQuery()), musicMixedIs(condition.getFilter()))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy(orderByCondition(condition.getOrder()))
@@ -48,12 +49,16 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 		return new PageImpl<>(content, pageable, resultCount);
 	}
 
+	private BooleanExpression musicUser(Integer user_seq) {
+		return music.userSeq.eq(user_seq);
+	}
+
 	private BooleanExpression musicNameContains(String query) {
 		return ((query == null) || (query.length() == 0)) ? null : music.musicName.contains(query);
 	}
 
 	private BooleanExpression musicMixedIs(String filter) {
-
+		
 		if(filter == null || filter.length() == 0){ // isEmpty(filter)
 			return null;
 		}
@@ -61,9 +66,13 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 		if(filter.equals("mix")) {
 			return music.mixed.isNotNull();
 		}
+		
+		if(filter.equals("inst")) {
+			return music.inst.isNotNull();
+		}
 
 		if(filter.equals("origin")) {
-			return music.mixed.isNull();
+			return music.inst.isNull().and(music.mixed.isNull());
 		}
 
 		return null;

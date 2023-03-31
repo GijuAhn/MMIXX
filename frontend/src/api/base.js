@@ -1,17 +1,19 @@
 import axios from 'axios'
 
 const instance =  axios.create({
-  // baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
+  // baseURL: 'http://j8a403.p.ssafy.io/api',
+  // baseURL: 'http://localhost:5555/api', // 로컬 테스트
   // headers: {
-  //   'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //   'Authorization': `Bearer ${localStorage.getItem('auth')}`
   // }
 })
 
-instance.defaults.headers.common['Authorization'] = 'token';
+instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('auth')}`
 
-export const handleLogin = async () => {
+export const handleLogout = async () => {
   return await instance({
-    url: '/api/oauth2/authorization/google?access_type=offline&prompt=consent'
+    url: `/logout`
   })
 }
 
