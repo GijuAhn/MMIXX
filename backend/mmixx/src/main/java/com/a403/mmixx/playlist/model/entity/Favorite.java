@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import com.a403.mmixx.user.model.entity.User;
+
 @Entity
 @Getter
 @Setter
@@ -18,20 +20,17 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "favorite_seq")
     private int favoriteSeq;
-    @Column(nullable = false)
-    private int userSeq;
-    @Column(nullable = false)
-    private int playlistSeq;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userSeq")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlistSeq")
+    private Playlist playlist;
     
-    public Favorite(int userSeq, int playlistSeq) {
-    	this.userSeq = userSeq;
-    	this.playlistSeq = playlistSeq;
+    public Favorite(User user, Playlist playlist) {
+    	this.user = user;
+    	this.playlist = playlist;
     }
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_seq")
-//    private User user;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "playlist_seq")
-//    private Playlist playlist;
 }
