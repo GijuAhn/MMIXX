@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { countMusic } from "api/mymusic";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const MusicCount = () => {
   const [allCnt, setAllCnt] = useState(0);
@@ -33,11 +33,25 @@ const MusicCount = () => {
   );
 };
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`;
+
 const Table = styled.table`
   position: absolute;
   top: 390px;
   width: 75%;
   // border: 1px dotted red;
+
+  animation-duration: 0.15s;
+  animation-timing-function: ease-out;
+  animation-name: ${fadeIn};
+  animation-fill-mode: forwards;
 `;
 
 const Tr = styled.tr`
