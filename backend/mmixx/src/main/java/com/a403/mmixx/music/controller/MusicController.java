@@ -3,17 +3,11 @@ package com.a403.mmixx.music.controller;
 import java.io.IOException;
 import java.util.List;
 
-import com.amazonaws.http.apache.request.impl.HttpGetWithBody;
-import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.a403.mmixx.music.model.dto.MusicCondition;
@@ -32,8 +26,6 @@ import com.a403.mmixx.music.model.service.MusicService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Api(tags = {"음악", "api"})
 @RestController
@@ -130,9 +122,4 @@ public class MusicController {
 		return ResponseEntity.ok(responseDto);
 	}
 	
-	@ApiOperation(value = "프리셋 전체 조회")
-	@GetMapping("/preset")
-	public ResponseEntity<?> findAllPreset() {
-		return ResponseEntity.ok(musicService.findAllPreset());
-	}
 }
