@@ -139,7 +139,7 @@ public class MusicService {
 		int preset_seq = requestDto.getPreset_seq();
 		log.info("music_seq : " + music_seq);
 		log.info("preset_seq : " + preset_seq);
-		
+
 		Music music = musicRepository.findById(music_seq).orElse(null);
 		Preset preset = presetRepository.findById(preset_seq).orElse(null);
 
@@ -147,7 +147,7 @@ public class MusicService {
 		String preset_path = preset.getPresetUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
 		log.info("music_path : " + music_path);
 		log.info("preset_path : " + preset_path);
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 		String response = "";
 
@@ -174,15 +174,15 @@ public class MusicService {
 				return null;
 			}
 		}
-		
+
 		log.info("***** Music Mix DB 저장 *****");
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
 		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
 		log.info("new_music_path : " + new_music_path);
 		log.info("new_music_name : " + new_music_name);
-		
+
 		Music new_music = new Music();
-		
+
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
 		new_music.setInst(null);
@@ -194,25 +194,25 @@ public class MusicService {
 		new_music.setMusicianName(music.getMusicianName());
 		new_music.setUserSeq(music.getUserSeq());
 		new_music.setPresetSeq(music.getPresetSeq());
-		
+
 		musicRepository.save(new_music);
-		
+
 //		String result = "{ \"music_url\" : \"" + music.getMusicUrl() + "\", \"mixed_music_url\" : \"" + new_music.getMusicUrl() + "\"}";
 		MusicMixResponseDto responseDto = new MusicMixResponseDto(music.getMusicUrl(), new_music.getMusicUrl(), music, new_music);
 		return responseDto;
 	}
-	
+
 	@Transactional
 	public MusicSplitResponseDto splitMusic(Integer music_seq) {
 		Music music = musicRepository.findById(music_seq).orElse(null);
-		if(music != null) {			
+		if(music != null) {
 			RestTemplate restTemplate = new RestTemplate();
 			String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
 			String response = "";
 
 			String url = "https://j8a403.p.ssafy.io/django/api/mix/inst";
 			String data = "{ \"music_path\" : \"" + music_path + "\"}";
-			
+
 			try {
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_JSON);
@@ -234,7 +234,7 @@ public class MusicService {
 					response = "API Fail";
 				}
 			}
-			
+
 			String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
 			String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
 			System.out.println("format : " + format);
@@ -246,9 +246,9 @@ public class MusicService {
 			}
 			System.out.println("new_music_path : " + new_music_path);
 			System.out.println("new_music_name : " + new_music_name);
-			
+
 			Music new_music = new Music();
-			
+
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
 			new_music.setInst(music.getMusicSeq());
@@ -260,24 +260,24 @@ public class MusicService {
 			new_music.setMusicianName(music.getMusicianName());
 			new_music.setUserSeq(music.getUserSeq());
 			new_music.setPresetSeq(music.getPresetSeq());
-			
+
 			musicRepository.save(new_music);
-			
+
 			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music_path);
 			return responseDto;
 		} else {
 			return null;
 		}
 	}
-	
+
 	public MusicCountResponseDto countMusic(Integer user_seq) {
 		int allCnt = musicRepository.countByUserSeq(user_seq);
 		int originCnt = musicRepository.countByUserSeqAndMixedNullAndInstNull(user_seq);
 		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
 		int instCnt = musicRepository.countByUserSeqAndInstNotNullAndInstGreaterThan(user_seq, 0);
-		
+
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;
 	}
-	
+
 }
