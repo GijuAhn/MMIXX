@@ -1,25 +1,41 @@
 package com.a403.mmixx.playlist.model.dto;
 
-import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.entity.Music;
+import com.a403.mmixx.music.model.service.MusicService;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonObject;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PlaylistMusicDto {
+
+    @JsonProperty("playlist_seq")
+    private int playlistSeq;
+
+    @JsonProperty("music_seq")
     private int musicSeq;
+
+    @JsonProperty("sequence")
     private int sequence;
-    private Music music;
 
     @Builder
     public PlaylistMusicDto(PlaylistMusic entity){
-        this.musicSeq = entity.getMusic().getMusicSeq();
+        this.playlistSeq = entity.getPlaylistSeq();
+        this.musicSeq = entity.getMusicSeq();
+//        this.musicSeq = entity.getMusic().getMusicSeq();
         this.sequence = entity.getSequence();
-        this.music = entity.getMusic();
     }
+
+    public PlaylistMusicDto(JsonObject playlistMusicJsonObject) {
+        this.playlistSeq = playlistMusicJsonObject.get("playlist_seq").getAsInt();
+        this.musicSeq = playlistMusicJsonObject.get("music_seq").getAsInt();
+        this.sequence = playlistMusicJsonObject.get("sequence").getAsInt();
+    }
+
 }
