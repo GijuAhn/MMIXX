@@ -6,7 +6,7 @@ import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
 import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 
 import { DefaultBtn, PlainBtn } from 'components/Common'
-import logo from 'assets/logo.png'
+// import logo from 'assets/logo.png'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
@@ -43,8 +43,8 @@ const NavBar = () => {
             sx={{ width: 80, height: 80 }}
             referrerPolicy='no-referrer'
           />  
-          {/* <p>{user ? user.userName : '사람 이름'}</p> */}
-          <p>사람 이름</p>
+          <p>{user ? user.userName : '사람 이름'}</p>
+          {/* <p>사람 이름</p> */}
         </NavProfile>
         {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavMenu />
