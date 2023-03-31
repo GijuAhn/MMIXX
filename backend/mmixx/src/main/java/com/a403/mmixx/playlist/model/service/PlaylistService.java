@@ -1,5 +1,6 @@
 package com.a403.mmixx.playlist.model.service;
 
+import com.a403.mmixx.playlist.model.dto.FavoriteRequestDto;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
@@ -7,6 +8,9 @@ import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.a403.mmixx.playlist.model.dto.PlaylistDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDetailResponseDtoForRetrieve;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
+
+import com.a403.mmixx.playlist.model.entity.Favorite;
+import com.a403.mmixx.playlist.model.entity.FavoriteRepository;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDtoForAddMusic;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
@@ -39,6 +43,9 @@ public class PlaylistService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FavoriteRepository favoriteRepository;
 
     //  JSON from Frontend - Example
     /*
@@ -252,4 +259,35 @@ public class PlaylistService {
         log.info("Delete Playlist... DONE");
     }
 
+//    public String getCoverImage(int seq) {
+//        return "";
+//    }
+
+    @Transactional
+    public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
+    	Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+    	if(favo == null) {
+//    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+    		Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
+        	favoriteRepository.save(favorite);
+        	return "SUCCESS";
+    	} else {
+    		return "EXIST";
+    	}
+    }
+
+    @Transactional
+    public String deleteFavorite(int user_seq, int playlist_seq) {
+    	try {
+    		log.info("****** Favorite DB Delete Start ******");
+    		favoriteRepository.deleteByUser_UserSeqAndPlaylist_PlaylistSeq(user_seq, playlist_seq);
+    		log.info("****** Favorite DB Delete End ******");
+    	} catch(Exception e) {
+    		System.out.println(e);
+    		e.printStackTrace();
+    		return "FAIL";
+    	}
+    	log.info("****** Favorite DB Delete SUCCESS ******");
+    	return "SUCCESS";
+    }
 }

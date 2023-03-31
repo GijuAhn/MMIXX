@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.ArrayExpression;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "playlist")
 public class Playlist {
 	@Id
@@ -37,6 +39,12 @@ public class Playlist {
 	@Column(name = "is_private")
 	private Boolean isPrivate;
 
+	@OneToMany(mappedBy = "playlist")
+	private List<PlaylistMusic> playlistMusics;
+
+	public Playlist(int playlistSeq) {
+		this.playlistSeq = playlistSeq;
+	}
 	public int getUserSeq() {
 		return user.getUserSeq();
 	}

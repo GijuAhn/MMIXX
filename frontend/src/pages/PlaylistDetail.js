@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 import { useRecoilValue } from 'recoil'
@@ -12,10 +12,10 @@ import { getPlaylistDetail } from "api/playlist"
 
 const PlaylistDetail = () => {
   const navigate = useNavigate()
+  const { playlistSeq } = useParams()
+  const [ data, setData ] = useState(null)
 
-  // 임시 데이터
-  // const location = useLocation()
-  // const playlistSeq = location.pathname.split('/')[2]
+  console.log('params', playlistSeq)
   const { 
     playlistName, 
     playlistMusic
@@ -23,7 +23,13 @@ const PlaylistDetail = () => {
   const [coverImage, setCoverImage] = useState(null)
 
   useEffect(() => {
-    getPlaylistDetail()
+    getPlaylistDetail(playlistSeq)
+      .then(res => {
+        setData(res.data)
+        return res.data
+      })
+      .then(res => console.log(res))
+
   }, [])
 
   useEffect(() => {
@@ -31,7 +37,7 @@ const PlaylistDetail = () => {
   }, [playlistMusic])
 
   return (
-    <StyleWrapper url="">
+    <StyleWrapper url={coverImage}>
       <Header 
         title="플레이리스트 상세 보기"
         desc=""

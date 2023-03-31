@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+//@CrossOrigin(origins = "http://localhost:3000", exposedHeaders = "Authorization")
 @Api(tags = {"회원", "api"})
 @RestController
 @RequestMapping("/user")
@@ -21,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class UserController {
     private final UserService userService;
-
+    
+    @ApiOperation(value = "회원 로그인", notes = "Google 로그인")
     @GetMapping("/login")
     public void moveLoginUrl(HttpServletRequest request) throws Exception {
         // 구글로그인 창을 띄우고, 로그인 후 리다이렉션

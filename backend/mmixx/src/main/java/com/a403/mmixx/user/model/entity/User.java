@@ -16,15 +16,16 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_seq")
     private Integer userSeq; // 회원 일련번호
 
     @Column(length = 100, nullable = false)
     private String email; // 이메일
 
-    @Column(length = 500, nullable = false)
+    @Column(name = "profile_image_url", length = 500, nullable = false)
     private String profileImageUrl; // 프로필사진 경로
 
-    @Column(length = 100, nullable = false)
+    @Column(name = "user_name", length = 100, nullable = false)
     private String userName; // 이름
 
     @Enumerated(EnumType.STRING)
@@ -40,6 +41,10 @@ public class User {
         this.email = email;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
+    }
+    
+    public User(Integer user_seq) {
+    	this.userSeq = user_seq;
     }
 
     public User update(String userName, String profileImageUrl){

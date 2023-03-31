@@ -15,6 +15,8 @@ const LightOutlineBtn = styled.button`
   // display: flex;
   align-items: center;
 
+  transition: all 0.1s ease-in-out;
+
   &: hover {
     background-color: ${({ theme }) => theme.palette.hover};
     border: 1.6px solid ${({ theme }) => theme.palette.secondary};

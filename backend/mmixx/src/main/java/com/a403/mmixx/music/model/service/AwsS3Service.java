@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.a403.mmixx.music.model.entity.Music;
+import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
@@ -48,15 +50,22 @@ public class AwsS3Service {
 	private String bucket;
 
 	private final AmazonS3 amazonS3;
+	private final MusicRepository musicRepository;
 	private final String MUSIC_FOLDER = "/music";
 	private final String IMAGE_FOLDER = "/images";
 
-	public ResponseEntity<byte[]> downloadMusic(String fileName) throws IOException {
-		S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucket + MUSIC_FOLDER, fileName));
+	public ResponseEntity<byte[]> downloadMusic(int music_seq) throws IOException {
+		Music music = musicRepository.findById(music_seq).orElse(null);
+		log.info("music name : " + music.getMusicName());
+
+		String music_url = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+		log.info("music_url : " + music_url);
+
+		S3Object s3Object = amazonS3.getObject(new GetObjectRequest(bucket, music_url));
 		S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
 		byte[] bytes = IOUtils.toByteArray(objectInputStream);
 
-		String downloadFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+		String downloadFileName = URLEncoder.encode(music.getMusicName(), "UTF-8").replaceAll("\\+", "%20");
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		httpHeaders.setContentLength(bytes.length);
@@ -134,7 +143,10 @@ public class AwsS3Service {
 
 	public void deleteMusic(String fileName) {
 		// amazonS3.deleteObject(bucket, fileName);
-		amazonS3.deleteObject(new DeleteObjectRequest(bucket + MUSIC_FOLDER, fileName));
+		System.out.println("AWS S3 filename : " + fileName);
+		amazonS3.deleteObject(new DeleteObjectRequest(bucket, "music/" + fileName));
+		
+//		amazonS3.deleteObject(new DeleteObjectRequest(bucket + "/music", fileName));
 	}
 
 
