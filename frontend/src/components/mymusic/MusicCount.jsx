@@ -17,28 +17,32 @@ const MusicCount = () => {
 
   return (
     <Table>
-      <Tr>
-        <Td>내가 업로드한 곡</Td>
-        <Cnt>{allCnt}</Cnt>
-      </Tr>
-      <Tr>
-        <Td>내가 믹스한 곡</Td>
-        <Cnt>{mixedCnt}</Cnt>
-      </Tr>
-      <Tr>
-        <Td>내가 추출한 Inst??...?</Td>
-        <Cnt>{instCnt}</Cnt>
-      </Tr>
+      <tbody>
+        <Tr>
+          <Td>내가 업로드한 곡</Td>
+          <Cnt>{allCnt}</Cnt>
+        </Tr>
+        <Tr>
+          <Td>내가 믹스한 곡</Td>
+          <Cnt>{mixedCnt}</Cnt>
+        </Tr>
+        <Tr>
+          <Td>내가 추출한 Inst??...?</Td>
+          <Cnt>{instCnt}</Cnt>
+        </Tr>
+      </tbody>
     </Table>
   );
 };
 
 const fadeIn = keyframes`
   from {
-    opacity: 0
+    opacity: 0;
+    transform: translateY(-5%);
   }
   to {
-    opacity: 1
+    opacity: 1;
+    transform: translateY(0);
   }
 `;
 

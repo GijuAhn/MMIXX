@@ -2,14 +2,16 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5555",
+  // baseURL: "http://localhost:5555/api",
+  baseURL: "https://j8a403.p.ssafy.io/api",
 });
 
-const musicUrl = `/api/music`;
+const musicUrl = `/music`;
 
 // TODO: user, return 수정하기
 export const getMusicList = async ({ userSeq, page = 1 }) =>
-  await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
+  // await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
+  await instance.get(`${musicUrl}/${"5"}?page=${page}`);
 
 export const getMusicListByCondition = async ({
   userSeq,
