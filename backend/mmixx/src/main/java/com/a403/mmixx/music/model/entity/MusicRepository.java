@@ -8,7 +8,7 @@ import com.a403.mmixx.music.model.dto.MusicCountResponseDto;
 
 public interface MusicRepository extends JpaRepository<Music, Integer>, MusicRepositoryCustom {
 	Page<Music> findByUserSeq(Integer user_seq, Pageable pageable);
-	
+
 //	select count(*) from music where user_seq = 5;
 	Integer countByUserSeq(Integer user_seq);
 //	select count(*) from music where user_seq = 5 and mixed is null and edited is null;
