@@ -2,13 +2,14 @@ import { Avatar } from "@mui/material";
 import styled from "styled-components";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
-import axios from "axios"
-import { useEffect, useState } from "react"
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 import { DefaultBtn, PlainBtn } from "components/Common";
+import MusicCount from "components/mymusic/MusicCount";
 import { handleLogin } from "api/base";
 import logo from "assets/logo.png";
-import MusicCount from "components/mymusic/MusicCount";
+import arrow from "assets/arrow-down-sign-to-navigate.png";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -19,14 +20,19 @@ const NavBar = () => {
     { name: "MY MUSIC", path: "mymusic" },
   ];
 
-  const isLogin = (localStorage.getItem('isLogin') && localStorage.getItem('isLogin')=='true') ? true : false;
+  const isLogin =
+    localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
+      ? true
+      : false;
   // console.log(isLogin);
 
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+  const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    window.location.href = "/login";   
+    window.location.href = "/login";
   };
 
   return (
@@ -35,15 +41,13 @@ const NavBar = () => {
       {isLogin ? (
         <>
           <NavProfile>
-          <NavAvatar 
-            src={user.profileImageUrl}
-            sx={{ width: 100, height: 100 }}
-            referrerPolicy='no-referrer' // 안 하면 가끔 403 오류 발생..
-          />  
-          <p>
-            {user.userName}
-          </p>
-        </NavProfile>
+            <NavAvatar
+              src={user.profileImageUrl}
+              sx={{ width: 100, height: 100 }}
+              referrerPolicy='no-referrer' // 안 하면 가끔 403 오류 발생..
+            />
+            <p>{user.userName}</p>
+          </NavProfile>
           <NavList>
             {navList &&
               navList.map((item, idx) => {
@@ -51,7 +55,13 @@ const NavBar = () => {
                   <NavItem key={idx} to={item.path}>
                     <NavBtn selected={"/" + item.path === location.pathname}>
                       {item.name}
-                      {item.name === "MY MUSIC" ? "[아이콘]" : null}
+                      {item.name === "MY MUSIC" ? (
+                        <Arrow
+                          src={arrow}
+                          selected={"/" + item.path === location.pathname}
+                          alt=''
+                        ></Arrow>
+                      ) : null}
                     </NavBtn>
                   </NavItem>
                 );
@@ -66,7 +76,7 @@ const NavBar = () => {
         </>
       ) : (
         <LoginWrapper>
-          <DefaultBtn width="150px" onClick={onClickLogin}>
+          <DefaultBtn width='150px' onClick={onClickLogin}>
             로그인 하기
           </DefaultBtn>
         </LoginWrapper>
@@ -143,6 +153,17 @@ const NavBtn = styled.button`
     background-color: ${({ theme }) => theme.palette.secondary};
     color: ${({ theme }) => theme.palette.dark};
   }
+`;
+
+const Arrow = styled.img`
+  width: 12px;
+  margin-left: auto;
+  transition: all ease 0.4s;
+  ${({ selected }) =>
+    selected &&
+    `
+    transform: rotate(-180deg);
+    `};
 `;
 
 const LogOut = styled.div`
