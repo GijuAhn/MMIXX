@@ -5,8 +5,13 @@ import { uploadMusic } from "api/mymusic";
 import upload from "assets/upload.png";
 import musicFile from "assets/music-file.png";
 import cancel from "assets/cancel.png";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "atom/atom";
 
 const MusicUploadBtn = () => {
+  const atomUser = useRecoilValue(userInfo);
+  const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
   const wrapperRef = useRef(null);
   const input = useRef(null);
   const [modalDisplay, setModalDisplay] = useState(false);
@@ -67,14 +72,14 @@ const MusicUploadBtn = () => {
       return;
     }
     const formData = new FormData();
-    const user = { userSeq: 1 };
+    const userInfo = { userSeq: user ? user.userSeq : 0 };
     const config = { headers: { "content-type": "multipart/form-data" } };
     for (let i = 0, len = fileList.length; i < len; i++) {
       formData.append("fileList", fileList[i]);
     }
     formData.append(
       "user",
-      new Blob([JSON.stringify(user)], { type: "application/json" })
+      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
     );
     uploadMusic(formData, config)
       .then((response) => {
