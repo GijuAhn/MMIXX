@@ -89,9 +89,10 @@ public class PlaylistService {
     
     @Transactional
     public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
-    	Favorite favo = favoriteRepository.findByUserSeqAndPlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+    	Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
     	if(favo == null) {
-    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+//    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+    		Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
         	favoriteRepository.save(favorite);
         	return "SUCCESS";
     	} else {
@@ -103,7 +104,7 @@ public class PlaylistService {
     public String deleteFavorite(int user_seq, int playlist_seq) {
     	try {
     		log.info("****** Favorite DB Delete Start ******");
-    		favoriteRepository.deleteByUserSeqAndPlaylistSeq(user_seq, playlist_seq);
+    		favoriteRepository.deleteByUser_UserSeqAndPlaylist_PlaylistSeq(user_seq, playlist_seq);
     		log.info("****** Favorite DB Delete End ******");
     	} catch(Exception e) {
     		System.out.println(e);

@@ -3,8 +3,36 @@ import { getMusicList, getMusicListByCondition } from "api/mymusic";
 import CustomTable from "./CustomTable";
 import upIcon from "assets/up-arrow.png";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "atom/atom";
 
-const MusicList = ({ filter, order, query }) => {
+const MusicList = ({ filter, order, query, radio = false, checkRadio }) => {
+  const atomUser = useRecoilValue(userInfo);
+  const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
+  // const [musicList, setMusicList] = useState([
+  //   {
+  //     musicSeq: 0,
+  //     coverImage: null,
+  //     mixed: null,
+  //     edited: null,
+  //     musicName: "곡 제목",
+  //     musicianName: "수지",
+  //     albumName: "앨범 이름",
+  //     musicLength: 35000,
+  //   },
+  //   {
+  //     musicSeq: 999999,
+  //     coverImage: null,
+  //     mixed: null,
+  //     edited: null,
+  //     musicName: "곡 제목9999",
+  //     musicianName: "뉴진스",
+  //     albumName: "앨범 이름9999",
+  //     musicLength: 35000,
+  //   },
+  // ]);
+  // const [isLoading, setIsLoading] = useState(false);
   const [musicList, setMusicList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [noticeNoList, setNoticeNoList] = useState("음악 목록이 없습니다.");
@@ -27,7 +55,7 @@ const MusicList = ({ filter, order, query }) => {
 
   // 1. 첫 렌더링 시에만 음악 리스트를 가져온다.
   useEffect(() => {
-    getMusicList({ userSeq: 1, page: 1 })
+    getMusicList({ userSeq: user ? user.userSeq : 0, page: 1 })
       .then(({ data }) => {
         // console.log(data.content);
         setMusicList(data.content);
@@ -39,7 +67,10 @@ const MusicList = ({ filter, order, query }) => {
   useEffect(() => {
     if (didMount2.current) {
       if (hasCondition.current) return;
-      getMusicList({ userSeq: 1, page: page.current }).then(({ data }) => {
+      getMusicList({
+        userSeq: user ? user.userSeq : 0,
+        page: page.current,
+      }).then(({ data }) => {
         // console.log(data.content);
         setMusicList((currentArray) => [...currentArray, ...data.content]);
         isLastPage.current = data.last;
@@ -51,6 +82,7 @@ const MusicList = ({ filter, order, query }) => {
   // 3. 첫 렌더링을 제외하고, 조건을 검색하면 페이징 된 음악 리스트를 가져온다.
   useEffect(() => {
     if (didMount3.current) {
+      if (!hasCondition.current) return;
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
       page.current = 1;
       hasCondition.current = true;
@@ -59,7 +91,7 @@ const MusicList = ({ filter, order, query }) => {
       curOrder.current = order;
 
       getMusicListByCondition({
-        userSeq: 1,
+        userSeq: user ? user.userSeq : 0,
         filter: filter,
         order: order,
         query: query,
@@ -78,7 +110,7 @@ const MusicList = ({ filter, order, query }) => {
       if (!hasCondition.current) return;
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
       getMusicListByCondition({
-        userSeq: 1,
+        userSeq: user ? user.userSeq : 0,
         filter: curFilter.current,
         order: curOrder.current,
         query: curQuery.current,
@@ -147,13 +179,17 @@ const MusicList = ({ filter, order, query }) => {
       ) : musicList.length === 0 ? (
         <div>{noticeNoList}</div>
       ) : (
-        <CustomTable musicList={musicList}></CustomTable>
+        <CustomTable
+          musicList={musicList}
+          radio={radio}
+          checkRadio={checkRadio}
+        ></CustomTable>
       )}
       <Button
         onClick={onClickUpIcon}
         visible={showUpIcon ? "visible" : "hidden"}
       >
-        <img src={upIcon} width="55" alt=""></img>
+        <img src={upIcon} width='55' alt=''></img>
       </Button>
     </div>
   );
