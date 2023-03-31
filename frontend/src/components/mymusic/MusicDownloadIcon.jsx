@@ -6,7 +6,7 @@ const MusicDownloadIcon = ({ musicSeq }) => {
   const onClick = () => {
     // 수정. get file name 가져오고, 성공하면 다운로드.
     console.log(musicSeq);
-    // downloadMusic("75dbc53f-fe9b-4e63-8aa9-e1922ded980e.mp3").then((res) => {
+    // downloadMusic(musicSeq).then((res) => {
     //   console.log(res);
     //   const blob = new Blob([res.data]);
 

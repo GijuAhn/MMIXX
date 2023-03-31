@@ -14,8 +14,10 @@ public class MusicListResponseDto {
 	private Integer musicLength;
 	private String musicianName;
 	private String albumName;
+	private Integer genreSeq;
 	private Integer mixed;
-	private Integer edited;
+	private Integer inst;
+	private Integer presetSeq;
 
 	@QueryProjection
 	public MusicListResponseDto(Music entity) {
@@ -26,7 +28,9 @@ public class MusicListResponseDto {
 		this.musicLength = entity.getMusicLength();
 		this.musicianName = entity.getMusicianName();
 		this.albumName = entity.getAlbumName();
+		this.genreSeq = entity.getGenreSeq();
 		this.mixed = entity.getMixed();
-		this.edited = entity.getEdited();
+		this.inst = entity.getInst();
+		this.presetSeq = entity.getPresetSeq();
 	}
 }

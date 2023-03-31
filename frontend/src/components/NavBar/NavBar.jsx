@@ -8,28 +8,42 @@ import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
 import { DefaultBtn, PlainBtn } from 'components/Common'
 import logo from 'assets/logo.png'
 import logoText from 'assets/logo_text.png'
+import arrow from "assets/arrow-down-sign-to-navigate.png";
+import MusicCount from "components/mymusic/MusicCount";
 
 const NavBar = () => {
   const navigate = useNavigate()
-  
-  const isLogin = true;
+
+  const isLogin =
+    localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
+      ? true
+      : true;
+
+  const user = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
+  const onClickLogin = () => {
+    // handleLogin().then((res) => console.log(res));
+    window.location.href = "/login";
+  };
 
   return (
     <Wrapper>
       <NavLogo onClick={() => navigate('/')}>
-        <LogoImage img={logo} alt="logo"/>
+        {/* <LogoImage img={logo} alt="logo"/> */}
         <LogoText img={logoText} alt="logoText" />
       </NavLogo>
       {isLogin ?
       <>
         <NavProfile>
           <NavAvatar 
-            src=''
+            src={user ? user.profileImageUrl : ''}
             sx={{ width: 80, height: 80 }}
+            referrerPolicy='no-referrer'
           />  
-          <p>
-            사용자 이름
-          </p>
+          {/* <p>{user ? user.userName : '사람 이름'}</p> */}
+          <p>사람 이름</p>
         </NavProfile>
         <NavMenu />
         {/* <NavList>
@@ -80,10 +94,22 @@ const NavMenu = () => {
             onClick={() => navigate(item.path)}
             selected={'/' + item.path === location.pathname}>
             {item.icon}
-            {item.name}
+            <span>{item.name}</span>
+            {item.name === "MY MUSIC" ? (
+              <Arrow
+                src={arrow}
+                selected={"/" + item.path === location.pathname}
+                alt=''
+              ></Arrow>
+            ) : null}
           </TestLi>
         )
       })}
+      <div>
+        {location.pathname === "/mymusic" ? (
+          <MusicCount></MusicCount>
+        ) : null}
+      </div>
     </TestUl>
   )
 }
@@ -98,7 +124,6 @@ const Wrapper = styled.nav`
   left: 0;
   justify-content: ${({isLogin}) => !isLogin && 'start'};
   // min-height: 100vh;
-  
   @media (max-width: 768px) {
     display: none;
   }
@@ -109,13 +134,13 @@ const NavLogo = styled.div`
   justify-content: space-evenly;
 `
 
-const LogoImage = styled.div`
-  background-image: url(${({img}) => img});
-  background-size: cover;
-  cursor: pointer;
-  height: 40px;
-  width: 40px;
-`
+// const LogoImage = styled.div`
+//   background-image: url(${({img}) => img});
+//   background-size: cover;
+//   cursor: pointer;
+//   height: 40px;
+//   width: 40px;
+// `
 
 const LogoText = styled.div`
   background-image: url(${({img}) => img});
@@ -123,11 +148,12 @@ const LogoText = styled.div`
   cursor: pointer;
   height: 30px;
   width: 100px;
+  margin-top: 10px;
 `
 
 const NavProfile = styled.div`
   flex-direction: column;
-  flex-grow: 1;
+  flex-grow: 0.7;
 `
 
 const NavAvatar = styled(Avatar)`
@@ -175,6 +201,7 @@ const NavAvatar = styled(Avatar)`
 //   }
 // `
 
+
 const LogOut = styled.div`
 `
 
@@ -195,27 +222,49 @@ const TestLi = styled.li`
   list-style: none;
   display: flex;
   align-items: center;
-  padding: 15px 17px;
-  justify-content: space-between;
+  padding: 10px 17px;
+  // justify-content: start;
   // display: inline-flex;
   // vertical-align: middle;
   text-align: left;
   cursor: pointer;
   border-radius: 25px;
+  margin: 3px 0;
   animation: 1s ease-in-out 0s 1 normal forwards;
 
   &:hover {
-    color: ${({ theme }) => theme.palette.secondary};
-    background-color: ${({ theme }) => theme.palette.darkAlt};
+    background-color: ${({ theme }) => theme.palette.secondary};
+    color: ${({ theme }) => theme.palette.darkAlt};
+
+    span {
+      color: ${({ theme }) => theme.palette.darkAlt};
+    }
   }
 
   ${({ selected, theme }) => 
     selected &&`
-      color: ${theme.palette.secondary};
-      background-color: ${theme.palette.dark};
-    `
-  };
+    background-color: ${theme.palette.secondary};
+    color: ${theme.palette.dark};
 
+    span {
+      color: ${theme.palette.darkAlt};
+    }
+    `
+  }
+
+  span {
+    margin-left: 10px;
+  }
 `
+const Arrow = styled.img`
+  width: 12px;
+  margin-left: auto;
+  transition: all ease 0.4s;
+  ${({ selected }) =>
+    selected &&
+    `
+    transform: rotate(-180deg);
+    `};
+`;
 
 export default NavBar;

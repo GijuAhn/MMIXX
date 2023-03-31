@@ -12,7 +12,7 @@ const PlayBar = () => {
 
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
 
-  if (location.pathname === '/mix' || location.pathname === '/' ) {
+  if (location.pathname === '/mix' || location.pathname === '/' || location.pathname === '/mix/result' ) {
     return null
   }
   

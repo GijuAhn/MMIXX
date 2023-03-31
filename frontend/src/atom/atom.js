@@ -2,14 +2,14 @@ import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
 
-// export const isLogin = atom({
-//   key: 'isLogin',
-//   default: false,
-// })
+export const isLogIn = atom({
+  key: 'isLogIn',
+  default: false//localStorage.getItem('isLogin')==true ? true : false,
+})
 
 export const userInfo = atom({
   key: 'userInfo',
-  default: null,
+  default: null,//localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
   name: 'John Smith'
 })
 

@@ -43,7 +43,7 @@ public class Music {
 	@Column(nullable = false)
 	private Integer genreSeq;
 	private Integer mixed;
-	private Integer edited;
+	private Integer inst;
 	private Integer presetSeq;
 
 	public void updateMusic(MusicUpdateRequestDto requestDto){
