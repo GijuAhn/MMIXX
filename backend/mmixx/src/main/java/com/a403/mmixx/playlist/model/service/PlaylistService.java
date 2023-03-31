@@ -170,6 +170,8 @@ public class PlaylistService {
         }
     }
 
+
+    // TODO: 조회시 순환참조 발생하는것같음. StackoverflowError 발생
     /**
      * Public 플레이리스트 조회, isPrivate = false 인 모든 항목을 조회한다.
      * ignore userSeq
