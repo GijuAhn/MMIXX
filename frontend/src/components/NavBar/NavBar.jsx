@@ -12,6 +12,7 @@ import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
 import { useRecoilValue } from 'recoil';
 import { isLogIn, test, userInfo } from 'atom/atom';
+import { handleLogout } from "api/base";
 
 const NavBar = () => {
   const navigate = useNavigate()
@@ -33,7 +34,14 @@ const NavBar = () => {
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
+    if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
+    else {
+      handleLogout().then(() => {
+        localStorage.clear();
+        console.log("로그아웃");
+        window.location.reload();
+      })
+    }
   };
 
   return (
@@ -68,7 +76,7 @@ const NavBar = () => {
           })}
         </NavList> */}
         <LogOut>
-          <PlainBtn>
+          <PlainBtn onClick={onClickLogin}>
             로그아웃
           </PlainBtn>
         </LogOut> 
