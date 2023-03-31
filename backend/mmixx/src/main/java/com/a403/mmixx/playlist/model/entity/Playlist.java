@@ -1,6 +1,8 @@
 package com.a403.mmixx.playlist.model.entity;
 
 import com.a403.mmixx.user.model.entity.User;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.ArrayExpression;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,11 +20,11 @@ public class Playlist {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "playlist_seq")
-	private int playlistSeq;
+	private Integer playlistSeq;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_seq")
-	private User user;
+	private Integer userSeq;
 
 	@NotNull
 	@Column(name = "playlist_name")
@@ -31,5 +33,5 @@ public class Playlist {
 	@NotNull
 	@Column(name = "is_private")
 	private Boolean isPrivate;
-	
+
 }

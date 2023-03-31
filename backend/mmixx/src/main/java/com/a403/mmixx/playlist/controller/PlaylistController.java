@@ -2,7 +2,7 @@
 
 package com.a403.mmixx.playlist.controller;
 
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDtoForAddMusic;
+import com.a403.mmixx.playlist.model.dto.PlaylistDto;
 import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDtoForCreateAndModify;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
 import com.google.gson.JsonObject;
@@ -17,13 +17,14 @@ public class PlaylistController {
     @Autowired
     private PlaylistService playlistService;
 
-    // 빈 플레이리스트 생성
+    // 빈 플레이리스트 생성 + 생성된 플레이리스트에 곡 리스트 추가한 후 DB 저장까지
     @PostMapping("/{userSeq}")
-    public ResponseEntity<?> createEmptyPlaylist(@RequestBody JsonObject jsonObjectForCreatePlaylist, @PathVariable int userSeq) {
-        return ResponseEntity.ok(playlistService.createEmptyPlaylistByJSON(jsonObjectForCreatePlaylist, userSeq));
+    public ResponseEntity<?> createPlaylist(@RequestBody PlaylistDto requestDto, @PathVariable int userSeq) {
+        playlistService.createPlaylist(requestDto, userSeq);
+        return ResponseEntity.ok().build();
     }
 
-    // 플레이리스트에 곡 추가 (Insert), JSON 객체를 받는다.
+    // 플레이리스트에 곡 추가 (Append), JSON 객체를 받는다.
     @PostMapping("/{userSeq}/{playlistSeq}")
     public void addMusicToPlaylist(@RequestBody JsonObject jsonObjectForAddMusic) {
         playlistService.addMusicToPlaylist(jsonObjectForAddMusic);

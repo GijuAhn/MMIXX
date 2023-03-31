@@ -16,17 +16,35 @@ import java.util.LinkedList;
 public class PlaylistMusic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int playlistMusicSeq;
+    private Integer playlistMusicSeq;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "playlist_seq")
+//    @ManyToOne(targetEntity = Playlist.class, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "playlist_seq")
+//    private Integer playlistSeq;
+
+    @ManyToOne(targetEntity = Playlist.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_seq", referencedColumnName = "playlist_seq", nullable = false)
     private Playlist playlist;
 
-    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "music_seq")
-    private Integer musicSeq;
+    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    Unable to find column with logical name: music_seq in org.hibernate.mapping.Table(music) and its related supertables and secondary tables
+//    @JoinColumn(name = "music_seq", referencedColumnName = "music_seq", nullable = false)
+    @JoinColumn(name = "music_seq", referencedColumnName = "musicSeq", nullable = false)
+    private Music music;
+
+//    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "music_seq")
+//    private Integer musicSeq;
 
     @NotNull
     @Column(name = "sequence")
     private Integer sequence;
+
+    public int getPlaylistSeq() {
+        return playlist.getPlaylistSeq();
+    }
+
+    public int getMusicSeq() {
+        return music.getMusicSeq();
+    }
 }

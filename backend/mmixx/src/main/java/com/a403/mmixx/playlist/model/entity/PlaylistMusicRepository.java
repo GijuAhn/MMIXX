@@ -8,4 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PlaylistMusicRepository extends JpaRepository<PlaylistMusic, Integer>{
+
 }

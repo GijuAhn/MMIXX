@@ -1,6 +1,7 @@
 package com.a403.mmixx.playlist.model.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 //  플레이리스트에 음악 추가시 사용되는 DTO
 @Getter
 @Setter
+@NoArgsConstructor
 public class PlaylistMusicRequestDtoForAddMusic {
 
     private int playlistSeq;

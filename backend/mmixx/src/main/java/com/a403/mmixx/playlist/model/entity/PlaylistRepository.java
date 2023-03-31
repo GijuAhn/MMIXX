@@ -9,4 +9,6 @@ import java.util.List;
 public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     List<Playlist> findByIsPrivateFalse();
     List<PlaylistMusic> findByPlaylistSeq(int seq);
+
+
 }
