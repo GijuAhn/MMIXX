@@ -97,10 +97,10 @@ const NavMenu = () => {
   ]
 
   return (
-    <TestUl>
+    <NavUl>
       {navList && navList.map((item, index) => {
         return (
-          <TestLi key={'testli' + index} 
+          <NavLi key={'NavLi' + index} 
             onClick={() => navigate(item.path)}
             selected={'/' + item.path === location.pathname}>
             {item.icon}
@@ -112,15 +112,15 @@ const NavMenu = () => {
                 alt=''
               ></Arrow>
             ) : null}
-          </TestLi>
+          </NavLi>
         )
       })}
       <div>
         {location.pathname === "/mymusic" ? (
-          <MusicCount></MusicCount>
+          <MusicCount />
         ) : null}
       </div>
-    </TestUl>
+    </NavUl>
   )
 }
 
@@ -137,6 +137,7 @@ const Wrapper = styled.nav`
   @media (max-width: 768px) {
     display: none;
   }
+  z-index: 10000;
 `
 
 const NavLogo = styled.div`
@@ -219,7 +220,7 @@ const LoginWrapper = styled.div`
   margin-top: 20px;
 `
 
-const TestUl = styled.ul`
+const NavUl = styled.ul`
   list-style: url(${({icon}) => icon});
   width: 180px;
   height: 200px;
@@ -229,7 +230,7 @@ const TestUl = styled.ul`
   flex-grow: 4;
 `
 
-const TestLi = styled.li`
+const NavLi = styled.li`
   list-style: none;
   display: flex;
   align-items: center;
