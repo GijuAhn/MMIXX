@@ -29,7 +29,7 @@ const PlaylistSelectMusic = () => {
       />
       <MusicItemWrapper>
         { musicList.map((music, index) => {
-          console.log('music :', music, 'index : ',index+1)
+          // console.log('music :', music, 'index : ',index+1)
           return (
             <SelectMusicItem 
             key={index+1} 
@@ -52,4 +52,7 @@ const MusicItemWrapper = styled.div`
   flex-direction: column;
   width: 80vw;
   padding-left: 3px;
+`
+const SelectBox = styled.div`
+  
 `
