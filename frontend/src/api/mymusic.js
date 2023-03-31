@@ -2,8 +2,12 @@
 import axios from "axios";
 
 const instance = axios.create({
-  // baseURL: "http://localhost:5555/api",
-  baseURL: "https://j8a403.p.ssafy.io/api",
+  // baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: "http://j8a403.p.ssafy.io/api",
+  // baseURL: 'http://localhost:5555/api', // 로컬 테스트
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("auth")}`,
+  },
 });
 
 const musicUrl = `/music`;
@@ -27,12 +31,17 @@ export const getMusicListByCondition = async ({
 export const uploadMusic = async (data, config) =>
   await instance.post(`${musicUrl}`, data, config);
 
-export const downloadMusic = async (musicSeq) => {
-  const res = await instance.get(`${musicUrl}/download/${musicSeq}`, {
+// export const downloadMusic = async (musicSeq) => {
+//   const res = await instance.get(`${musicUrl}/download/${musicSeq}`, {
+//     responseType: "blob",
+//   });
+//   return res;
+// };
+
+export const downloadMusic = async (musicSeq) =>
+  await instance.get(`${musicUrl}/download/${musicSeq}`, {
     responseType: "blob",
   });
-  return res;
-};
 
 // export const downloadMusic = async (musicSeq) =>
 //   await instance.get(`${musicUrl}/download/${musicSeq}`, {
