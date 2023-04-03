@@ -114,10 +114,13 @@ public class MusicService {
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
-
+		
+		System.out.println("uploadMusicToS3");
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
+		System.out.println("uploadCoverImageToS3");
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
-
+		
+		System.out.println("End upload");
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
 //		C:\Users\SSAFY\AppData\Local\Temp\tomcat.5555.6401783967014632574\work\Tomcat\localhost\api\ upload_c84fc623_5e93_45cd_b1b0_ae7e377fa2d4_00000000.tmp
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
