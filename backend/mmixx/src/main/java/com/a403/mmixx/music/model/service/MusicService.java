@@ -22,6 +22,7 @@ import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.a403.mmixx.preset.model.entity.Preset;
 import com.a403.mmixx.preset.model.entity.PresetRepository;
+import com.a403.mmixx.user.model.entity.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class MusicService {
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
 //		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
-		return musicRepository.findByUserSeq(user_seq, pageable).map(MusicListResponseDto::new);
+		return musicRepository.findByUser_UserSeq(user_seq, pageable).map(MusicListResponseDto::new);
 	}
 
 	public Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable) {
@@ -75,7 +76,7 @@ public class MusicService {
 
 		//	set userSeq into musicContainerList
 		for (Music music : musicContainerList) {
-			music.setUserSeq(user.getUserSeq());
+			music.setUser(new User(user.getUserSeq()));
 		}
 
 		log.info("musicContainerList: " + musicContainerList);
@@ -190,13 +191,13 @@ public class MusicService {
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
 		new_music.setInst(null);
-		new_music.setMixed(music.getMusicSeq());
+		new_music.setMixed(music.getMixed());
 		new_music.setGenre(music.getGenre());
 		new_music.setMusicLength(music.getMusicLength());
 		new_music.setMusicName(new_music_name);
 		new_music.setMusicUrl(new_music_path);
 		new_music.setMusicianName(music.getMusicianName());
-		new_music.setUserSeq(music.getUserSeq());
+		new_music.setUser(music.getUser());
 		new_music.setPresetSeq(music.getPresetSeq());
 
 		musicRepository.save(new_music);
@@ -246,8 +247,10 @@ public class MusicService {
 			String new_music_name = "";
 			if(format.equals("mp3")) {
 				new_music_name = music.getMusicName().replace(".mp3", "_inst.mp3");
-			} else {
+			} else if(format.equals("wav")){
 				new_music_name = music.getMusicName().replace(".wav", "_inst.wav");
+			} else {
+				new_music_name = music.getMusicName() + "_inst";
 			}
 			System.out.println("new_music_path : " + new_music_path);
 			System.out.println("new_music_name : " + new_music_name);
@@ -256,14 +259,14 @@ public class MusicService {
 
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
-			new_music.setInst(music.getMusicSeq());
+			new_music.setInst(music.getInst());
 			new_music.setMixed(null);
 			new_music.setGenre(music.getGenre());
 			new_music.setMusicLength(music.getMusicLength());
 			new_music.setMusicName(new_music_name);
 			new_music.setMusicUrl(new_music_path);
 			new_music.setMusicianName(music.getMusicianName());
-			new_music.setUserSeq(music.getUserSeq());
+			new_music.setUser(music.getUser());
 			new_music.setPresetSeq(music.getPresetSeq());
 
 			musicRepository.save(new_music);
@@ -277,14 +280,14 @@ public class MusicService {
 
 	public MusicCountResponseDto countMusic(Integer user_seq) {
 		
-		int allCnt = musicRepository.countByUserSeq(user_seq);
+		int allCnt = musicRepository.countByUser_UserSeq(user_seq);
 		log.info("***** allCnt: {} *****", allCnt);
-		int originCnt = musicRepository.countByUserSeqAndMixedNullAndInstNull(user_seq);
+		int originCnt = musicRepository.countByUser_UserSeqAndMixedNullAndInstNull(user_seq);
 		log.info("***** originCnt: {} *****", originCnt);
 		int temp = 0;
-		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNull(user_seq);
+		int mixedCnt = musicRepository.countByUser_UserSeqAndMixedNotNull(user_seq);
 		log.info("***** mixedCnt: {} *****", mixedCnt);
-		int instCnt = musicRepository.countByUserSeqAndInstNotNull(user_seq);
+		int instCnt = musicRepository.countByUser_UserSeqAndInstNotNull(user_seq);
 		log.info("***** instCnt: {} *****", instCnt);
 
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
