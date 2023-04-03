@@ -156,9 +156,9 @@ const DivModal = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  left: 0;
   top: 0;
-  display: flex;
+  left: 0;
+  display: flex; //
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -179,9 +179,16 @@ const Modal = styled.div`
   // border: 1px solid rgba(255, 255, 255, 0.18);
   width: 625px;
   height: 445px;
-  position: relative;
-  top: -30px;
-  flex-direction: column;
+  // position: relative;
+  // top: -30px;
+  // right: auto;
+  // left: 200px;
+  margin-top: -80px;
+  margin-left: 200px;
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+  // flex-direction: column;
 `;
 
 const DivUpload = styled.div`
@@ -253,9 +260,9 @@ const Button = styled.button`
 
   margin: 15px 10px auto 10px;
   transition: border 0.1s ease-in-out;
-  &:hover {
-    border: 3px solid ${({ theme }) => theme.palette.darkgray};
-  }
+  // &:hover {
+  //   border: 3px solid ${({ theme }) => theme.palette.darkgray};
+  // }
 
   ${({ outline }) =>
     outline &&
