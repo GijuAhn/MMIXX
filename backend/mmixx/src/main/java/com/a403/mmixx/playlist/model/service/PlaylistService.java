@@ -2,7 +2,7 @@ package com.a403.mmixx.playlist.model.service;
 
 import com.a403.mmixx.playlist.model.dto.*;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
-
+import com.a403.mmixx.playlist.model.dto.FindFavoriteDto;
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.entity.MusicRepository;
 
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -245,6 +246,22 @@ public class PlaylistService {
 //    public String getCoverImage(int seq) {
 //        return "";
 //    }
+    
+    public List<FindFavoriteDto> FindFavorite(int user_seq) {
+//    	List<FindFavoriteDto> favorite_list = favoriteRepository.findAllByUser_UserSeq(user_seq);
+//    	return favorite_list;
+    	List<Favorite> favorite_list = favoriteRepository.findAllByUser_UserSeq(user_seq);
+    	if(favorite_list != null) {
+    		List<FindFavoriteDto> response = new ArrayList<>();
+        	for(Favorite favo : favorite_list) {
+        		FindFavoriteDto temp = new FindFavoriteDto(favo.getFavoriteSeq(), favo.getUser().getUserSeq(), favo.getPlaylist().getPlaylistSeq(), favo.getPlaylist().getPlaylistName(), favo.getPlaylist().getIsPrivate());
+        		response.add(temp);
+        	}
+        	return response;
+    	} else {
+    		return null;
+    	}
+    }
 
     @Transactional
     public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {

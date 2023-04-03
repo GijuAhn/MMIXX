@@ -34,14 +34,13 @@ public class UserController {
     @GetMapping("/{userSeq}")
     public ResponseEntity<?> getUser(@PathVariable Integer userSeq) {
         // name에 userSeq 저장되어 있음
-        Integer authUserSeq = Integer.parseInt(
-                SecurityContextHolder.getContext().getAuthentication().getName().toString());
+        Integer authUserSeq = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName().toString());
+        
         if(userSeq != authUserSeq){
             log.error("본인 아님");
             // 나중에 에러 처리 해야됨
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
 
         return ResponseEntity.ok(userService.getUser(authUserSeq));
     }
