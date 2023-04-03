@@ -72,6 +72,8 @@ public class MusicService {
 	}
 
 	public List<Music> registMusic(MusicRegistRequestDto user, List<MultipartFile> multipartFiles) throws Exception {
+		
+		// TODO: EC2 서버에 아예 .mp3 파일째로 저장해버리기. S3 에도 저장하고. .tmp 생성경로가 너무 말썽이다.
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
 
 		//	set userSeq into musicContainerList
