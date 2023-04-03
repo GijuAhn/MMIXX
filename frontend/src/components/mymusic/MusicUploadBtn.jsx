@@ -73,7 +73,7 @@ const MusicUploadBtn = () => {
     }
     const formData = new FormData();
     const userInfo = { userSeq: user ? user.userSeq : 0 };
-    const config = { headers: { "content-type": "multipart/form-data" } };
+    // const config = { headers: { "content-type": "multipart/form-data" } };
     for (let i = 0, len = fileList.length; i < len; i++) {
       formData.append("files", fileList[i]);
     }
@@ -81,7 +81,7 @@ const MusicUploadBtn = () => {
       "user",
       new Blob([JSON.stringify(userInfo)], { type: "application/json" })
     );
-    uploadMusic(formData, config)
+    uploadMusic(formData)
       .then((response) => {
         console.log(response);
       })
