@@ -84,3 +84,7 @@ export const playlistQueue = atom({
     ]
 })
 
+export const defaultPlaylist = atom({
+  key: 'defaultPlaylist',
+  default: 9,
+})
