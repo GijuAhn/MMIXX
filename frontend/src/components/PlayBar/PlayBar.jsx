@@ -24,7 +24,10 @@ const PlayBar = () => {
           {coverImage ?
             <img src={coverImage} alt="" />  
           :
-            <StyledAlbumIcon />}
+            <AlbumIconDiv>
+              <StyledAlbumIcon />
+            </AlbumIconDiv>
+          }
         </CoverImage>
         <MusicInfo>
           {/* <p>{musicName}</p>
@@ -90,12 +93,17 @@ const CoverImage = styled.div`
   }
 `
 
+const AlbumIconDiv = styled.div`
+  border: 1px solid red;
+  width: 50px;
+  height: 50px;
+`
+
 const StyledAlbumIcon = styled(AlbumIcon)`
-  // border: 1px solid red;
-  padding: 20px 20px;
-  background-clip: padding-box;
-  // background-color: linear gradient(to bottom right, rgba(255, 255, 255, 0), ${({ theme }) => theme.palette.darkAlt})
-  background: linear-gradient(#6b6868, ${({ theme }) => theme.palette.darkAlt});
+  padding: 30px 30px;
+  // background-clip: padding-box;
+  // // background-color: linear gradient(to bottom right, rgba(255, 255, 255, 0), ${({ theme }) => theme.palette.darkAlt})
+  // background: linear-gradient(#6b6868, ${({ theme }) => theme.palette.darkAlt});
 `
 
 const MusicInfo = styled.div`

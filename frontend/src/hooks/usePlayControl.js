@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
-import { useRecoilState } from "recoil"
+import { useRecoilState, useSetRecoilState } from "recoil"
 
 import { nowPlayingSelector } from "atom/music"
 
 const usePlayControl = (props) => {
   const { data, sequence } = props
-  const newData = data.filter((item, index) => sequence === index)
-  localStorage.setItem('playlists', JSON.stringify(data))
-  localStorage.setItem('playlist', JSON.stringify(newData))
+  const contoroller = useSetRecoilState(nowPlayingSelector)
+
+  const newData = data.filter((_, index) => sequence === index)
+  contoroller(newData[0])
 }
 
 export { usePlayControl }
