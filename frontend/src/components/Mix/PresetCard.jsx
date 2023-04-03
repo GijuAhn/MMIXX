@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Box from '@mui/material/Box';
 
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +18,16 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
   const playlist = useRecoilValue(testPlaylistMusic)
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
+  
+  useEffect(() => {
+    console.log(props.selnum)
+    if (props.selnum === presetSeq) {
+      console.log('나야낭')
+    } else {
+      console.log('나 아니양')
+    }
+  }, [props.selnum])
+
 
   return (
     <Card onClick={() => props.presetSeqFunc(presetSeq) }>
