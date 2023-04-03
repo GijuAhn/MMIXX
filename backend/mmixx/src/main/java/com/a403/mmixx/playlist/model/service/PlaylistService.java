@@ -302,23 +302,17 @@ public class PlaylistService {
      * 플레이리스트 삭제 (playlist 에 포함된 music 까지 cascade)
      */
     public String deletePlaylist(int playlistSeq) {
-    	log.info("playlist 전체 삭제");
-    	Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
-        if(playlist != null) {
-        	log.info("playlist : " + playlist.toString());
-        	List<PlaylistMusic> musicList = playlistRepository.findAllByPlaylistSeq(playlist.getPlaylistSeq());
-        	if(musicList != null) {
-        		for(PlaylistMusic music : musicList) {
-            		log.info("playlist music : " + music.toString());
-            		playlistMusicRepository.deleteById(music.getPlaylistMusicSeq());
-            	}
-        	}
-        	playlistRepository.deleteById(playlistSeq);
-        	log.info("SUCCESS");
-        	return "SUCCESS";
+    	log.info("해당 playlist 전체 삭제 시작");
+        log.info("playlistSeq : " + playlistSeq + "번호에 해당하는 플레이리스트에 속한 모든 곡들 삭제");
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                playlistMusicRepository.deleteById(playlistMusicList.get(i).getPlaylistMusicSeq());
+            }
         }
-        log.info("FAIL");
-        return "FAIL";
+        log.info("playlistSeq : " + playlistSeq + "번호에 해당하는 플레이리스트 자체 삭제");
+        playlistRepository.deleteById(playlistSeq);
+        return "success";
     }
 
 //    public String getCoverImage(int seq) {
