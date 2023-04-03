@@ -58,7 +58,7 @@ const Form = styled.form`
   `};
   border-radius: 27px;
   // margin: 5px auto;
-  height: 20px;
+  height: 40px;
   // text-align: left;
   display: flex;
   align-items: center;

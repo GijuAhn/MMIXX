@@ -10,7 +10,7 @@ const Test = () => {
   const testData = useRecoilValue(playlistQueue)
   const testData2 = useRecoilValue(nowPlayingSelector)
 
-  console.log('테스트중....', testData2)
+  console.log('테스트중....', testData2._now)
 
   // console.log('테스트', playlist, '1')
   // setInterval(() => {

@@ -14,19 +14,19 @@ export const nowPlaying = atom({
     musicianName: ''
   },
   effects: [
-    localStorageEffect('playlist')
+    localStorageEffect('_now')
   ]
 })
 
 export const nowPlayingSelector = selector({
   key: 'nowPlayingSelector',
   get: ({ get }) => {
-    const playlist = get(nowPlaying)
+    const _now = get(nowPlaying)
     // const nowMusic = playlist.filter((item) => item.playing)
     // const { coverImage, musicName, musicianName, musicUrl } = nowMusic[0]
     
     return {
-      playlist
+      _now
       // nowMusic, 
       // coverImage,
       // musicName,
@@ -36,7 +36,10 @@ export const nowPlayingSelector = selector({
   },
   set: ({ set }, newValue) => {
     set(nowPlaying, newValue)
-  }
+  },
+  effects: [
+    localStorageEffect('_test', 1)
+  ]
 })
 
 export const playlistQueue = atom({
