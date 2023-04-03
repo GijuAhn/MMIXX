@@ -8,6 +8,6 @@ export const getGenreDetail = async ( genreCategory ) => {
   return await instance(`/genre/${genreCategory}`)
 }
 
-export const getPreset = async ( genreSeq ) => {
-  return await instance(`/genre/preset/${genreSeq}`)
+export const getPreset = async () => {
+  return await instance('/preset')
 }

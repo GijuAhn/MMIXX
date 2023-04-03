@@ -13,6 +13,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +25,7 @@ import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.a403.mmixx.preset.model.entity.Preset;
 import com.a403.mmixx.preset.model.entity.PresetRepository;
 import com.a403.mmixx.user.model.entity.User;
+import com.a403.mmixx.user.model.entity.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MusicService {
 	private final MusicRepository musicRepository;
 	private final PresetRepository presetRepository;
+	private final UserRepository userRepository;
 	private final AwsS3Service awsS3Service;
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
@@ -75,9 +79,18 @@ public class MusicService {
 		
 		// TODO: EC2 서버에 아예 .mp3 파일째로 저장해버리기. S3 에도 저장하고. .tmp 생성경로가 너무 말썽이다.
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
-
+		
+//		Integer authUserSeq = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName().toString());
+//		
+//		if(user.getUserSeq() != authUserSeq){
+//            log.error("본인 아님");
+//            // 나중에 에러 처리 해야됨
+//            return null;
+//        }
+		
 		//	set userSeq into musicContainerList
 		for (Music music : musicContainerList) {
+//			music.setUser(userRepository.findById(authUserSeq).orElse(null));
 			music.setUser(new User(user.getUserSeq()));
 		}
 
