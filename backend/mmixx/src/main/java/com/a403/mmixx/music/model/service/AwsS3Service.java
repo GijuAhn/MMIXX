@@ -102,6 +102,7 @@ public class AwsS3Service {
 
 
 	public List<String> uploadCoverImageToS3(List<MultipartFile> multipartFiles) {
+		System.out.println("uploadCoverImageToS3 START");
 		List<String> fileList = new ArrayList<>();
 
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -124,6 +125,8 @@ public class AwsS3Service {
 
 
 			String fileName = createFileName(file.getOriginalFilename() + "_artwork.jpg");
+			System.out.println("fileName : " + fileName);
+			
 			ObjectMetadata metadata = new ObjectMetadata();
 			//	setContentType to .jpg
 			metadata.setContentType("image/jpeg");
