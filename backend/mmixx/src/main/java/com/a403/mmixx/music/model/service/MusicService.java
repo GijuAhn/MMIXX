@@ -129,6 +129,7 @@ public class MusicService {
 //			musicContainerList.get(i).setGenre(null);
 		}
 
+		multipartFiles.clear();
 		return musicContainerList;
 	}
 
