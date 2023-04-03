@@ -13,7 +13,7 @@ const MusicCount = () => {
   const [instCnt, setInstCnt] = useState(0);
 
   useEffect(() => {
-    countMusic({ userSeq: user ? user.userSeq : 0 }).then(({ data }) => {
+    countMusic(user ? user.userSeq : 0).then(({ data }) => {
       setAllCnt(data.allCnt);
       setMixedCnt(data.mixedCnt);
       setInstCnt(data.instCnt);

@@ -123,8 +123,8 @@ const CustomTable = ({
               ></CoverImage>
             </TdRound>
             <Td weight='400'>
-              {/* {music.mixed !== null ? "M" : music.edited !== null ? "Ⅰ" : null} */}
-              M i I Inst. inst. Ⅰ
+              {/* {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null} */}
+              M Ⅰ i I
             </Td>
             <Td>
               {music.musicName.includes(".")
