@@ -1,6 +1,7 @@
 export { default as Main } from './Main'
 export { default as Mix } from './Mix'
 export { default as MixResult } from './MixResult'
+export { default as MixSelectMusic } from './MixSelectMusic'
 export { default as MyMusic } from './MyMusic'
 export { default as Playlist } from './Playlist'
 export { default as PlaylistCreate } from './PlaylistCreate'
