@@ -80,6 +80,13 @@ public class PlaylistController {
     }
 
 
+//    @ApiOperation(value = "플레이리스트 상세정보 수정 (이름 변경, 공개/비공개 변경)")
+//    @PutMapping("/detail/{playlistSeq}")
+//    public ResponseEntity<?> updatePlaylistDetail(@RequestBody PlaylistDto requestDto, @PathVariable int playlistSeq) {
+//        return ResponseEntity.ok(playlistService.updatePlaylistDetail(requestDto, playlistSeq));
+//    }
+//
+
 
     @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
     @DeleteMapping("/detail/{playlistSeq}")
