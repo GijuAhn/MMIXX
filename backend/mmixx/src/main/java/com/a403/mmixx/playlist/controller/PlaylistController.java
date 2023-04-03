@@ -66,12 +66,22 @@ public class PlaylistController {
     }
 
     // 해당(playlistSeq) 플레이리스트 삭제
-    @ApiOperation(value = "플레이리스트 전체 삭제")
+    @ApiOperation(value = "플레이리스트 삭제")
     @DeleteMapping("/{playlistSeq}")
     public ResponseEntity<?> deletePlaylist(@PathVariable int playlistSeq) {
         return ResponseEntity.ok(playlistService.deletePlaylist(playlistSeq));
     }
-    
+
+    //  해당(playlistSeq) 플레이리스트의 첫번째 곡 앨범커버아트 URL 가져오기
+    @ApiOperation(value = "플레이리스트 첫번째 곡의 커버 이미지 URL 가져오기")
+    @GetMapping("/{playlistSeq}/1")
+    public String getCoverImage(@PathVariable("playlistSeq") int playlistSeq){
+        return playlistService.getCoverImage(playlistSeq);
+    }
+
+
+
+
     @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
     @DeleteMapping("/detail/{playlistSeq}")
     public void deletePlaylistMusic(@PathVariable int playlistSeq) {
@@ -98,9 +108,5 @@ public class PlaylistController {
     	String response = playlistService.deleteFavorite(user_seq, playlist_seq);
     	return ResponseEntity.ok(response);
     }
-//    @ApiOperation(value = "플레이리스트 커버 이미지")
-//    @GetMapping("/{playlistSeq}/1")
-//    public String getCoverImage(@PathVariable("playlistSeq") int seq){
-//        return playlistService.getCoverImage(seq);
-//    }
+
 }
