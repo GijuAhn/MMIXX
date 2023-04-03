@@ -1,17 +1,13 @@
 package com.a403.mmixx.playlist.model.service;
 
-import com.a403.mmixx.playlist.model.dto.FavoriteRequestDto;
+import com.a403.mmixx.playlist.model.dto.*;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
 import com.a403.mmixx.music.model.entity.MusicRepository;
-import com.a403.mmixx.playlist.model.dto.PlaylistDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicDetailResponseDtoForRetrieve;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicDto;
 
 import com.a403.mmixx.playlist.model.entity.Favorite;
 import com.a403.mmixx.playlist.model.entity.FavoriteRepository;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDtoForAddMusic;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusic;
 import com.a403.mmixx.playlist.model.entity.PlaylistMusicRepository;
@@ -73,7 +69,7 @@ public class PlaylistService {
      * @param userSeq
      */
     @Transactional
-    public void createPlaylist(@RequestBody PlaylistDto requestDto, int userSeq) {
+    public Integer createPlaylist(@RequestBody PlaylistDto requestDto, int userSeq) {
 
         // check requestDto got from frontend
         log.info("requestDto: " + requestDto);
@@ -117,6 +113,8 @@ public class PlaylistService {
             log.info("[6/6] !!playlistMusic objects (list) saved successfully!!");
         }
 
+        System.out.println("!!playlistSeq returned successfully!!: " + playlistSeq);
+        return playlistSeq;
     }
 
 
@@ -160,97 +158,80 @@ public class PlaylistService {
     /**
      * (관리자용) private 여부 상관없이 모든 유저의 모든 플레이리스트를 조회
      */
-    public List<Playlist> getAllPlaylist(int userSeq) {
+    public List<PlaylistSimpleDto> getAllPlaylist(int userSeq) {
         // check User.Role
         User user = userRepository.findById(userSeq).orElse(null);
         if (user.getRole().equals("ADMIN")) {
-            return playlistRepository.findAll();
+            List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+            List<Playlist> playlistList = playlistRepository.findAll();
+            for (int i = 0; i < playlistList.size(); i++) {
+                PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+                playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+                playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+                playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+                playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+                playlistSimpleDtoList.add(playlistSimpleDto);
+            }
+            return playlistSimpleDtoList;
         } else {
             return null;
         }
     }
 
 
-    // TODO: 조회시 순환참조 발생하는것같음. StackoverflowError 발생
     /**
      * Public 플레이리스트 조회, isPrivate = false 인 모든 항목을 조회한다.
      * ignore userSeq
      */
-    public List<Playlist> getGlobalPlaylist() {
-        return playlistRepository.findByIsPrivateFalse();
+    public List<PlaylistSimpleDto> getGlobalPlaylist() {
+        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+        List<Playlist> playlistList = playlistRepository.findByIsPrivateFalse();
+        for (int i = 0; i < playlistList.size(); i++) {
+            PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+            playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+            playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+            playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+            playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+            playlistSimpleDtoList.add(playlistSimpleDto);
+        }
+        return playlistSimpleDtoList;
     }
 
 
     /**
      * Private 플레이리스트 조회 (userSeq 필요)
      */
-    public List<Playlist> getPrivatePlaylist(int userSeq) {
+    public List<PlaylistSimpleDto> getPrivatePlaylist(int userSeq) {
+        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
         List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
         for (int i = 0; i < playlistList.size(); i++) {
-            if (playlistList.get(i).getUserSeq() != userSeq) {
-                playlistList.remove(i);
+            if (playlistList.get(i).getUserSeq() == userSeq) {
+                PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+                playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+                playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+                playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+                playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+                playlistSimpleDtoList.add(playlistSimpleDto);
             }
         }
-        return playlistList;
+        return playlistSimpleDtoList;
     }
-
 
 
 
     /**
      * 플레이리스트에 속한 노래 목록 조회
      */
-    public PlaylistMusicDetailResponseDtoForRetrieve getMusicListInPlaylist(int playlistSeq) {
-        PlaylistMusicDetailResponseDtoForRetrieve responseDto = new PlaylistMusicDetailResponseDtoForRetrieve();
+//    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(int playlistSeq) {
+//
+//        //  최종적으로 전달해야 할 플레이리스트 내 음악들의 리스트
+//        List<PlaylistMusicDetailResponseDtoForRetrieve> musicListInthePlaylist = new LinkedList<>();
+//
+//        //
+////        List<PlaylistMusicDto> playlistMusicDtoList = playlistMusicRepository.findByPlaylistSeq(playlistSeq);
+//    }
 
-//        private int playlistSeq;
-//        private List<PlaylistMusicDto> playlistMusics;
-//        private List<MusicListResponseDto> musicList;
 
-        // get playlistSeq
-        responseDto.setPlaylistSeq(playlistSeq);
-        log.info("playlistSeq: " + playlistSeq);
-
-        // get playlistMusics
-        //  여기서 해당 곡의 musicSeq, sequence를 가져옴
-
-        List<PlaylistMusic> playlistMusicList = playlistRepository.findByPlaylistSeq(playlistSeq);
-        List<PlaylistMusicDto> playlistMusicDtoList = new LinkedList<>();
-        for (int i = 0; i < playlistMusicList.size(); i++) {
-            PlaylistMusicDto playlistMusicDto = new PlaylistMusicDto();
-            playlistMusicDto.setMusicSeq(playlistMusicList.get(i).getMusicSeq());
-            playlistMusicDto.setSequence(playlistMusicList.get(i).getSequence());
-            playlistMusicDtoList.add(playlistMusicDto);
-            log.info("MusicSeq: " + playlistMusicList.get(i).getMusicSeq());
-            log.info("Sequence: " + playlistMusicList.get(i).getSequence());
-        }
-        responseDto.setPlaylistMusics(playlistMusicDtoList);
-
-        // get musicList
-        //  여기서 해당 곡의 상세정보들을 가져옴
-        List<MusicListResponseDto> musicListResponseDtoList = new LinkedList<>();
-        for (int i = 0; i < playlistMusicDtoList.size(); i++) {
-            MusicListResponseDto musicListResponseDto = new MusicListResponseDto();
-            musicListResponseDto.setMusicSeq(playlistMusicDtoList.get(i).getMusicSeq());
-            musicListResponseDto.setMusicName(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicName());
-            musicListResponseDto.setMusicianName(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicianName());
-            musicListResponseDto.setAlbumName(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getAlbumName());
-            musicListResponseDto.setMusicUrl(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicUrl());
-            musicListResponseDto.setCoverImage(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getCoverImage());
-            musicListResponseDto.setMusicLength(musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicLength());
-            musicListResponseDtoList.add(musicListResponseDto);
-            log.info("MusicSeq: " + playlistMusicDtoList.get(i).getMusicSeq());
-            log.info("MusicName: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicName());
-            log.info("MusicianName: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicianName());
-            log.info("AlbumName: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getAlbumName());
-            log.info("MusicUrl: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicUrl());
-            log.info("CoverImage: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getCoverImage());
-            log.info("MusicLength: " + musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null).getMusicLength());
-        }
-        responseDto.setMusicList(musicListResponseDtoList);
-
-        return responseDto;
-    }
 
     /**
      * 플레이리스트 삭제 (playlist 에 포함된 music 까지 cascade)
@@ -267,29 +248,29 @@ public class PlaylistService {
 
     @Transactional
     public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
-    	Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
-    	if(favo == null) {
+        Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+        if(favo == null) {
 //    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
-    		Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
-        	favoriteRepository.save(favorite);
-        	return "SUCCESS";
-    	} else {
-    		return "EXIST";
-    	}
+            Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
+            favoriteRepository.save(favorite);
+            return "SUCCESS";
+        } else {
+            return "EXIST";
+        }
     }
 
     @Transactional
     public String deleteFavorite(int user_seq, int playlist_seq) {
-    	try {
-    		log.info("****** Favorite DB Delete Start ******");
-    		favoriteRepository.deleteByUser_UserSeqAndPlaylist_PlaylistSeq(user_seq, playlist_seq);
-    		log.info("****** Favorite DB Delete End ******");
-    	} catch(Exception e) {
-    		System.out.println(e);
-    		e.printStackTrace();
-    		return "FAIL";
-    	}
-    	log.info("****** Favorite DB Delete SUCCESS ******");
-    	return "SUCCESS";
+        try {
+            log.info("****** Favorite DB Delete Start ******");
+            favoriteRepository.deleteByUser_UserSeqAndPlaylist_PlaylistSeq(user_seq, playlist_seq);
+            log.info("****** Favorite DB Delete End ******");
+        } catch(Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+            return "FAIL";
+        }
+        log.info("****** Favorite DB Delete SUCCESS ******");
+        return "SUCCESS";
     }
 }
