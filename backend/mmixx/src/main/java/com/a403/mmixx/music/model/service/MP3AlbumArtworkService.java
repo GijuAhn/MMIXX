@@ -7,13 +7,17 @@ import org.jaudiotagger.tag.TagException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.apache.commons.io.IOUtils;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 
 @Service
@@ -49,7 +53,8 @@ public class MP3AlbumArtworkService {
 
     private static byte[] getDefaultAlbumArtwork() throws IOException {
         ClassLoader classLoader = MP3AlbumArtworkService.class.getClassLoader();
-        File file = new File(classLoader.getResource("static/default_cover.jpg").getFile());
-        return Files.readAllBytes(file.toPath());
+        InputStream inputStream = classLoader.getResourceAsStream("static/default_cover.jpg");
+        byte[] bytes = IOUtils.toByteArray(inputStream);
+        return bytes;
     }
 }
