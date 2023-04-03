@@ -200,11 +200,12 @@ public class PlaylistService {
 
 
     /**
-     * Private 플레이리스트 조회 (userSeq 필요)
+     * 유저 ID로 플레이리스트 조회 (userSeq 필요), 해당 user 가 생성한 private + public 플레이리스트를 조회한다.
      */
     public List<PlaylistSimpleDto> getPrivatePlaylist(int userSeq) {
         List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
-        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+//        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+        List<Playlist> playlistList = playlistRepository.findAll();
         for (int i = 0; i < playlistList.size(); i++) {
             if (playlistList.get(i).getUserSeq() == userSeq) {
                 PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
