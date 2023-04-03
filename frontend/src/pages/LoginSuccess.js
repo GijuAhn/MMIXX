@@ -1,27 +1,17 @@
 import { useSearchParams } from 'react-router-dom';
 
 import { useEffect } from 'react';
-import { isLogIn, userInfo } from "atom/atom";
-import { useSetRecoilState } from "recoil";
 import axios from "axios";
 
 
 const LoginSuccess = () => {
-    // const [user, setUser] = useState('');
     
     // 현재 url 의 쿼리스트링을 변경
     const [searchParams] = useSearchParams();
-    
-    // const setSortParams = () => {
-    //     searchParams.set('sort', 'clear');
-    //     setSearchParams(searchParams);
-    // };
 
     // 특정한 key의 value를 가져오는 메서드, 해당 key 의 value 가 두개라면 제일 먼저 나온 value 만 리턴
     const token = searchParams.get("token");
-    const seq = searchParams.get("no");
-
-    
+    const seq = searchParams.get("no");   
     // console.log(token);
 
     const instance =  axios.create({
