@@ -212,7 +212,7 @@ const Button = styled.button`
   position: fixed;
   bottom: 120px;
   background-color: transparent;
-  right: 30px;
+  right: 21px;
   visibility: ${(props) => props.visible};
 `;
 

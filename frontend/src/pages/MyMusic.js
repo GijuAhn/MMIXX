@@ -4,6 +4,7 @@ import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+import CustomToast from "components/mymusic/CustomToast";
 
 const MyMusic = () => {
   const [query, setQuery] = useState("");
@@ -47,6 +48,8 @@ const MyMusic = () => {
         </SelectSection>
       </Div>
 
+      <CustomToast></CustomToast>
+
       <MusicList filter={filter} order={order} query={query}></MusicList>
 
       {/* [Test] 곡 선택하기 (radio) */}
@@ -73,15 +76,16 @@ const MyMusic = () => {
 // `;
 
 const Div = styled.div`
-  border: 1px dotted green;
+  // border: 1px dotted green;
   justify-content: space-between;
-  width: 85%;
+  width: 87%;
   margin: 10px auto 20px auto;
 `;
 
 const SearchBarSection = styled.section`
   margin-top: 20px;
-  margin-right: 100px;
+  margin-right: 83px;
+  // border: 1px dotted green;
 `;
 
 const SelectSection = styled.section`
