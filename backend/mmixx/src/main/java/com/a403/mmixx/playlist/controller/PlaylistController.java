@@ -70,6 +70,12 @@ public class PlaylistController {
     public void deletePlaylist(@PathVariable int playlistSeq) {
         playlistService.deletePlaylist(playlistSeq);
     }
+    
+    @ApiOperation(value = "즐겨찾기한 플레이리스트 목록 조회")
+    @GetMapping("/favorite/{user_seq}")
+    public ResponseEntity<?> findFavorite(@PathVariable int user_seq) {
+    	return ResponseEntity.ok(playlistService.FindFavorite(user_seq));
+    }
 
 
 
