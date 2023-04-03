@@ -30,8 +30,8 @@ public class PlaylistController {
     // 빈 플레이리스트 생성 + 생성된 플레이리스트에 곡 리스트 추가한 후 DB 저장까지
     @PostMapping("/{userSeq}")
     public ResponseEntity<?> createPlaylist(@RequestBody PlaylistDto requestDto, @PathVariable int userSeq) {
-        playlistService.createPlaylist(requestDto, userSeq);
-        return ResponseEntity.ok().build();
+        Integer playlistSeq = playlistService.createPlaylist(requestDto, userSeq);
+        return ResponseEntity.ok().body(playlistSeq);
     }
 
     // 플레이리스트에 곡 추가
