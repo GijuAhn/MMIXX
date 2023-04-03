@@ -1,0 +1,91 @@
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { useLocation } from "react-router-dom";
+import styled from "styled-components"
+
+import { testPlaylistMusic } from "atom/atom";
+import { userInfo } from 'atom/atom';
+import { postPlaylist } from 'api/playlist';
+import { Wrapper, Header, DefaultBtn } from "components/Common"
+import { SelectMusicItem } from "components/Mix";
+
+
+const PlaylistSelectMusic = () => {
+  const playList = useRecoilValue(testPlaylistMusic)
+  const musicList = playList.playlistMusic
+
+  const { state } = useLocation()
+  const playlistTitle = state.playlistTitle
+
+  const atomUser = useRecoilValue(userInfo)
+  const [playListDto, setPlayListDto] = useState([]);
+
+  const plyMusicList =
+  [
+    {
+      "music_seq": 1,
+      "sequence": 1
+    },
+    {
+      "music_seq": 2,
+      "sequence": 2
+    }
+  ];
+
+  // [Test] 곡 선택하기 (check box)
+  const [checkedList, setCheckedList] = useState([]);
+
+
+  // 선택 완료 버튼 누르면 플레이리스트 생성
+  const onClickLogin = () => {
+    // console.log(plyMusicList);
+    setPlayListDto([
+      {
+        playlist_name: playlistTitle,
+        is_private: state.isPrivate,
+        user_seq: atomUser.userSeq,
+        playlist_music: checkedList
+      }
+    ]);
+    // console.log(playListDto);
+    postPlaylist(
+       {data :{playlist_name: playlistTitle,
+      is_private: state.isPrivate,
+      user_seq: atomUser.userSeq,
+      playlist_music: plyMusicList}
+    });
+
+  };
+
+  return (
+    <Wrapper>
+      <Header 
+        title="Music Select"
+        desc="노래 고르기"
+      />
+      { musicList.map((music, index) => {
+        // console.log('music :', music, 'index : ',index+1)
+        return (
+          <SelectMusicItem 
+            key={index+1} 
+            music={music}
+            hasIcon='false'
+          />
+        )
+      })}
+      {/* <CustomTable musicList={musicList} hasIcon={false}>
+      </CustomTable> */}
+
+      <CreateBtn onClick={onClickLogin}>
+        선택 완료
+      </CreateBtn>
+      {/* <button onClick={() => console.log(checkedList)}>추가하기</button>
+      <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList> */}
+    </Wrapper>
+  );
+};
+
+const CreateBtn = styled(DefaultBtn)`
+`
+
+export default PlaylistSelectMusic;
