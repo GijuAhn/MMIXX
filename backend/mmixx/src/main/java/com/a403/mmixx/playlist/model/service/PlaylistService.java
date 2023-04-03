@@ -315,9 +315,24 @@ public class PlaylistService {
         return "success";
     }
 
-//    public String getCoverImage(int seq) {
-//        return "";
-//    }
+    /**
+     * 플레이리스트 첫번째 곡 앨범아트 URL 가져오기
+     */
+    public String getCoverImage(int playlistSeq) {
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+        if (playlist == null) {
+            log.info("플레이리스트가 비어있습니다.");
+            return null;
+        }
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                Music music = musicRepository.findById(playlistMusicList.get(i).getMusicSeq()).orElse(null);
+                return music.getCoverImage();
+            }
+        }
+        return null;
+    }
     
     public List<FindFavoriteDto> FindFavorite(int user_seq) {
 //    	List<FindFavoriteDto> favorite_list = favoriteRepository.findAllByUser_UserSeq(user_seq);
@@ -362,4 +377,6 @@ public class PlaylistService {
         log.info("****** Favorite DB Delete SUCCESS ******");
         return "SUCCESS";
     }
+
+
 }
