@@ -1,6 +1,7 @@
 export const filterOptions = [
   ["all", "모든 음악"],
   ["mix", "믹스 음악"],
+  ["mix", "배경 음악--수정하기"],
   ["origin", "원본 음악"],
 ];
 export const orderOptions = [

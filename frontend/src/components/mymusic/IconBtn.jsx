@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 // import PropTypes from "prop-types";
 
-const IconBtn = ({ icon, iconName, iconHeight = 25, onClick }) => {
+const IconBtn = ({ icon, iconName, iconHeight = 25, fontSize, onClick }) => {
   const [isHover, setIsHover] = useState(false);
   // const onMouseEnter = () => {
   //   setIsHover(true);
@@ -25,7 +25,7 @@ const IconBtn = ({ icon, iconName, iconHeight = 25, onClick }) => {
       onClick={onClick}
     >
       {isHover ? (
-        <IconName>{iconName}</IconName>
+        <IconName fontSize={fontSize}>{iconName}</IconName>
       ) : (
         <Icon src={icon} alt='' height={iconHeight} />
       )}
@@ -46,7 +46,7 @@ const Button = styled.button`
 `;
 
 const IconName = styled.div`
-  font-size: 12px;
+  font-size: ${(props) => props.fontSize || "12px"};
   font-weight: 200;
   font-family: "Heebo", sans-serif;
 `;
