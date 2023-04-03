@@ -191,7 +191,7 @@ public class MusicService {
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
 		new_music.setInst(null);
-		new_music.setMixed(music.getMixed());
+		new_music.setMixed(music);
 		new_music.setGenre(music.getGenre());
 		new_music.setMusicLength(music.getMusicLength());
 		new_music.setMusicName(new_music_name);
@@ -256,10 +256,9 @@ public class MusicService {
 			System.out.println("new_music_name : " + new_music_name);
 
 			Music new_music = new Music();
-
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
-			new_music.setInst(music.getInst());
+			new_music.setInst(music);
 			new_music.setMixed(null);
 			new_music.setGenre(music.getGenre());
 			new_music.setMusicLength(music.getMusicLength());
