@@ -33,8 +33,16 @@ public class MusicListResponseDto {
 		this.musicianName = entity.getMusicianName();
 		this.albumName = entity.getAlbumName();
 		this.genre = entity.getGenre();
-		this.mixed = entity.getMixed();
-		this.inst = entity.getInst();
+		if(entity.getMixed() != null) {
+			this.mixed = entity.getMixed().getMusicSeq();
+		} else {
+			this.mixed = null;
+		}
+		if(entity.getInst() != null) {
+			this.inst = entity.getInst().getMusicSeq();
+		} else {
+			this.inst = null;
+		}
 		this.presetSeq = entity.getPresetSeq();
 	}
 }

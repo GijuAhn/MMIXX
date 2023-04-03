@@ -19,7 +19,7 @@ public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "favorite_seq")
-    private int favoriteSeq;
+    private Integer favoriteSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userSeq")
