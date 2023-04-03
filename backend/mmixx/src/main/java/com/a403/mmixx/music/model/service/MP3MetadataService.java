@@ -64,6 +64,7 @@ public class MP3MetadataService {
 
     public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
         // Convert multipart file to MP3 file
+    	System.out.println("extract Metadata 시작");
         File mp3File = Files.createTempFile("temp", ".mp3").toFile();
 
         //  print file's location (path) for debugging
