@@ -11,7 +11,7 @@ import { DefaultBtn, PlainBtn } from 'components/Common'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
-import { isLogIn, test, userInfo } from 'atom/atom';
+import { isLogIn, userInfo } from 'atom/atom';
 import { handleLogout } from "api/base";
 
 const NavBar = () => {
