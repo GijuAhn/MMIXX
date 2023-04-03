@@ -1,5 +1,6 @@
 package com.a403.mmixx.playlist.model.service;
 
+import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.playlist.model.dto.*;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 import com.a403.mmixx.playlist.model.dto.FindFavoriteDto;
@@ -32,6 +33,7 @@ public class PlaylistService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+
     @Autowired
     private PlaylistMusicRepository playlistMusicRepository;
 
@@ -222,16 +224,77 @@ public class PlaylistService {
 
 
     /**
-     * 플레이리스트에 속한 노래 목록 조회
+     * 플레이리스트에 속한 노래 목록 조회, playlistSeq 필요
      */
-//    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(int playlistSeq) {
-//
-//        //  최종적으로 전달해야 할 플레이리스트 내 음악들의 리스트
-//        List<PlaylistMusicDetailResponseDtoForRetrieve> musicListInthePlaylist = new LinkedList<>();
-//
-//        //
-////        List<PlaylistMusicDto> playlistMusicDtoList = playlistMusicRepository.findByPlaylistSeq(playlistSeq);
-//    }
+    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(int playlistSeq) {
+
+        //  최종적으로 전달해야 할, 플레이리스트 안에 들어있는 음악들의 목록
+        List<PlaylistMusicDetailResponseDtoForRetrieve> musicListInthePlaylist = new LinkedList<>();
+
+        //  플레이리스트에 속해있는 음악들의 순서정보(musicSeq, sequence)를 담은 리스트
+        List<PlaylistMusicDto> playlistMusicDtoList = new LinkedList<>();
+
+        //  플레이리스트에 들어있는 개별 음악의 상세정보
+        List<MusicListResponseDto> musicListResponseDtoList = new LinkedList<>();
+
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+
+        if (playlist == null) {
+            log.info("플레이리스트가 비어있습니다.");
+            return null;
+        }
+
+        //  playlistSeq 로 playlistMusic 테이블에서 musicSeq, sequence 를 조회
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+
+
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                PlaylistMusicDto playlistMusicDto = new PlaylistMusicDto();
+                playlistMusicDto.setPlaylistSeq(playlistMusicList.get(i).getPlaylistSeq());
+                playlistMusicDto.setMusicSeq(playlistMusicList.get(i).getMusicSeq());
+                playlistMusicDto.setSequence(playlistMusicList.get(i).getSequence());
+                playlistMusicDtoList.add(playlistMusicDto);
+            }
+        }
+
+        //  musicSeq 로 music 테이블에서 개별 음악의 상세정보를 조회
+        for (int i = 0; i < playlistMusicDtoList.size(); i++) {
+            MusicListResponseDto musicListResponseDto = new MusicListResponseDto();
+            Music music = musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null);
+            musicListResponseDto.setMusicName(music.getMusicName());
+            musicListResponseDto.setMusicUrl(music.getMusicUrl());
+            musicListResponseDto.setCoverImage(music.getCoverImage());
+            musicListResponseDto.setMusicLength(music.getMusicLength());
+            musicListResponseDto.setMusicianName(music.getMusicianName());
+            musicListResponseDto.setAlbumName(music.getAlbumName());
+            musicListResponseDto.setGenre(music.getGenre());
+            musicListResponseDto.setMixed(music.getMixed());
+            musicListResponseDto.setInst(music.getInst());
+            musicListResponseDto.setPresetSeq(music.getPresetSeq());
+            musicListResponseDtoList.add(musicListResponseDto);
+        }
+
+        //  musicListResponseDtoList 에서 개별 음악의 상세정보를 뽑아서, PlaylistMusicDetailResponseDtoForRetrieve 에 담는다.
+        for (int i = 0; i < musicListResponseDtoList.size(); i++) {
+            PlaylistMusicDetailResponseDtoForRetrieve playlistMusicDetailResponseDtoForRetrieve = new PlaylistMusicDetailResponseDtoForRetrieve();
+            playlistMusicDetailResponseDtoForRetrieve.setMusicSeq(playlistMusicDtoList.get(i).getMusicSeq());
+            playlistMusicDetailResponseDtoForRetrieve.setSequence(playlistMusicDtoList.get(i).getSequence());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicName(musicListResponseDtoList.get(i).getMusicName());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicUrl(musicListResponseDtoList.get(i).getMusicUrl());
+            playlistMusicDetailResponseDtoForRetrieve.setCoverImage(musicListResponseDtoList.get(i).getCoverImage());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicLength(musicListResponseDtoList.get(i).getMusicLength());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicianName(musicListResponseDtoList.get(i).getMusicianName());
+            playlistMusicDetailResponseDtoForRetrieve.setAlbumName(musicListResponseDtoList.get(i).getAlbumName());
+            playlistMusicDetailResponseDtoForRetrieve.setGenre(musicListResponseDtoList.get(i).getGenre());
+            playlistMusicDetailResponseDtoForRetrieve.setMixed(musicListResponseDtoList.get(i).getMixed());
+            playlistMusicDetailResponseDtoForRetrieve.setInst(musicListResponseDtoList.get(i).getInst());
+            playlistMusicDetailResponseDtoForRetrieve.setPresetSeq(musicListResponseDtoList.get(i).getPresetSeq());
+            musicListInthePlaylist.add(playlistMusicDetailResponseDtoForRetrieve);
+        }
+
+        return musicListInthePlaylist;
+    }
 
 
 

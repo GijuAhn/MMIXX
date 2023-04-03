@@ -60,10 +60,10 @@ public class PlaylistController {
 
 
     // 해당(playlistSeq) 플레이리스트에 속한 노래 목록 조회
-//    @GetMapping("/{playlistSeq}")
-//    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(@PathVariable("playlistSeq") int playlistSeq) {
-//        return playlistService.getMusicListInPlaylist(playlistSeq);
-//    }
+    @GetMapping("/{playlistSeq}")
+    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(@PathVariable("playlistSeq") int playlistSeq) {
+        return playlistService.getMusicListInPlaylist(playlistSeq);
+    }
 
     @ApiOperation(value = "플레이리스트 전체 삭제")
     @DeleteMapping("/{playlistSeq}")
