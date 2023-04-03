@@ -39,8 +39,8 @@ const LoginSuccess = () => {
         })
     }
 
-    const [ setUserInfo ] = useSetRecoilState(userInfo);
-    const [ setIsLogin ] = useSetRecoilState(isLogIn);
+    const  setUserInfo  = useSetRecoilState(userInfo);
+    const  setIsLogin  = useSetRecoilState(isLogIn);
     useEffect(() => {
         // console.log("dddddddddd");
          getUser(seq).then(res => {

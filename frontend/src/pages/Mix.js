@@ -44,6 +44,7 @@ const Mix = () => {
         desc="음악 믹스하기"  
         />
       <Music>
+        {/* {musicSelected ? 'true' : 'false'} */}
         { musicSelected && (<DefaultBtn
           onClick={ () => navigate('/playlist/select') }
           >
@@ -76,11 +77,12 @@ const Mix = () => {
             ></PresetCard>
           </div>
         )} */}
-        <div key={1} style={presetStyle}>
+        <div key={1} style={presetStyle} onClick={() => console.log('나야나')}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
             preset_name='밝은'
             presetSeq={1}
+            selnum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={2} style={presetStyle}>
@@ -88,6 +90,7 @@ const Mix = () => {
             presetSeqFunc={presetSeqFunc}
             preset_name='신나는'
             presetSeq={2}
+            selnum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={3} style={presetStyle}>
@@ -95,6 +98,7 @@ const Mix = () => {
             presetSeqFunc={presetSeqFunc}
             preset_name='편안한'
             presetSeq={3}
+            selnum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={4} style={presetStyle}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
@@ -102,6 +106,7 @@ const Mix = () => {
             presetSeqFunc={presetSeqFunc}
             preset_name='강렬한'
             presetSeq={4}
+            selnum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={5} style={presetStyle}>
@@ -109,6 +114,7 @@ const Mix = () => {
             presetSeqFunc={presetSeqFunc}
             preset_name='힘있는'
             presetSeq={5}
+            selnum = {presetSeq}
           ></PresetCard>
         </div>
       </Carousel>
