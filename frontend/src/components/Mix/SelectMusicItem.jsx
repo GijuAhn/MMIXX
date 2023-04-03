@@ -8,62 +8,66 @@ import theme from "styles/theme";
 
 // { props, hasIcon = true }
 const SelectMusicItem = (props,{hasIcon = true }) => {
-  console.log('props : ',props.music)
+  // console.log('props : ',props.music["music"].musicName)
+  const music = props.music['music']
   return (
     <MusicItem>
       <CoverImage
-        coverImage={
-          props.music.coverImage === null
-            ? DefaultCoverImage
-            : props.music.coverImage
-        }
-      ></CoverImage>
+        // coverImage={
+        //   music.coverImage === null
+        //     ? DefaultCoverImage
+        //     : music.coverImage
+        // }
+      ><img src={music.coverImage=== null ? DefaultCoverImage : music.coverImage}/></CoverImage>
       <MusicContent>
-        {props.music.musicName}
-        {/* {props.music.musicName.substr(0, props.music.musicName.lastIndexOf("."))} */}
+        <p>{music.musicName}</p>
+        {/* <p style={{ color:`${theme.palette.light}` }}>{music.musicName.substr(0, music.musicName.lastIndexOf("."))}</p> */}
       </MusicContent>
       <MusicContent>
-        {props.music.musicianName}
-        {/* {props.music.musicianName === null ||
-        props.music.musicianName.replace(/\s/g, "").length === 0
+        <p>{music.musicianName}</p>
+        {/* {music.musicianName === null ||
+        music.musicianName.replace(/\s/g, "").length === 0
           ? "-"
-          : props.music.musicianName} */}
+          : music.musicianName} */}
       </MusicContent>
       <MusicContent>
-        {props.music.albumName}
-        {/* {props.music.albumName === null ||
-        props.music.albumName.replace(/\s/g, "").length === 0
+        <p>{music.albumName}</p>
+        {/* {music.albumName === null ||
+        music.albumName.replace(/\s/g, "").length === 0
           ? "-"
-          : props.music.albumName} */}
+          : music.albumName} */}
       </MusicContent>
       <MusicContent>
-        {props.music.musicLength}
-        {/* {Math.floor(props.music.musicLength / 1000 / 60)}:
-        {String(Math.floor((props.music.musicLength / 1000) % 60)).padStart(
+        {/* <p>{music.musicLength}</p> */}
+        <p>{Math.floor(music.musicLength / 1000 / 60)}:
+        {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
           2,
           "0"
-        )} */}
+        )}</p>
       </MusicContent>
+      <Icons>
+
       {hasIcon ? (
         <MusicContent>
-          <Play musicSeq={props.music.musicSeq}></Play>
+          <Play musicSeq={music.musicSeq}></Play>
         </MusicContent>
       ) : null}
       {hasIcon ? (
         <MusicContent>
-          <Mix musicSeq={props.music.musicSeq}></Mix>
+          <Mix musicSeq={music.musicSeq}></Mix>
         </MusicContent>
       ) : null}
       {hasIcon ? (
         <MusicContent>
-          <Extract musicSeq={props.music.musicSeq}></Extract>
+          <Extract musicSeq={music.musicSeq}></Extract>
         </MusicContent>
       ) : null}
       {hasIcon ? (
         <MusicContent>
-          <Download musicSeq={props.music.musicSeq}></Download>
+          <Download musicSeq={music.musicSeq}></Download>
         </MusicContent>
       ) : null}
+      </Icons>
     </MusicItem>
   )
 }
@@ -76,17 +80,26 @@ const MusicItem = styled.div`
   background-color: ${theme.palette.hover};
   margin: 3px;
   margin-left: 3px;
+  border-radius: 5px;
 `
 const CoverImage = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 8.5px;
-  background-image: url(${({ coverImage }) => coverImage});
-  background-size: cover;
-  justify-content: start;
-  align-items: end;
+  object-fit: cover;
+  width: 15vw;
+  height: 5vh;
+  overflow: hidden;
+  border-radius: 0.3vw;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 const MusicContent = styled.div`
   align-items: center;
   color: ${theme.palette.light}
+`
+const Icons = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-right: 3vw;
 `
