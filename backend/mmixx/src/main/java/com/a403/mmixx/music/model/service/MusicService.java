@@ -22,6 +22,7 @@ import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.music.model.entity.MusicRepository;
 import com.a403.mmixx.preset.model.entity.Preset;
 import com.a403.mmixx.preset.model.entity.PresetRepository;
+import com.a403.mmixx.user.model.entity.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class MusicService {
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
 //		return musicRepository.findAll(pageable).map(MusicListResponseDto::new);
-		return musicRepository.findByUserSeq(user_seq, pageable).map(MusicListResponseDto::new);
+		return musicRepository.findByUser_UserSeq(user_seq, pageable).map(MusicListResponseDto::new);
 	}
 
 	public Page<MusicListResponseDto> getMusicListByCondition(Integer user_seq, MusicCondition condition, Pageable pageable) {
@@ -75,7 +76,7 @@ public class MusicService {
 
 		//	set userSeq into musicContainerList
 		for (Music music : musicContainerList) {
-			music.setUserSeq(user.getUserSeq());
+			music.setUser(new User(user.getUserSeq()));
 		}
 
 		log.info("musicContainerList: " + musicContainerList);
@@ -114,10 +115,13 @@ public class MusicService {
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
-
+		
+		System.out.println("uploadMusicToS3");
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
+		System.out.println("uploadCoverImageToS3");
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
-
+		
+		System.out.println("End upload");
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
 //		C:\Users\SSAFY\AppData\Local\Temp\tomcat.5555.6401783967014632574\work\Tomcat\localhost\api\ upload_c84fc623_5e93_45cd_b1b0_ae7e377fa2d4_00000000.tmp
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
@@ -129,6 +133,7 @@ public class MusicService {
 //			musicContainerList.get(i).setGenre(null);
 		}
 
+		multipartFiles.clear();
 		return musicContainerList;
 	}
 
@@ -177,7 +182,14 @@ public class MusicService {
 
 		log.info("***** Music Mix DB 저장 *****");
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
-		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
+		String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+		System.out.println("format : " + format);
+		String new_music_name = "";
+		if(format.equals("mp3")) {
+			new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
+		} else {
+			new_music_name = music.getMusicName() + "_mix";
+		}
 		log.info("new_music_path : " + new_music_path);
 		log.info("new_music_name : " + new_music_name);
 
@@ -186,13 +198,13 @@ public class MusicService {
 		new_music.setAlbumName(music.getAlbumName());
 		new_music.setCoverImage(music.getCoverImage());
 		new_music.setInst(null);
-		new_music.setMixed(music.getMusicSeq());
+		new_music.setMixed(music);
 		new_music.setGenre(music.getGenre());
 		new_music.setMusicLength(music.getMusicLength());
 		new_music.setMusicName(new_music_name);
 		new_music.setMusicUrl(new_music_path);
 		new_music.setMusicianName(music.getMusicianName());
-		new_music.setUserSeq(music.getUserSeq());
+		new_music.setUser(music.getUser());
 		new_music.setPresetSeq(music.getPresetSeq());
 
 		musicRepository.save(new_music);
@@ -208,6 +220,7 @@ public class MusicService {
 		if(music != null) {
 			RestTemplate restTemplate = new RestTemplate();
 			String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+			System.out.println("music_path : " + music_path);
 			String response = "";
 
 			String url = "https://j8a403.p.ssafy.io/django/api/mix/inst";
@@ -241,24 +254,25 @@ public class MusicService {
 			String new_music_name = "";
 			if(format.equals("mp3")) {
 				new_music_name = music.getMusicName().replace(".mp3", "_inst.mp3");
-			} else {
+			} else if(format.equals("wav")){
 				new_music_name = music.getMusicName().replace(".wav", "_inst.wav");
+			} else {
+				new_music_name = music.getMusicName() + "_inst";
 			}
 			System.out.println("new_music_path : " + new_music_path);
 			System.out.println("new_music_name : " + new_music_name);
 
 			Music new_music = new Music();
-
 			new_music.setAlbumName(music.getAlbumName());
 			new_music.setCoverImage(music.getCoverImage());
-			new_music.setInst(music.getMusicSeq());
+			new_music.setInst(music);
 			new_music.setMixed(null);
 			new_music.setGenre(music.getGenre());
 			new_music.setMusicLength(music.getMusicLength());
 			new_music.setMusicName(new_music_name);
 			new_music.setMusicUrl(new_music_path);
 			new_music.setMusicianName(music.getMusicianName());
-			new_music.setUserSeq(music.getUserSeq());
+			new_music.setUser(music.getUser());
 			new_music.setPresetSeq(music.getPresetSeq());
 
 			musicRepository.save(new_music);
@@ -271,10 +285,16 @@ public class MusicService {
 	}
 
 	public MusicCountResponseDto countMusic(Integer user_seq) {
-		int allCnt = musicRepository.countByUserSeq(user_seq);
-		int originCnt = musicRepository.countByUserSeqAndMixedNullAndInstNull(user_seq);
-		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
-		int instCnt = musicRepository.countByUserSeqAndInstNotNullAndInstGreaterThan(user_seq, 0);
+		
+		int allCnt = musicRepository.countByUser_UserSeq(user_seq);
+		log.info("***** allCnt: {} *****", allCnt);
+		int originCnt = musicRepository.countByUser_UserSeqAndMixedNullAndInstNull(user_seq);
+		log.info("***** originCnt: {} *****", originCnt);
+		int temp = 0;
+		int mixedCnt = musicRepository.countByUser_UserSeqAndMixedNotNull(user_seq);
+		log.info("***** mixedCnt: {} *****", mixedCnt);
+		int instCnt = musicRepository.countByUser_UserSeqAndInstNotNull(user_seq);
+		log.info("***** instCnt: {} *****", instCnt);
 
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;
