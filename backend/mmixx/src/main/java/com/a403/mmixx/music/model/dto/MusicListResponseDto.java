@@ -19,8 +19,8 @@ public class MusicListResponseDto {
 	private String musicianName;
 	private String albumName;
 	private String genre;
-	private Integer mixed;
-	private Integer inst;
+	private Music mixed;
+	private Music inst;
 	private Integer presetSeq;
 
 	@QueryProjection
