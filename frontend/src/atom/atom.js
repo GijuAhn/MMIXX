@@ -25,7 +25,7 @@ export const isLogIn = atom({
 
 export const userInfo = atom({
   key: 'userInfo',
-  default: null,//localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
+  default: [], //localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
   effects: [
     localStorageEffect('user')
   ]

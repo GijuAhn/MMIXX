@@ -1,24 +1,52 @@
 import styled from "styled-components";
 import DefaultCoverImage from "assets/default-cover-image.jpg";
-import Play from "../mymusic/MusicPlayIcon";
-import Mix from "../mymusic/MusicMixIcon";
-import Extract from "../mymusic/MusicExtractIcon";
-import Download from "../mymusic/MusicDownloadIcon";
+// import Play from "../mymusic/MusicPlayIcon";
+// import Mix from "../mymusic/MusicMixIcon";
+// import Extract from "../mymusic/MusicExtractIcon";
+// import Download from "../mymusic/MusicDownloadIcon";
+import Checkbox from "@mui/material/Checkbox";
 import theme from "styles/theme";
+import { useState, useEffect } from "react";
 
-// { props, hasIcon = true }
-const SelectMusicItem = (props,{hasIcon = true }) => {
-  // console.log('props : ',props.music["music"].musicName)
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const SelectMusicItem = (props, {selectedMusicSeq}) => {
+  // console.log('props : ',props.music["music"])
+  // console.log('뮤직 시퀀스 : ', props.music["musicSeq"])
   const music = props.music['music']
+  const musicSeq = props.music['musicSeq']
+  const [isSelected, setIsSelected] = useState(true)
+
+  useEffect(() => {
+    console.log(props.selNum)
+    if (props.selNum === musicSeq) {
+      setIsSelected(true)
+      console.log('선택된 음악', props.selNum)
+    } else {
+      setIsSelected(false)
+      // console.log('선택되지 않은 프리셋', props.selNum)
+    }
+  }, [props.selNum])
+
   return (
-    <MusicItem>
-      <CoverImage
-        // coverImage={
-        //   music.coverImage === null
-        //     ? DefaultCoverImage
-        //     : music.coverImage
-        // }
-      ><img src={music.coverImage=== null ? DefaultCoverImage : music.coverImage}/></CoverImage>
+    <div>
+
+    <Checkbox 
+      {...label} 
+      onClick={() => props.selectedMusicSeq(musicSeq)} 
+      // disabled={ isSelected ? true : false }
+      checked={ isSelected ? true : false }
+      sx={{
+        color: theme.palette.light,
+        '&.Mui-checked': {
+          color: theme.palette.secondary,
+        },
+      }}
+    />
+    <MusicItem isSelected={isSelected}>
+      <CoverImage>
+        <img src={music.coverImage === null ? DefaultCoverImage : music.coverImage}/>
+      </CoverImage>
       <MusicContent>
         <p>{music.musicName}</p>
         {/* <p style={{ color:`${theme.palette.light}` }}>{music.musicName.substr(0, music.musicName.lastIndexOf("."))}</p> */}
@@ -27,15 +55,15 @@ const SelectMusicItem = (props,{hasIcon = true }) => {
         <p>{music.musicianName}</p>
         {/* {music.musicianName === null ||
         music.musicianName.replace(/\s/g, "").length === 0
-          ? "-"
-          : music.musicianName} */}
+        ? "-"
+      : music.musicianName} */}
       </MusicContent>
       <MusicContent>
         <p>{music.albumName}</p>
         {/* {music.albumName === null ||
         music.albumName.replace(/\s/g, "").length === 0
           ? "-"
-          : music.albumName} */}
+        : music.albumName} */}
       </MusicContent>
       <MusicContent>
         {/* <p>{music.musicLength}</p> */}
@@ -43,32 +71,10 @@ const SelectMusicItem = (props,{hasIcon = true }) => {
         {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
           2,
           "0"
-        )}</p>
+          )}</p>
       </MusicContent>
-      <Icons>
-
-      {hasIcon ? (
-        <MusicContent>
-          <Play musicSeq={music.musicSeq}></Play>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Mix musicSeq={music.musicSeq}></Mix>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Extract musicSeq={music.musicSeq}></Extract>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Download musicSeq={music.musicSeq}></Download>
-        </MusicContent>
-      ) : null}
-      </Icons>
     </MusicItem>
+    </div>
   )
 }
 export default SelectMusicItem
@@ -78,16 +84,17 @@ const MusicItem = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   background-color: ${theme.palette.hover};
+  border: 3px solid ${props => (props.isSelected ? theme.palette.secondary : theme.palette.dark)};
   margin: 3px;
   margin-left: 3px;
   border-radius: 5px;
 `
 const CoverImage = styled.div`
   object-fit: cover;
-  width: 15vw;
+  width: 12vw;
   height: 5vh;
   overflow: hidden;
-  border-radius: 0.3vw;
+  border-radius: 5px;
 
   img {
     width: 100%;
