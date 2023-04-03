@@ -11,7 +11,12 @@ const MusicExtractIcon = ({ musicSeq }) => {
   };
 
   return (
-    <IconBtn onClick={onClick} icon={ExtractIcon} iconName='Inst.'></IconBtn>
+    <IconBtn
+      onClick={onClick}
+      icon={ExtractIcon}
+      iconName='Inst.'
+      fontSize='15px'
+    ></IconBtn>
   );
 };
 
