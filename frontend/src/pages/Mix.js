@@ -28,87 +28,108 @@ const Mix = () => {
   }
 
   useEffect(() => {
-    getPreset(1).then(
-      res => setPresetData(res), console.log(presetData)
-      ).catch(err => console.log(err))
-  }, [presetData])
+    console.log('******* 믹스할 음악 *******')
+    console.log(musicSelected)
+    console.log(musicName)
+    console.log(musicianName)
+    console.log('****************************')
+    getPreset()
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err))
+  }, [])
 
   useEffect(() => {
-    console.log('결과값 확인 : ', presetData) 
+    console.log('프리셋 데이터 확인 : ', presetData) 
   }, [presetData]);
 
   return (
     <Wrapper>
-      <Header 
-        title="MIX"
-        desc="음악 믹스하기"  
-        />
+      <HeadContent>
+        <Header 
+          style={{ width: 500 }}
+          title="MIX"
+          desc="음악 믹스하기" 
+          help="도움말"
+          helpDesc={"믹스하기는 프리셋의 곡 분위기를 참조하여 음악의 스타일을 변환하는 기능입니다. 프리셋을 선택한 후 음악 스타일을 변환해보세요."}
+          />
+      </HeadContent>
       <Music>
-        { musicSelected && (<DefaultBtn
-          onClick={ () => navigate('/playlist/select') }
-          >
-          곡 선택
-        </DefaultBtn>)}
-          {/* 우측 상단에 띄워놓을 동그래미 */}
-        { !musicSelected && (<div>
-          <MusicInfo
+        {/* {musicSelected ? 'true' : 'false'} */}
+        { !musicSelected ? (<MusicInfo
             // props 보내기
             coverImage={coverImage}
             musicName={musicName}
             musicianName={musicianName}
-            >
-          </MusicInfo>
-        </div>)}
+          > </MusicInfo>) : (<DefaultBtn
+            onClick={ () => navigate('/mix/select') }>
+            곡 선택</DefaultBtn>)}
       </Music>
       <p> 원하는 프리셋을 선택하세요. </p>
-      <Carousel height={400} width={800} xOrigin={120} yOrigin={-40} yRadius={0} autoPlay={false}>
+      <Carousel children={PresetCard} height={"40vh"} width={"60vw"} xOrigin={100} yOrigin={0} yRadius={0} autoPlay={false}>
         {/* // const preset_name = props.preset_name
             // const preset_summary = props.preset_summary
             // const preset_info = props.preset_info
             const preset_image = props.preset_image */}
 
         {/* 컴포넌트 반복 코드 */}
-        {/* {presetData.map((preset) => 
-          <div key={preset.presetSeq} style={presetStyle} onClick={() => setPresetSeq(preset.presetSeq)}>
-            <PresetCard
-              preset_name={preset.presetName}
-              preset_image={preset.presetImg}
-            ></PresetCard>
-          </div>
-        )} */}
-        <div key={1} style={presetStyle}>
+        {/* <div key={1} style={{width: 400, height: 250}}>
+        { presetData && presetData.map((preset) =>  {
+          return (
+            <div onClick={() => setPresetSeq(preset.presetSeq)}>
+              <PresetCard
+                presetSeqFunc={presetSeqFunc}
+                presetNum={preset.presetSeq}
+                presetName={preset.presetName}
+                musicName={preset.musicName}
+                musicLength={preset.musicLength}
+                musicianName={preset.musicianName}
+                albumName={preset.albumName}
+                presetUrl={preset.presetUrl}
+                converImage={preset.converImage}
+                selNum = {presetSeq}
+              ></PresetCard>
+            </div>
+              )
+            })}
+        </div> */}
+        <div key={1} style={presetStyle} onClick={() => console.log('나야나')}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            preset_name='밝은'
-            presetSeq={1}
+            presetName='밝은'
+            presetNum={1}
+            selNum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={2} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            preset_name='신나는'
-            presetSeq={2}
+            presetName='신나는'
+            presetNum={2}
+            selNum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={3} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            preset_name='편안한'
-            presetSeq={3}
+            presetName='편안한'
+            presetNum={3}
+            selNum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={4} style={presetStyle}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            preset_name='강렬한'
-            presetSeq={4}
+            presetName='강렬한'
+            presetNum={4}
+            selNum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={5} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            preset_name='힘있는'
-            presetSeq={5}
+            presetName='힘있는'
+            presetNum={5}
+            selNum = {presetSeq}
           ></PresetCard>
         </div>
       </Carousel>
@@ -126,11 +147,15 @@ const Mix = () => {
 
 export default Mix;
 
+const HeadContent = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 const Music = styled.div`
   display: flex;
-  align-items: start;
   justify-content: flex-start;
-  padding-top: 5vh;
+  padding-top: 1vh;
   padding-left: 5vw;
 `
 const presetStyle = {
@@ -144,6 +169,7 @@ const ButtonStyle = styled.div`
   display: flex;
   align-items: end;
   justify-content: flex-end;
-  padding-bottom: 2vh;
+  // margin-top: 5px;
+  padding: 15vh;
   padding-right: 6vw;
 `
