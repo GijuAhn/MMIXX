@@ -414,4 +414,15 @@ public class PlaylistService {
     }
 
 
+    public String updatePlaylistDetail(PlaylistNameAndPrivateSimpleDto requestDto, int playlistSeq) {
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+        if (playlist == null) {
+            log.info("해당 플레이리스트가 없습니다.");
+            return "There is no playlist";
+        }
+        playlist.setPlaylistName(requestDto.getPlaylistName());
+        playlist.setIsPrivate(requestDto.getIsPrivate());
+        playlistRepository.save(playlist);
+        return "successfully updated";
+    }
 }
