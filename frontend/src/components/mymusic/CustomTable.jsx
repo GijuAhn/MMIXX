@@ -4,16 +4,18 @@ import Play from "./MusicPlayIcon";
 import Mix from "./MusicMixIcon";
 import Extract from "./MusicExtractIcon";
 import Download from "./MusicDownloadIcon";
-
-import unCheck from "assets/check.png";
+import UnCheck from "assets/check.png";
 import Check from "assets/check-selected.png";
+import More from "assets/more-vertical.png";
 import { useRef } from "react";
 
 const CustomTable = ({
   musicList,
-  hasIcon = true,
+  // hasIcon = true,
   radio = false,
   checkRadio,
+  checkBox = false,
+  checkMusicList,
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -21,46 +23,83 @@ const CustomTable = ({
   const musicianName = useRef(null);
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
+  const checkedList = useRef([]);
+
   const onCheck = (event) => {
-    musicSeq.current =
-      event.target.attributes.getNamedItem("seq") === null
-        ? null
-        : event.target.attributes.getNamedItem("seq").value;
-    coverImage.current =
-      event.target.attributes.getNamedItem("cover") === null
-        ? null
-        : event.target.attributes.getNamedItem("cover").value;
-    musicName.current =
-      event.target.attributes.getNamedItem("title") === null
-        ? null
-        : event.target.attributes.getNamedItem("title").value;
-    musicianName.current =
-      event.target.attributes.getNamedItem("musician") === null
-        ? null
-        : event.target.attributes.getNamedItem("musician").value;
+    if (radio) {
+      musicSeq.current =
+        event.target.attributes.getNamedItem("seq") === null
+          ? null
+          : event.target.attributes.getNamedItem("seq").value;
+      coverImage.current =
+        event.target.attributes.getNamedItem("cover") === null
+          ? null
+          : event.target.attributes.getNamedItem("cover").value;
+      musicName.current =
+        event.target.attributes.getNamedItem("title") === null
+          ? null
+          : event.target.attributes.getNamedItem("title").value;
+      musicianName.current =
+        event.target.attributes.getNamedItem("musician") === null
+          ? null
+          : event.target.attributes.getNamedItem("musician").value;
 
-    // setMusicSeqState(musicSeq.current);
+      // setMusicSeqState(musicSeq.current);
 
-    // console.log(
-    //   musicSeq.current,
-    //   coverImage.current,
-    //   musicName.current,
-    //   musicianName.current
-    // );
+      // console.log(
+      //   musicSeq.current,
+      //   coverImage.current,
+      //   musicName.current,
+      //   musicianName.current
+      // );
 
-    checkRadio({
-      musicSeq: musicSeq.current,
-      coverImage: coverImage.current,
-      musicName: musicName.current,
-      musicianName: musicianName.current,
-    });
+      checkRadio({
+        musicSeq: musicSeq.current,
+        coverImage: coverImage.current,
+        musicName: musicName.current,
+        musicianName: musicianName.current,
+      });
+    } else if (checkBox) {
+      // console.log(event.target.src);
+      // console.log(UnCheck);
+      // console.log(Check);
+
+      if (event.target.src.includes("check-selected")) {
+        event.target.setAttribute("src", UnCheck);
+      } else {
+        event.target.setAttribute("src", Check);
+      }
+
+      const newMusicSeq =
+        event.target.attributes.getNamedItem("seq") === null
+          ? null
+          : event.target.attributes.getNamedItem("seq").value;
+
+      const deletedIndex = checkedList.current.findIndex(
+        (item) => item.musicSeq === newMusicSeq
+      );
+
+      // console.log("deletedIndex", deletedIndex);
+      if (deletedIndex === -1) {
+        // console.log("추가!");
+        checkedList.current.push({
+          music_seq: newMusicSeq,
+          sequence: newMusicSeq,
+        });
+      } else {
+        // console.log("삭제!");
+        checkedList.current.splice(deletedIndex, 1);
+      }
+      // console.log(checkedList.current);
+      checkMusicList(checkedList.current);
+    }
   };
   return (
     <Table>
       <tbody>
         {musicList.map((music) => (
           <Tr key={music.musicSeq}>
-            {radio ? (
+            {radio || checkBox ? (
               <Radio>
                 <img
                   onClick={onCheck}
@@ -68,13 +107,13 @@ const CustomTable = ({
                   cover={music.coverImage}
                   title={music.musicName}
                   musician={music.musicianName}
-                  src={musicSeq.current == music.musicSeq ? Check : unCheck}
+                  src={musicSeq.current == music.musicSeq ? Check : UnCheck}
                   alt=''
                   width='23'
                 />
               </Radio>
             ) : null}
-            <TdRound>
+            <TdRound width='5%'>
               <CoverImage
                 coverImage={
                   music.coverImage === null
@@ -83,41 +122,45 @@ const CustomTable = ({
                 }
               ></CoverImage>
             </TdRound>
-            <Td weight='400'>
-              {/* {music.mixed !== null ? "M" : music.edited !== null ? "Ⅰ" : null} */}
-              M i I Inst. inst. Ⅰ
+            <Td weight='400' width='7%' align='center'>
+              {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
-            <Td>
+            <Td width='27.5%'>
               {music.musicName.includes(".")
                 ? music.musicName.substr(0, music.musicName.lastIndexOf("."))
                 : music.musicName}
             </Td>
-            <Td>
+            <Td width='15%'>
               {music.musicianName === null ||
               music.musicianName.replace(/\s/g, "").length === 0
                 ? "-"
                 : music.musicianName}
             </Td>
-            <Td>
+            <Td width='15%'>
               {music.albumName === null ||
               music.albumName.replace(/\s/g, "").length === 0
                 ? "-"
                 : music.albumName}
             </Td>
-            <Td>
+            <Td width='10%'>
               {Math.floor(music.musicLength / 1000 / 60)}:
               {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
                 2,
                 "0"
               )}
             </Td>
-            {!radio ? (
-              <Td>
+            {radio || checkBox ? (
+              <Td width='10%' align='right' padding={true}>
+                <img src={More} alt='' width='20' />
+              </Td>
+            ) : null}
+            {!radio && !checkBox ? (
+              <Td width='5%'>
                 <Play musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {!radio ? (
-              <Td>
+            {!radio && !checkBox ? (
+              <Td width='5%'>
                 <Mix
                   musicSeq={music.musicSeq}
                   musicName={music.musicName.substr(
@@ -129,13 +172,13 @@ const CustomTable = ({
                 ></Mix>
               </Td>
             ) : null}
-            {!radio ? (
-              <Td>
+            {!radio && !checkBox ? (
+              <Td width='5%'>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {!radio ? (
-              <Td>
+            {!radio && !checkBox ? (
+              <Td width='5%'>
                 <Download musicSeq={music.musicSeq}></Download>
               </Td>
             ) : null}
@@ -157,13 +200,11 @@ const CoverImage = styled.div`
 `;
 
 const Table = styled.table`
-  // display: block;
   border-collapse: separate;
   border-spacing: 0 10px;
-  width: 85%;
+  width: 87%;
   font-size: 14px;
   font-weight: 400;
-  // font-family: "Heebo", sans-serif;
 `;
 
 const Tr = styled.tr`
@@ -171,25 +212,30 @@ const Tr = styled.tr`
   &:hover {
     background-color: ${({ theme }) => theme.palette.hover};
   }
-  // padding: 20px;
   height: 65px;
-  // font-family: "Heebo", sans-serif;
 `;
 
 const Radio = styled.td`
   background-color: ${({ theme }) => theme.palette.darkAlt};
+  width: 5%;
 `;
 
 const TdRound = styled.td`
-  // background-color: green;
   border-radius: 15px 0 0 15px;
+  padding-left: 10px;
 `;
 
 const Td = styled.td`
-  // background-color: green;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;
+  width: ${(props) => props.width || "auto"};
+  text-align: ${(props) => props.align || "left"};
+  ${(props) =>
+    props.padding &&
+    `padding-top: 5px;
+    padding-right: 10px;`};
+
   // &:first-child {
   //   border-radius: 15px 0 0 15px;
   //   // margin-left: 10px;

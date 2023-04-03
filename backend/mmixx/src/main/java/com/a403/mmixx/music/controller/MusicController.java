@@ -32,16 +32,18 @@ import com.a403.mmixx.music.model.service.MusicService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Api(tags = {"음악", "api"})
 @RestController
 @RequestMapping("/music")
 @RequiredArgsConstructor
 public class MusicController {
-	private final MusicService musicService;
-	private final AwsS3Service awsS3Service;
+    private final MusicService musicService;
+    private final AwsS3Service awsS3Service;
 
 	//	Send REST API request to Django python server for AI processing
 	@ApiOperation(value = "음악 스타일 변환", notes = "")
@@ -54,13 +56,13 @@ public class MusicController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@ApiOperation(value = "음악 다운로드", notes = "")
 	@GetMapping("/download/{music_seq}")
 	public ResponseEntity<byte[]> downloadMusic(@PathVariable Integer music_seq) throws IOException {
 		return awsS3Service.downloadMusic(music_seq);
 	}
-	
+
 	@ApiOperation(value = "음악 배경음 추출(보컬 제거)")
 	@GetMapping("/inst/{music_seq}")
 	public ResponseEntity<?> splitMusic(@PathVariable Integer music_seq) throws Exception {
@@ -122,17 +124,12 @@ public class MusicController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@ApiOperation(value = "음악 개수 조회", notes = "user_seq로 회원의 조건별 음원 개수 조회")
 	@GetMapping("/count/{user_seq}")
 	public ResponseEntity<?> countMusic(@PathVariable Integer user_seq) {
 		MusicCountResponseDto responseDto = musicService.countMusic(user_seq);
 		return ResponseEntity.ok(responseDto);
 	}
-	
-	@ApiOperation(value = "프리셋 전체 조회")
-	@GetMapping("/preset")
-	public ResponseEntity<?> findAllPreset() {
-		return ResponseEntity.ok(musicService.findAllPreset());
-	}
+
 }

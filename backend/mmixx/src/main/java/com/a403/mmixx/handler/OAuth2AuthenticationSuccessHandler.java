@@ -10,6 +10,7 @@ import com.a403.mmixx.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private static final String REFRESH_TOKEN = "refresh-token";
     private static final String AUTH = "Authorization";
     private static final int REFRESH_PERIOD = 60 * 60 * 24 * 14;
+    @Value("${mmixx.server}")
+    private String SERVER_URL;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
@@ -58,7 +61,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setCharacterEncoding("utf-8");
 //        log.info("**** path : {}", request.getScheme() + "://" + request.getServerName());
 //        String targetUrl = request.getScheme() + "://" + request.getServerName() +":3000/login/success";
-        String targetUrl = request.getScheme() + "://" + request.getServerName() + "/login/success";
+//        String targetUrl = request.getRequestURL().toString()
+//                .replace(request.getRequestURI(),"");
+
+        String targetUrl = "http://" + request.getServerName();
+        if(request.getServerName().toString().indexOf(SERVER_URL) > -1) targetUrl += "/login/success";
+        else targetUrl += ":3000/login/success";
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = principalDetails.getUser();

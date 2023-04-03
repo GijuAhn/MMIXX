@@ -15,7 +15,7 @@ export const isLogIn = atom({
 
 export const userInfo = atom({
   key: 'userInfo',
-  default: null,//localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
+  default: [], //localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
   effects: [
     localStorageEffect('user')
   ]
@@ -91,7 +91,7 @@ export const testPlaylistMusic = atom({
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -101,11 +101,11 @@ export const testPlaylistMusic = atom({
         sequence: 2,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -115,11 +115,11 @@ export const testPlaylistMusic = atom({
         sequence: 3,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -129,11 +129,11 @@ export const testPlaylistMusic = atom({
         sequence: 4,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -143,11 +143,11 @@ export const testPlaylistMusic = atom({
         sequence: 5,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }

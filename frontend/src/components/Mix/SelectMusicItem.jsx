@@ -1,70 +1,80 @@
 import styled from "styled-components";
 import DefaultCoverImage from "assets/default-cover-image.jpg";
-import Play from "../mymusic/MusicPlayIcon";
-import Mix from "../mymusic/MusicMixIcon";
-import Extract from "../mymusic/MusicExtractIcon";
-import Download from "../mymusic/MusicDownloadIcon";
+// import Play from "../mymusic/MusicPlayIcon";
+// import Mix from "../mymusic/MusicMixIcon";
+// import Extract from "../mymusic/MusicExtractIcon";
+// import Download from "../mymusic/MusicDownloadIcon";
+import Checkbox from "@mui/material/Checkbox";
 import theme from "styles/theme";
+import { useState, useEffect } from "react";
 
-// { props, hasIcon = true }
-const SelectMusicItem = (props,{hasIcon = true }) => {
-  console.log('props : ',props.music)
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+const SelectMusicItem = (props, {selectedMusicSeq}) => {
+  // console.log('props : ',props.music["music"])
+  // console.log('뮤직 시퀀스 : ', props.music["musicSeq"])
+  const music = props.music['music']
+  const musicSeq = props.music['musicSeq']
+  const [isSelected, setIsSelected] = useState(true)
+
+  useEffect(() => {
+    console.log(props.selNum)
+    if (props.selNum === musicSeq) {
+      setIsSelected(true)
+      console.log('선택된 음악', props.selNum)
+    } else {
+      setIsSelected(false)
+      // console.log('선택되지 않은 프리셋', props.selNum)
+    }
+  }, [props.selNum])
+
   return (
-    <MusicItem>
-      <CoverImage
-        coverImage={
-          props.music.coverImage === null
-            ? DefaultCoverImage
-            : props.music.coverImage
-        }
-      ></CoverImage>
+    <div>
+
+    <Checkbox 
+      {...label} 
+      onClick={() => props.selectedMusicSeq(musicSeq)} 
+      // disabled={ isSelected ? true : false }
+      checked={ isSelected ? true : false }
+      sx={{
+        color: theme.palette.light,
+        '&.Mui-checked': {
+          color: theme.palette.secondary,
+        },
+      }}
+    />
+    <MusicItem isSelected={isSelected}>
+      <CoverImage>
+        <img src={music.coverImage === null ? DefaultCoverImage : music.coverImage}/>
+      </CoverImage>
       <MusicContent>
-        {props.music.musicName}
-        {/* {props.music.musicName.substr(0, props.music.musicName.lastIndexOf("."))} */}
+        <p>{music.musicName}</p>
+        {/* <p style={{ color:`${theme.palette.light}` }}>{music.musicName.substr(0, music.musicName.lastIndexOf("."))}</p> */}
       </MusicContent>
       <MusicContent>
-        {props.music.musicianName}
-        {/* {props.music.musicianName === null ||
-        props.music.musicianName.replace(/\s/g, "").length === 0
+        <p>{music.musicianName}</p>
+        {/* {music.musicianName === null ||
+        music.musicianName.replace(/\s/g, "").length === 0
+        ? "-"
+      : music.musicianName} */}
+      </MusicContent>
+      <MusicContent>
+        <p>{music.albumName}</p>
+        {/* {music.albumName === null ||
+        music.albumName.replace(/\s/g, "").length === 0
           ? "-"
-          : props.music.musicianName} */}
+        : music.albumName} */}
       </MusicContent>
       <MusicContent>
-        {props.music.albumName}
-        {/* {props.music.albumName === null ||
-        props.music.albumName.replace(/\s/g, "").length === 0
-          ? "-"
-          : props.music.albumName} */}
-      </MusicContent>
-      <MusicContent>
-        {props.music.musicLength}
-        {/* {Math.floor(props.music.musicLength / 1000 / 60)}:
-        {String(Math.floor((props.music.musicLength / 1000) % 60)).padStart(
+        {/* <p>{music.musicLength}</p> */}
+        <p>{Math.floor(music.musicLength / 1000 / 60)}:
+        {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
           2,
           "0"
-        )} */}
+          )}</p>
       </MusicContent>
-      {hasIcon ? (
-        <MusicContent>
-          <Play musicSeq={props.music.musicSeq}></Play>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Mix musicSeq={props.music.musicSeq}></Mix>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Extract musicSeq={props.music.musicSeq}></Extract>
-        </MusicContent>
-      ) : null}
-      {hasIcon ? (
-        <MusicContent>
-          <Download musicSeq={props.music.musicSeq}></Download>
-        </MusicContent>
-      ) : null}
     </MusicItem>
+    </div>
   )
 }
 export default SelectMusicItem
@@ -74,19 +84,29 @@ const MusicItem = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   background-color: ${theme.palette.hover};
+  border: 3px solid ${props => (props.isSelected ? theme.palette.secondary : theme.palette.dark)};
   margin: 3px;
   margin-left: 3px;
+  border-radius: 5px;
 `
 const CoverImage = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 8.5px;
-  background-image: url(${({ coverImage }) => coverImage});
-  background-size: cover;
-  justify-content: start;
-  align-items: end;
+  object-fit: cover;
+  width: 12vw;
+  height: 5vh;
+  overflow: hidden;
+  border-radius: 5px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 const MusicContent = styled.div`
   align-items: center;
   color: ${theme.palette.light}
+`
+const Icons = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-right: 3vw;
 `

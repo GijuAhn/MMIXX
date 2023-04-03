@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 import { useRecoilValue } from 'recoil'
@@ -10,37 +10,34 @@ import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
 import { getPlaylistDetail } from "api/playlist"
 import usePlayAudio from "hooks/usePlayAudio"
+import { CustomTable } from "components/mymusic"
 
 const PlaylistDetail = () => {
   const navigate = useNavigate()
   const { playlistSeq } = useParams()
-  const [ data, setData ] = useState(null)
-  const testValue = usePlayAudio()
+  const [data, setData] = useState(null)
 
-  const testFunc = () => {
-    console.log(testValue)
-  }
+  const { state } = useLocation();
+  const playlistTitle = state.playlistTitle;
+  // console.log(playlistTitle);
 
-  console.log('params', playlistSeq, data)
-  const { 
-    playlistName, 
-    playlistMusic
-  } = useRecoilValue(testPlaylistMusic)
+  // console.log('params', playlistSeq);
+  const [playlistMusic, setPlayListMusic] = useState([]);
   const [coverImage, setCoverImage] = useState(null)
 
   useEffect(() => {
     getPlaylistDetail(playlistSeq)
       .then(res => {
-        setData(res.data)
+        // console.log(res);
+        setPlayListMusic(res.data);
         return res.data
       })
-      .then(res => console.log(res))
+      .then(res => {
+        // console.log(res);
+        setCoverImage(res[0].coverImage);
+      })
+  }, [])
 
-  }, [playlistSeq])
-
-  useEffect(() => {
-    setCoverImage(playlistMusic[0].music.coverImage)
-  }, [playlistMusic])
 
   return (
     <StyleWrapper url={coverImage}>
@@ -58,7 +55,7 @@ const PlaylistDetail = () => {
         <RightContent>
           <Top>
             <PlaylistTitle>
-              <p>{playlistName}</p>
+              <p>{playlistTitle}</p>
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
@@ -68,7 +65,6 @@ const PlaylistDetail = () => {
           <Bottom>
             <PlayCircleFilledRoundedIcon 
               fontSize="large"
-              onClick={() => testFunc}
             />
             <DefaultBtn onClick={() => navigate("/playlist/edit")}>
               플레이리스트 수정
@@ -77,6 +73,7 @@ const PlaylistDetail = () => {
         </RightContent>
       </InfoContent>
 
+      <CustomTable musicList={ playlistMusic }/>        
     </StyleWrapper>
   );
 };

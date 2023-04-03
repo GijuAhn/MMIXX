@@ -4,6 +4,7 @@ import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+import CustomToast from "components/mymusic/CustomToast";
 
 const MyMusic = () => {
   const [query, setQuery] = useState("");
@@ -11,38 +12,43 @@ const MyMusic = () => {
   const [order, setOrder] = useState("");
 
   // // [Test] 곡 선택하기 (radio)
-  // const [selectedRadio, SetSelectedRadio] = useState({
+  // const [selectedRadio, setSelectedRadio] = useState({
   //   musicSeq: null,
   //   coverImage: null,
   //   musicName: null,
   //   musicianName: null,
   // });
 
+  // // [Test] 곡 선택하기 (check box)
+  // const [checkedList, setCheckedList] = useState([]);
+
   return (
     <Wrapper>
-      <Header title='My Music' desc='내 음악 들어보기' />
-      <Content>
-        <DivRight>
-          <MusicSearchBar query={query} setQuery={setQuery}></MusicSearchBar>
-        </DivRight>
-      </Content>
-
-      <Content>
-        <MusicUploadBtn></MusicUploadBtn>
-        <DivRight>
+      <div>
+        <Header title='My Music' desc='내 음악 들어보기' />
+        <SearchBarSection>
+          <MusicSearchBar query={query} setQuery={setQuery} />
+        </SearchBarSection>
+      </div>
+      <Div>
+        <section>
+          <MusicUploadBtn />
+        </section>
+        <SelectSection>
           <CustomSelect
             options={filterOptions}
             selectKind='필터'
             setSelect={setFilter}
-          ></CustomSelect>
+          />
           <CustomSelect
             options={orderOptions}
             selectKind='정렬'
             setSelect={setOrder}
-          ></CustomSelect>
-          {/* <DefaultBtn>즐겨찾기</DefaultBtn> */}
-        </DivRight>
-      </Content>
+          />
+        </SelectSection>
+      </Div>
+
+      <CustomToast></CustomToast>
 
       <MusicList filter={filter} order={order} query={query}></MusicList>
 
@@ -51,31 +57,39 @@ const MyMusic = () => {
       {selectedRadio.coverImage}
       {selectedRadio.musicName}
       {selectedRadio.musicianName}
-      <MusicList radio={true} checkRadio={SetSelectedRadio}></MusicList> */}
+      <MusicList radio={true} checkRadio={setSelectedRadio}></MusicList> */}
+
+      {/* [Test] 여러 곡 선택하기 (check box) */}
+      {/* <button onClick={() => console.log(checkedList)}>추가하기</button>
+      <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList> */}
     </Wrapper>
   );
 };
 
-// const DivBlock = styled.div`
-//   display: block;
+// const DivRight = styled.div`
+//   justify-content: end;
+//   margin-right: 15px;
+//   // margin-bottom: 10px;
+//   // & > button:first-child {
+//   //   margin-right: 15px;
+//   // }
 // `;
-const Content = styled.div`
-  width: 1100px;
-  flex-direction: column;
+
+const Div = styled.div`
+  // border: 1px dotted green;
+  justify-content: space-between;
+  width: 87%;
+  margin: 10px auto 20px auto;
 `;
 
-// const Div = styled.div`
-//   // display: flex;
-//   // justify-content: start;
-//   // padding: 30px 40px 30px;
-// `;
-const DivRight = styled.div`
-  justify-content: end;
-  margin-right: 15px;
-  // margin-bottom: 10px;
-  // & > button:first-child {
-  //   margin-right: 15px;
-  // }
+const SearchBarSection = styled.section`
+  margin-top: 20px;
+  margin-right: 83px;
+  // border: 1px dotted green;
+`;
+
+const SelectSection = styled.section`
+  display: flex;
 `;
 
 export default MyMusic;

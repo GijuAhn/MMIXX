@@ -6,6 +6,8 @@ import argparse
 import torchaudio
 import numpy as np
 from pydub import AudioSegment
+import scipy.io as sio
+import scipy.io.wavfile
 # import wave
 
 import sys
@@ -112,11 +114,16 @@ if __name__ == "__main__":
     print("current path : ", os.path.abspath(os.path.curdir))
     # mp3 to wav
     target_sound = AudioSegment.from_mp3('file/target.mp3')
-    # target_sound = target_sound.set_frame_rate(44100)
     target_sound.export('file/target.wav', format = 'wav')
 
     preset_sound = AudioSegment.from_mp3('file/preset.mp3')
     preset_sound.export('file/preset.wav', format = 'wav')
+
+    # 음악 길이 구하기
+    target_samplerate, target_data = sio.wavfile.read('file/target.wav')
+    target_times = np.arange(len(target_data))/float(target_samplerate)
+    preset_samplerate, preset_data = sio.wavfile.read('file/preset.wav')
+    preset_times = np.arange(len(preset_data))/float(preset_samplerate)
 
     x, x_sr = torchaudio.load('file/target.wav')
     r, r_sr = torchaudio.load('file/preset.wav')
@@ -137,13 +144,13 @@ if __name__ == "__main__":
         r_24000 = r
 
     # peak normalize to -12 dBFS
-    x_24000 = x_24000[0:1, : 24000 * 300]
+    x_24000 = x_24000[0:1, : 24000 * target_times[-1]]
     x_24000 /= x_24000.abs().max()
     x_24000 *= 10 ** (-12 / 20.0)
     x_24000 = x_24000.view(1, 1, -1)
 
     # peak normalize to -12 dBFS
-    r_24000 = r_24000[0:1, : 24000 * 300]
+    r_24000 = r_24000[0:1, : 24000 * preset_times[-1]]
     r_24000 /= r_24000.abs().max()
     r_24000 *= 10 ** (-12 / 20.0)
     r_24000 = r_24000.view(1, 1, -1)
