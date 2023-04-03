@@ -202,7 +202,7 @@ const CoverImage = styled.div`
 const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 10px;
-  width: 90%;
+  width: 87%;
   font-size: 14px;
   font-weight: 400;
 `;

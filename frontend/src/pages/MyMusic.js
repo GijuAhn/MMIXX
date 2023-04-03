@@ -75,13 +75,14 @@ const MyMusic = () => {
 const Div = styled.div`
   // border: 1px dotted green;
   justify-content: space-between;
-  width: 90%;
+  width: 87%;
   margin: 10px auto 20px auto;
 `;
 
 const SearchBarSection = styled.section`
   margin-top: 20px;
-  margin-right: 64px;
+  margin-right: 83px;
+  // border: 1px dotted green;
 `;
 
 const SelectSection = styled.section`
