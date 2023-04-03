@@ -42,34 +42,36 @@ public class PlaylistController {
 
     //  (관리자용) private 여부 상관없이 모든 유저의 모든 플레이리스트를 조회
     @GetMapping("/all/{userSeq}")
-    public List<Playlist> getAllPlaylist(@PathVariable int userSeq) {
+    public List<PlaylistSimpleDto> getAllPlaylist(@PathVariable int userSeq) {
         return playlistService.getAllPlaylist(userSeq);
     }
 
     //  전체 플레이리스트 목록을 조회 - public playlist
     @GetMapping("/global")
-    public List<Playlist> getGlobalPlaylist() {
+    public List<PlaylistSimpleDto> getGlobalPlaylist() {
         return playlistService.getGlobalPlaylist();
     }
 
     //  개인 플레이리스트 목록을 조회 - private playlist
     @GetMapping("/user/{userSeq}")
-    public List<Playlist> getPrivatePlaylist(@PathVariable int userSeq) {
+    public List<PlaylistSimpleDto> getPrivatePlaylist(@PathVariable int userSeq) {
         return playlistService.getPrivatePlaylist(userSeq);
     }
 
 
     // 해당(playlistSeq) 플레이리스트에 속한 노래 목록 조회
-    @GetMapping("/{playlistSeq}")
-    public PlaylistMusicDetailResponseDtoForRetrieve getMusicListInPlaylist(@PathVariable("playlistSeq") int playlistSeq) {
-        return playlistService.getMusicListInPlaylist(playlistSeq);
-    }
+//    @GetMapping("/{playlistSeq}")
+//    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(@PathVariable("playlistSeq") int playlistSeq) {
+//        return playlistService.getMusicListInPlaylist(playlistSeq);
+//    }
 
     //  플레이리스트 삭제
     @DeleteMapping("/{playlistSeq}")
     public void deletePlaylist(@PathVariable int playlistSeq) {
         playlistService.deletePlaylist(playlistSeq);
     }
+
+
 
     @ApiOperation(value = "즐겨찾기 등록")
     @PostMapping("/favorite")
