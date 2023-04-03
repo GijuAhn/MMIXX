@@ -1,6 +1,7 @@
 package com.a403.mmixx.playlist.model.dto;
 
 import com.a403.mmixx.music.model.dto.MusicListResponseDto;
+import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package com.a403.mmixx.playlist.model.service;
 
+import com.a403.mmixx.music.model.entity.Music;
 import com.a403.mmixx.playlist.model.dto.*;
 //import com.a403.mmixx.playlist.model.dto.PlaylistMusicListResponseDto;
 import com.a403.mmixx.playlist.model.dto.FindFavoriteDto;
@@ -32,6 +33,7 @@ public class PlaylistService {
 
     @Autowired
     private PlaylistRepository playlistRepository;
+
     @Autowired
     private PlaylistMusicRepository playlistMusicRepository;
 
@@ -121,13 +123,40 @@ public class PlaylistService {
 
     /**
      * 플레이리스트에 곡 추가
+     *
+     * @return
+     */
+    /*
+    JSON Example
+    {
+    "playlist_music":[
+        {
+            "musicSeq":1,
+            "sequence":1
+        },
+        {
+            "musicSeq":2,
+            "sequence":2
+        }
+    ],
+    "add_music":[
+        {
+            "musicSeq":70,
+            "sequence":4
+        },
+        {
+            "musicSeq":74,
+            "sequence":3
+        }
+    ]
+    }
      */
     @Transactional
-    public void addMusicToPlaylist(PlaylistMusicRequestDtoForAddMusic requestDto, String playlistSeq, String userSeq) {
+    public String addMusicToPlaylist(PlaylistMusicRequestDtoForAddMusic requestDto, String playlistSeq, String userSeq) {
 
         // get requestDto
-        LinkedList<PlaylistMusicDto> oriPlaylistMusicDtoList = requestDto.getOriPlaylistMusicDtoList();
-        LinkedList<PlaylistMusicDto> addPlaylistMusicDtoList = requestDto.getAddPlaylistMusicDtoList();
+        List<PlaylistMusicSimpleDto> oriPlaylistMusicDtoList = requestDto.getPlaylistMusic();
+        List<PlaylistMusicSimpleDto> addPlaylistMusicDtoList = requestDto.getAddMusic();
         log.info("oriPlaylistMusicDtoList: " + oriPlaylistMusicDtoList);
         log.info("addPlaylistMusicDtoList: " + addPlaylistMusicDtoList);
 
@@ -153,7 +182,7 @@ public class PlaylistService {
             newPlaylistMusic.setSequence(addPlaylistMusicDtoList.get(i).getSequence());
             playlistMusicRepository.save(newPlaylistMusic);
         }
-
+        return "addMusicToPlaylist success";
     }
 
     /**
@@ -200,11 +229,12 @@ public class PlaylistService {
 
 
     /**
-     * Private 플레이리스트 조회 (userSeq 필요)
+     * 유저 ID로 플레이리스트 조회 (userSeq 필요), 해당 user 가 생성한 private + public 플레이리스트를 조회한다.
      */
     public List<PlaylistSimpleDto> getPrivatePlaylist(int userSeq) {
         List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
-        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+//        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+        List<Playlist> playlistList = playlistRepository.findAll();
         for (int i = 0; i < playlistList.size(); i++) {
             if (playlistList.get(i).getUserSeq() == userSeq) {
                 PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
@@ -221,16 +251,85 @@ public class PlaylistService {
 
 
     /**
-     * 플레이리스트에 속한 노래 목록 조회
+     * 플레이리스트에 속한 노래 목록 조회, playlistSeq 필요
      */
-//    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(int playlistSeq) {
-//
-//        //  최종적으로 전달해야 할 플레이리스트 내 음악들의 리스트
-//        List<PlaylistMusicDetailResponseDtoForRetrieve> musicListInthePlaylist = new LinkedList<>();
-//
-//        //
-////        List<PlaylistMusicDto> playlistMusicDtoList = playlistMusicRepository.findByPlaylistSeq(playlistSeq);
-//    }
+    public List<PlaylistMusicDetailResponseDtoForRetrieve> getMusicListInPlaylist(int playlistSeq) {
+
+        //  최종적으로 전달해야 할, 플레이리스트 안에 들어있는 음악들의 목록
+        List<PlaylistMusicDetailResponseDtoForRetrieve> musicListInthePlaylist = new LinkedList<>();
+
+        //  플레이리스트에 속해있는 음악들의 순서정보(musicSeq, sequence)를 담은 리스트
+        List<PlaylistMusicDto> playlistMusicDtoList = new LinkedList<>();
+
+        //  플레이리스트에 들어있는 개별 음악의 상세정보
+        List<MusicListResponseDto> musicListResponseDtoList = new LinkedList<>();
+
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+
+        if (playlist == null) {
+            log.info("플레이리스트가 비어있습니다.");
+            return null;
+        }
+
+        //  playlistSeq 로 playlistMusic 테이블에서 musicSeq, sequence 를 조회
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+
+
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                PlaylistMusicDto playlistMusicDto = new PlaylistMusicDto();
+                playlistMusicDto.setPlaylistSeq(playlistMusicList.get(i).getPlaylistSeq());
+                playlistMusicDto.setMusicSeq(playlistMusicList.get(i).getMusicSeq());
+                playlistMusicDto.setSequence(playlistMusicList.get(i).getSequence());
+                playlistMusicDtoList.add(playlistMusicDto);
+            }
+        }
+
+        //  musicSeq 로 music 테이블에서 개별 음악의 상세정보를 조회
+        for (int i = 0; i < playlistMusicDtoList.size(); i++) {
+            MusicListResponseDto musicListResponseDto = new MusicListResponseDto();
+            Music music = musicRepository.findById(playlistMusicDtoList.get(i).getMusicSeq()).orElse(null);
+            musicListResponseDto.setMusicName(music.getMusicName());
+            musicListResponseDto.setMusicUrl(music.getMusicUrl());
+            musicListResponseDto.setCoverImage(music.getCoverImage());
+            musicListResponseDto.setMusicLength(music.getMusicLength());
+            musicListResponseDto.setMusicianName(music.getMusicianName());
+            musicListResponseDto.setAlbumName(music.getAlbumName());
+            musicListResponseDto.setGenre(music.getGenre());
+            if (music.getMixed() == null) {
+                musicListResponseDto.setMixed(null);
+            } else {
+                musicListResponseDto.setMixed(music.getMixed().getMusicSeq());
+            }
+            if (music.getInst() == null) {
+                musicListResponseDto.setInst(null);
+            } else {
+                musicListResponseDto.setInst(music.getInst().getMusicSeq());
+            }
+            musicListResponseDto.setPresetSeq(music.getPresetSeq());
+            musicListResponseDtoList.add(musicListResponseDto);
+        }
+
+        //  musicListResponseDtoList 에서 개별 음악의 상세정보를 뽑아서, PlaylistMusicDetailResponseDtoForRetrieve 에 담는다.
+        for (int i = 0; i < musicListResponseDtoList.size(); i++) {
+            PlaylistMusicDetailResponseDtoForRetrieve playlistMusicDetailResponseDtoForRetrieve = new PlaylistMusicDetailResponseDtoForRetrieve();
+            playlistMusicDetailResponseDtoForRetrieve.setMusicSeq(playlistMusicDtoList.get(i).getMusicSeq());
+            playlistMusicDetailResponseDtoForRetrieve.setSequence(playlistMusicDtoList.get(i).getSequence());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicName(musicListResponseDtoList.get(i).getMusicName());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicUrl(musicListResponseDtoList.get(i).getMusicUrl());
+            playlistMusicDetailResponseDtoForRetrieve.setCoverImage(musicListResponseDtoList.get(i).getCoverImage());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicLength(musicListResponseDtoList.get(i).getMusicLength());
+            playlistMusicDetailResponseDtoForRetrieve.setMusicianName(musicListResponseDtoList.get(i).getMusicianName());
+            playlistMusicDetailResponseDtoForRetrieve.setAlbumName(musicListResponseDtoList.get(i).getAlbumName());
+            playlistMusicDetailResponseDtoForRetrieve.setGenre(musicListResponseDtoList.get(i).getGenre());
+            playlistMusicDetailResponseDtoForRetrieve.setMixed(musicListResponseDtoList.get(i).getMixed());
+            playlistMusicDetailResponseDtoForRetrieve.setInst(musicListResponseDtoList.get(i).getInst());
+            playlistMusicDetailResponseDtoForRetrieve.setPresetSeq(musicListResponseDtoList.get(i).getPresetSeq());
+            musicListInthePlaylist.add(playlistMusicDetailResponseDtoForRetrieve);
+        }
+
+        return musicListInthePlaylist;
+    }
 
 
 
@@ -238,28 +337,37 @@ public class PlaylistService {
      * 플레이리스트 삭제 (playlist 에 포함된 music 까지 cascade)
      */
     public String deletePlaylist(int playlistSeq) {
-    	log.info("playlist 전체 삭제");
-    	Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
-        if(playlist != null) {
-        	log.info("playlist : " + playlist.toString());
-        	List<PlaylistMusic> musicList = playlistRepository.findAllByPlaylistSeq(playlist.getPlaylistSeq());
-        	if(musicList != null) {
-        		for(PlaylistMusic music : musicList) {
-            		log.info("playlist music : " + music.toString());
-            		playlistMusicRepository.deleteById(music.getPlaylistMusicSeq());
-            	}
-        	}
-        	playlistRepository.deleteById(playlistSeq);
-        	log.info("SUCCESS");
-        	return "SUCCESS";
+    	log.info("해당 playlist 전체 삭제 시작");
+        log.info("playlistSeq : " + playlistSeq + "번호에 해당하는 플레이리스트에 속한 모든 곡들 삭제");
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                playlistMusicRepository.deleteById(playlistMusicList.get(i).getPlaylistMusicSeq());
+            }
         }
-        log.info("FAIL");
-        return "FAIL";
+        log.info("playlistSeq : " + playlistSeq + "번호에 해당하는 플레이리스트 자체 삭제");
+        playlistRepository.deleteById(playlistSeq);
+        return "success";
     }
 
-//    public String getCoverImage(int seq) {
-//        return "";
-//    }
+    /**
+     * 플레이리스트 첫번째 곡 앨범아트 URL 가져오기
+     */
+    public String getCoverImage(int playlistSeq) {
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+        if (playlist == null) {
+            log.info("플레이리스트가 비어있습니다.");
+            return null;
+        }
+        List<PlaylistMusic> playlistMusicList = playlistMusicRepository.findAll();
+        for (int i = 0; i < playlistMusicList.size(); i++) {
+            if (playlistMusicList.get(i).getPlaylistSeq() == playlistSeq) {
+                Music music = musicRepository.findById(playlistMusicList.get(i).getMusicSeq()).orElse(null);
+                return music.getCoverImage();
+            }
+        }
+        return null;
+    }
     
     public List<FindFavoriteDto> FindFavorite(int user_seq) {
 //    	List<FindFavoriteDto> favorite_list = favoriteRepository.findAllByUser_UserSeq(user_seq);
@@ -304,4 +412,6 @@ public class PlaylistService {
         log.info("****** Favorite DB Delete SUCCESS ******");
         return "SUCCESS";
     }
+
+
 }

@@ -43,9 +43,9 @@ public class Playlist {
 	@JsonProperty
 		private Boolean isPrivate;
 
-	@OneToMany(mappedBy = "playlist")
-	@JsonProperty
-	private List<PlaylistMusic> playlistMusics;
+//	@OneToMany(mappedBy = "playlist")
+//	@JsonProperty
+//	private List<PlaylistMusic> playlistMusics;
 
 	public Playlist(int playlistSeq) {
 		this.playlistSeq = playlistSeq;
