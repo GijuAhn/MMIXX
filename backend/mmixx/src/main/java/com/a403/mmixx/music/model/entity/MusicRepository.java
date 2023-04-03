@@ -14,8 +14,10 @@ public interface MusicRepository extends JpaRepository<Music, Integer>, MusicRep
 //	select count(*) from music where user_seq = 5 and mixed is null and edited is null;
 	Integer countByUserSeqAndMixedNullAndInstNull(Integer user_seq);
 //	select count(*) from music where user_seq = 5 and mixed is not null and mixed != 0;
-	Integer countByUserSeqAndMixedNotNullAndMixedGreaterThan(Integer user_seq, Integer mixed);
+	Integer countByUserSeqAndMixedNotNull(Integer user_seq);
+//	Integer countByUserSeqAndMixedNotNullAndMixedGreaterThan(Integer user_seq, Integer mixed);
 //	select count(*) from music where user_seq = 5 and edited is not null and edited != 0;
-	Integer countByUserSeqAndInstNotNullAndInstGreaterThan(Integer user_seq, Integer inst);
+	Integer countByUserSeqAndInstNotNull(Integer user_seq);
+//	Integer countByUserSeqAndInstNotNullAndInstGreaterThan(Integer user_seq, Integer inst);
 
 }
