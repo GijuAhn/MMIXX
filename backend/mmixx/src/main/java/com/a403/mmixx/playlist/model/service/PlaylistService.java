@@ -296,8 +296,16 @@ public class PlaylistService {
             musicListResponseDto.setMusicianName(music.getMusicianName());
             musicListResponseDto.setAlbumName(music.getAlbumName());
             musicListResponseDto.setGenre(music.getGenre());
-            musicListResponseDto.setMixed(music.getMixed().getMusicSeq());
-            musicListResponseDto.setInst(music.getInst().getMusicSeq());
+            if (music.getMixed() == null) {
+                musicListResponseDto.setMixed(null);
+            } else {
+                musicListResponseDto.setMixed(music.getMixed().getMusicSeq());
+            }
+            if (music.getInst() == null) {
+                musicListResponseDto.setInst(null);
+            } else {
+                musicListResponseDto.setInst(music.getInst().getMusicSeq());
+            }
             musicListResponseDto.setPresetSeq(music.getPresetSeq());
             musicListResponseDtoList.add(musicListResponseDto);
         }
