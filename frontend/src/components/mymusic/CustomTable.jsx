@@ -123,8 +123,7 @@ const CustomTable = ({
               ></CoverImage>
             </TdRound>
             <Td weight='400' width='7%' align='center'>
-              {/* {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null} */}
-              M Ⅰ
+              {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             <Td width='27.5%'>
               {music.musicName.includes(".")
@@ -203,7 +202,7 @@ const CoverImage = styled.div`
 const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 10px;
-  width: 85%;
+  width: 90%;
   font-size: 14px;
   font-weight: 400;
 `;
