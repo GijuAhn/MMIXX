@@ -81,6 +81,7 @@ public class AwsS3Service {
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 		multipartFiles.forEach(file -> {
 			String fileName = createFileName(file.getOriginalFilename());
+			System.out.println("uploadMusicToS3 fileName : " + fileName);
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentLength(file.getSize());
 			metadata.setContentType(file.getContentType());
