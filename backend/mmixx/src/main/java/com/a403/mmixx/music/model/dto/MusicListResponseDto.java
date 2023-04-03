@@ -19,8 +19,8 @@ public class MusicListResponseDto {
 	private String musicianName;
 	private String albumName;
 	private String genre;
-	private Music mixed;
-	private Music inst;
+	private Integer mixed;
+	private Integer inst;
 	private Integer presetSeq;
 
 	@QueryProjection
@@ -33,8 +33,16 @@ public class MusicListResponseDto {
 		this.musicianName = entity.getMusicianName();
 		this.albumName = entity.getAlbumName();
 		this.genre = entity.getGenre();
-		this.mixed = entity.getMixed();
-		this.inst = entity.getInst();
+		if(entity.getMixed() != null) {
+			this.mixed = entity.getMixed().getMusicSeq();
+		} else {
+			this.mixed = null;
+		}
+		if(entity.getInst() != null) {
+			this.inst = entity.getInst().getMusicSeq();
+		} else {
+			this.inst = null;
+		}
 		this.presetSeq = entity.getPresetSeq();
 	}
 }
