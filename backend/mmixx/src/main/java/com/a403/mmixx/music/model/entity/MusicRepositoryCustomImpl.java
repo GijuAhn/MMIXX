@@ -50,7 +50,7 @@ public class MusicRepositoryCustomImpl implements MusicRepositoryCustom {
 	}
 
 	private BooleanExpression musicUser(Integer user_seq) {
-		return music.userSeq.eq(user_seq);
+		return music.user.userSeq.eq(user_seq);
 	}
 
 	private BooleanExpression musicNameContains(String query) {
