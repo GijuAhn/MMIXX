@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { testPlaylistMusic } from "atom/atom";
+import { userInfo } from "atom/atom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components"
 
@@ -13,22 +13,22 @@ import { getMusicList } from 'api/playlist';
 
 const MixSelectMusic = () => {
   const navigate = useNavigate();
-  const playList = useRecoilValue(testPlaylistMusic)
+  // const playList = useRecoilValue(testPlaylistMusic)
   // console.log('playList :', playList)
-  const musicList = playList.playlistMusic
+  // const musicList = playList.playlistMusic
   // console.log('musicList :', musicList)
   // console.log('music :', musicList[0].music)
-
+  const atomUser = useRecoilValue(userInfo);
   const [selMusicSeq, setSelMusicSeq] = useState('')
   const [selMusicInfo, setSelMusicInfo] = useState([])
 
   // 음악 데이터 가져오기 api
-  // const [musicList, setMusicList] = useState();
-  // useEffect(() => {
-  //   getMusicList(userSeq, page = 1)
-  //   .then( res => setMusicList(res.data) )
-  //   .catch( err => console.log(err) )
-  // },[])
+  const [musicList, setMusicList] = useState();
+  useEffect(() => {
+    getMusicList(atomUser.userSeq, 1)
+    .then( res => setMusicList(res.data[0].content) )
+    .catch( err => console.log(err) )
+  },[])
   const selectedMusicSeq = (x) => {
     setSelMusicSeq(x)
     console.log('선택한 음악 시퀀스 : ', x)
