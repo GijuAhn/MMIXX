@@ -253,9 +253,9 @@ const Button = styled.button`
 
   margin: 15px 10px auto 10px;
   transition: border 0.1s ease-in-out;
-  &:hover {
-    border: 3px solid ${({ theme }) => theme.palette.darkgray};
-  }
+  // &:hover {
+  //   border: 3px solid ${({ theme }) => theme.palette.darkgray};
+  // }
 
   ${({ outline }) =>
     outline &&
