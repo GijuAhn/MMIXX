@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import { useTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 // import { testPlaylistMusic } from 'atom/atom';
 // import { useRecoilValue } from 'recoil';
 import theme from 'styles/theme';
+import { PlaySlider, PlayIcons } from 'components/PlayBar';
 
 const ResultCard = (props) => {
   const theme = useTheme();
@@ -30,17 +27,10 @@ const ResultCard = (props) => {
           <p>{ musicianName }</p>
         </Content>
       </Card>
-      <PlayBar>
-        <IconButton aria-label="previous">
-          {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-        </IconButton>
-        <IconButton aria-label="play/pause">
-          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-        </IconButton>
-        <IconButton aria-label="next">
-          {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-        </IconButton>
-      </PlayBar>
+      <MusicPlayer>
+        <PlaySlider />
+        <PlayIcons />
+      </MusicPlayer>
     </ResultCardWrapper>
   )
 }
@@ -80,9 +70,9 @@ const CoverImage = styled.div`
     height: 100%;
   }
 `
-const PlayBar = styled.div`
-  display: 'flex', 
-  align-items: 'center', 
-  pl: 1, 
-  pb: 1
+const MusicPlayer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: 'flex-start';
+  margin: 1px;
 `

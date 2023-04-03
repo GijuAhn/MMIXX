@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const instance =  axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-  // baseURL: 'http://j8a403.p.ssafy.io/api',
+  // baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: 'http://j8a403.p.ssafy.io/api',
   // baseURL: 'http://localhost:5555/api', // 로컬 테스트
   // headers: {
   //   'Authorization': `Bearer ${localStorage.getItem('auth')}`
@@ -12,7 +12,7 @@ const instance =  axios.create({
 instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('auth')}`
 
 export const handleLogout = async () => {
-  return await instance.post({
+  return await instance({
     url: `/logout`
   })
 }

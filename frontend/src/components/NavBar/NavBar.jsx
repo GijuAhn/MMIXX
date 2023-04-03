@@ -11,7 +11,7 @@ import { DefaultBtn, PlainBtn } from 'components/Common'
 import logoText from 'assets/logo_text.png'
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
-import { isLogIn, test, userInfo } from 'atom/atom';
+import { isLogIn, userInfo } from 'atom/atom';
 import { handleLogout } from "api/base";
 
 const NavBar = () => {
@@ -33,12 +33,13 @@ const NavBar = () => {
 
   const onClickLogin = () => {
     // handleLogin().then((res) => console.log(res));
-    if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";//"http://localhost:5555/api/user/login";
+    // if (!isLogin) window.location.href = "http://localhost:5555/api/user/login";
+    if (!isLogin) window.location.href = process.env.REACT_APP_BASE_URL + "/user/login";
     else {
       handleLogout().then(() => {
         localStorage.clear();
-        console.log("로그아웃");
-        window.location.reload();
+        // console.log("로그아웃");
+        window.location.href = "/";
       })
     }
   };

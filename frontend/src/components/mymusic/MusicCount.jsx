@@ -13,7 +13,7 @@ const MusicCount = () => {
   const [instCnt, setInstCnt] = useState(0);
 
   useEffect(() => {
-    countMusic({ userSeq: user ? user.userSeq : 0 }).then(({ data }) => {
+    countMusic(user ? user.userSeq : 0).then(({ data }) => {
       setAllCnt(data.allCnt);
       setMixedCnt(data.mixedCnt);
       setInstCnt(data.instCnt);
@@ -32,7 +32,7 @@ const MusicCount = () => {
           <Cnt>{mixedCnt}</Cnt>
         </Tr>
         <Tr>
-          <Td>내가 추출한 Inst??...?</Td>
+          <Td>내가 배경음 추출한 곡</Td>
           <Cnt>{instCnt}</Cnt>
         </Tr>
       </tbody>
@@ -54,7 +54,7 @@ const fadeIn = keyframes`
 const Table = styled.table`
   // position: absolute;
   // top: 400px;
-  width: 85%;
+  width: 90%;
   margin: 0 auto;
   height: 100px;
   // border: 1px dotted red;

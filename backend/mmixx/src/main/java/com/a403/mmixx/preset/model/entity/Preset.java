@@ -1,4 +1,4 @@
-package com.a403.mmixx.music.model.entity;
+package com.a403.mmixx.preset.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

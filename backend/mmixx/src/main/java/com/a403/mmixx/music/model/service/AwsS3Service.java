@@ -51,7 +51,7 @@ public class AwsS3Service {
 
 	private final AmazonS3 amazonS3;
 	private final MusicRepository musicRepository;
-	private final String MUSIC_FOLDER = "/music/";
+	private final String MUSIC_FOLDER = "/music";
 	private final String IMAGE_FOLDER = "/images";
 
 	public ResponseEntity<byte[]> downloadMusic(int music_seq) throws IOException {
@@ -81,6 +81,7 @@ public class AwsS3Service {
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 		multipartFiles.forEach(file -> {
 			String fileName = createFileName(file.getOriginalFilename());
+			System.out.println("uploadMusicToS3 fileName : " + fileName);
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentLength(file.getSize());
 			metadata.setContentType(file.getContentType());
@@ -101,6 +102,7 @@ public class AwsS3Service {
 
 
 	public List<String> uploadCoverImageToS3(List<MultipartFile> multipartFiles) {
+		System.out.println("uploadCoverImageToS3 START");
 		List<String> fileList = new ArrayList<>();
 
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -110,19 +112,26 @@ public class AwsS3Service {
 			try {
 				coverImage = MP3AlbumArtworkService.extractAlbumArtwork(file);
 			} catch (IOException e) {
+				e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "커버 이미지 업로드에 실패했습니다.");
 			} catch (CannotReadException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (TagException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (InvalidAudioFrameException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (ReadOnlyFileException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
 
 
 			String fileName = createFileName(file.getOriginalFilename() + "_artwork.jpg");
+			System.out.println("fileName : " + fileName);
+			
 			ObjectMetadata metadata = new ObjectMetadata();
 			//	setContentType to .jpg
 			metadata.setContentType("image/jpeg");
