@@ -4,24 +4,29 @@ import { useNavigate } from 'react-router-dom';
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
-import { testPlaylist } from 'atom/atom';
+import { testPlaylist, isLogIn, userInfo } from 'atom/atom';
 import { useEffect, useState } from 'react';
-import { testApi } from 'api/playlist';
+import { getPlaylists } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
   const playlists = useRecoilValue(testPlaylist)
-  const [data, setData] = useState('')
+  const [data, setData] = useState(null)
+
+  const atomIsLogin = useRecoilValue(isLogIn)
+  const atomUser = useRecoilValue(userInfo)
 
   useEffect(() => {
-    testApi()
-      .then(res => setData(res))
+    getPlaylists(atomUser.userSeq)
+      .then(
+        res => {
+          setData(res.data)
+          return res.data
+        }
+    )
       .catch(err => console.log(err))
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    console.log('결과값 확인 : ', data) 
-  }, [data]);
 
   return (
     <StyleWrapper>
@@ -42,17 +47,29 @@ const Playlist = () => {
             플레이리스트 추가
           </DefaultBtn>
         </Top>
-        <CardWrapper>
-          {playlists.map((playlist, index) => {
-            return (
-              <MiniPlaylistCard 
-                key={index} 
-                playlist={playlist}
-                onClick={() => navigate(`/playlist/${playlist.playlistSeq}`)}
-                />
-            )
-          })}
-        </CardWrapper>
+        {data != null ?
+          <>
+            <CardWrapper>
+            
+              {data.map((playlist, index) => {
+                return (
+                  <MiniPlaylistCard
+                    key={index}
+                    playlist={playlist}                   
+                    onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
+                      state : {
+                        playlistTitle: `${playlist.playlistName}`,
+                        isPrivate: `${playlist.isPrivate}`,
+                      } 
+                      })}
+                  />
+                )
+              })}
+          
+            </CardWrapper>
+          </> :
+          <button></button>
+        }
       </Content>
     </StyleWrapper>
   );

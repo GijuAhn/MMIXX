@@ -40,7 +40,7 @@ const PlaylistCreate = () => {
             <AddMusicBtn onClick={() => navigate("/playlist/select", {
               state : {
                 playlistTitle: inputRef.current.value,
-                isPrivate: false,
+                isPrivate: true,
               } 
               })}>
               곡 추가

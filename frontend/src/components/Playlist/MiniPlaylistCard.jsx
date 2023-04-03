@@ -1,7 +1,18 @@
 import styled from "styled-components"
+import { getPlaylistCoverImage } from "api/playlist"
+import { useEffect, useState } from "react"
 
 const MiniPlaylistCard = ({ playlist, onClick }) => {
-  const { coverImage, playlistName } = playlist
+  const { playlistName } = playlist
+  const [coverImage, setCoverImg] = useState('');
+  useEffect(() => {
+    getPlaylistCoverImage(playlist.playlistSeq)
+      .then(res => {
+      // console.log(res);
+      setCoverImg(res.data);
+    })
+  }, []); 
+
 
   return (
     <CardWrapper coverImage={coverImage} onClick={onClick}>
