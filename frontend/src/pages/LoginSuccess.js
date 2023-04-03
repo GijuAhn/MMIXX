@@ -39,8 +39,8 @@ const LoginSuccess = () => {
         })
     }
 
-    const  setUserInfo  = useSetRecoilState(userInfo);
-    const  setIsLogin  = useSetRecoilState(isLogIn);
+    // const [ userInfo, setUserInfo ] = useSetRecoilState(userInfo);
+    // const [ isLogin, setIsLogin ] = useSetRecoilState(isLogIn);
     useEffect(() => {
         // console.log("dddddddddd");
          getUser(seq).then(res => {
@@ -51,8 +51,8 @@ const LoginSuccess = () => {
              localStorage.setItem('user', JSON.stringify(res));
              localStorage.setItem('auth', token);
              localStorage.setItem('isLogin', 'true');
-             setUserInfo(res);
-             setIsLogin(true);
+            //  setUserInfo(res);
+            //  setIsLogin(true);
          }).then(res => {
              window.location.href = "/"
          })

@@ -13,6 +13,7 @@ const MixResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [result, setResult] = useState('')
+  // const [responsed, setResponsed] = useState(false)
   const musicSeq = location.state && location.state.musicSeq;
   const presetSeq = location.state && location.state.presetSeq;
 

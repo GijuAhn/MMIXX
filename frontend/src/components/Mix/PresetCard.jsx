@@ -1,58 +1,64 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-
-import IconButton from '@mui/material/IconButton';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import theme from 'styles/theme';
 
 import styled from 'styled-components';
 import { testPlaylistMusic } from 'atom/atom';
 import { useRecoilValue } from 'recoil';
 
-const PresetCard = (props, {presetSeqFunc}) => {
-  const preset_name = props.preset_name
-  const presetSeq = props.presetSeq
-  // const musicName = props.musicName
-  // const musicianName = props.musicianName
-  // const coverImage = props.coverImage
+import theme from 'styles/theme';
+import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
+const PresetCard = (props, {presetSeqFunc}) => {
+  const presetName = props.presetName
+  const presetNum = props.presetNum
+  // const musicName = props.musicName
+  // const musicLength = props.musicLength
+  // const musicianName = props.musicianName
+  // const presetUrl = props.presetUrl
+  // const coverImage = props.coverImage
+  const [isSelected, setIsSelected] = useState(true)
   const playlist = useRecoilValue(testPlaylistMusic)
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   
   useEffect(() => {
-    console.log(props.selnum)
-    if (props.selnum === presetSeq) {
-      console.log('나야낭')
+    console.log(props.selNum)
+    if (props.selNum === presetNum) {
+      setIsSelected(true)
+      console.log('선택된 프리셋', props.selNum)
     } else {
-      console.log('나 아니양')
+      setIsSelected(false)
+      console.log('선택되지 않은 프리셋', props.selNum)
     }
-  }, [props.selnum])
+  }, [props.selNum])
 
 
   return (
-    <Card onClick={() => props.presetSeqFunc(presetSeq) }>
+    <Card isSelected={isSelected} onClick={() => props.presetSeqFunc(presetNum) }>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <CoverImage>
           <img src={coverImage} alt={musicName} />
         </CoverImage>
         <Content>
-          <div style={{ color: `${theme.palette.secondary}`, fontSize: 35, fontWeight: 'bolder', justifyContent: 'flex-start' }}>
-            { preset_name }
+          <div style={{ color: `${theme.palette.secondary}`, fontSize: '3vw', fontWeight: 'bolder', justifyContent: 'flex-start' }}>
+            { presetName }
           </div>
-          <div style={{ color: `${theme.palette.light}`, fontSize: 25, fontWeight: 'bold', justifyContent: 'flex-start' }}>
+          <div style={{ color: `${theme.palette.light}`, fontSize: '1.5vw', fontWeight: 'bold', justifyContent: 'flex-start' }}>
             { musicName }
           </div>
-          <div style={{ color: `${theme.palette.light}`, fontWeight: 'normal', justifyContent: 'flex-start' }}>
+          <div style={{ color: `${theme.palette.light}`, fontSize: '0.8vw', fontWeight: 'normal', justifyContent: 'flex-start' }}>
             { musicianName }
-          </div>
-          <div style={{ justifyContent: 'flex-start' }}>
-            <IconButton aria-label="play/pause">
-              <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-            </IconButton>
-            {/* <PlayIcons /> */}
           </div>
         </Content>
       </Box>
+
+      {/* 프리셋 음악 재생 */}
+      <MusicPlayer>
+        {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
+          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+        </IconButton> */}
+        <PlaySlider />
+        <PlayIcons />
+      </MusicPlayer>
     </Card>
   );
 }
@@ -63,16 +69,16 @@ const Card = styled.div`
   display: flex; 
   flex-direction: column;
   width: 30vw; 
-  height: 40vh; 
-  border: 3px solid ${theme.palette.secondary};
+  height: 43vh; 
+  border: 3px ${props => props.isSelected ? 'solid' : 'dashed'} ${props => (props.isSelected ? theme.palette.secondary : theme.palette.light)};
   border-radius: 10px;
   background-color: ${theme.palette.dark};
   padding: 3vw;
 `
 const CoverImage = styled.div`
   object-fit: cover;
-  width: 30vw;
-  height: 25vh;
+  width: 25vw;
+  height: 23vh;
   overflow: hidden;
   border-radius: 1vw;
 
@@ -85,4 +91,11 @@ const Content = styled.div`
  display: flex;
  flex-direction: column;
  padding-left: 3vw
+`
+
+const MusicPlayer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: 'flex-start';
+  padding-top: 1vh;
 `
