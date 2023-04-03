@@ -35,11 +35,11 @@ public class MP3MetadataService {
             Map<String, String> metadataMap = extractMetadata(multipartFile);
             //  if musicName is null, set musicName to its own file name
             if (metadataMap.get("musicName") == null) {
-            	byte[] euckrStringBuffer = multipartFile.getOriginalFilename().getBytes(Charset.forName("euc-kr"));
-            	String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
-            	byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
-            	String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
-            	System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
+                byte[] euckrStringBuffer = multipartFile.getOriginalFilename().getBytes(Charset.forName("euc-kr"));
+                String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
+                byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
+                String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
+                System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
                 musicContainer.setMusicName(decodedFromUtf8);
 //                musicContainer.setMusicName(multipartFile.getOriginalFilename());
             } else {
@@ -89,36 +89,54 @@ public class MP3MetadataService {
 //        metadataMap.put("musicLength", metadata.get("xmpDM:duration"));
 //        metadataMap.put("musicianName", euckrToUtf8(metadata.get("xmpDM:artist")));
 //        metadataMap.put("albumName", euckrToUtf8(metadata.get("xmpDM:album")));
-        System.out.println("*********************************************************************************");
-        System.out.println("metadata.get(\"title\") : " + metadata.get("title"));
-        byte[] euckrStringBuffer = metadata.get("title").getBytes(Charset.forName("euc-kr"));
-    	String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
-    	System.out.println("decodedFromEucKr : " + decodedFromEucKr);
-    	
-		byte[] utf8StringBuffer1 = metadata.get("title").getBytes("utf-8");
-    	String decodedFromUtf81 = new String(utf8StringBuffer1, "utf-8");
-    	System.out.println("decodedFromUtf81 : " + decodedFromUtf81);
-    	
-    	byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
-    	String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
-    	System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
-    	
-    	String[] charSet = {"utf-8", "euc-kr", "ksc5601", "iso-8859-1", "x-windows-949"};
-    	for(int i = 0; i<charSet.length; i++) {
-    		for(int j = 0; j<charSet.length; j++) {
-				System.out.println("[" + charSet[i] + "," + charSet[j] + "]" + new String(metadata.get("title").getBytes(charSet[i]), charSet[j]));
-    		}
-    	}
-    	System.out.println("*********************************************************************************");
-    	
-        metadataMap.put("musicName", new String(metadata.get("title").getBytes("iso-8859-1"), "euc-kr"));
+
+        if (metadata.get("title") != null) {
+
+            System.out.println("*********************************************************************************");
+            System.out.println("metadata.get(\"title\") : " + metadata.get("title"));
+            byte[] euckrStringBuffer = metadata.get("title").getBytes(Charset.forName("euc-kr"));
+            String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
+            System.out.println("decodedFromEucKr : " + decodedFromEucKr);
+
+            byte[] utf8StringBuffer1 = metadata.get("title").getBytes("utf-8");
+            String decodedFromUtf81 = new String(utf8StringBuffer1, "utf-8");
+            System.out.println("decodedFromUtf81 : " + decodedFromUtf81);
+
+            byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
+            String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
+            System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
+
+            String[] charSet = {"utf-8", "euc-kr", "ksc5601", "iso-8859-1", "x-windows-949"};
+            for (int i = 0; i < charSet.length; i++) {
+                for (int j = 0; j < charSet.length; j++) {
+                    System.out.println("[" + charSet[i] + "," + charSet[j] + "]" + new String(metadata.get("title").getBytes(charSet[i]), charSet[j]));
+                }
+            }
+            System.out.println("*********************************************************************************");
+
+            metadataMap.put("musicName", new String(metadata.get("title").getBytes("iso-8859-1"), "euc-kr"));
+        } else {
+            metadataMap.put("musicName", file.getOriginalFilename());
+        }
         metadataMap.put("musicLength", metadata.get("xmpDM:duration"));
-        metadataMap.put("musicianName", new String(metadata.get("xmpDM:artist").getBytes("iso-8859-1"), "euc-kr"));
-        metadataMap.put("albumName", new String(metadata.get("xmpDM:album").getBytes("iso-8859-1"), "euc-kr"));
+
+        if (metadata.get("xmpDM:artist") != null) {
+            metadataMap.put("musicianName", new String(metadata.get("xmpDM:artist").getBytes("iso-8859-1"), "euc-kr"));
+        } else {
+            metadataMap.put("musicianName", "Unknown");
+        }
+//        metadataMap.put("musicianName", new String(metadata.get("xmpDM:artist").getBytes("iso-8859-1"), "euc-kr"));
+
+        if (metadata.get("xmpDM:album") != null) {
+            metadataMap.put("albumName", new String(metadata.get("xmpDM:album").getBytes("iso-8859-1"), "euc-kr"));
+        } else {
+            metadataMap.put("albumName", "Unknown");
+        }
+//        metadataMap.put("albumName", new String(metadata.get("xmpDM:album").getBytes("iso-8859-1"), "euc-kr"));
 
         //  print all metadata (raw data check)
         String[] metadataNames = metadata.names();
-        for(String name : metadataNames){
+        for (String name : metadataNames) {
             System.out.println(name + ": " + metadata.get(name));
         }
 
@@ -129,21 +147,21 @@ public class MP3MetadataService {
     }
 
     public static String euckrToUtf8(String data) {
-    	if(data != null) {
+        if (data != null) {
 //    		byte[] euckrStringBuffer = data.getBytes(Charset.forName("euc-kr"));
 //        	String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
 //			byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
 //        	String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
 //        	System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
-    		
-			try {
-	        	return new String(data.getBytes("iso-8859-1"), "euc-kr");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return null;
-			}
-    	} else {
-    		return null;
-    	}
+
+            try {
+                return new String(data.getBytes("iso-8859-1"), "euc-kr");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }
