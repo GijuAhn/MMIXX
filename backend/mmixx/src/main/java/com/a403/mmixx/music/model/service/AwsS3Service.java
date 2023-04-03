@@ -112,14 +112,19 @@ public class AwsS3Service {
 			try {
 				coverImage = MP3AlbumArtworkService.extractAlbumArtwork(file);
 			} catch (IOException e) {
+				e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "커버 이미지 업로드에 실패했습니다.");
 			} catch (CannotReadException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (TagException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (InvalidAudioFrameException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			} catch (ReadOnlyFileException e) {
+				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
 
