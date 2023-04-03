@@ -30,8 +30,8 @@ public class PlaylistController {
     // 빈 플레이리스트 생성 + 생성된 플레이리스트에 곡 리스트 추가한 후 DB 저장까지
     @PostMapping("/{userSeq}")
     public ResponseEntity<?> createPlaylist(@RequestBody PlaylistDto requestDto, @PathVariable int userSeq) {
-        playlistService.createPlaylist(requestDto, userSeq);
-        return ResponseEntity.ok().build();
+        Integer playlistSeq = playlistService.createPlaylist(requestDto, userSeq);
+        return ResponseEntity.ok().body(playlistSeq);
     }
 
     // 플레이리스트에 곡 추가
@@ -65,9 +65,16 @@ public class PlaylistController {
 //        return playlistService.getMusicListInPlaylist(playlistSeq);
 //    }
 
-    //  플레이리스트 삭제
+    @ApiOperation(value = "플레이리스트 전체 삭제")
     @DeleteMapping("/{playlistSeq}")
     public void deletePlaylist(@PathVariable int playlistSeq) {
+        playlistService.deletePlaylist(playlistSeq);
+    }
+    
+    //  플레이리스트 삭제
+    @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
+    @DeleteMapping("/detail/{playlistSeq}")
+    public void deletePlaylistMusic(@PathVariable int playlistSeq) {
         playlistService.deletePlaylist(playlistSeq);
     }
     

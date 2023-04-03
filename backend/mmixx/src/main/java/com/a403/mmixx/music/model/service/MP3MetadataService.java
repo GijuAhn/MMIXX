@@ -27,12 +27,16 @@ import java.util.Map;
 public class MP3MetadataService {
 
     public static List<Music> extractMetadataFromMultipartFileList(List<MultipartFile> multipartFiles) throws Exception {
-
+    	System.out.println("extractMetadataFromMultipartFileList 시작~~~~!!^^");
         List<Music> musicContainerList = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFiles) {
             Music musicContainer = new Music();
+            
+            System.out.println("extractMetadata 시작");
             Map<String, String> metadataMap = extractMetadata(multipartFile);
+            System.out.println("extractMetadata 종료");
+            
             //  if musicName is null, set musicName to its own file name
             if (metadataMap.get("musicName") == null) {
             	byte[] euckrStringBuffer = multipartFile.getOriginalFilename().getBytes(Charset.forName("euc-kr"));
@@ -64,6 +68,7 @@ public class MP3MetadataService {
 
     public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
         // Convert multipart file to MP3 file
+    	System.out.println("extract Metadata 시작");
         File mp3File = Files.createTempFile("temp", ".mp3").toFile();
 
         //  print file's location (path) for debugging
