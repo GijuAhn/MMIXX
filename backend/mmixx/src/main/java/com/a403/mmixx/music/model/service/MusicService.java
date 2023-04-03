@@ -114,10 +114,13 @@ public class MusicService {
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
-
+		
+		System.out.println("uploadMusicToS3");
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
+		System.out.println("uploadCoverImageToS3");
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
-
+		
+		System.out.println("End upload");
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items
 //		C:\Users\SSAFY\AppData\Local\Temp\tomcat.5555.6401783967014632574\work\Tomcat\localhost\api\ upload_c84fc623_5e93_45cd_b1b0_ae7e377fa2d4_00000000.tmp
 		musicContainerList = MP3MetadataService.extractMetadataFromMultipartFileList(multipartFiles);
@@ -209,6 +212,7 @@ public class MusicService {
 		if(music != null) {
 			RestTemplate restTemplate = new RestTemplate();
 			String music_path = music.getMusicUrl().replace("https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/", "");
+			System.out.println("music_path : " + music_path);
 			String response = "";
 
 			String url = "https://j8a403.p.ssafy.io/django/api/mix/inst";
@@ -272,10 +276,16 @@ public class MusicService {
 	}
 
 	public MusicCountResponseDto countMusic(Integer user_seq) {
+		
 		int allCnt = musicRepository.countByUserSeq(user_seq);
+		log.info("***** allCnt: {} *****", allCnt);
 		int originCnt = musicRepository.countByUserSeqAndMixedNullAndInstNull(user_seq);
-		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNullAndMixedGreaterThan(user_seq, 0);
-		int instCnt = musicRepository.countByUserSeqAndInstNotNullAndInstGreaterThan(user_seq, 0);
+		log.info("***** originCnt: {} *****", originCnt);
+		int temp = 0;
+		int mixedCnt = musicRepository.countByUserSeqAndMixedNotNull(user_seq);
+		log.info("***** mixedCnt: {} *****", mixedCnt);
+		int instCnt = musicRepository.countByUserSeqAndInstNotNull(user_seq);
+		log.info("***** instCnt: {} *****", instCnt);
 
 		MusicCountResponseDto responseDto = new MusicCountResponseDto(allCnt, originCnt, mixedCnt, instCnt);
 		return responseDto;

@@ -9,11 +9,12 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
 import { getPlaylistDetail } from "api/playlist"
+import {CustomTable} from "components/mymusic"
 
 const PlaylistDetail = () => {
   const navigate = useNavigate()
   const { playlistSeq } = useParams()
-  const [ data, setData ] = useState(null)
+  const [data, setData] = useState(null)
 
   console.log('params', playlistSeq)
   const { 
@@ -26,6 +27,7 @@ const PlaylistDetail = () => {
     getPlaylistDetail(playlistSeq)
       .then(res => {
         setData(res.data)
+        // console.log(res);
         return res.data
       })
       .then(res => console.log(res))
@@ -70,6 +72,7 @@ const PlaylistDetail = () => {
         </RightContent>
       </InfoContent>
 
+      {/* <CustomTable musicList={ null }/>         */}
     </StyleWrapper>
   );
 };
