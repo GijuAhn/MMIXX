@@ -4,6 +4,7 @@ import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+import CustomToast from "components/mymusic/CustomToast";
 
 const MyMusic = () => {
   const [query, setQuery] = useState("");
@@ -46,6 +47,8 @@ const MyMusic = () => {
           />
         </SelectSection>
       </Div>
+
+      <CustomToast></CustomToast>
 
       <MusicList filter={filter} order={order} query={query}></MusicList>
 
