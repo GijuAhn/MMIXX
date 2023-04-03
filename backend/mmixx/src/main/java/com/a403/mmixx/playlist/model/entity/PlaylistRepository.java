@@ -13,6 +13,8 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     List<Playlist> findByIsPrivateTrue();
     List<Playlist> findByIsPrivateFalse();
 
+	List<PlaylistMusic> findAllByPlaylistSeq(Integer playlistSeq);
+
     //    List<PlaylistSimpleDto> findByIsPrivate(boolean b);
 //    List<PlaylistSimpleDto> findByIsPrivateAndUserSeq(boolean b, int userSeq);
 }
