@@ -9,13 +9,19 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
 import { getPlaylistDetail } from "api/playlist"
+import usePlayAudio from "hooks/usePlayAudio"
 
 const PlaylistDetail = () => {
   const navigate = useNavigate()
   const { playlistSeq } = useParams()
   const [ data, setData ] = useState(null)
+  const testValue = usePlayAudio()
 
-  console.log('params', playlistSeq)
+  const testFunc = () => {
+    console.log(testValue)
+  }
+
+  console.log('params', playlistSeq, data)
   const { 
     playlistName, 
     playlistMusic
@@ -30,7 +36,7 @@ const PlaylistDetail = () => {
       })
       .then(res => console.log(res))
 
-  }, [])
+  }, [playlistSeq])
 
   useEffect(() => {
     setCoverImage(playlistMusic[0].music.coverImage)
@@ -62,6 +68,7 @@ const PlaylistDetail = () => {
           <Bottom>
             <PlayCircleFilledRoundedIcon 
               fontSize="large"
+              onClick={() => testFunc}
             />
             <DefaultBtn onClick={() => navigate("/playlist/edit")}>
               플레이리스트 수정
