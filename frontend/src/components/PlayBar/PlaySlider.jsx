@@ -1,18 +1,18 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import Slider from '@mui/material/Slider';
 
 // 1. 마우스가 바를 선택하고 놨을 때 지정된 값부터 노래를 다시 재생한다 -> 노래가 시작되는 순서?! 
 // 2. 노래가 재생되는 동안 그 진행되는 시간을 가져와서 playbar의 value에 반영하면 되지 않나???????
 
 const PlaySlider = () => {
-  const [ position, setPosition ] = useState(15)
+  // const [ position, setPosition ] = useState(15)
 
 
   return (
     <Slider
       aria-label="time-indicator"
       size="small"
-      value={position}
+      value={30}
       min={0}
       step={1}
       max={200}

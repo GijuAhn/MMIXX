@@ -1,19 +1,9 @@
 import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
-
-const localStorageEffect = key => ({setSelf, onSet}) => {
-  const savedValue = localStorage.getItem(key)
-  if (savedValue != null) {
-    setSelf(JSON.parse(savedValue));
-  }
-
-  onSet((newValue, _, isReset) => {
-    isReset
-      ? localStorage.removeItem(key)
-      : localStorage.setItem(key, JSON.stringify(newValue));
-  });
-};
+import { localStorageEffect } from "./_local";
+import newJeansRetro from 'assets/music/NewJeans-Retro.mp3'
+import newJeansRemix from 'assets/music/NewJeans-Future Funk Remix.mp3'
 
 export const isLogIn = atom({
   key: 'isLogIn',
@@ -39,7 +29,7 @@ export const testPlaylist = atom({
         playlistSeq: 1,
         userSeq: 'ABC',
         musicName: 'OMG', 
-        musicUrl: '',
+        musicUrl: newJeansRetro,
         coverImage: newJeansImage,
         musicImage: 'assets/cover_image.jpg',
         musicianName: 'New Jeans',
@@ -51,7 +41,7 @@ export const testPlaylist = atom({
         playlistSeq: 2,
         userSeq: 'DEF',
         musicName: '사건의 지평선', 
-        musicUrl: '',
+        musicUrl: newJeansRemix,
         coverImage: 'https://image.bugsm.co.kr/album/images/500/40734/4073469.jpg',
         musicImage: '',
         musicianName: '윤하',
@@ -63,7 +53,7 @@ export const testPlaylist = atom({
         playlistSeq: 3,
         userSeq: 'GHI',
         musicName: 'Cupid', 
-        musicUrl: '',
+        musicUrl: newJeansRetro,
         coverImage: 'https://preview.redd.it/fifty-fifty-the-1st-single-album-the-beginning-cupid-cover-v0-ujxvn57yg5ka1.jpg?auto=webp&s=464bef37a60cd8b6b2d0c607ecea65be3c4e85b8',
         musicImage: '',
         musicianName: 'FIFTY FIFTY',
@@ -75,7 +65,7 @@ export const testPlaylist = atom({
         playlistSeq: 4,
         userSeq: 'XYZ',
         musicName: 'OMG', 
-        musicUrl: '',
+        musicUrl: newJeansRemix,
         coverImage: 'https://images.genius.com/78a260dddd0b802059eb5e7a4d4f2f0c.1000x1000x1.jpg',
         musicImage: '',
         musicianName: '뉴진스',

@@ -24,7 +24,7 @@ const NavBar = () => {
     atomIsLogin
     // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
       ? true
-      : false;
+      : true;
 
   const user = atomUser
     // localStorage.getItem("user")
@@ -49,7 +49,7 @@ const NavBar = () => {
         {/* <LogoImage img={logo} alt="logo"/> */}
         <LogoText img={logoText} alt="logoText" />
       </NavLogo>
-      {atomIsLogin ?
+      {isLogin ?
       <>
         {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
         <NavProfile>

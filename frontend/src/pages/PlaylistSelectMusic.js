@@ -4,7 +4,7 @@ import { Wrapper, Header } from "components/Common"
 import { SelectMusicItem } from "components/Mix";
 import { testPlaylistMusic } from "atom/atom";
 import { useRecoilValue } from "recoil";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // import { getMusicList } from "api/mymusic";
 
@@ -23,6 +23,8 @@ const PlaylistSelectMusic = () => {
 
   const { state } = useLocation()
   const playlistTitle = state.playlistTitle
+
+  console.log('playlistTitle :', playlistTitle)
 
   return (
     <Wrapper>
