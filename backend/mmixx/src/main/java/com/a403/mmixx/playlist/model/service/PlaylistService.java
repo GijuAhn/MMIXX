@@ -269,8 +269,8 @@ public class PlaylistService {
             musicListResponseDto.setMusicianName(music.getMusicianName());
             musicListResponseDto.setAlbumName(music.getAlbumName());
             musicListResponseDto.setGenre(music.getGenre());
-            musicListResponseDto.setMixed(music.getMixed());
-            musicListResponseDto.setInst(music.getInst());
+            musicListResponseDto.setMixed(music.getMixed().getMusicSeq());
+            musicListResponseDto.setInst(music.getInst().getMusicSeq());
             musicListResponseDto.setPresetSeq(music.getPresetSeq());
             musicListResponseDtoList.add(musicListResponseDto);
         }

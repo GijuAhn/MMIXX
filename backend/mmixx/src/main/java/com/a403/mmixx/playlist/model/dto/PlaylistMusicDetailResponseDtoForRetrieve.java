@@ -26,8 +26,8 @@ public class PlaylistMusicDetailResponseDtoForRetrieve {
     private String musicianName;
     private String albumName;
     private String genre;
-    private Music mixed;
-    private Music inst;
+    private Integer mixed;
+    private Integer inst;
     private Integer presetSeq;
 
 }
