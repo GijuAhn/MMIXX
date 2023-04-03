@@ -123,13 +123,40 @@ public class PlaylistService {
 
     /**
      * 플레이리스트에 곡 추가
+     *
+     * @return
+     */
+    /*
+    JSON Example
+    {
+    "playlist_music":[
+        {
+            "musicSeq":1,
+            "sequence":1
+        },
+        {
+            "musicSeq":2,
+            "sequence":2
+        }
+    ],
+    "add_music":[
+        {
+            "musicSeq":70,
+            "sequence":4
+        },
+        {
+            "musicSeq":74,
+            "sequence":3
+        }
+    ]
+    }
      */
     @Transactional
-    public void addMusicToPlaylist(PlaylistMusicRequestDtoForAddMusic requestDto, String playlistSeq, String userSeq) {
+    public String addMusicToPlaylist(PlaylistMusicRequestDtoForAddMusic requestDto, String playlistSeq, String userSeq) {
 
         // get requestDto
-        LinkedList<PlaylistMusicDto> oriPlaylistMusicDtoList = requestDto.getOriPlaylistMusicDtoList();
-        LinkedList<PlaylistMusicDto> addPlaylistMusicDtoList = requestDto.getAddPlaylistMusicDtoList();
+        List<PlaylistMusicSimpleDto> oriPlaylistMusicDtoList = requestDto.getPlaylistMusic();
+        List<PlaylistMusicSimpleDto> addPlaylistMusicDtoList = requestDto.getAddMusic();
         log.info("oriPlaylistMusicDtoList: " + oriPlaylistMusicDtoList);
         log.info("addPlaylistMusicDtoList: " + addPlaylistMusicDtoList);
 
@@ -155,7 +182,7 @@ public class PlaylistService {
             newPlaylistMusic.setSequence(addPlaylistMusicDtoList.get(i).getSequence());
             playlistMusicRepository.save(newPlaylistMusic);
         }
-
+        return "addMusicToPlaylist success";
     }
 
     /**

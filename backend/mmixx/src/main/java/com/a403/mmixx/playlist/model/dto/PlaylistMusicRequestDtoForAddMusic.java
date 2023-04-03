@@ -1,5 +1,6 @@
 package com.a403.mmixx.playlist.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,20 +14,19 @@ import java.util.List;
 @NoArgsConstructor
 public class PlaylistMusicRequestDtoForAddMusic {
 
-    private int playlistSeq;
-
     //  기존 플레이리스트에 있던 곡들의 리스트
-    private LinkedList<PlaylistMusicDto> oriPlaylistMusicDtoList;
+    @JsonProperty("playlist_music")
+    private List<PlaylistMusicSimpleDto> oriPlaylistMusicDtoList;
 
     //  추가할 곡의 리스트
-    private LinkedList<PlaylistMusicDto> addPlaylistMusicDtoList;
+    @JsonProperty("add_music")
+    private List<PlaylistMusicSimpleDto> addPlaylistMusicDtoList;
 
-    public List<Integer> getMusicSeqList() {
-        List<Integer> musicSeqList = new LinkedList<>();
-        for (PlaylistMusicDto playlistMusicDto : addPlaylistMusicDtoList) {
-            musicSeqList.add(playlistMusicDto.getMusicSeq());
-        }
-        return musicSeqList;
+    public List<PlaylistMusicSimpleDto> getPlaylistMusic() {
+        return oriPlaylistMusicDtoList;
     }
 
+    public List<PlaylistMusicSimpleDto> getAddMusic() {
+        return addPlaylistMusicDtoList;
+    }
 }

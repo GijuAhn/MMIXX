@@ -36,8 +36,8 @@ public class PlaylistController {
 
     // 플레이리스트에 곡 추가
     @PostMapping("/{userSeq}/{playlistSeq}")
-    public void addMusicToPlaylist(@RequestBody PlaylistMusicRequestDtoForAddMusic requestDto, @PathVariable String playlistSeq, @PathVariable String userSeq) {
-        playlistService.addMusicToPlaylist(requestDto, playlistSeq, userSeq);
+    public ResponseEntity addMusicToPlaylist(@RequestBody PlaylistMusicRequestDtoForAddMusic requestDto, @PathVariable String playlistSeq, @PathVariable String userSeq) {
+        return ResponseEntity.ok(playlistService.addMusicToPlaylist(requestDto, playlistSeq, userSeq));
     }
 
     //  (관리자용) private 여부 상관없이 모든 유저의 모든 플레이리스트를 조회
@@ -78,7 +78,6 @@ public class PlaylistController {
     public String getCoverImage(@PathVariable("playlistSeq") int playlistSeq){
         return playlistService.getCoverImage(playlistSeq);
     }
-
 
 
 
