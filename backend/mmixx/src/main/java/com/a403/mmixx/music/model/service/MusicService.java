@@ -182,7 +182,14 @@ public class MusicService {
 
 		log.info("***** Music Mix DB 저장 *****");
 		String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
-		String new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
+		String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+		System.out.println("format : " + format);
+		String new_music_name = "";
+		if(format.equals("mp3")) {
+			new_music_name = music.getMusicName().replace(".mp3", "_mix.wav");
+		} else {
+			new_music_name = music.getMusicName() + "_mix";
+		}
 		log.info("new_music_path : " + new_music_path);
 		log.info("new_music_name : " + new_music_name);
 
