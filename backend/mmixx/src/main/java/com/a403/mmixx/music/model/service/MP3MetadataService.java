@@ -80,11 +80,14 @@ public class MP3MetadataService {
 //
 //        file.transferTo(mp3File);
     	
-    	File convFile = new File(file.getOriginalFilename());
-    	System.out.println(convFile.getAbsolutePath());
-    	FileOutputStream fos = new FileOutputStream(convFile);
-    	fos.write(file.getBytes());
-    	fos.close();
+//    	File convFile = new File(file.getOriginalFilename());
+//    	System.out.println(convFile.getAbsolutePath());
+//    	FileOutputStream fos = new FileOutputStream(convFile);
+//    	fos.write(file.getBytes());
+//    	fos.close();
+    	
+    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+        file.transferTo(mp3File);
 
         System.out.println("END: file transferTo");
 
@@ -95,7 +98,7 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-        InputStream stream = new FileInputStream(convFile);
+        InputStream stream = new FileInputStream(mp3File);
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
