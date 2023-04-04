@@ -12,18 +12,18 @@ export const _now = atom({
 
 export const nowPlaylist = atom({
   key: 'nowPlaying',
-  default: {
-    coverImage: '',
-    musicName: '',
-    musicianName: ''
-  },
-  
+  // default: {
+  //   coverImage: '',
+  //   musicName: '',
+  //   musicianName: ''
+  // },
+  default: []
 })
 
 export const _nowSelector = selector({
   key: '_nowSelector',
   get: ({ get }) => {
-    const getNow = get(_now)
+    const getNow = get(nowPlaylist)
     // const nowMusic = playlist.filter((item) => item.playing)
     // const { coverImage, musicName, musicianName, musicUrl } = nowMusic[0]
     
