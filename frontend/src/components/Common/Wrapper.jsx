@@ -12,5 +12,9 @@ const Wrapper = styled.div`
   @media (max-width: 768px) {
     margin-left: 0;
   }
+
+  >:last-child {
+    margin-bottom: 150px;
+  }
 `
 export default Wrapper;
