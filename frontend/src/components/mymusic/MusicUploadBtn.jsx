@@ -22,6 +22,8 @@ const MusicUploadBtn = () => {
 
   const [loading, setLoading] = useState(false);
   const [toastInfo, setToastInfo] = useState(false);
+  const [toastWarning1, setToastWarning1] = useState(false);
+  const [toastWarning2, setToastWarning2] = useState(false);
   const [toastError, setToastError] = useState(false);
   const [toastSuccess, setToastSuccess] = useState(false);
 
@@ -78,11 +80,13 @@ const MusicUploadBtn = () => {
 
     if (fileList.length === 0) {
       // || fileNameList === 0) {
-      alert("파일을 선택하세요");
+      // alert("파일을 선택하세요");
+      setToastWarning1(true);
       return;
     }
     if (fileList.length > 10) {
-      alert("10개 이하만 선택하세요");
+      // alert("10개 이하만 선택하세요");
+      setToastWarning2(true);
       return;
     }
 
@@ -98,8 +102,16 @@ const MusicUploadBtn = () => {
     formData.append("user", new Blob([JSON.stringify(userInfo)], { type: "application/json" }));
 
     uploadMusic(formData)
-      .then((response) => {
+      .then(({ data }) => {
         // console.log(response);
+        // array
+        // data.coverImage
+        // data.mixed, data.inst
+        // data.musicName
+        // data.musicianName
+        // data.albumName
+        // data.musicSeq
+        // data.musicUrl
         setToastSuccess(true);
       })
       .catch((error) => {
@@ -147,6 +159,7 @@ const MusicUploadBtn = () => {
                         <td>
                           <img src={musicFile} width='25' alt='' />
                         </td>
+                        {/* <Td>{file.name.length > 24 ? `${file.name.slice(0, 24)}...` : file.name}</Td> */}
                         <Td>{file.name}</Td>
                         <td>
                           <ButtonCancel onClick={onClickFileCancel} hover={!loading}>
@@ -179,6 +192,8 @@ const MusicUploadBtn = () => {
       ) : null}
 
       {toastInfo ? <CustomToast res='info' text='업로드 중...' toggle={setToastInfo} /> : null}
+      {toastWarning1 ? <CustomToast res='warning' text='파일을 선택하세요' toggle={setToastWarning1} width='200px' /> : null}
+      {toastWarning2 ? <CustomToast res='warning' text='10개 이하만 선택하세요' toggle={setToastWarning2} width='230px' /> : null}
       {toastSuccess ? <CustomToast res='success' text='업로드 성공' toggle={setToastSuccess} /> : null}
       {toastError ? <CustomToast res='error' text='업로드 실패' toggle={setToastError} /> : null}
     </div>
@@ -266,8 +281,14 @@ const Td = styled.td`
   font-weight: 300;
   font-family: "Heebo", sans-serif;
   text-align: left;
-  width: 300px;
+  // width: 300px;
   padding-left: 3px;
+
+  display: inline-block;
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const ButtonCancel = styled.section`

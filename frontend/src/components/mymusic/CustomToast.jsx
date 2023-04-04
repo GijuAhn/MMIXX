@@ -33,9 +33,9 @@ const CustomToast = ({ res, text, toggle, width = "160px", time = 3000 }) => {
         <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
       ) : res === "success" ? (
         <SuccessIcon color='success' />
-      ) : (
+      ) : res === "warning" ? (
         <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
-      )}
+      ) : null}
       {/* <InfoIcon color='primary' />
       <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
       <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
