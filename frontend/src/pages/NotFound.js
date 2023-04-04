@@ -4,9 +4,9 @@ import styled from 'styled-components'
 const NotFound = () => {
   const navigate = useNavigate()
 
-  // setTimeout(() => {
-  //   navigate(-1)
-  // }, 2000)
+  setTimeout(() => {
+    navigate(-1)
+  }, 5000)
   
   return (
     <NotFoundDiv>
