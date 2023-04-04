@@ -414,6 +414,9 @@ public class PlaylistService {
     }
 
 
+    /**
+     * 플레이리스트 상세정보 (이름, 공개여부) 수정
+     */
     public String updatePlaylistDetail(PlaylistNameAndPrivateSimpleDto requestDto, int playlistSeq) {
         Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
         if (playlist == null) {
@@ -424,5 +427,29 @@ public class PlaylistService {
         playlist.setIsPrivate(requestDto.getIsPrivate());
         playlistRepository.save(playlist);
         return "successfully updated";
+    }
+
+    /**
+     * 플레이리스트 정보 가져오기
+     */
+    public PlaylistSimpleDto getPlaylistInfo(int playlistSeq) {
+        PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+        if (playlist == null) {
+            log.info("해당 플레이리스트가 존재하지 않습니다.");
+            return null;
+        }
+        playlistSimpleDto.setPlaylistSeq(playlist.getPlaylistSeq());
+        playlistSimpleDto.setUserSeq(playlist.getUser().getUserSeq());
+        playlistSimpleDto.setPlaylistName(playlist.getPlaylistName());
+        playlistSimpleDto.setIsPrivate(playlist.getIsPrivate());
+
+//        log.info("------playlist 정보------");
+//        log.info("playlistSeq : " + playlist.getPlaylistSeq());
+//        log.info("userSeq : " + playlist.getUser().getUserSeq());
+//        log.info("playlistName : " + playlist.getPlaylistName());
+//        log.info("isPrivate : " + playlist.getIsPrivate());
+
+        return playlistSimpleDto;
     }
 }
