@@ -37,7 +37,12 @@ public class MP3MetadataService {
             Music musicContainer = new Music();
             
             System.out.println("extractMetadata 시작");
-            Map<String, String> metadataMap = extractMetadata(multipartFile);
+        	
+            File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+        	Path path = Paths.get(mp3File.getAbsolutePath()).toAbsolutePath();
+        	multipartFile.transferTo(path.toFile());
+            
+        	Map<String, String> metadataMap = extractMetadata(path.toFile());
             System.out.println("extractMetadata 종료");
             
             //  if musicName is null, set musicName to its own file name
@@ -69,14 +74,13 @@ public class MP3MetadataService {
         return musicContainerList;
     }
 
-    public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
+    public static Map<String, String> extractMetadata(File file) throws Exception {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
-    	System.out.println("extract Metadata file size : " + file.getSize());
-    	System.out.println("extract Metadata file name : " + file.getName());
-    	System.out.println("extract Metadata Original file name : " + file.getOriginalFilename());
+//    	System.out.println("extract Metadata file size : " + file.getSize());
+//    	System.out.println("extract Metadata file name : " + file.getName());
+//    	System.out.println("extract Metadata Original file name : " + file.getOriginalFilename());
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-//        File mp3File = File.createTempFile("temp", ".mp3");
 
         //  print file's location (path) for debugging
 //        System.out.println(mp3File.getAbsolutePath());
@@ -88,9 +92,9 @@ public class MP3MetadataService {
 //
 //
 //        file.transferTo(mp3File);
-    	if(file.isEmpty()) {
-    		System.out.println("file is empty");
-    	}
+//    	if(file.isEmpty()) {
+//    		System.out.println("file is empty");
+//    	}
 //    	System.out.println("extract Metadata file size : " + file.getSize());
 //    	File convFile = new File(file.getOriginalFilename());
 //    	Path path = Paths.get(convFile.getAbsolutePath()).toAbsolutePath();
@@ -102,10 +106,10 @@ public class MP3MetadataService {
 //    	fos.close();
 //    	System.out.println("ffff extract Metadata file size : " + file.getSize());
 //    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-//    	
+    	
 //    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
-//    	
-////    	file.transferTo(mp3File);
+    	
+//    	file.transferTo(mp3File);
 //    	Path path = Paths.get(mp3File.getAbsolutePath()).toAbsolutePath();
 //    	file.transferTo(path.toFile());
 
@@ -119,12 +123,12 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-//        InputStream stream = new FileInputStream(path.toFile());
+        InputStream stream = new FileInputStream(file);
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
-        parser.parse(file.getInputStream(), handler, metadata, parseContext);
+        parser.parse(stream, handler, metadata, parseContext);
         
-//        stream.close();
+        stream.close();
         boolean utf = true;
         
         // Extract the metadata fields and add them to the map
@@ -132,7 +136,7 @@ public class MP3MetadataService {
         	if(utf) metadataMap.put("musicName", metadata.get("title"));
         	else metadataMap.put("musicName", euckrToUtf8(metadata.get("title")));
         } else {
-            metadataMap.put("musicName", file.getOriginalFilename());
+//            metadataMap.put("musicName", file.getOriginalFilename());
         }
         metadataMap.put("musicLength", metadata.get("xmpDM:duration"));
 
