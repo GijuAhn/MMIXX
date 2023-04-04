@@ -23,6 +23,11 @@ const PlaylistDetail = () => {
   })
 
   const now = useRecoilValue(_now)
+  // 공개 여부 체크
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+  };
   /**
    * 플레이리스트 재생
    */
@@ -45,6 +50,7 @@ const PlaylistDetail = () => {
     getPlaylistInfo(playlistSeq)
       .then(res => {
         setPlaylistInfo(res.data)
+        setIsChecked(res.data.isPrivate)
       })
       .catch(err => console.log(err))
   }, []);
@@ -69,7 +75,7 @@ const PlaylistDetail = () => {
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
-              <Switch defaultChecked/>
+              <Switch checked={isChecked } onChange={handleChange}/>
             </PrivateToggle>
           </Top>
           <Bottom style={{ border: '1px solid blue'}}>
