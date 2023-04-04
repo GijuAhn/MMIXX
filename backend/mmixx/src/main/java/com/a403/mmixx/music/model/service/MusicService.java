@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MusicService {
 	private final MusicRepository musicRepository;
 	private final PresetRepository presetRepository;
-	private final UserRepository userRepository;
 	private final AwsS3Service awsS3Service;
 
 	public Page<MusicListResponseDto> getMusicList(Pageable pageable, Integer user_seq) {
