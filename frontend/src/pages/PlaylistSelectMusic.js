@@ -35,7 +35,12 @@ const PlaylistSelectMusic = () => {
         playlist_music: checkedList
       }
     ).then(
-      res => navigate(`/playlist/${res.data}`)
+      res => navigate(`/playlist/${res.data}`, {
+        state : {
+          playlistTitle: `${playlistTitle}`,
+          isPrivate: `${state.isPrivate}`,
+        } 
+        })
     );
 
   };
