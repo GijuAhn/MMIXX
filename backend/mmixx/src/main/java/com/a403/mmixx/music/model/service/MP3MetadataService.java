@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,8 +79,9 @@ public class MP3MetadataService {
 
 
 //        file.transferTo(mp3File);
-        String filePath = mp3File.getAbsolutePath();
-        file.transferTo(new File(filePath));
+        String fullFilePath = mp3File.getAbsolutePath();
+        Path path = Paths.get(fullFilePath).toAbsolutePath();
+        file.transferTo(path.toFile());
 
 
         System.out.println("END: file transferTo");
