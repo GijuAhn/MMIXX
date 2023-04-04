@@ -1,6 +1,9 @@
 import styled from "styled-components"
 import { getPlaylistCoverImage } from "api/playlist"
 import { useEffect, useState } from "react"
+import FavoriteIcon from '@mui/icons-material/Favorite'; // 하트
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // 빈 하트
+import { InsightsOutlined } from "@mui/icons-material";
 
 const MiniPlaylistCard = ({ playlist, onClick }) => {
   const { playlistName } = playlist
@@ -16,6 +19,7 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
 
   return (
     <CardWrapper coverImage={coverImage} onClick={onClick}>
+      <FavoriteBorderIcon />
       <PlaylistTitle>
         {playlistName}
       </PlaylistTitle>

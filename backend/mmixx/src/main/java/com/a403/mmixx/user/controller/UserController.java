@@ -30,19 +30,19 @@ public class UserController {
         userService.request();
     }//getGoogleAuthUrl
 
-    @ApiOperation(value = "회원 정보 조회", notes = "현재 로그인 한 회원의 정보를 조회합니다.")
+    @ApiOperation(value = "회원 정보 조회", notes = "회원의 정보를 조회합니다.")
     @GetMapping("/{userSeq}")
     public ResponseEntity<?> getUser(@PathVariable Integer userSeq) {
         // name에 userSeq 저장되어 있음
-        Integer authUserSeq = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName().toString());
-        
-        if(userSeq != authUserSeq){
-            log.error("본인 아님");
-            // 나중에 에러 처리 해야됨
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+//        Integer authUserSeq = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName().toString());
+//
+//        if(userSeq != authUserSeq){
+//            log.error("본인 아님");
+//            // 나중에 에러 처리 해야됨
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
 
-        return ResponseEntity.ok(userService.getUser(authUserSeq));
+        return ResponseEntity.ok(userService.getUser(userSeq));
     }
 
     @ApiOperation(value = "회원 탈퇴", notes = "현재 로그인 한 회원 탈퇴")
