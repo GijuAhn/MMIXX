@@ -88,18 +88,26 @@ public class MP3MetadataService {
 //
 //
 //        file.transferTo(mp3File);
-    	
-//    	File convFile = new File(file.getOriginalFilename());
-//    	System.out.println(convFile.getAbsolutePath());
-//    	FileOutputStream fos = new FileOutputStream(convFile);
-//    	fos.write(file.getBytes());
-//    	fos.close();
-    	
-    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-    	
-    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
-    	
-        file.transferTo(mp3File);
+    	if(file.isEmpty()) {
+    		System.out.println("file is empty");
+    	}
+    	System.out.println("extract Metadata file size : " + file.getSize());
+    	File convFile = new File(file.getOriginalFilename());
+    	Path path = Paths.get(convFile.getAbsolutePath()).toAbsolutePath();
+    	System.out.println(convFile.getAbsolutePath());
+    	System.out.println("path : " + path);
+    	System.out.println("extract Metadata file size : " + file.getSize());
+    	FileOutputStream fos = new FileOutputStream(path.toFile());
+    	fos.write(file.getBytes());
+    	fos.close();
+    	System.out.println("ffff extract Metadata file size : " + file.getSize());
+//    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+//    	
+//    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
+//    	
+////    	file.transferTo(mp3File);
+//    	Path path = Paths.get(mp3File.getAbsolutePath()).toAbsolutePath();
+//    	file.transferTo(path.toFile());
 
 
         System.out.println("END: file transferTo");
@@ -111,7 +119,7 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-        InputStream stream = new FileInputStream(mp3File);
+        InputStream stream = new FileInputStream(path.toFile());
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
