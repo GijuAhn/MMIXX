@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -71,13 +72,20 @@ public class MP3MetadataService {
     public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
+    	System.out.println(file.getSize());
+    	System.out.println(file.getName());
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
         File mp3File = File.createTempFile("temp", ".mp3");
 
         //  print file's location (path) for debugging
         System.out.println(mp3File.getAbsolutePath());
 
-
+//        File mp3File = File.createTempFile("temp", ".mp3");
+//
+//        //  print file's location (path) for debugging
+//        System.out.println(mp3File.getAbsolutePath());
+//
+//
 //        file.transferTo(mp3File);
         String fullFilePath = mp3File.getAbsolutePath();
         Path path = Paths.get(fullFilePath).toAbsolutePath();
