@@ -77,6 +77,8 @@ public class MP3MetadataService {
 
 
         file.transferTo(mp3File);
+        
+        System.out.println("END: file transferTo");
 
         Map<String, String> metadataMap = new HashMap<>();
 
@@ -90,6 +92,7 @@ public class MP3MetadataService {
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
         
+        stream.close();
         boolean utf = true;
         
         // Extract the metadata fields and add them to the map
