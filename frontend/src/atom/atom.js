@@ -1,19 +1,7 @@
 import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
-
-const localStorageEffect = key => ({setSelf, onSet}) => {
-  const savedValue = localStorage.getItem(key)
-  if (savedValue != null) {
-    setSelf(JSON.parse(savedValue));
-  }
-
-  onSet((newValue, _, isReset) => {
-    isReset
-      ? localStorage.removeItem(key)
-      : localStorage.setItem(key, JSON.stringify(newValue));
-  });
-};
+import localStorageEffect from './_local'
 
 export const isLogIn = atom({
   key: 'isLogIn',
@@ -101,7 +89,7 @@ export const testPlaylistMusic = atom({
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -111,11 +99,11 @@ export const testPlaylistMusic = atom({
         sequence: 2,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -125,11 +113,11 @@ export const testPlaylistMusic = atom({
         sequence: 3,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -139,11 +127,11 @@ export const testPlaylistMusic = atom({
         sequence: 4,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
@@ -153,11 +141,11 @@ export const testPlaylistMusic = atom({
         sequence: 5,
         music: {
           userSeq: 'ABS', 
-          musicName: 'New Jeans',
+          musicName: 'OMG',
           coverImage: newJeansImage,
           musicLength: 100,
           musicianName: 'New Jeans',
-          albumName: '뉴진스 앨범',
+          albumName: '1st single',
           mixed: 0,
           edited: 0
        }
