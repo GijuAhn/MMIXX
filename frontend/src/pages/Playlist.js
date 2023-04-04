@@ -1,53 +1,98 @@
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
-import { testPlaylist, isLogIn, userInfo } from 'atom/atom';
+import {  userInfo } from 'atom/atom';
 import { useEffect, useState } from 'react';
-import { getPlaylists } from 'api/playlist';
+import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
-  const playlists = useRecoilValue(testPlaylist)
-  const [data, setData] = useState(null)
-
-  const atomIsLogin = useRecoilValue(isLogIn)
+  // const playlists = useRecoilValue(testPlaylist)
+  const [data, setData] = useState(null);
+  const location = useLocation();
+  const mine = 'mine';
+  const global = 'global';
+  const favorite = 'favorite';
+  // console.log(playlistType);
+  
+  // const atomIsLogin = useRecoilValue(isLogIn)
   const atomUser = useRecoilValue(userInfo)
-
+  
+  // const [playlistType, setType] = useState( location.pathname.includes('global') ? global
+  //   : (location.pathname.includes('favorite') ? favorite : mine));
+    const [playlistType, setType] = useState('');
+  
   useEffect(() => {
-    getPlaylists(atomUser.userSeq)
-      .then(
-        res => {
-          setData(res.data)
-          return res.data
-        }
-    )
-      .catch(err => console.log(err))
-  }, []);
+    
+    if (location.pathname.includes(global)) { // 글로벌 플레이리스트
+      globalPlaylists(atomUser.userSeq)
+        .then(
+          res => {
+            setData(res.data)
+            return res.data
+          }
+          , setType(global)
+      ).catch(err => console.log(err))
+      
+    } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
+      favoritePlaylists(atomUser.userSeq)
+        .then(
+          res => {
+            setData(res.data)
+            return res.data
+          }
+          , setType(favorite)
+      ).catch(err => console.log(err))
+    } else { // 내 플레이리스트
+      getPlaylists(atomUser.userSeq)
+        .then(
+          res => {
+            setData(res.data)
+            return res.data
+          }
+          , setType(mine)
+      ).catch(err => console.log(err))
+    }
+      
+  }, [location, atomUser]);
 
 
   return (
     <StyleWrapper>
-      <Header 
-        title="My Playlist"
-        desc="내 플레이리스트 모아보기"
-      />
+      {playlistType === mine ? (
+        <Header
+          title="My Playlist"
+          desc="내 플레이리스트"
+        />
+      ) : (
+         playlistType === global ? (
+          <Header
+            title="Global Playlist"
+            desc="글로벌 플레이리스트"
+          />
+        ) : (
+          <Header
+            title="Favorite Playlist"
+            desc="즐겨찾기 플레이리스트"
+          />    
+      ))
+      }
       <Content>
         <Top>
-          <DefaultBtn 
-            white
-            width="150px">
-            즐겨찾기
-          </DefaultBtn>
-          <DefaultBtn 
-            onClick={ () => navigate("/playlist/create")}
-            width="150px">
-            플레이리스트 추가
-          </DefaultBtn>
+          {playlistType === mine ? (
+            <DefaultBtn
+              onClick={() => navigate("/playlist/create")}
+              width="150px">
+              플레이리스트 추가
+            </DefaultBtn>
+          ) : (
+              <> </>
+          )}
         </Top>
-        {data != null ?
+        {data != null && data.length > 0 ?
           <>
             <CardWrapper>
             
@@ -68,7 +113,7 @@ const Playlist = () => {
           
             </CardWrapper>
           </> :
-          <button></button>
+          <div>플레이리스트가 없습니다.</div>
         }
       </Content>
     </StyleWrapper>
@@ -82,6 +127,7 @@ const StyleWrapper = styled(Wrapper)`
 const Content = styled.div`
   width: 1100px;
   flex-direction: column;
+  margin-bottom: 100px;
 `
 
 const Top = styled.div`
@@ -96,7 +142,7 @@ const Top = styled.div`
 const CardWrapper = styled.div`
   margin-top: 15px;
   flex-wrap: wrap;
-  justify-content: space-between
+  justify-content: space-between;
 `
 
 export default Playlist;

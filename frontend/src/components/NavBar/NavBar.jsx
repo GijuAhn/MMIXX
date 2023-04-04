@@ -1,34 +1,34 @@
-import { Avatar } from '@mui/material'
-import styled from 'styled-components'
-import { useLocation, useNavigate } from 'react-router-dom'
-import AlbumIcon from '@mui/icons-material/Album'
-import MusicNoteSharpIcon from '@mui/icons-material/MusicNoteSharp';
-import PlaylistPlaySharpIcon from '@mui/icons-material/PlaylistPlaySharp';
-import { useRecoilValue } from 'recoil';
+import { Avatar } from "@mui/material";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import AlbumIcon from "@mui/icons-material/Album";
+import MusicNoteSharpIcon from "@mui/icons-material/MusicNoteSharp";
+import PlaylistPlaySharpIcon from "@mui/icons-material/PlaylistPlaySharp";
+import { useRecoilValue } from "recoil";
 
-import { DefaultBtn, PlainBtn } from 'components/Common'
+import { DefaultBtn, PlainBtn } from "components/Common";
 // import logo from 'assets/logo.png'
-import logoText from 'assets/logo_text.png'
+import logoText from "assets/logo_text.png";
 import arrow from "assets/arrow-down-sign-to-navigate.png";
 import MusicCount from "components/mymusic/MusicCount";
-import { isLogIn, userInfo } from 'atom/atom';
+import { isLogIn, userInfo } from "atom/atom";
 import { handleLogout } from "api/base";
+import PlaylistNavigate from "components/Playlist/PlaylistNavigate";
 
 const NavBar = () => {
-  const navigate = useNavigate()
-  const atomIsLogin = useRecoilValue(isLogIn)
-  const atomUser = useRecoilValue(userInfo)
+  const navigate = useNavigate();
+  const atomIsLogin = useRecoilValue(isLogIn);
+  const atomUser = useRecoilValue(userInfo);
 
   // console.log(atomTest)
-  const isLogin =
-    atomIsLogin
-    // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
-      ? true
-      : false;
+  const isLogin = atomIsLogin
+    ? // localStorage.getItem("isLogin") && localStorage.getItem("isLogin") == "true"
+      true
+    : false;
 
   const user = atomUser
-    // localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
+    ? // localStorage.getItem("user")
+      JSON.parse(localStorage.getItem("user"))
     : null;
 
   const onClickLogin = () => {
@@ -40,31 +40,27 @@ const NavBar = () => {
         localStorage.clear();
         // console.log("로그아웃");
         window.location.href = "/";
-      })
+      });
     }
   };
 
   return (
     <Wrapper>
-      <NavLogo onClick={() => navigate('/')}>
+      <NavLogo onClick={() => navigate("/")}>
         {/* <LogoImage img={logo} alt="logo"/> */}
-        <LogoText img={logoText} alt="logoText" />
+        <LogoText img={logoText} alt='logoText' />
       </NavLogo>
-      {atomIsLogin ?
-      <>
-        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
-        <NavProfile>
-          <NavAvatar 
-            src={user ? user.profileImageUrl : ''}
-            sx={{ width: 80, height: 80 }}
-            referrerPolicy='no-referrer'
-          />  
-          <p>{user ? user.userName : '사람 이름'}</p>
-          {/* <p>사람 이름</p> */}
-        </NavProfile>
-        {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
-        <NavMenu />
-        {/* <NavList>
+      {atomIsLogin ? (
+        <>
+          {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
+          <NavProfile>
+            <NavAvatar src={user ? user.profileImageUrl : ""} sx={{ width: 80, height: 80 }} referrerPolicy='no-referrer' />
+            <p>{user ? user.userName : "사람 이름"}</p>
+            {/* <p>사람 이름</p> */}
+          </NavProfile>
+          {/* <hr style={{ width: 50, marginBottom: '20px'}}/> */}
+          <NavMenu />
+          {/* <NavList>
           {navList && navList.map((item, idx) => {
             return (
               <NavItem key={idx} to={item.path}>
@@ -75,83 +71,76 @@ const NavBar = () => {
             )
           })}
         </NavList> */}
-        <LogOut>
-          <PlainBtn onClick={onClickLogin}>
-            로그아웃
-          </PlainBtn>
-        </LogOut> 
-      </>
-      :
-      <LoginWrapper>
-        <DefaultBtn 
-          width="150px" onClick={onClickLogin}>
-          로그인 하기
-        </DefaultBtn>
-      </LoginWrapper>
-      }
+          <LogOut>
+            <PlainBtn onClick={onClickLogin}>로그아웃</PlainBtn>
+          </LogOut>
+        </>
+      ) : (
+        <LoginWrapper>
+          <DefaultBtn width='150px' onClick={onClickLogin}>
+            로그인 하기
+          </DefaultBtn>
+        </LoginWrapper>
+      )}
     </Wrapper>
-  )
-}
+  );
+};
 
 const NavMenu = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navList = [
     // {name: 'MIX', path: 'mix', icon: <AlbumOutlinedIcon />},
-    {name: 'MIX', path: 'mix', icon: <AlbumIcon fontSize="small" />},
-    {name: 'PLAYLIST', path: 'playlist', icon: <PlaylistPlaySharpIcon fontSize="small" />},
-    {name: 'MY MUSIC', path: 'mymusic', icon: <MusicNoteSharpIcon fontSize="small" />},
-  ]
+    { name: "MIX", path: "mix", icon: <AlbumIcon fontSize='small' /> },
+    { name: "PLAYLIST", path: "playlist", icon: <PlaylistPlaySharpIcon fontSize='small' /> },
+    { name: "MY MUSIC", path: "mymusic", icon: <MusicNoteSharpIcon fontSize='small' /> },
+  ];
 
   return (
     <NavUl>
-      {navList && navList.map((item, index) => {
-        return (
-          <NavLi key={'NavLi' + index} 
-            onClick={() => navigate(item.path)}
-            selected={'/' + item.path === location.pathname}>
-            {item.icon}
-            <span>{item.name}</span>
-            {item.name === "MY MUSIC" ? (
-              <Arrow
-                src={arrow}
-                selected={"/" + item.path === location.pathname}
-                alt=''
-              ></Arrow>
-            ) : null}
-          </NavLi>
-        )
-      })}
-      <div>
-        {location.pathname === "/mymusic" ? (
-          <MusicCount />
-        ) : null}
-      </div>
+      {navList &&
+        navList.map((item, index) => {
+          return (
+            <section key={"NavLi" + index}>
+              <NavLi onClick={() => navigate(item.path)} selected={location.pathname.includes("/" + item.path)}>
+                {item.icon}
+                <span>{item.name}</span>
+                {item.name === "MY MUSIC" ? <Arrow src={arrow} selected={"/" + item.path === location.pathname} alt=''></Arrow> : null}
+              </NavLi>
+              {item.name === "PLAYLIST" && location.pathname.includes("/playlist") ? (
+                <li>
+                  <PlaylistNavigate />
+                </li>
+              ) : null}
+            </section>
+          );
+        })}
+      <div>{location.pathname === "/mymusic" ? <MusicCount /> : null}</div>
     </NavUl>
-  )
-}
+  );
+};
 
 const Wrapper = styled.nav`
   height: 100vh;
-  background-color: ${({ theme }) => theme.palette.dark };
+  background-color: ${({ theme }) => theme.palette.dark};
   flex-direction: column;
   width: 200px;
   position: fixed;
   top: 0;
   left: 0;
-  justify-content: ${({isLogin}) => !isLogin && 'start'};
+  justify-content: ${({ isLogin }) => !isLogin && "start"};
   // min-height: 100vh;
   @media (max-width: 768px) {
     display: none;
   }
   z-index: 10000;
-`
+`;
 
 const NavLogo = styled.div`
   height: 50px;
   justify-content: space-evenly;
-`
+`;
 
 // const LogoImage = styled.div`
 //   background-image: url(${({img}) => img});
@@ -162,22 +151,22 @@ const NavLogo = styled.div`
 // `
 
 const LogoText = styled.div`
-  background-image: url(${({img}) => img});
+  background-image: url(${({ img }) => img});
   background-size: cover;
   cursor: pointer;
   height: 30px;
   width: 100px;
   margin-top: 10px;
-`
+`;
 
 const NavProfile = styled.div`
   flex-direction: column;
   flex-grow: 0.7;
-`
+`;
 
 const NavAvatar = styled(Avatar)`
   margin-bottom: 15px;
-`
+`;
 
 // const NavList = styled.div`
 //   flex-direction: column;
@@ -207,7 +196,7 @@ const NavAvatar = styled(Avatar)`
 //   display: flex;
 //   align-items: center;
 
-//   ${({ selected, theme }) => 
+//   ${({ selected, theme }) =>
 //     selected &&`
 //       background-color: ${theme.palette.secondary};
 //       color: ${theme.palette.dark};
@@ -220,23 +209,21 @@ const NavAvatar = styled(Avatar)`
 //   }
 // `
 
-
-const LogOut = styled.div`
-`
+const LogOut = styled.div``;
 
 const LoginWrapper = styled.div`
   margin-top: 20px;
-`
+`;
 
 const NavUl = styled.ul`
-  list-style: url(${({icon}) => icon});
+  list-style: url(${({ icon }) => icon});
   width: 180px;
   height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: start;
   flex-grow: 4;
-`
+`;
 
 const NavLi = styled.li`
   list-style: none;
@@ -261,21 +248,21 @@ const NavLi = styled.li`
     }
   }
 
-  ${({ selected, theme }) => 
-    selected &&`
+  ${({ selected, theme }) =>
+    selected &&
+    `
     background-color: ${theme.palette.secondary};
     color: ${theme.palette.dark};
 
     span {
       color: ${theme.palette.darkAlt};
     }
-    `
-  }
+    `}
 
   span {
     margin-left: 10px;
   }
-`
+`;
 const Arrow = styled.img`
   width: 12px;
   margin-left: auto;

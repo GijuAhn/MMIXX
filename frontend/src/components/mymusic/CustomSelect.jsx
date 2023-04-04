@@ -11,7 +11,6 @@ const CustomSelect = ({ options, selectKind, setSelect }) => {
     function onClickOutside(event) {
       if (!show) return;
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        // console.log("Clicked outside the wrapper");
         setShow(false);
       }
     }

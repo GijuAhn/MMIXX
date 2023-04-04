@@ -11,7 +11,7 @@ const MusicList = ({
   order,
   query,
   radio = false,
-  checkRadio,
+  checkMusic,
   checkBox = false,
   checkMusicList,
 }) => {
@@ -189,15 +189,12 @@ const MusicList = ({
         <CustomTable
           musicList={musicList}
           radio={radio}
-          checkRadio={checkRadio}
+          checkMusic={checkMusic}
           checkBox={checkBox}
           checkMusicList={checkMusicList}
         ></CustomTable>
       )}
-      <Button
-        onClick={onClickUpIcon}
-        visible={showUpIcon ? "visible" : "hidden"}
-      >
+      <Button onClick={onClickUpIcon} visible={showUpIcon ? "visible" : "hidden"}>
         <img src={upIcon} width='55' alt=''></img>
       </Button>
     </div>
