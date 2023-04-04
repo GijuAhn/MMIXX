@@ -17,7 +17,8 @@ const Playlist = () => {
   const atomUser = useRecoilValue(userInfo)
 
   useEffect(() => {
-    getPlaylists(atomUser.userSeq)
+    // getPlaylists(atomUser.userSeq)
+    getPlaylists(10)
       .then(
         res => {
           setData(res.data)
