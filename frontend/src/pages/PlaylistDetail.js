@@ -9,8 +9,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import { CustomTable } from "components/mymusic"
-import { nowPlaylist, _nowSelector } from "atom/music"
-import { useRecoilState } from "recoil"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -22,16 +20,12 @@ const PlaylistDetail = () => {
       userSeq: -1
   })
 
-  const [ nowState, setNowState ] = useRecoilState(_nowSelector)
 
-  console.log('???', nowState)
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    setNowState(playlistMusic)
-    console.log(playlistMusic)
-    console.log('바뀐 값 : ', nowState)
+
   }
 
   useEffect(() => {
@@ -49,7 +43,7 @@ const PlaylistDetail = () => {
         setPlaylistInfo(res.data)
       })
       .catch(err => console.log(err))
-  }, []);
+  }, [playlistSeq]);
 
   return (
     <StyleWrapper url={coverImage}>
