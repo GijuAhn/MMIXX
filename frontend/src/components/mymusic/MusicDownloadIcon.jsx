@@ -2,10 +2,21 @@ import IconBtn from "./IconBtn";
 import DownloadIcon from "assets/download.png";
 import { downloadMusic } from "api/mymusic";
 import CustomToast from "./CustomToast";
+import { useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
+  const [loading, setLoading] = useState(false);
+  const [toastInfo, setToastInfo] = useState(false);
+  const [toastError, setToastError] = useState(false);
+  const [toastSuccess, setToastSuccess] = useState(false);
+
   const onClick = () => {
     console.log(musicSeq, musicName, musicUrl);
+
+    setLoading(true);
+    setToastInfo(true);
+
     downloadMusic(musicSeq)
       .then((res) => {
         console.log(res);
@@ -29,7 +40,9 @@ const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
         // };
         // link.download = injectFilename(res);
 
-        let title = musicName.includes(".") ? musicName.substr(0, musicName.lastIndexOf(".")) : musicName;
+        let title = musicName.includes(".")
+          ? musicName.substr(0, musicName.lastIndexOf("."))
+          : musicName;
         let type = musicUrl.substring(musicUrl.lastIndexOf("."), musicUrl.length).toLowerCase();
 
         link.download = `${title}${type}`;
@@ -37,19 +50,32 @@ const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
         document.body.appendChild(link);
         link.click();
         link.remove();
+
+        setToastSuccess(true);
       })
       .catch((error) => {
-        console.log(error);
-        if (error.response.status === 400) {
-        } else if (error.response.status === 404) {
-        }
+        // console.log(error);
+        setToastError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+        // setToastInfo(false);
       });
   };
 
   return (
     <div>
-      <IconBtn onClick={onClick} icon={DownloadIcon} iconName='DOWNLOAD'></IconBtn>
-      <CustomToast></CustomToast>
+      {!loading ? (
+        <IconBtn onClick={onClick} icon={DownloadIcon} iconName='DOWNLOAD' />
+      ) : (
+        <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />
+      )}
+
+      {toastInfo ? <CustomToast res='info' text='다운로드 중...' toggle={setToastInfo} /> : null}
+      {toastSuccess ? (
+        <CustomToast res='success' text='다운로드 성공' toggle={setToastSuccess} />
+      ) : null}
+      {toastError ? <CustomToast res='error' text='다운로드 실패' toggle={setToastError} /> : null}
     </div>
   );
 };
