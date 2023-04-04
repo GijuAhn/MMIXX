@@ -123,9 +123,9 @@ public class MusicService {
 			InputStream multipartFileInputStreamClone1 = multipartFile.getInputStream();
 
 			multipartFilesCopy1.add(multipartFileInputStreamClone1);
+			is.close();
 		}
-
-
+		
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
