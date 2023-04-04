@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.transaction.Transactional;
 
+import com.a403.mmixx.auth.entity.Role;
 import com.a403.mmixx.music.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,20 +77,12 @@ public class MusicService {
 	}
 
 	public List<Music> registMusic(MusicRegistRequestDto user, List<MultipartFile> multipartFiles) throws Exception {
+		
+		// TODO: EC2 서버에 아예 .mp3 파일째로 저장해버리기. S3 에도 저장하고. .tmp 생성경로가 너무 말썽이다.
 		List<Music> musicContainerList = uploadMusicAndArtworkWithMetadata(multipartFiles);
 		
-//		Integer authUserSeq = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName().toString());
-//		
-//		if(user.getUserSeq() != authUserSeq){
-//            log.error("본인 아님");
-//            // 나중에 에러 처리 해야됨
-//            return null;
-//        }
-		
-		//	set userSeq into musicContainerList
 		for (Music music : musicContainerList) {
-//			music.setUser(userRepository.findById(authUserSeq).orElse(null));
-			music.setUser(new User(user.getUserSeq()));
+			music.setUser(new User(user.getUserSeq(), Role.USER));
 		}
 
 		log.info("musicContainerList: " + musicContainerList);
@@ -122,9 +115,9 @@ public class MusicService {
 			InputStream multipartFileInputStreamClone1 = multipartFile.getInputStream();
 
 			multipartFilesCopy1.add(multipartFileInputStreamClone1);
+			is.close();
 		}
-
-
+		
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;
@@ -133,6 +126,11 @@ public class MusicService {
 		musicUrlList = awsS3Service.uploadMusicToS3(multipartFiles);
 		System.out.println("uploadCoverImageToS3");
 		coverImageList = awsS3Service.uploadCoverImageToS3(multipartFiles);
+		
+		System.out.println("S3 업로드 끝");
+		
+		System.out.println("MusicService getOriginalFilename : " + multipartFiles.get(0).getOriginalFilename());
+		System.out.println("MusicService getSize : " + multipartFiles.get(0).getSize());
 		
 		System.out.println("End upload");
 //		WARN 14280 --- [nio-5555-exec-1] s.w.m.s.StandardServletMultipartResolver : Failed to perform cleanup of multipart items

@@ -7,6 +7,8 @@ import musicFile from "assets/music-file.png";
 import cancel from "assets/cancel.png";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
+import CustomToast from "./CustomToast";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MusicUploadBtn = () => {
   const atomUser = useRecoilValue(userInfo);
@@ -77,15 +79,20 @@ const MusicUploadBtn = () => {
     for (let i = 0, len = fileList.length; i < len; i++) {
       formData.append("files", fileList[i]);
     }
-    formData.append(
-      "user",
-      new Blob([JSON.stringify(userInfo)], { type: "application/json" })
-    );
+    formData.append("user", new Blob([JSON.stringify(userInfo)], { type: "application/json" }));
     uploadMusic(formData)
       .then((response) => {
         console.log(response);
       })
-      .then(setFileList([]));
+      .then(setFileList([]))
+      .catch((error) => {
+        // console.log(error);
+        // if (error.response.status === 413) {
+        //   console.log('파일 용량 초과');
+        // } else if (error.response.status === 415) {
+        //   console.log('지원하지 않는 확장자');
+        // }
+      });
   };
   return (
     <div>
@@ -144,6 +151,9 @@ const MusicUploadBtn = () => {
               <Button onClick={uploadFile} width='100px'>
                 업로드
               </Button>
+              <Loading>
+                <CircularProgress size='1.8rem' sx={{ color: "rgb(29, 33, 35)" }} />
+              </Loading>
             </div>
           </Modal>
         </DivModal>
@@ -269,6 +279,16 @@ const Button = styled.button`
     `
     background-color: transparent;
   `}
+`;
+
+const Loading = styled.div`
+  background-color: ${({ theme }) => theme.palette.light};
+  padding: 10px 20px;
+  border: 3px solid ${({ theme }) => theme.palette.light};
+  border-radius: 27px;
+  width: 100px;
+  height: 45px;
+  margin: 15px 10px auto 10px;
 `;
 
 export default MusicUploadBtn;

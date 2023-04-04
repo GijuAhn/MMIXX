@@ -1,46 +1,82 @@
 import IconBtn from "./IconBtn";
 import DownloadIcon from "assets/download.png";
 import { downloadMusic } from "api/mymusic";
+import CustomToast from "./CustomToast";
+import { useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const MusicDownloadIcon = ({ musicSeq }) => {
+const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
+  const [loading, setLoading] = useState(false);
+  const [toastInfo, setToastInfo] = useState(false);
+  const [toastError, setToastError] = useState(false);
+  const [toastSuccess, setToastSuccess] = useState(false);
+
   const onClick = () => {
-    // 수정. get file name 가져오고, 성공하면 다운로드.
-    console.log(musicSeq);
-    downloadMusic(musicSeq).then((res) => {
-      console.log(res);
-      const blob = new Blob([res.data]);
+    console.log(musicSeq, musicName, musicUrl);
 
-      const fileUrl = window.URL.createObjectURL(blob);
+    setLoading(true);
+    setToastInfo(true);
 
-      const link = document.createElement("a");
-      link.href = fileUrl;
-      link.style.display = "none";
+    downloadMusic(musicSeq)
+      .then((res) => {
+        console.log(res);
+        const blob = new Blob([res.data]);
 
-      // const injectFilename = (res) => {
-      //   const disposition = res.headers["content-disposition"];
+        const fileUrl = window.URL.createObjectURL(blob);
 
-      //   const fileName = decodeURI(
-      //     disposition
-      //       .match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)[1]
-      //       .replace(/['"]/g, "")
-      //   );
-      //   return fileName;
-      // };
-      // link.download = injectFilename(res);
-      link.download = "download-file.mp3";
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.style.display = "none";
 
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    });
+        // const injectFilename = (res) => {
+        //   const disposition = res.headers["content-disposition"];
+
+        //   const fileName = decodeURI(
+        //     disposition
+        //       .match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)[1]
+        //       .replace(/['"]/g, "")
+        //   );
+        //   return fileName;
+        // };
+        // link.download = injectFilename(res);
+
+        let title = musicName.includes(".")
+          ? musicName.substr(0, musicName.lastIndexOf("."))
+          : musicName;
+        let type = musicUrl.substring(musicUrl.lastIndexOf("."), musicUrl.length).toLowerCase();
+
+        link.download = `${title}${type}`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setToastSuccess(true);
+      })
+      .catch((error) => {
+        // console.log(error);
+        setToastError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+        // setToastInfo(false);
+      });
   };
 
   return (
-    <IconBtn
-      onClick={onClick}
-      icon={DownloadIcon}
-      iconName='DOWNLOAD'
-    ></IconBtn>
+    <div>
+      {!loading ? (
+        <IconBtn onClick={onClick} icon={DownloadIcon} iconName='DOWNLOAD' />
+      ) : (
+        <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />
+      )}
+
+      {toastInfo ? <CustomToast res='info' text='다운로드 중...' toggle={setToastInfo} /> : null}
+      {toastSuccess ? (
+        <CustomToast res='success' text='다운로드 성공' toggle={setToastSuccess} />
+      ) : null}
+      {toastError ? <CustomToast res='error' text='다운로드 실패' toggle={setToastError} /> : null}
+    </div>
   );
 };
 

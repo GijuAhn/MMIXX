@@ -25,8 +25,13 @@ public class MP3AlbumArtworkService {
 
     public static byte[] extractAlbumArtwork(MultipartFile file) throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
         // Convert multipart file to MP3 file
+    	System.out.println("extract Album Art file size : " + file.getSize());
+    	System.out.println("extract Album Art file name : " + file.getName());
+    	
         File mp3File = Files.createTempFile("temp", ".mp3").toFile();
         file.transferTo(mp3File);
+        
+        System.out.println("extract Album Art mp3File absolute path : " + mp3File.getAbsolutePath());
 
         // Extract album artwork from MP3 file using JAudioTagger library
         AudioFile audioFile = AudioFileIO.read(mp3File);
@@ -55,6 +60,7 @@ public class MP3AlbumArtworkService {
         ClassLoader classLoader = MP3AlbumArtworkService.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("static/default_cover.jpg");
         byte[] bytes = IOUtils.toByteArray(inputStream);
+        inputStream.close();
         return bytes;
     }
 }
