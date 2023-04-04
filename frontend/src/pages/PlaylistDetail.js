@@ -102,7 +102,7 @@ const PlaylistDetail = () => {
             <DefaultBtn onClick={confirmDelete}>
               플레이리스트 삭제
             </DefaultBtn>
-            <DefaultBtn onClick={() => navigate("/playlist/edit")}>
+            <DefaultBtn onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
               플레이리스트 수정
             </DefaultBtn>           
           </Bottom>

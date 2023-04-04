@@ -38,3 +38,7 @@ export const insertMusicInPlaylist = async ( playlistSeq ) => {
 export const deletePlaylist = async (playlistSeq) => {
   return await instance.delete(`/playlist/${playlistSeq}`)
 }
+// 플레이리스트 수정
+export const modifyPlaylist = async (playlistSeq) => {
+  return await instance.put(`/playlist/detail/${playlistSeq}`)
+}
