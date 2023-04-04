@@ -105,7 +105,7 @@ const CustomTable = ({
                   cover={music.coverImage}
                   title={music.musicName}
                   musician={music.musicianName}
-                  src={musicSeq.current == music.musicSeq ? Check : UnCheck}
+                  src={musicSeq.current === music.musicSeq ? Check : UnCheck}
                   alt=''
                   width='23'
                 />
