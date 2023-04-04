@@ -5,15 +5,15 @@ const MusicCount = () => {
   const navigate = useNavigate();
 
   const onClickMine = () => {
-    navigate(`/comment/id/등등 내가 원하는 주소`);
+    navigate(`/playlist`);
   };
 
   const onClickGlobal = () => {
-    navigate(`/comment/id/등등 내가 원하는 주소`);
+    navigate(`/playlist/global`);
   };
 
   const onClickFav = () => {
-    navigate(`/comment/id/등등 내가 원하는 주소`);
+    navigate(`/playlist/favorite`);
   };
   return (
     <Table>
@@ -74,6 +74,11 @@ const Td = styled.td`
     background-color: ${({ theme }) => theme.palette.hover};
     cursor: pointer;
   }
+
+  ${({ selected, theme }) =>
+    selected &&`
+    background-color: ${theme.palette.hover};
+    color: ${theme.palette.secondary}`}
 `;
 
 export default MusicCount;
