@@ -9,25 +9,14 @@ import instance from "./base";
 //   //   Authorization: `Bearer ${localStorage.getItem("auth")}`,
 //   // },
 // });
-// instance.defaults.headers.common[
-//   "Authorization"
-// ] = `Bearer ${localStorage.getItem("auth")}`;
+// instance.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("auth")}`;
 
 const musicUrl = `/music`;
 
-export const getMusicList = async ({ userSeq, page = 1 }) =>
-  await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
+export const getMusicList = async ({ userSeq, page = 1 }) => await instance.get(`${musicUrl}/${userSeq}?page=${page}`);
 
-export const getMusicListByCondition = async ({
-  userSeq,
-  filter = "",
-  order = "",
-  query = "",
-  page = 1,
-}) =>
-  await instance.get(
-    `${musicUrl}/search/${userSeq}?filter=${filter}&order=${order}&query=${query}&page=${page}`
-  );
+export const getMusicListByCondition = async ({ userSeq, filter = "", order = "", query = "", page = 1 }) =>
+  await instance.get(`${musicUrl}/search/${userSeq}?filter=${filter}&order=${order}&query=${query}&page=${page}`);
 
 export const uploadMusic = async (data) =>
   await instance.post(`${musicUrl}`, data, {
@@ -39,8 +28,6 @@ export const downloadMusic = async (musicSeq) =>
     responseType: "blob",
   });
 
-export const countMusic = async (userSeq) =>
-  await instance.get(`${musicUrl}/count/${userSeq}`);
+export const countMusic = async (userSeq) => await instance.get(`${musicUrl}/count/${userSeq}`);
 
-export const splitMusic = async (musicSeq) =>
-  await instance.get(`${musicUrl}/inst/${musicSeq}`);
+export const splitMusic = async (musicSeq) => await instance.get(`${musicUrl}/inst/${musicSeq}`);

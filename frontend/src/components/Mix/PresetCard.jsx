@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
 import styled from 'styled-components';
 import { testPlaylistMusic } from 'atom/atom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import theme from 'styles/theme';
 import { PlayIcons, PlaySlider } from 'components/PlayBar';
+import { _mix_now } from 'atom/music';
 
 const PresetCard = (props, {presetSeqFunc}) => {
   const presetName = props.presetName
@@ -20,6 +22,13 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const playlist = useRecoilValue(testPlaylistMusic)
   const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   
+  const [ mixPlay ] = useRecoilState(_mix_now)
+
+  const handleMixPlay = () => {
+    mixPlay.src = props.presetUrl
+    mixPlay.play()
+  }
+
   useEffect(() => {
     console.log(props.selNum)
     if (props.selNum === presetNum) {
@@ -30,7 +39,6 @@ const PresetCard = (props, {presetSeqFunc}) => {
       console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
-
 
   return (
     <Card isSelected={isSelected} onClick={() => props.presetSeqFunc(presetNum) }>
@@ -57,7 +65,8 @@ const PresetCard = (props, {presetSeqFunc}) => {
           <PlayArrowIcon sx={{ height: 38, width: 38 }} />
         </IconButton> */}
         <PlaySlider />
-        <PlayIcons />
+        {/* <PlayIcons /> */}
+        <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
       </MusicPlayer>
     </Card>
   );

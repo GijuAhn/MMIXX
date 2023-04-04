@@ -1,42 +1,58 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
-import { useRecoilValue } from 'recoil'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { testPlaylistMusic } from 'atom/atom'
-import { getPlaylistDetail } from "api/playlist"
-import {CustomTable} from "components/mymusic"
+import { Wrapper, Header } from "components/Common"
+import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
+import { CustomTable } from "components/mymusic"
+import { useRecoilValue } from "recoil";
+import { _now } from "atom/music"
 
 const PlaylistDetail = () => {
-  const navigate = useNavigate()
   const { playlistSeq } = useParams()
-  const [data, setData] = useState(null)
+  const [ playlistMusic, setPlayListMusic ] = useState([]);
+  const [ coverImage, setCoverImage ] = useState(null)
+  const [ playlistInfo, setPlaylistInfo ] = useState({
+      playlistName: '',
+      isPrivate: true,
+      userSeq: -1
+  })
 
-  const { state } = useLocation();
-  const playlistTitle = state.playlistTitle;
-  // console.log(playlistTitle);
+  const now = useRecoilValue(_now)
+  // 공개 여부 체크
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+  };
 
-  // console.log('params', playlistSeq);
-  const [playlistMusic, setPlayListMusic] = useState([]);
-  const [coverImage, setCoverImage] = useState(null)
+  /**
+   * 플레이리스트 재생
+   */
+  const handlePlaying = () => {
+    // createNowPlaylist(playlistMusic)
+  }
 
   useEffect(() => {
+    // 플레이리스트 음악 목록 가져오기
     getPlaylistDetail(playlistSeq)
       .then(res => {
-        // console.log(res);
-        setPlayListMusic(res.data);
-        return res.data
+        setPlayListMusic(res.data)
+        setCoverImage(res.data[0].coverImage)
       })
+      .catch(err => console.log(err))
+    
+    // 플레이리스트 정보(제목, 공개여부 등) 가져오기
+    getPlaylistInfo(playlistSeq)
       .then(res => {
-        // console.log(res);
-        setCoverImage(res[0].coverImage);
+        setPlaylistInfo(res.data)
+        setIsChecked(res.data.isPrivate)
       })
-  }, [])
-
+      .catch(err => console.log(err))
+  }, [playlistSeq]);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -51,23 +67,32 @@ const PlaylistDetail = () => {
             <AlbumIcon color="white" fontSize="large"/>
           }
         </PlaylistCover>
-        <RightContent>
+        <RightContent style={{ border: '1px solid blue'}}>
           <Top>
             <PlaylistTitle>
-              <p>{playlistTitle}</p>
+              <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
-              <Switch defaultChecked/>
+              <Switch checked={isChecked } onChange={handleChange}/>
             </PrivateToggle>
           </Top>
-          <Bottom>
-            <PlayCircleFilledRoundedIcon 
-              fontSize="large"
+          <Bottom style={{ border: '1px solid blue'}}>
+            <StylePlayCircleFilledRoundedIcon 
+              sx={{ fontSize: '40px'}}
+              onClick={handlePlaying}
+              disabled={playlistMusic.length === 0}
             />
-            <DefaultBtn onClick={() => navigate("/playlist/edit")}>
-              플레이리스트 수정
-            </DefaultBtn>
+            <MoreIconDiv playlistSeq={playlistSeq}/>
+            
+            {/* <div>
+              <DefaultBtn onClick={confirmDelete}>
+                삭제
+              </DefaultBtn>
+              <DefaultBtn onClick={() => navigate("/playlist/edit")}>
+                수정
+              </DefaultBtn>    
+            </div>          */}
           </Bottom>
         </RightContent>
       </InfoContent>
@@ -76,6 +101,88 @@ const PlaylistDetail = () => {
     </StyleWrapper>
   );
 };
+
+const MoreIconDiv = ({ playlistSeq }) => {
+  const wrapperRef = useRef(null)
+  const navigate = useNavigate()
+  const [ isOpen, setIsOpen ] = useState(false)
+
+  // 플레이리스트 삭제 시작
+  const useConfirm = (message = null, onConfirm, onCancel) => {
+    if (!onConfirm || typeof onConfirm !== "function") {
+      return;
+    }
+    if (onCancel && typeof onCancel !== "function") {
+      return;
+    }
+  
+    const confirmAction = () => {
+      if (window.confirm(message)) {
+        onConfirm();
+      } else {
+        onCancel();
+      }
+    };
+  
+    return confirmAction;
+  };
+  const deleteConfirm = () => {
+    deletePlaylist(playlistSeq)
+      .then(res => {
+        // alert('삭제되었습니다.')
+        navigate('/playlist')
+      })
+  }
+  const cancelConfirm = () => console.log("취소했습니다.");
+  const confirmDelete = useConfirm(
+    "삭제하시겠습니까?",
+    deleteConfirm,
+    cancelConfirm
+  );
+  // 플레이리스트 삭제 끝
+
+  const handleToggle = () => {
+    setIsOpen((pre) => !pre)
+    console.log(isOpen)
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!isOpen) return;
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+      console.log(isOpen)
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef, isOpen]);
+
+  return (
+    <MoreDiv ref={wrapperRef}>
+      <SelectSection>
+        <MoreVertIcon 
+          fontSize="small" 
+          onClick={handleToggle}
+        />
+        {isOpen &&
+          <CustomSelect>
+            <ul>
+              <li onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
+                수정하기
+              </li>
+              <li onClick={confirmDelete}>
+                삭제하기
+              </li>
+            </ul>
+          </CustomSelect>
+        }
+      </SelectSection>
+    </MoreDiv>
+  )
+}
 
 const StyleWrapper = styled(Wrapper)`
   ${({theme, url}) => css`
@@ -86,12 +193,10 @@ const StyleWrapper = styled(Wrapper)`
 
 const InfoContent = styled.div`
   height: 350px;
-  width: 1100px;
+  width: 1130px;
   overflow: hidden;
   display: grid;
-  padding: 0px 10px;
   grid-template-columns: 300px 700px;
-  gap: 30px;
   justify-content: start;
 `
 
@@ -112,10 +217,11 @@ const PlaylistCover = styled.div`
 ` 
 
 const RightContent = styled.div`
-  width: 700px;
+  width: 830px;
   height: 300px;
   display: flex;
   flex-direction: column;
+  padding: 5px 10px;
 `
 
 const Top = styled.div`
@@ -126,8 +232,55 @@ const Top = styled.div`
 
 const Bottom = styled.div`
   flex-grow: 1;
-  justify-content: start;
+  justify-content: space-between;
   align-items: end;
+`
+
+const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
+  
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  ${({disabled}) => disabled && `
+    color: gray;
+    
+    :hover {
+      transform: scale(1);
+      cursor: default;
+    }
+  `}
+`
+
+const MoreDiv = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-bottom: 5px;
+  cursor: pointer;
+  position: relative;
+`
+
+const CustomSelect = styled.div`
+  position: absolute;
+  left: -95px;
+  top: -25px;
+  border: 1px solid pink;
+  width: 100px;
+  border-radius: 10px;
+  border: 2px solid ${({theme}) => theme.palette.secondary};
+  background-color: ${({theme}) => theme.palette.dark};
+  height: 50px;
+  font-size: 14px;
+
+  li {
+    width: 100%;
+  }
+
+  li:hover {
+    background-color: ${({theme}) => theme.palette.hover};
+  }
 `
 
 const PlaylistTitle = styled.div`
@@ -154,5 +307,9 @@ const PrivateToggle = styled.div`
   font-weight: light;
   display: inline-block;
 `
+
+const SelectSection = styled.section`
+  display: flex;
+`;
 
 export default PlaylistDetail;
