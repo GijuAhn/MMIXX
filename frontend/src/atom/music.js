@@ -4,32 +4,41 @@ import localStorageEffect from './_local'
 
 export const _now = atom({
   key: '_now_playing',
-  default: new Audio(),
+  default: null,
   effects: [
     localStorageEffect('_now')
   ]
 })
 
-export const nowPlaylist = atom({
-  key: 'nowPlaying',
-  // default: {
-  //   coverImage: '',
-  //   musicName: '',
-  //   musicianName: ''
-  // },
-  default: []
+export const _nowMusic = atom({
+  key: '_nowMusic',
+  default: {
+    coverImage: '',
+    musicName: '',
+    musicianName: '',
+    playing: false,
+  },
+})
+
+export const playlistQueue = atom({
+  key: 'Queue',
+  default: [],
+  effects: [
+    localStorageEffect('_queue')
+  ]
 })
 
 export const _nowSelector = selector({
   key: '_nowSelector',
   get: ({ get }) => {
-    const getNow = get(nowPlaylist)
+    const getNow = get(playlistQueue)
+    const nowMusic = getNow.filter((item) => item.playing)
     // const nowMusic = playlist.filter((item) => item.playing)
     // const { coverImage, musicName, musicianName, musicUrl } = nowMusic[0]
     
     return {
-      getNow
-      // nowMusic, 
+      getNow,
+      nowMusic, 
       // coverImage,
       // musicName,
       // musicianName,
@@ -37,14 +46,12 @@ export const _nowSelector = selector({
     }
   },
   set: ({ set }, newValue) => {
-    set(nowPlaylist, newValue)
+    set(playlistQueue, newValue)
+    set(playlistQueue, newValue)
   },
   effects: [
     localStorageEffect('_test', _now)
   ]
 })
 
-export const playlistQueue = atom({
-  key: 'Queue',
-  default: []
-})
+
