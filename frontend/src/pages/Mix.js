@@ -43,7 +43,7 @@ const Mix = () => {
   }, [presetData]);
 
   return (
-    <Wrapper>
+    <StyledWrapper>
       <HeadContent>
         <Header 
           style={{ width: 500 }}
@@ -92,7 +92,7 @@ const Mix = () => {
               )
             })}
         </div> */}
-        <div key={1} style={presetStyle} onClick={() => console.log('나야나')}>
+        <div key={1} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
             presetName='밝은'
@@ -141,11 +141,15 @@ const Mix = () => {
           }}
         >변환하기</DefaultBtn>
       </ButtonStyle>
-    </Wrapper>
+    </StyledWrapper>
   );
 };
 
 export default Mix;
+
+const StyledWrapper = styled(Wrapper)`
+  min-height: 700px;
+`
 
 const HeadContent = styled.div`
   display: flex;
