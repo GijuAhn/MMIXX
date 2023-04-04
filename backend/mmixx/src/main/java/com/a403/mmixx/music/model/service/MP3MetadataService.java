@@ -70,8 +70,9 @@ public class MP3MetadataService {
     public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
-    	System.out.println(file.getSize());
-    	System.out.println(file.getName());
+    	System.out.println("extract Metadata file size : " + file.getSize());
+    	System.out.println("extract Metadata file name : " + file.getName());
+    	System.out.println("extract Metadata Original file name : " + file.getOriginalFilename());
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
 
 //        File mp3File = File.createTempFile("temp", ".mp3");
@@ -89,6 +90,9 @@ public class MP3MetadataService {
 //    	fos.close();
     	
     	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+    	
+    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
+    	
         file.transferTo(mp3File);
 
         System.out.println("END: file transferTo");
