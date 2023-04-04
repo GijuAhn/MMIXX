@@ -13,7 +13,7 @@ const CustomTable = ({
   musicList,
   // hasIcon = true,
   radio = false,
-  checkRadio,
+  checkMusic,
   checkBox = false,
   checkMusicList,
 }) => {
@@ -53,7 +53,7 @@ const CustomTable = ({
       //   musicianName.current
       // );
 
-      checkRadio({
+      checkMusic({
         musicSeq: musicSeq.current,
         coverImage: coverImage.current,
         musicName: musicName.current,
@@ -75,9 +75,7 @@ const CustomTable = ({
           ? null
           : event.target.attributes.getNamedItem("seq").value;
 
-      const deletedIndex = checkedList.current.findIndex(
-        (item) => item.musicSeq === newMusicSeq
-      );
+      const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
 
       // console.log("deletedIndex", deletedIndex);
       if (deletedIndex === -1) {
@@ -115,11 +113,7 @@ const CustomTable = ({
             ) : null}
             <TdRound width='5%'>
               <CoverImage
-                coverImage={
-                  music.coverImage === null
-                    ? DefaultCoverImage
-                    : music.coverImage
-                }
+                coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}
               ></CoverImage>
             </TdRound>
             <Td weight='400' width='7%' align='center'>
@@ -131,23 +125,18 @@ const CustomTable = ({
                 : music.musicName}
             </Td>
             <Td width='15%'>
-              {music.musicianName === null ||
-              music.musicianName.replace(/\s/g, "").length === 0
+              {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0
                 ? "-"
                 : music.musicianName}
             </Td>
             <Td width='15%'>
-              {music.albumName === null ||
-              music.albumName.replace(/\s/g, "").length === 0
+              {music.albumName === null || music.albumName.replace(/\s/g, "").length === 0
                 ? "-"
                 : music.albumName}
             </Td>
             <Td width='10%'>
               {Math.floor(music.musicLength / 1000 / 60)}:
-              {String(Math.floor((music.musicLength / 1000) % 60)).padStart(
-                2,
-                "0"
-              )}
+              {String(Math.floor((music.musicLength / 1000) % 60)).padStart(2, "0")}
             </Td>
             {radio || checkBox ? (
               <Td width='10%' align='right' padding={true}>
@@ -163,10 +152,7 @@ const CustomTable = ({
               <Td width='5%'>
                 <Mix
                   musicSeq={music.musicSeq}
-                  musicName={music.musicName.substr(
-                    0,
-                    music.musicName.lastIndexOf(".")
-                  )}
+                  musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))}
                   coverImage={music.coverImage}
                   musicianName={music.musicianName}
                 ></Mix>
@@ -179,7 +165,11 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%'>
-                <Download musicSeq={music.musicSeq}></Download>
+                <Download
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName}
+                  musicUrl={music.musicUrl}
+                ></Download>
               </Td>
             ) : null}
           </Tr>

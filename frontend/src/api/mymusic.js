@@ -39,8 +39,6 @@ export const downloadMusic = async (musicSeq) =>
     responseType: "blob",
   });
 
-export const countMusic = async (userSeq) =>
-  await instance.get(`${musicUrl}/count/${userSeq}`);
+export const countMusic = async (userSeq) => await instance.get(`${musicUrl}/count/${userSeq}`);
 
-export const splitMusic = async (musicSeq) =>
-  await instance.get(`${musicUrl}/inst/${musicSeq}`);
+export const splitMusic = async (musicSeq) => await instance.get(`${musicUrl}/inst/${musicSeq}`);
