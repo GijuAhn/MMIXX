@@ -36,6 +36,8 @@ const index = () => {
           <Route path="login" element={<Login />} />
           <Route path="login/success" element={<LoginSuccess />} />       
           <Route path="playlist/test" element={<Test />} />
+          <Route path="playlist/global" element={<Playlist />} />
+          <Route path="playlist/favorite" element={<Playlist />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

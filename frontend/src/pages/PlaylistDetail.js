@@ -60,7 +60,7 @@ const PlaylistDetail = () => {
   const deleteConfirm = () => {
     deletePlaylist(playlistSeq)
       .then(res => {
-        alert('삭제되었습니다.')
+        // alert('삭제되었습니다.')
         navigate('/playlist')
       })
   }
