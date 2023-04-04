@@ -1,8 +1,9 @@
 import styled, { keyframes } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const MusicCount = () => {
+const MusicCount = ({ selected }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onClickMine = () => {
     navigate(`/playlist`);
@@ -19,13 +20,19 @@ const MusicCount = () => {
     <Table>
       <tbody>
         <Tr>
-          <Td onClick={onClickMine}>내 플레이리스트</Td>
+          <Td onClick={onClickMine} selected={location.pathname === `/playlist`}>
+            내 플레이리스트
+          </Td>
         </Tr>
         <Tr>
-          <Td onClick={onClickGlobal}>글로벌 플레이리스트</Td>
+          <Td onClick={onClickGlobal} selected={location.pathname === `/playlist/global`}>
+            글로벌 플레이리스트
+          </Td>
         </Tr>
         <Tr>
-          <Td onClick={onClickFav}>즐겨찾기</Td>
+          <Td onClick={onClickFav} selected={location.pathname === `/playlist/favorite`}>
+            즐겨찾기
+          </Td>
         </Tr>
       </tbody>
     </Table>
@@ -44,12 +51,9 @@ const fadeIn = keyframes`
 `;
 
 const Table = styled.table`
-  // position: absolute;
-  // top: 400px;
   margin: 0 auto;
   height: 100px;
   width: 100%;
-  // border: 1px dotted red;
 
   animation-duration: 0.2s;
   animation-timing-function: ease-out;
@@ -76,7 +80,8 @@ const Td = styled.td`
   }
 
   ${({ selected, theme }) =>
-    selected &&`
+    selected &&
+    `
     background-color: ${theme.palette.hover};
     color: ${theme.palette.secondary}`}
 `;
