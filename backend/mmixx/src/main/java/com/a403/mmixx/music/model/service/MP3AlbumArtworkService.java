@@ -55,6 +55,7 @@ public class MP3AlbumArtworkService {
         ClassLoader classLoader = MP3AlbumArtworkService.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("static/default_cover.jpg");
         byte[] bytes = IOUtils.toByteArray(inputStream);
+        inputStream.close();
         return bytes;
     }
 }

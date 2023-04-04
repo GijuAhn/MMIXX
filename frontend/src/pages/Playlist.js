@@ -1,17 +1,18 @@
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams,  } from 'react-router-dom';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
-import { testPlaylist, isLogIn, userInfo } from 'atom/atom';
+import { isLogIn, userInfo } from 'atom/atom';
 import { useEffect, useState } from 'react';
 import { getPlaylists } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
-  const playlists = useRecoilValue(testPlaylist)
+  // const playlists = useRecoilValue(testPlaylist)
   const [data, setData] = useState(null)
+  const { playlistSeq } = useParams()
 
   const atomIsLogin = useRecoilValue(isLogIn)
   const atomUser = useRecoilValue(userInfo)
@@ -47,7 +48,7 @@ const Playlist = () => {
             플레이리스트 추가
           </DefaultBtn>
         </Top>
-        {data != null ?
+        {data != null && data.length > 0 ?
           <>
             <CardWrapper>
             
@@ -68,7 +69,7 @@ const Playlist = () => {
           
             </CardWrapper>
           </> :
-          <button></button>
+          <div>플레이리스트 없음.</div>
         }
       </Content>
     </StyleWrapper>
@@ -82,6 +83,7 @@ const StyleWrapper = styled(Wrapper)`
 const Content = styled.div`
   width: 1100px;
   flex-direction: column;
+  margin-bottom: 100px;
 `
 
 const Top = styled.div`
@@ -96,7 +98,7 @@ const Top = styled.div`
 const CardWrapper = styled.div`
   margin-top: 15px;
   flex-wrap: wrap;
-  justify-content: space-between
+  justify-content: space-between;
 `
 
 export default Playlist;
