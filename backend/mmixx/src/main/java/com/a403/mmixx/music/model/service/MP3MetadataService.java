@@ -88,15 +88,19 @@ public class MP3MetadataService {
 //
 //
 //        file.transferTo(mp3File);
-    	
+    	if(file.isEmpty()) {
+    		System.out.println("file is empty");
+    	}
+    	System.out.println("extract Metadata file size : " + file.getSize());
     	File convFile = new File(file.getOriginalFilename());
     	Path path = Paths.get(convFile.getAbsolutePath()).toAbsolutePath();
     	System.out.println(convFile.getAbsolutePath());
     	System.out.println("path : " + path);
+    	System.out.println("extract Metadata file size : " + file.getSize());
     	FileOutputStream fos = new FileOutputStream(path.toFile());
     	fos.write(file.getBytes());
     	fos.close();
-    	
+    	System.out.println("ffff extract Metadata file size : " + file.getSize());
 //    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
 //    	
 //    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
