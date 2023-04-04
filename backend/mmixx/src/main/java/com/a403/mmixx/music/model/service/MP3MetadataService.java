@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -70,16 +71,20 @@ public class MP3MetadataService {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-        File mp3File = File.createTempFile("temp", ".mp3");
 
-        //  print file's location (path) for debugging
-        System.out.println(mp3File.getAbsolutePath());
-
-
+//        File mp3File = File.createTempFile("temp", ".mp3");
+//
+//        //  print file's location (path) for debugging
+//        System.out.println(mp3File.getAbsolutePath());
+//
+//
 //        file.transferTo(mp3File);
-        String filePath = mp3File.getAbsolutePath();
-        file.transferTo(new File(filePath));
-
+    	
+    	File convFile = new File(file.getOriginalFilename());
+    	System.out.println(convFile.getAbsolutePath());
+    	FileOutputStream fos = new FileOutputStream(convFile);
+    	fos.write(file.getBytes());
+    	fos.close();
 
         System.out.println("END: file transferTo");
 
@@ -90,7 +95,7 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-        InputStream stream = new FileInputStream(mp3File);
+        InputStream stream = new FileInputStream(convFile);
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
