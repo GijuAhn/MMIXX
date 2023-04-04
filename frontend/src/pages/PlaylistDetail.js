@@ -9,6 +9,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import { CustomTable } from "components/mymusic"
+import { useRecoilValue } from "recoil";
+import { _now } from "atom/music"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -20,13 +22,23 @@ const PlaylistDetail = () => {
       userSeq: -1
   })
 
+  const now = useRecoilValue(_now)
+  // 공개 여부 체크
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-
+    createNowPlaylist(playlistMusic)
   }
+
+  useEffect(() => {
+    console.log(testNow)
+  }, [testNow])
 
   useEffect(() => {
     // 플레이리스트 음악 목록 가져오기
@@ -41,6 +53,7 @@ const PlaylistDetail = () => {
     getPlaylistInfo(playlistSeq)
       .then(res => {
         setPlaylistInfo(res.data)
+        setIsChecked(res.data.isPrivate)
       })
       .catch(err => console.log(err))
   }, [playlistSeq]);
@@ -65,7 +78,7 @@ const PlaylistDetail = () => {
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
-              <Switch defaultChecked/>
+              <Switch checked={isChecked } onChange={handleChange}/>
             </PrivateToggle>
           </Top>
           <Bottom style={{ border: '1px solid blue'}}>
