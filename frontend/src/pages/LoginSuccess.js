@@ -15,8 +15,8 @@ const LoginSuccess = () => {
     // console.log(token);
 
     const instance =  axios.create({
-        // baseURL: process.env.REACT_APP_BASE_URL, // 서버용
-        baseURL: 'http://localhost:5555/api', // 로컬 테스트용
+        baseURL: process.env.REACT_APP_BASE_URL, // 서버용
+        // baseURL: 'http://localhost:5555/api', // 로컬 테스트용
         // baseURL: 'https://j8a403.p.ssafy.io/api',
         headers: {
           'Authorization': `Bearer ${token}`
