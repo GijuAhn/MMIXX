@@ -4,7 +4,7 @@ import { useNavigate, useLocation  } from 'react-router-dom';
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
-import { isLogIn, userInfo } from 'atom/atom';
+import { userInfo } from 'atom/atom';
 import { useEffect, useState } from 'react';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
 
@@ -18,7 +18,7 @@ const Playlist = () => {
   const favorite = 'favorite';
   // console.log(playlistType);
   
-  const atomIsLogin = useRecoilValue(isLogIn)
+  // const atomIsLogin = useRecoilValue(isLogIn)
   const atomUser = useRecoilValue(userInfo)
   
   // const [playlistType, setType] = useState( location.pathname.includes('global') ? global
@@ -57,7 +57,7 @@ const Playlist = () => {
       ).catch(err => console.log(err))
     }
       
-  }, [location]);
+  }, [location, atomUser]);
 
 
   return (
