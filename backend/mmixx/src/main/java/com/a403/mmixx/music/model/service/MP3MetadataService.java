@@ -91,16 +91,16 @@ public class MP3MetadataService {
     	if(file.isEmpty()) {
     		System.out.println("file is empty");
     	}
-    	System.out.println("extract Metadata file size : " + file.getSize());
-    	File convFile = new File(file.getOriginalFilename());
-    	Path path = Paths.get(convFile.getAbsolutePath()).toAbsolutePath();
-    	System.out.println(convFile.getAbsolutePath());
-    	System.out.println("path : " + path);
-    	System.out.println("extract Metadata file size : " + file.getSize());
-    	FileOutputStream fos = new FileOutputStream(path.toFile());
-    	fos.write(file.getBytes());
-    	fos.close();
-    	System.out.println("ffff extract Metadata file size : " + file.getSize());
+//    	System.out.println("extract Metadata file size : " + file.getSize());
+//    	File convFile = new File(file.getOriginalFilename());
+//    	Path path = Paths.get(convFile.getAbsolutePath()).toAbsolutePath();
+//    	System.out.println(convFile.getAbsolutePath());
+//    	System.out.println("path : " + path);
+//    	System.out.println("extract Metadata file size : " + file.getSize());
+//    	FileOutputStream fos = new FileOutputStream(path.toFile());
+//    	fos.write(file.getBytes());
+//    	fos.close();
+//    	System.out.println("ffff extract Metadata file size : " + file.getSize());
 //    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
 //    	
 //    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
@@ -119,12 +119,12 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-        InputStream stream = new FileInputStream(path.toFile());
+//        InputStream stream = new FileInputStream(path.toFile());
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
-        parser.parse(stream, handler, metadata, parseContext);
+        parser.parse(file.getInputStream(), handler, metadata, parseContext);
         
-        stream.close();
+//        stream.close();
         boolean utf = true;
         
         // Extract the metadata fields and add them to the map
