@@ -9,6 +9,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import { CustomTable } from "components/mymusic"
+import { usePlayControl } from "hooks/usePlayControl"
+import { useRecoilValue } from "recoil"
+import { _nowSelector } from "atom/music"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -20,13 +23,18 @@ const PlaylistDetail = () => {
       userSeq: -1
   })
 
-
+  const { createNowPlaylist } = usePlayControl()
+  const testNow = useRecoilValue(_nowSelector)
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-
+    createNowPlaylist(playlistMusic)
   }
+
+  useEffect(() => {
+    console.log(testNow)
+  }, [testNow])
 
   useEffect(() => {
     // 플레이리스트 음악 목록 가져오기
