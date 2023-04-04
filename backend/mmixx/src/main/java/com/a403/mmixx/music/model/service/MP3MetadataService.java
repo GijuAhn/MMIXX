@@ -71,6 +71,7 @@ public class MP3MetadataService {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+
 //        File mp3File = File.createTempFile("temp", ".mp3");
 //
 //        //  print file's location (path) for debugging
@@ -84,7 +85,7 @@ public class MP3MetadataService {
     	FileOutputStream fos = new FileOutputStream(convFile);
     	fos.write(file.getBytes());
     	fos.close();
-        
+
         System.out.println("END: file transferTo");
 
         Map<String, String> metadataMap = new HashMap<>();
