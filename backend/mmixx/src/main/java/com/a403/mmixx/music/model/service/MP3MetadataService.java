@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +76,10 @@ public class MP3MetadataService {
     	System.out.println("extract Metadata file name : " + file.getName());
     	System.out.println("extract Metadata Original file name : " + file.getOriginalFilename());
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+//        File mp3File = File.createTempFile("temp", ".mp3");
+
+        //  print file's location (path) for debugging
+//        System.out.println(mp3File.getAbsolutePath());
 
 //        File mp3File = File.createTempFile("temp", ".mp3");
 //
@@ -94,6 +100,7 @@ public class MP3MetadataService {
     	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
     	
         file.transferTo(mp3File);
+
 
         System.out.println("END: file transferTo");
 
