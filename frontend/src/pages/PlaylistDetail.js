@@ -6,12 +6,13 @@ import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { Wrapper, Header, DefaultBtn } from "components/Common"
+import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import {CustomTable} from "components/mymusic"
+import { _now } from "atom/music"
+import { useRecoilValue } from "recoil"
 
 const PlaylistDetail = () => {
-  const navigate = useNavigate()
   const { playlistSeq } = useParams()
   const [ playlistMusic, setPlayListMusic ] = useState([]);
   const [ coverImage, setCoverImage ] = useState(null)
@@ -21,10 +22,14 @@ const PlaylistDetail = () => {
       userSeq: -1
   })
 
-  
-  
+  const now = useRecoilValue(_now)
+  /**
+   * 플레이리스트 재생
+   */
   const handlePlaying = () => {
-
+    console.log(playlistMusic)
+    // now.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c21b74a7-d1b4-4001-b125-a6af467e0432.mp3'
+    // now.play()
   }
 
   useEffect(() => {
@@ -68,9 +73,10 @@ const PlaylistDetail = () => {
             </PrivateToggle>
           </Top>
           <Bottom style={{ border: '1px solid blue'}}>
-            <PlayCircleFilledRoundedIcon 
+            <StylePlayCircleFilledRoundedIcon 
               sx={{ fontSize: '40px'}}
               onClick={handlePlaying}
+              disabled={playlistMusic.length === 0}
             />
             <MoreIconDiv playlistSeq={playlistSeq}/>
             
@@ -159,7 +165,7 @@ const MoreIconDiv = ({ playlistSeq }) => {
         {isOpen &&
           <CustomSelect>
             <ul>
-              <li onClick={() => navigate('/playlist/edit')}>
+              <li onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
                 수정하기
               </li>
               <li onClick={confirmDelete}>
@@ -223,6 +229,23 @@ const Bottom = styled.div`
   flex-grow: 1;
   justify-content: space-between;
   align-items: end;
+`
+
+const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
+  
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  ${({disabled}) => disabled && `
+    color: gray;
+    
+    :hover {
+      transform: scale(1);
+      cursor: default;
+    }
+  `}
 `
 
 const MoreDiv = styled.div`

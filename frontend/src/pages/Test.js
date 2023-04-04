@@ -3,21 +3,8 @@ import styled from 'styled-components'
 import { useRecoilState } from 'recoil';
 
 import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3';
-import { nowPlaying } from 'atom/music';
 
 const Test = () => {
-  const audioElement = new Audio(Remix)
-  const [ atomTest, setAtomTest ] = useRecoilState(nowPlaying)
-
-  const playAudio = () => {
-    audioElement.play();
-  }
-  
-  const changeAtomValueTest = () => {
-    setAtomTest(atomTest + 1)
-    console.log(atomTest) 
-  }
-
   // setInterval(() => {
   //   console.log(audioElement.duration)
   //   console.log(audioElement.currentTime)
@@ -25,10 +12,10 @@ const Test = () => {
 
   return (
     <Wrapper style={{ backgroundImage: "url('https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80')"}}>
-      <button style={{ color: 'red'}} onClick={() => playAudio()}>
+      <button style={{ color: 'red'}}>
         {Remix}
       </button>
-      <button onClick={changeAtomValueTest}>
+      <button>
         recoil 테스트용 
       </button>
       <TestDiv />

@@ -97,8 +97,8 @@ const CustomTable = ({
   return (
     <Table>
       <tbody>
-        {musicList.map((music) => (
-          <Tr key={music.musicSeq}>
+        {musicList.map((music, index) => (
+          <Tr key={index}>
             {radio || checkBox ? (
               <Radio>
                 <img
