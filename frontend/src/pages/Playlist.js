@@ -65,18 +65,18 @@ const Playlist = () => {
       {playlistType === mine ? (
         <Header
           title="My Playlist"
-          desc="내 플레이리스트 모아보기"
+          desc="내 플레이리스트"
         />
       ) : (
          playlistType === global ? (
           <Header
             title="Global Playlist"
-            desc="글로벌 플레이리스트 모아보기"
+            desc="글로벌 플레이리스트"
           />
         ) : (
           <Header
             title="Favorite Playlist"
-            desc="즐겨찾기 플레이리스트 모아보기"
+            desc="즐겨찾기 플레이리스트"
           />    
       ))
       }
