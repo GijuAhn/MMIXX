@@ -1,7 +1,7 @@
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from "atom/atom";
 import { useRecoilValue } from "recoil";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components"
 import { useState } from "react";
 import { userInfo } from 'atom/atom';
@@ -22,6 +22,8 @@ const PlaylistSelectMusic = () => {
   // [Test] 곡 선택하기 (check box)
   const [checkedList, setCheckedList] = useState([]);
 
+  const { type } = useParams();
+  console.log(type);
 
   // 선택 완료 버튼 누르면 플레이리스트 생성
   const onClickLogin = () => {

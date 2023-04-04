@@ -31,8 +31,8 @@ const index = () => {
           <Route path="playlist" element={<Playlist />} />
           <Route path="playlist/create" element={<PlaylistCreate />} />
           <Route path="playlist/:playlistSeq" element={<PlaylistDetail />} />
-          <Route path="playlist/edit" element={<PlaylistEdit />} />
-          <Route path="playlist/select" element={<PlaylistSelectMusic />} />
+          <Route path="playlist/edit/:playlistSeq" element={<PlaylistEdit />} />
+          <Route path="playlist/select/:type" element={<PlaylistSelectMusic />} />
           <Route path="login" element={<Login />} />
           <Route path="login/success" element={<LoginSuccess />} />       
           <Route path="playlist/test" element={<Test />} />

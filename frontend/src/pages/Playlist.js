@@ -28,7 +28,7 @@ const Playlist = () => {
   useEffect(() => {
     
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
-      globalPlaylists()
+      globalPlaylists(atomUser.userSeq)
         .then(
           res => {
             setData(res.data)
