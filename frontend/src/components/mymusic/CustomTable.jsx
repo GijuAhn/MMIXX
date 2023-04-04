@@ -27,22 +27,10 @@ const CustomTable = ({
 
   const onCheck = (event) => {
     if (radio) {
-      musicSeq.current =
-        event.target.attributes.getNamedItem("seq") === null
-          ? null
-          : event.target.attributes.getNamedItem("seq").value;
-      coverImage.current =
-        event.target.attributes.getNamedItem("cover") === null
-          ? null
-          : event.target.attributes.getNamedItem("cover").value;
-      musicName.current =
-        event.target.attributes.getNamedItem("title") === null
-          ? null
-          : event.target.attributes.getNamedItem("title").value;
-      musicianName.current =
-        event.target.attributes.getNamedItem("musician") === null
-          ? null
-          : event.target.attributes.getNamedItem("musician").value;
+      musicSeq.current = event.target.attributes.getNamedItem("seq") === null ? null : event.target.attributes.getNamedItem("seq").value;
+      coverImage.current = event.target.attributes.getNamedItem("cover") === null ? null : event.target.attributes.getNamedItem("cover").value;
+      musicName.current = event.target.attributes.getNamedItem("title") === null ? null : event.target.attributes.getNamedItem("title").value;
+      musicianName.current = event.target.attributes.getNamedItem("musician") === null ? null : event.target.attributes.getNamedItem("musician").value;
 
       // setMusicSeqState(musicSeq.current);
 
@@ -70,10 +58,7 @@ const CustomTable = ({
         event.target.setAttribute("src", Check);
       }
 
-      const newMusicSeq =
-        event.target.attributes.getNamedItem("seq") === null
-          ? null
-          : event.target.attributes.getNamedItem("seq").value;
+      const newMusicSeq = event.target.attributes.getNamedItem("seq") === null ? null : event.target.attributes.getNamedItem("seq").value;
 
       const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
 
@@ -105,38 +90,26 @@ const CustomTable = ({
                   cover={music.coverImage}
                   title={music.musicName}
                   musician={music.musicianName}
-                  src={musicSeq.current == music.musicSeq ? Check : UnCheck}
+                  src={musicSeq.current === music.musicSeq ? Check : UnCheck}
                   alt=''
                   width='23'
                 />
               </Radio>
             ) : null}
             <TdRound width='5%'>
-              <CoverImage
-                coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}
-              ></CoverImage>
+              <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
             <Td weight='400' width='7%' align='center'>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
-            <Td width='27.5%'>
-              {music.musicName.includes(".")
-                ? music.musicName.substr(0, music.musicName.lastIndexOf("."))
-                : music.musicName}
-            </Td>
-            <Td width='15%'>
-              {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0
-                ? "-"
-                : music.musicianName}
-            </Td>
-            <Td width='15%'>
-              {music.albumName === null || music.albumName.replace(/\s/g, "").length === 0
-                ? "-"
-                : music.albumName}
-            </Td>
+            {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
+            <Td width='15%'>{music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}</Td>
+            <Td width='15%'>{music.albumName === null || music.albumName.replace(/\s/g, "").length === 0 ? "-" : music.albumName}</Td> */}
+            <TdText width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</TdText>
+            <TdText width='15%'>{music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}</TdText>
+            <TdText width='15%'>{music.albumName === null || music.albumName.replace(/\s/g, "").length === 0 ? "-" : music.albumName}</TdText>
             <Td width='10%'>
-              {Math.floor(music.musicLength / 1000 / 60)}:
-              {String(Math.floor((music.musicLength / 1000) % 60)).padStart(2, "0")}
+              {Math.floor(music.musicLength / 1000 / 60)}:{String(Math.floor((music.musicLength / 1000) % 60)).padStart(2, "0")}
             </Td>
             {radio || checkBox ? (
               <Td width='10%' align='right' padding={true}>
@@ -150,12 +123,7 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%'>
-                <Mix
-                  musicSeq={music.musicSeq}
-                  musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))}
-                  coverImage={music.coverImage}
-                  musicianName={music.musicianName}
-                ></Mix>
+                <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
@@ -165,11 +133,7 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%'>
-                <Download
-                  musicSeq={music.musicSeq}
-                  musicName={music.musicName}
-                  musicUrl={music.musicUrl}
-                ></Download>
+                <Download musicSeq={music.musicSeq} musicName={music.musicName} musicUrl={music.musicUrl}></Download>
               </Td>
             ) : null}
           </Tr>
@@ -233,6 +197,24 @@ const Td = styled.td`
   &:last-child {
     border-radius: 0 15px 15px 0;
   }
+`;
+
+const TdText = styled.td`
+  font-size: 14px;
+  font-weight: ${(props) => props.weight || "200"};
+  font-family: "Heebo", sans-serif;
+  width: ${(props) => props.width || "auto"};
+  text-align: ${(props) => props.align || "left"};
+  ${(props) =>
+    props.padding &&
+    `padding-top: 5px;
+  padding-right: 10px;`};
+
+  // display: inline-block;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  // vertical-align: middle;
 `;
 
 export default CustomTable;

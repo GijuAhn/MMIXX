@@ -8,9 +8,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
-import {CustomTable} from "components/mymusic"
+import { CustomTable } from "components/mymusic"
+import { useRecoilValue } from "recoil";
 import { _now } from "atom/music"
-import { useRecoilValue } from "recoil"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -28,13 +28,12 @@ const PlaylistDetail = () => {
   const handleChange = () => {
     setIsChecked(!isChecked);
   };
+
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    console.log(playlistMusic)
-    // now.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c21b74a7-d1b4-4001-b125-a6af467e0432.mp3'
-    // now.play()
+
   }
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const PlaylistDetail = () => {
         setIsChecked(res.data.isPrivate)
       })
       .catch(err => console.log(err))
-  }, []);
+  }, [playlistSeq]);
 
   return (
     <StyleWrapper url={coverImage}>
