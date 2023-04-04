@@ -8,9 +8,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
-import {CustomTable} from "components/mymusic"
-import { _now } from "atom/music"
-import { useRecoilValue } from "recoil"
+import { CustomTable } from "components/mymusic"
+import { nowPlaylist, _nowSelector } from "atom/music"
+import { useRecoilState } from "recoil"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -22,14 +22,16 @@ const PlaylistDetail = () => {
       userSeq: -1
   })
 
-  const now = useRecoilValue(_now)
+  const [ nowState, setNowState ] = useRecoilState(_nowSelector)
+
+  console.log('???', nowState)
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
+    setNowState(playlistMusic)
     console.log(playlistMusic)
-    // now.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c21b74a7-d1b4-4001-b125-a6af467e0432.mp3'
-    // now.play()
+    console.log('바뀐 값 : ', nowState)
   }
 
   useEffect(() => {
