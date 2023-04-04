@@ -1,18 +1,55 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import styled, { css } from "styled-components"
 import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { getPlaylistInfo, modifyPlaylist} from 'api/playlist'
 
 const PlaylistEdit = () => {
+  const { playlistSeq } = useParams();
+  // console.log(playlistSeq);
   const inputRef = useRef(null)
   const navigate = useNavigate()
-  useEffect(() => {
+  const [ playlistInfo, setPlaylistInfo ] = useState({
+    playlistName: '',
+    isPrivate: true,
+    userSeq: -1
+  })
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  // 플레이리스트 정보 불러오기
+  useEffect(() => {    
+    getPlaylistInfo(playlistSeq)
+    .then(res => {
+      setPlaylistInfo(res.data)
+      setIsChecked(res.data.isPrivate)
+    })
+    .catch(err => console.log(err))
+    
     inputRef.current.select()
     inputRef.current.focus()
-  })
+  }, [])
+
+  // 수정 완료
+  const modifySubmit = () => {
+    // console.log(isChecked);
+    // console.log(inputRef.current.value);
+    modifyPlaylist(
+      playlistSeq,
+      {
+        playlist_name: inputRef.current.value,
+        is_private: isChecked,
+      }
+    ).then(
+      navigate(`/playlist/${playlistSeq}`)
+    )
+  }
 
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
@@ -27,17 +64,20 @@ const PlaylistEdit = () => {
         <RightContent>
           <Top>
             <InputTitle>
-              <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
+              <input type="text" ref={inputRef} defaultValue={playlistInfo.playlistName }></input>
             </InputTitle>
             <InputRivateToggle>
               공개여부
-              <Switch defaultChecked/>
+              <Switch checked={isChecked } onChange={handleChange} />
             </InputRivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select")}>
-              곡 추가
-            </AddMusicBtn>
+            <CancleBtn onClick={() => navigate(`/playlist/${playlistSeq}`)}>
+              취소
+            </CancleBtn>
+            <ModifyBtn onClick={modifySubmit}>
+              수정 완료
+            </ModifyBtn>
           </Bottom>
         </RightContent>
       </InputContent>
@@ -116,7 +156,12 @@ const InputRivateToggle = styled.div`
   display: inline-block;
 `
 
-const AddMusicBtn = styled(DefaultBtn)`
+// const AddMusicBtn = styled(DefaultBtn)`
+// `
+const ModifyBtn = styled(DefaultBtn)`
+`
+
+const CancleBtn = styled(DefaultBtn)`
 `
 
 export default PlaylistEdit;

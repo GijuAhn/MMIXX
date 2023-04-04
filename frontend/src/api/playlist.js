@@ -13,6 +13,7 @@ export const getPlaylists = async (userSeq) => {
 export const getPlaylistDetail = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}`)
 }
+// 플레이리스트 정보 조회
 export const getPlaylistInfo = async ( playlistSeq ) => {
   return await instance(`/playlist/info/${playlistSeq}`)
 }
@@ -26,8 +27,8 @@ export const favoritePlaylists = async (userSeq) => {
   return await instance(`/playlist/favorite/${userSeq}`)
 }
 // 글로벌 플레이리스트 목록 조회
-export const globalPlaylists = async () => {
-  return await instance('/playlist/global')
+export const globalPlaylists = async (userSeq) => {
+  return await instance(`/playlist/global/${userSeq}`)
 }
 // 플레이리스트 대표 앨범커버 가져오기 (앨범아트가 없으면 default image 를 출력한다. (Error Code 404 처리 필요))
 export const getPlaylistCoverImage = async ( playlistSeq ) => {
@@ -42,6 +43,6 @@ export const deletePlaylist = async (playlistSeq) => {
   return await instance.delete(`/playlist/${playlistSeq}`)
 }
 // 플레이리스트 수정
-export const modifyPlaylist = async (playlistSeq) => {
-  return await instance.put(`/playlist/detail/${playlistSeq}`)
+export const modifyPlaylist = async (playlistSeq, playlist) => {
+  return await instance.put(`/playlist/detail/${playlistSeq}`,  playlist)
 }
