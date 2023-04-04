@@ -68,7 +68,7 @@ const Playlist = () => {
           
             </CardWrapper>
           </> :
-          <button></button>
+          <div>플레이리스트 없음.</div>
         }
       </Content>
     </StyleWrapper>
@@ -82,6 +82,7 @@ const StyleWrapper = styled(Wrapper)`
 const Content = styled.div`
   width: 1100px;
   flex-direction: column;
+  margin-bottom: 100px;
 `
 
 const Top = styled.div`
@@ -96,7 +97,7 @@ const Top = styled.div`
 const CardWrapper = styled.div`
   margin-top: 15px;
   flex-wrap: wrap;
-  justify-content: space-between
+  justify-content: space-between;
 `
 
 export default Playlist;
