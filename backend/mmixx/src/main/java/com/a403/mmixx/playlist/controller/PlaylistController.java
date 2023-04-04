@@ -43,14 +43,14 @@ public class PlaylistController {
     }
 
     //  전체 플레이리스트 목록을 조회 - public playlist
-    @GetMapping("/global")
-    public List<PlaylistSimpleDto> getGlobalPlaylist() {
-        return playlistService.getGlobalPlaylist();
+    @GetMapping("/global/{userSeq}")
+    public List<PlaylistWithFavoriteSimpleDto> getGlobalPlaylist(@PathVariable int userSeq) {
+        return playlistService.getGlobalPlaylist(userSeq);
     }
 
     //  개인 플레이리스트 목록을 조회 - private playlist
     @GetMapping("/user/{userSeq}")
-    public List<PlaylistSimpleDto> getPrivatePlaylist(@PathVariable int userSeq) {
+    public List<PlaylistWithFavoriteSimpleDto> getPrivatePlaylist(@PathVariable int userSeq) {
         return playlistService.getPrivatePlaylist(userSeq);
     }
 

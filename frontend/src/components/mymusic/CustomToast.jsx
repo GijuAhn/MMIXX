@@ -5,7 +5,7 @@ import WarningIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorrIcon from "@mui/icons-material/ReportGmailerrorredOutlined";
 import SuccessIcon from "@mui/icons-material/CheckBoxOutlined";
 
-const CustomToast = ({ res, text = "업로드 중...", toggle, width = "160px", time = 3000 }) => {
+const CustomToast = ({ res, text, toggle, width = "160px", time = 3000 }) => {
   const [state, setState] = useState(slideDown);
 
   useEffect(() => {
@@ -33,9 +33,9 @@ const CustomToast = ({ res, text = "업로드 중...", toggle, width = "160px", 
         <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
       ) : res === "success" ? (
         <SuccessIcon color='success' />
-      ) : (
+      ) : res === "warning" ? (
         <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
-      )}
+      ) : null}
       {/* <InfoIcon color='primary' />
       <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
       <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
