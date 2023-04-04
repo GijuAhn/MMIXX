@@ -102,8 +102,8 @@ const NavMenu = () => {
       {navList &&
         navList.map((item, index) => {
           return (
-            <section>
-              <NavLi key={"NavLi" + index} onClick={() => navigate(item.path)} selected={location.pathname.includes("/" + item.path)}>
+            <section key={"NavLi" + index}>
+              <NavLi onClick={() => navigate(item.path)} selected={location.pathname.includes("/" + item.path)}>
                 {item.icon}
                 <span>{item.name}</span>
                 {item.name === "MY MUSIC" ? <Arrow src={arrow} selected={"/" + item.path === location.pathname} alt=''></Arrow> : null}
