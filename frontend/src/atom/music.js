@@ -10,6 +10,11 @@ export const _now = atom({
   ]
 })
 
+export const _mix_now = atom({
+  key: '_mix_now',
+  default: new Audio()
+})
+
 export const _nowMusic = atom({
   key: '_nowMusic',
   default: {
