@@ -30,3 +30,7 @@ export const getPlaylistCoverImage = async ( playlistSeq ) => {
 export const insertMusicInPlaylist = async ( playlistSeq ) => {
   return await instance.post(`/playlist/${playlistSeq}`)
 }
+// 플레이리스트 삭제
+export const deletePlaylist = async (playlistSeq) => {
+  return await instance.delete(`/playlist/${playlistSeq}`)
+}

@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.transaction.Transactional;
 
+import com.a403.mmixx.auth.entity.Role;
 import com.a403.mmixx.music.model.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -91,7 +92,7 @@ public class MusicService {
 		//	set userSeq into musicContainerList
 		for (Music music : musicContainerList) {
 //			music.setUser(userRepository.findById(authUserSeq).orElse(null));
-			music.setUser(new User(user.getUserSeq()));
+			music.setUser(new User(user.getUserSeq(), Role.USER));
 		}
 
 		log.info("musicContainerList: " + musicContainerList);
@@ -124,9 +125,9 @@ public class MusicService {
 			InputStream multipartFileInputStreamClone1 = multipartFile.getInputStream();
 
 			multipartFilesCopy1.add(multipartFileInputStreamClone1);
+			is.close();
 		}
-
-
+		
 		List<Music> musicContainerList;
 		List<String> musicUrlList;
 		List<String> coverImageList;

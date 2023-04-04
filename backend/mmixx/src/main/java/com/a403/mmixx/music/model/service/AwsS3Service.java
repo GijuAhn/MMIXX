@@ -70,7 +70,8 @@ public class AwsS3Service {
 		httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		httpHeaders.setContentLength(bytes.length);
 		httpHeaders.setContentDispositionFormData("attachment", downloadFileName); // 파일 이름 지정
-
+		
+		objectInputStream.close();
 		return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
 	}
 
@@ -89,6 +90,7 @@ public class AwsS3Service {
 			try (InputStream inputStream = file.getInputStream()) {
 				amazonS3.putObject(new PutObjectRequest(bucket + MUSIC_FOLDER, fileName, inputStream, metadata)
 						.withCannedAcl(CannedAccessControlList.PublicRead));
+				inputStream.close();
 			} catch (IOException e) {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "음원 파일 업로드에 실패했습니다.");
 			}
@@ -139,6 +141,7 @@ public class AwsS3Service {
 			try(InputStream inputStream = new ByteArrayInputStream(coverImage)) {
 				amazonS3.putObject(new PutObjectRequest(bucket + IMAGE_FOLDER, fileName, inputStream, metadata)
 						.withCannedAcl(CannedAccessControlList.PublicRead));
+				inputStream.close();
 			} catch (IOException e) {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "커버 이미지 업로드에 실패했습니다.");
 			}

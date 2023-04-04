@@ -8,7 +8,7 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { testPlaylistMusic } from 'atom/atom'
-import { getPlaylistDetail } from "api/playlist"
+import { getPlaylistDetail, deletePlaylist } from "api/playlist"
 import {CustomTable} from "components/mymusic"
 
 const PlaylistDetail = () => {
@@ -24,6 +24,7 @@ const PlaylistDetail = () => {
   const [playlistMusic, setPlayListMusic] = useState([]);
   const [coverImage, setCoverImage] = useState(null)
 
+  // 플레이리스트 음악 목록 가져오기
   useEffect(() => {
     getPlaylistDetail(playlistSeq)
       .then(res => {
@@ -35,8 +36,41 @@ const PlaylistDetail = () => {
         // console.log(res);
         setCoverImage(res[0].coverImage);
       })
-  }, [])
+  }, []);
 
+  // 플레이리스트 삭제 시작
+  const useConfirm = (message = null, onConfirm, onCancel) => {
+    if (!onConfirm || typeof onConfirm !== "function") {
+      return;
+    }
+    if (onCancel && typeof onCancel !== "function") {
+      return;
+    }
+  
+    const confirmAction = () => {
+      if (window.confirm(message)) {
+        onConfirm();
+      } else {
+        onCancel();
+      }
+    };
+  
+    return confirmAction;
+  };
+  const deleteConfirm = () => {
+    deletePlaylist(playlistSeq)
+      .then(res => {
+        // alert('삭제되었습니다.')
+        navigate('/playlist')
+      })
+  }
+  const cancelConfirm = () => console.log("취소했습니다.");
+  const confirmDelete = useConfirm(
+    "삭제하시겠습니까?",
+    deleteConfirm,
+    cancelConfirm
+  );
+  // 플레이리스트 삭제 끝
 
   return (
     <StyleWrapper url={coverImage}>
@@ -65,9 +99,12 @@ const PlaylistDetail = () => {
             <PlayCircleFilledRoundedIcon 
               fontSize="large"
             />
+            <DefaultBtn onClick={confirmDelete}>
+              플레이리스트 삭제
+            </DefaultBtn>
             <DefaultBtn onClick={() => navigate("/playlist/edit")}>
               플레이리스트 수정
-            </DefaultBtn>
+            </DefaultBtn>           
           </Bottom>
         </RightContent>
       </InfoContent>
