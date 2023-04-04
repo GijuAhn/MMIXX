@@ -77,6 +77,8 @@ public class MP3MetadataService {
 
 
         file.transferTo(mp3File);
+        
+        System.out.println("END: file transferTo");
 
         Map<String, String> metadataMap = new HashMap<>();
 
