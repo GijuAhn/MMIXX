@@ -213,39 +213,63 @@ public class PlaylistService {
      * Public 플레이리스트 조회, isPrivate = false 인 모든 항목을 조회한다.
      * ignore userSeq
      */
-    public List<PlaylistSimpleDto> getGlobalPlaylist() {
-        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+    public List<PlaylistWithFavoriteSimpleDto> getGlobalPlaylist(int userSeq) {
+        List<PlaylistWithFavoriteSimpleDto> playlistWithFavoriteSimpleDtoList = new LinkedList<>();
         List<Playlist> playlistList = playlistRepository.findByIsPrivateFalse();
+
+        favoriteRepository.findAll();
+
         for (int i = 0; i < playlistList.size(); i++) {
-            PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
-            playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
-            playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
-            playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
-            playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
-            playlistSimpleDtoList.add(playlistSimpleDto);
+            PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
+
+            playlistWithFavoriteSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+            playlistWithFavoriteSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+            playlistWithFavoriteSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+            playlistWithFavoriteSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+
+            // set favorite status
+            Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistList.get(i).getPlaylistSeq());
+            if (favorite != null) {
+                playlistWithFavoriteSimpleDto.setIsFavorite(true);
+            } else {
+                playlistWithFavoriteSimpleDto.setIsFavorite(false);
+            }
+
+            playlistWithFavoriteSimpleDtoList.add(playlistWithFavoriteSimpleDto);
+
         }
-        return playlistSimpleDtoList;
+        return playlistWithFavoriteSimpleDtoList;
     }
 
 
     /**
      * 유저 ID로 플레이리스트 조회 (userSeq 필요), 해당 user 가 생성한 private + public 플레이리스트를 조회한다.
      */
-    public List<PlaylistSimpleDto> getPrivatePlaylist(int userSeq) {
-        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+    public List<PlaylistWithFavoriteSimpleDto> getPrivatePlaylist(int userSeq) {
+        List<PlaylistWithFavoriteSimpleDto> playlistWithFavoriteSimpleDtoList = new LinkedList<>();
 //        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+
         List<Playlist> playlistList = playlistRepository.findAll();
         for (int i = 0; i < playlistList.size(); i++) {
             if (playlistList.get(i).getUserSeq() == userSeq) {
-                PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
-                playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
-                playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
-                playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
-                playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
-                playlistSimpleDtoList.add(playlistSimpleDto);
+                PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
+                playlistWithFavoriteSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+                playlistWithFavoriteSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+                playlistWithFavoriteSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+                playlistWithFavoriteSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+
+                // set favorite status
+                Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistList.get(i).getPlaylistSeq());
+                if (favorite != null) {
+                    playlistWithFavoriteSimpleDto.setIsFavorite(true);
+                } else {
+                    playlistWithFavoriteSimpleDto.setIsFavorite(false);
+                }
+
+                playlistWithFavoriteSimpleDtoList.add(playlistWithFavoriteSimpleDto);
             }
         }
-        return playlistSimpleDtoList;
+        return playlistWithFavoriteSimpleDtoList;
     }
 
 

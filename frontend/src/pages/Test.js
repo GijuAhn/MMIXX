@@ -1,6 +1,5 @@
 import { Wrapper } from 'components/Common';
 import styled from 'styled-components'
-import { useRecoilState } from 'recoil';
 
 import Remix from 'assets/music/NewJeans-Future Funk Remix.mp3';
 
