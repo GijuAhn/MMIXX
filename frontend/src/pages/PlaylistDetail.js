@@ -3,40 +3,74 @@ import styled, { css } from "styled-components"
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
-import { useRecoilValue } from 'recoil'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
-import { testPlaylistMusic } from 'atom/atom'
-import { getPlaylistDetail } from "api/playlist"
+import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import {CustomTable} from "components/mymusic"
 
 const PlaylistDetail = () => {
   const navigate = useNavigate()
   const { playlistSeq } = useParams()
-  const [data, setData] = useState(null)
-
-  const { state } = useLocation();
-  const playlistTitle = state.playlistTitle;
-  // console.log(playlistTitle);
-
-  // console.log('params', playlistSeq);
   const [playlistMusic, setPlayListMusic] = useState([]);
   const [coverImage, setCoverImage] = useState(null)
 
+  const { state } = useLocation();
+  const playlistTitle = state.playlistTitle;
+
+  // 플레이리스트 삭제 시작
+  const useConfirm = (message = null, onConfirm, onCancel) => {
+    if (!onConfirm || typeof onConfirm !== "function") {
+      return;
+    }
+    if (onCancel && typeof onCancel !== "function") {
+      return;
+    }
+  
+    const confirmAction = () => {
+      if (window.confirm(message)) {
+        onConfirm();
+      } else {
+        onCancel();
+      }
+    };
+  
+    return confirmAction;
+  };
+  const deleteConfirm = () => {
+    deletePlaylist(playlistSeq)
+      .then(res => {
+        alert('삭제되었습니다.')
+        navigate('/playlist')
+      })
+  }
+  const cancelConfirm = () => console.log("취소했습니다.");
+  const confirmDelete = useConfirm(
+    "삭제하시겠습니까?",
+    deleteConfirm,
+    cancelConfirm
+  );
+  // 플레이리스트 삭제 끝
+  
+  const handlePlaying = () => {
+
+  }
+
   useEffect(() => {
+    // 플레이리스트 음악 목록 가져오기
     getPlaylistDetail(playlistSeq)
       .then(res => {
-        // console.log(res);
-        setPlayListMusic(res.data);
-        return res.data
+        setPlayListMusic(res.data)
+        setCoverImage(res.data[0].coverImage)
       })
+      .catch(err => console.log(err))
+    
+    // 플레이리스트 정보(제목, 공개여부 등) 가져오기
+    getPlaylistInfo(playlistSeq)
       .then(res => {
-        // console.log(res);
-        setCoverImage(res[0].coverImage);
+        console.log('확인용:', res)
       })
-  }, [])
-
+  }, []);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -63,11 +97,17 @@ const PlaylistDetail = () => {
           </Top>
           <Bottom>
             <PlayCircleFilledRoundedIcon 
-              fontSize="large"
+              sx={{ fontSize: '40px'}}
+              onClick={handlePlaying}
             />
-            <DefaultBtn onClick={() => navigate("/playlist/edit")}>
-              플레이리스트 수정
-            </DefaultBtn>
+            <div>
+              <DefaultBtn onClick={confirmDelete}>
+                삭제
+              </DefaultBtn>
+              <DefaultBtn onClick={() => navigate("/playlist/edit")}>
+                수정
+              </DefaultBtn>    
+            </div>         
           </Bottom>
         </RightContent>
       </InfoContent>
@@ -126,7 +166,7 @@ const Top = styled.div`
 
 const Bottom = styled.div`
   flex-grow: 1;
-  justify-content: start;
+  justify-content: space-between;
   align-items: end;
 `
 

@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   }
 
   >:last-child {
-    margin-bottom: 200px;
+    margin-bottom: 150px;
   }
 `
 export default Wrapper;
