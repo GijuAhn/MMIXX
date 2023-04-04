@@ -4,12 +4,11 @@ import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const PlaylistEdit = () => {
   const inputRef = useRef(null)
   const navigate = useNavigate()
-
   useEffect(() => {
     inputRef.current.select()
     inputRef.current.focus()
