@@ -19,6 +19,12 @@ const MusicUploadBtn = () => {
   const [modalDisplay, setModalDisplay] = useState(false);
   const [fileList, setFileList] = useState([]);
   // const [fileNameList, setFileNameList] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [toastInfo, setToastInfo] = useState(false);
+  const [toastError, setToastError] = useState(false);
+  const [toastSuccess, setToastSuccess] = useState(false);
+
   useEffect(() => {
     function onClickOutside(event) {
       if (!modalDisplay) return;
@@ -32,15 +38,21 @@ const MusicUploadBtn = () => {
       document.removeEventListener("mousedown", onClickOutside);
     };
   }, [modalDisplay]);
+
   const onClick = () => {
     setModalDisplay(true);
   };
+
   const onClickCloseModal = () => {
     setModalDisplay(false);
-    setFileList([]);
+    if (!loading) setFileList([]);
   };
+
   const onClickFileCancel = (event) => {
     // console.log(fileNameList);
+
+    if (loading) return;
+
     console.log(event.target.id);
 
     const fileArray = Array.from(fileList);
@@ -63,16 +75,20 @@ const MusicUploadBtn = () => {
 
   const uploadFile = () => {
     console.log(fileList);
+
     if (fileList.length === 0) {
       // || fileNameList === 0) {
       alert("파일을 선택하세요");
       return;
     }
     if (fileList.length > 10) {
-      // TODO: 개수 제한 두기...??
       alert("10개 이하만 선택하세요");
       return;
     }
+
+    setLoading(true);
+    setToastInfo(true);
+
     const formData = new FormData();
     const userInfo = { userSeq: user ? user.userSeq : 0 };
     // const config = { headers: { "content-type": "multipart/form-data" } };
@@ -80,18 +96,24 @@ const MusicUploadBtn = () => {
       formData.append("files", fileList[i]);
     }
     formData.append("user", new Blob([JSON.stringify(userInfo)], { type: "application/json" }));
+
     uploadMusic(formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        setToastSuccess(true);
       })
-      .then(setFileList([]))
       .catch((error) => {
+        setToastError(true);
         // console.log(error);
         // if (error.response.status === 413) {
         //   console.log('파일 용량 초과');
         // } else if (error.response.status === 415) {
         //   console.log('지원하지 않는 확장자');
         // }
+      })
+      .finally(() => {
+        setLoading(false);
+        onClickCloseModal();
       });
   };
   return (
@@ -127,7 +149,7 @@ const MusicUploadBtn = () => {
                         </td>
                         <Td>{file.name}</Td>
                         <td>
-                          <ButtonCancel onClick={onClickFileCancel}>
+                          <ButtonCancel onClick={onClickFileCancel} hover={!loading}>
                             <img id={index} src={cancel} width='20' alt='' />
                           </ButtonCancel>
                         </td>
@@ -137,27 +159,28 @@ const MusicUploadBtn = () => {
                 </table>
               </DivUpload>
             )}
-            <input
-              ref={input}
-              type='file'
-              style={{ display: "none" }}
-              multiple
-              onChange={onChange}
-            />
+            <input ref={input} type='file' style={{ display: "none" }} multiple onChange={onChange} />
             <div>
               <Button onClick={onClickCloseModal} outline width='100px'>
                 취소
               </Button>
-              <Button onClick={uploadFile} width='100px'>
-                업로드
-              </Button>
-              <Loading>
-                <CircularProgress size='1.8rem' sx={{ color: "rgb(29, 33, 35)" }} />
-              </Loading>
+              {!loading ? (
+                <Button onClick={uploadFile} width='100px'>
+                  업로드
+                </Button>
+              ) : (
+                <Loading>
+                  <CircularProgress size='1.8rem' sx={{ color: "rgb(29, 33, 35)" }} />
+                </Loading>
+              )}
             </div>
           </Modal>
         </DivModal>
       ) : null}
+
+      {toastInfo ? <CustomToast res='info' text='업로드 중...' toggle={setToastInfo} /> : null}
+      {toastSuccess ? <CustomToast res='success' text='업로드 성공' toggle={setToastSuccess} /> : null}
+      {toastError ? <CustomToast res='error' text='업로드 실패' toggle={setToastError} /> : null}
     </div>
   );
 };
@@ -252,9 +275,13 @@ const ButtonCancel = styled.section`
   width: 21px;
   height: 21px;
   border-radius: 50%;
-  &: hover {
-    background-color: rgb(209, 211, 212);
-  }
+  ${({ hover }) =>
+    hover &&
+    `
+    &: hover {
+      background-color: rgb(209, 211, 212);
+    }
+  `};
 `;
 
 const Button = styled.button`
