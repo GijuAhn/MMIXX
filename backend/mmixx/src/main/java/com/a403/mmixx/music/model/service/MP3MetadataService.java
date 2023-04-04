@@ -76,8 +76,11 @@ public class MP3MetadataService {
         System.out.println(mp3File.getAbsolutePath());
 
 
-        file.transferTo(mp3File);
-        
+//        file.transferTo(mp3File);
+        String filePath = mp3File.getAbsolutePath();
+        file.transferTo(new File(filePath));
+
+
         System.out.println("END: file transferTo");
 
         Map<String, String> metadataMap = new HashMap<>();
