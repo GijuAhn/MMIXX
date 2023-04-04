@@ -33,12 +33,8 @@ const PlaylistDetail = () => {
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    createNowPlaylist(playlistMusic)
+    // createNowPlaylist(playlistMusic)
   }
-
-  useEffect(() => {
-    console.log(testNow)
-  }, [testNow])
 
   useEffect(() => {
     // 플레이리스트 음악 목록 가져오기
