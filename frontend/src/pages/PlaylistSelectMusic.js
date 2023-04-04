@@ -63,3 +63,13 @@ const CreateBtn = styled(DefaultBtn)`
 `
 
 export default PlaylistSelectMusic;
+
+const MusicItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  padding-left: 3px;
+`
+const SelectBox = styled.div`
+  
+`

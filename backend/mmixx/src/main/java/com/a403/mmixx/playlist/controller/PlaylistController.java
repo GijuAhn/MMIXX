@@ -2,11 +2,7 @@
 
 package com.a403.mmixx.playlist.controller;
 
-import com.a403.mmixx.playlist.model.dto.FavoriteRequestDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistDto;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicDetailResponseDtoForRetrieve;
-import com.a403.mmixx.playlist.model.dto.PlaylistMusicRequestDtoForAddMusic;
-import com.a403.mmixx.playlist.model.dto.PlaylistSimpleDto;
+import com.a403.mmixx.playlist.model.dto.*;
 import com.a403.mmixx.playlist.model.entity.Playlist;
 import com.a403.mmixx.playlist.model.service.PlaylistService;
 import com.amazonaws.Response;
@@ -80,12 +76,12 @@ public class PlaylistController {
     }
 
 
-//    @ApiOperation(value = "플레이리스트 상세정보 수정 (이름 변경, 공개/비공개 변경)")
-//    @PutMapping("/detail/{playlistSeq}")
-//    public ResponseEntity<?> updatePlaylistDetail(@RequestBody PlaylistDto requestDto, @PathVariable int playlistSeq) {
-//        return ResponseEntity.ok(playlistService.updatePlaylistDetail(requestDto, playlistSeq));
-//    }
-//
+    @ApiOperation(value = "플레이리스트 상세정보 수정 (이름 변경, 공개/비공개 변경)")
+    @PutMapping("/detail/{playlistSeq}")
+    public ResponseEntity<?> updatePlaylistDetail(@RequestBody PlaylistNameAndPrivateSimpleDto requestDto, @PathVariable int playlistSeq) {
+        return ResponseEntity.ok(playlistService.updatePlaylistDetail(requestDto, playlistSeq));
+    }
+
 
 
     @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
