@@ -4,7 +4,7 @@ import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const PlaylistEdit = () => {
   const inputRef = useRef(null)
