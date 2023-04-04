@@ -98,8 +98,10 @@ public class MP3MetadataService {
     	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
     	
     	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
-    	
-        file.transferTo(mp3File);
+
+//    	file.transferTo(mp3File);
+    	Path path = Paths.get(mp3File.getAbsolutePath()).toAbsolutePath();
+    	file.transferTo(path.toFile());
 
 
         System.out.println("END: file transferTo");
@@ -111,7 +113,7 @@ public class MP3MetadataService {
         Metadata metadata = new Metadata();
 
         // File to InputStream
-        InputStream stream = new FileInputStream(mp3File);
+        InputStream stream = new FileInputStream(mp3File.getAbsolutePath());
         ParseContext parseContext = new ParseContext();
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
