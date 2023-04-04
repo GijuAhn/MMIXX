@@ -90,7 +90,7 @@ public class MP3MetadataService {
         Mp3Parser parser = new Mp3Parser();
         parser.parse(stream, handler, metadata, parseContext);
         
-        boolean utf = false;
+        boolean utf = true;
         
         // Extract the metadata fields and add them to the map
         if (metadata.get("title") != null) {
