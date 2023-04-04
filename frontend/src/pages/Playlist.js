@@ -4,7 +4,7 @@ import { useNavigate, useLocation  } from 'react-router-dom';
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { useRecoilValue } from 'recoil';
-import { userInfo } from 'atom/atom';
+import {  userInfo } from 'atom/atom';
 import { useEffect, useState } from 'react';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
 
