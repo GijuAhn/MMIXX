@@ -81,6 +81,7 @@ const Cnt = styled.td`
   color: ${({ theme }) => theme.palette.light};
   font-size: 14px;
   font-family: "Heebo", sans-serif;
+  text-align: right;
 `;
 
 export default MusicCount;

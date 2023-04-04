@@ -123,8 +123,8 @@ const MoreIconDiv = ({ playlistSeq }) => {
   };
   const deleteConfirm = () => {
     deletePlaylist(playlistSeq)
-      .then(() => {
-        alert('삭제되었습니다.')
+      .then(res => {
+        // alert('삭제되었습니다.')
         navigate('/playlist')
       })
   }

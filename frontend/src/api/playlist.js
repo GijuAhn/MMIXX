@@ -22,8 +22,12 @@ export const postPlaylist = async (userSeq, playlist) => {
   return await instance.post(`/playlist/${userSeq}`,  playlist )
 }
 // 즐겨찾기한 플레이리스트 목록 조회
-export const favoritePlaylists = async () => {
-  return await instance('/playlist/favorite')
+export const favoritePlaylists = async (userSeq) => {
+  return await instance(`/playlist/favorite/${userSeq}`)
+}
+// 글로벌 플레이리스트 목록 조회
+export const globalPlaylists = async () => {
+  return await instance('/playlist/global')
 }
 // 플레이리스트 대표 앨범커버 가져오기 (앨범아트가 없으면 default image 를 출력한다. (Error Code 404 처리 필요))
 export const getPlaylistCoverImage = async ( playlistSeq ) => {
