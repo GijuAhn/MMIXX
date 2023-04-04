@@ -110,7 +110,7 @@ const NavMenu = () => {
               </NavLi>
               {item.name === "PLAYLIST" && location.pathname.includes("/playlist") ? (
                 <li>
-                  <PlaylistNavigate selected={"/" + item.path === location.pathname} />
+                  <PlaylistNavigate />
                 </li>
               ) : null}
             </section>
