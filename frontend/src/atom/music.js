@@ -28,7 +28,7 @@ export const _nowSelector = selector({
     // const { coverImage, musicName, musicianName, musicUrl } = nowMusic[0]
     
     return {
-      _now
+      getNow
       // nowMusic, 
       // coverImage,
       // musicName,
@@ -37,10 +37,10 @@ export const _nowSelector = selector({
     }
   },
   set: ({ set }, newValue) => {
-    // set(nowPlaying, newValue)
+    set(nowPlaylist, newValue)
   },
   effects: [
-    localStorageEffect('_test', 1)
+    localStorageEffect('_test', _now)
   ]
 })
 
