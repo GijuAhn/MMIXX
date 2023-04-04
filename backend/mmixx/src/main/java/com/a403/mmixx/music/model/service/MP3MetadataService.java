@@ -72,13 +72,14 @@ public class MP3MetadataService {
     public static Map<String, String> extractMetadata(MultipartFile file) throws Exception {
         // Convert multipart file to MP3 file
     	System.out.println("extract Metadata 시작");
-    	System.out.println(file.getSize());
-    	System.out.println(file.getName());
+    	System.out.println("extract Metadata file size : " + file.getSize());
+    	System.out.println("extract Metadata file name : " + file.getName());
+    	System.out.println("extract Metadata Original file name : " + file.getOriginalFilename());
 //        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-        File mp3File = File.createTempFile("temp", ".mp3");
+//        File mp3File = File.createTempFile("temp", ".mp3");
 
         //  print file's location (path) for debugging
-        System.out.println(mp3File.getAbsolutePath());
+//        System.out.println(mp3File.getAbsolutePath());
 
 //        File mp3File = File.createTempFile("temp", ".mp3");
 //
@@ -87,9 +88,18 @@ public class MP3MetadataService {
 //
 //
 //        file.transferTo(mp3File);
-        String fullFilePath = mp3File.getAbsolutePath();
-        Path path = Paths.get(fullFilePath).toAbsolutePath();
-        file.transferTo(path.toFile());
+    	
+//    	File convFile = new File(file.getOriginalFilename());
+//    	System.out.println(convFile.getAbsolutePath());
+//    	FileOutputStream fos = new FileOutputStream(convFile);
+//    	fos.write(file.getBytes());
+//    	fos.close();
+    	
+    	File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+    	
+    	System.out.println("extract Metadata mp3File absolute path : " + mp3File.getAbsolutePath());
+    	
+        file.transferTo(mp3File);
 
 
         System.out.println("END: file transferTo");
