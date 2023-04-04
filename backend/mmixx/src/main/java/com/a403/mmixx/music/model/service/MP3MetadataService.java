@@ -29,30 +29,32 @@ import java.util.Map;
 @Service
 public class MP3MetadataService {
 
-    public static List<Music> extractMetadataFromMultipartFileList(List<MultipartFile> multipartFiles) throws Exception {
+    public static List<Music> extractMetadataFromMultipartFileList(List<String> filepath) throws Exception {
     	System.out.println("extractMetadataFromMultipartFileList 시작~~~~!!^^");
         List<Music> musicContainerList = new ArrayList<>();
 
-        for (MultipartFile multipartFile : multipartFiles) {
+//        for (MultipartFile multipartFile : multipartFiles) {
+        for (String fpath : filepath) {
             Music musicContainer = new Music();
             
             System.out.println("extractMetadata 시작");
         	
-            File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-        	Path path = Paths.get(mp3File.getAbsolutePath()).toAbsolutePath();
-        	multipartFile.transferTo(path.toFile());
+//            File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+        	Path path = Paths.get(fpath).toAbsolutePath();
+//        	multipartFile.transferTo(path.toFile());
             
         	Map<String, String> metadataMap = extractMetadata(path.toFile());
             System.out.println("extractMetadata 종료");
             
             //  if musicName is null, set musicName to its own file name
             if (metadataMap.get("musicName") == null) {
-                byte[] euckrStringBuffer = multipartFile.getOriginalFilename().getBytes(Charset.forName("euc-kr"));
-                String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
-                byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
-                String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
-                System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
-                musicContainer.setMusicName(decodedFromUtf8);
+//                byte[] euckrStringBuffer = multipartFile.getOriginalFilename().getBytes(Charset.forName("euc-kr"));
+//                String decodedFromEucKr = new String(euckrStringBuffer, "euc-kr");
+//                byte[] utf8StringBuffer = decodedFromEucKr.getBytes("utf-8");
+//                String decodedFromUtf8 = new String(utf8StringBuffer, "utf-8");
+//                System.out.println("decodedFromUtf8 : " + decodedFromUtf8);
+//                musicContainer.setMusicName(decodedFromUtf8);
+                musicContainer.setMusicName(path.getFileName().toString());
 //                musicContainer.setMusicName(multipartFile.getOriginalFilename());
             } else {
                 musicContainer.setMusicName(metadataMap.get("musicName"));
