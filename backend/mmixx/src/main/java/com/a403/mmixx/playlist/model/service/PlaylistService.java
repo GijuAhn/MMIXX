@@ -373,6 +373,20 @@ public class PlaylistService {
         playlistRepository.deleteById(playlistSeq);
         return "success";
     }
+    
+    public String deleteDetailMusicPlaylist(int playlist_music_seq) {
+    	log.info("해당 playlist 개별 삭제 시작");
+        log.info("playlistMusicSeq : " + playlist_music_seq + "번호에 해당하는 곡 삭제");
+        PlaylistMusic music = playlistMusicRepository.findById(playlist_music_seq).orElse(null);
+        if(music != null) {
+        	playlistMusicRepository.deleteById(music.getPlaylistMusicSeq());
+        } else {
+        	log.info("곡을 찾을 수 없습니다.");
+        	return "곡을 찾을 수 없습니다.";
+        }
+        
+        return "SUCCESS";
+    }
 
     /**
      * 플레이리스트 첫번째 곡 앨범아트 URL 가져오기
