@@ -5,7 +5,7 @@ import WarningIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorrIcon from "@mui/icons-material/ReportGmailerrorredOutlined";
 import SuccessIcon from "@mui/icons-material/CheckBoxOutlined";
 
-const CustomToast = ({ res, text = "업로드 중...", toggle, width = "160px", time = 3000 }) => {
+const CustomToast = ({ res, text, toggle, width = "160px", time = 3000 }) => {
   const [state, setState] = useState(slideDown);
 
   useEffect(() => {
