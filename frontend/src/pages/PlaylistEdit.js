@@ -47,7 +47,7 @@ const PlaylistEdit = () => {
         is_private: isChecked,
       }
     ).then(
-      navigate(`/playlist/${playlistSeq}`)
+      navigate(-1)
     )
   }
 

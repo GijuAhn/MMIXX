@@ -21,6 +21,7 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
+  const [ playlistTitle, setPlaylistTitle ] = useState('')
 
   const now = useRecoilValue(_now)
   // 공개 여부 체크
@@ -48,11 +49,13 @@ const PlaylistDetail = () => {
     // 플레이리스트 정보(제목, 공개여부 등) 가져오기
     getPlaylistInfo(playlistSeq)
       .then(res => {
+        setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        console.log('asdfasdfasdf')
       })
       .catch(err => console.log(err))
-  }, [playlistSeq]);
+  }, [playlistTitle, isChecked]);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -70,7 +73,7 @@ const PlaylistDetail = () => {
         <RightContent style={{ border: '1px solid blue'}}>
           <Top>
             <PlaylistTitle>
-              <p>{playlistInfo.playlistName}</p>
+              <p>{playlistTitle}</p>
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
@@ -83,7 +86,7 @@ const PlaylistDetail = () => {
               onClick={handlePlaying}
               disabled={playlistMusic.length === 0}
             />
-            <MoreIconDiv playlistSeq={playlistSeq}/>
+            <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
             
             {/* <div>
               <DefaultBtn onClick={confirmDelete}>
@@ -102,7 +105,7 @@ const PlaylistDetail = () => {
   );
 };
 
-const MoreIconDiv = ({ playlistSeq }) => {
+const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
   const wrapperRef = useRef(null)
   const navigate = useNavigate()
   const [ isOpen, setIsOpen ] = useState(false)
@@ -170,6 +173,15 @@ const MoreIconDiv = ({ playlistSeq }) => {
         {isOpen &&
           <CustomSelect>
             <ul>
+              <li onClick={() => navigate(`/playlist/select/update`, {
+                      state : {
+                        playlistSeq: `${playlistSeq}`,
+                        playlistMusic: playlistMusic
+                      }
+                    })}
+                      >
+                곡 추가하기
+              </li>
               <li onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
                 수정하기
               </li>
