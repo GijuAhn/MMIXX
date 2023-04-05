@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import DefaultCoverImage from "assets/default-cover-image.jpg";
 import Play from "./MusicPlayIcon";
 import Mix from "./MusicMixIcon";
@@ -7,7 +7,7 @@ import Download from "./MusicDownloadIcon";
 import UnCheck from "assets/check.png";
 import Check from "assets/check-selected.png";
 import More from "assets/more-vertical.png";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 const CustomTable = ({
   musicList,
@@ -16,6 +16,7 @@ const CustomTable = ({
   checkMusic,
   checkBox = false,
   checkMusicList,
+  isNew = false,
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -42,7 +43,7 @@ const CustomTable = ({
       // );
 
       checkMusic({
-        musicSeq: musicSeq.current,
+        musicSeq: Number(musicSeq.current),
         coverImage: coverImage.current,
         musicName: musicName.current,
         musicianName: musicianName.current,
@@ -77,8 +78,16 @@ const CustomTable = ({
       checkMusicList(checkedList.current);
     }
   };
+
+  const [isOut, setIsOut] = useState(false);
+  useEffect(() => {
+    return () => {
+      if (isNew) setIsOut(true);
+    };
+  });
+
   return (
-    <Table>
+    <Table isNew={isNew} isOut={isOut}>
       <tbody>
         {musicList.map((music, index) => (
           <Tr key={index}>
@@ -90,25 +99,31 @@ const CustomTable = ({
                   cover={music.coverImage}
                   title={music.musicName}
                   musician={music.musicianName}
-                  src={musicSeq.current == music.musicSeq ? Check : UnCheck}
+                  src={Number(musicSeq.current) === music.musicSeq ? Check : UnCheck}
                   alt=''
                   width='23'
                 />
               </Radio>
             ) : null}
-            <TdRound width='5%'>
+            <TdRound width='5%' isNew={isNew}>
               <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
-            <Td weight='400' width='7%' align='center'>
+            <Td weight='400' width='7%' align='center' isNew={isNew}>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
             <Td width='15%'>{music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}</Td>
             <Td width='15%'>{music.albumName === null || music.albumName.replace(/\s/g, "").length === 0 ? "-" : music.albumName}</Td> */}
-            <TdText width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</TdText>
-            <TdText width='15%'>{music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}</TdText>
-            <TdText width='15%'>{music.albumName === null || music.albumName.replace(/\s/g, "").length === 0 ? "-" : music.albumName}</TdText>
-            <Td width='10%'>
+            <TdText width='27.5%' isNew={isNew}>
+              {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
+            </TdText>
+            <TdText width='15%' isNew={isNew}>
+              {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
+            </TdText>
+            <TdText width='15%' isNew={isNew}>
+              {music.albumName === null || music.albumName.replace(/\s/g, "").length === 0 ? "-" : music.albumName}
+            </TdText>
+            <Td width='10%' isNew={isNew}>
               {Math.floor(music.musicLength / 1000 / 60)}:{String(Math.floor((music.musicLength / 1000) % 60)).padStart(2, "0")}
             </Td>
             {radio || checkBox ? (
@@ -117,22 +132,22 @@ const CustomTable = ({
               </Td>
             ) : null}
             {!radio && !checkBox ? (
-              <Td width='5%'>
+              <Td width='5%' isNew={isNew}>
                 <Play musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
-              <Td width='5%'>
+              <Td width='5%' isNew={isNew}>
                 <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
-              <Td width='5%'>
+              <Td width='5%' isNew={isNew}>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
-              <Td width='5%'>
+              <Td width='5%' isNew={isNew}>
                 <Download musicSeq={music.musicSeq} musicName={music.musicName} musicUrl={music.musicUrl}></Download>
               </Td>
             ) : null}
@@ -142,6 +157,27 @@ const CustomTable = ({
     </Table>
   );
 };
+
+const blink = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
 
 const CoverImage = styled.div`
   width: 50px;
@@ -159,6 +195,17 @@ const Table = styled.table`
   width: 87%;
   font-size: 14px;
   font-weight: 400;
+
+  ${({ isNew }) =>
+    isNew &&
+    css`
+      animation: ${blink} 0.7s linear 2;
+    `}
+  ${({ isOut }) =>
+    isOut &&
+    css`
+      animation: ${fadeOut} 0.25s linear forwards;
+    `}
 `;
 
 const Tr = styled.tr`
@@ -175,11 +222,33 @@ const Radio = styled.td`
 `;
 
 const TdRound = styled.td`
+  ${({ isNew, theme }) =>
+    isNew &&
+    `
+  border-width: 2px 0px 2px 2px;
+  border-style: solid;
+  border-color: ${theme.palette.secondary};
+  `}
+
   border-radius: 15px 0 0 15px;
   padding-left: 10px;
 `;
 
 const Td = styled.td`
+  ${({ isNew, theme }) =>
+    isNew &&
+    `
+  border-width: 2px 0px 2px 0px;
+  border-style: solid;
+  border-color: ${theme.palette.secondary};
+
+  &:last-child {
+    border-width: 2px 2px 2px 0px;
+    border-style: solid;
+    border-color: ${theme.palette.secondary};
+  }
+  `}
+
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;
@@ -200,6 +269,14 @@ const Td = styled.td`
 `;
 
 const TdText = styled.td`
+  ${({ isNew, theme }) =>
+    isNew &&
+    `
+  border-width: 2px 0px 2px 0px;
+  border-style: solid;
+  border-color: ${theme.palette.secondary};
+  `}
+
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;

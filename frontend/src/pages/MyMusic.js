@@ -1,14 +1,23 @@
 import { useState } from "react";
 import { Wrapper, Header } from "components/Common";
-import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
+import { MusicSearchBar, MusicUploadBtn, MusicList, CustomTable } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+
+import { useRecoilValue } from "recoil";
+import { _show_new, _new_music_list } from "atom/mymusic";
 
 const MyMusic = () => {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("");
   const [order, setOrder] = useState("");
+  const [searchText, setSearchText] = useState("");
+
+  // const [showNew, setShowNew] = useState(false);
+  // const [newMusicList, setNewMusicList] = useState([]);
+  const showNew = useRecoilValue(_show_new);
+  const newMusicList = useRecoilValue(_new_music_list);
 
   // // [Test] 곡 선택하기 (radio)
   // const [selectedMusic, setSelectedMusic] = useState({
@@ -26,7 +35,7 @@ const MyMusic = () => {
       <div>
         <Header title='My Music' desc='내 음악 들어보기' />
         <SearchBarSection>
-          <MusicSearchBar query={query} setQuery={setQuery} />
+          <MusicSearchBar setQuery={setQuery} searchText={searchText} setSearchText={setSearchText} />
         </SearchBarSection>
       </div>
       <Div>
@@ -39,7 +48,34 @@ const MyMusic = () => {
         </SelectSection>
       </Div>
 
-      <MusicList filter={filter} order={order} query={query} />
+      {showNew ? <CustomTable musicList={newMusicList} isNew={true} /> : null}
+      {/* <CustomTable
+        musicList={[
+          {
+            musicSeq: 0,
+            coverImage: null,
+            mixed: null,
+            edited: null,
+            musicName: "곡 제목",
+            musicianName: "수지",
+            albumName: "앨범 이름",
+            musicLength: 35000,
+          },
+          {
+            musicSeq: 999999,
+            coverImage: null,
+            mixed: null,
+            edited: null,
+            musicName: "곡 제목9999",
+            musicianName: "뉴진스",
+            albumName: "앨범 이름9999",
+            musicLength: 35000,
+          },
+        ]}
+        isNew={true}
+      /> */}
+
+      <MusicList filter={filter} order={order} query={query} setSearchText={setSearchText} />
 
       {/* [Test] 곡 선택하기 (radio) */}
       {/* {selectedMusic.musicSeq}

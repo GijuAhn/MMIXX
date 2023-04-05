@@ -4,6 +4,8 @@ import { splitMusic } from "api/mymusic";
 import CustomToast from "./CustomToast";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useSetRecoilState } from "recoil";
+import { _show_new, _new_music_list } from "atom/mymusic";
 
 const MusicExtractIcon = ({ musicSeq }) => {
   const [loading, setLoading] = useState(false);
@@ -11,15 +13,23 @@ const MusicExtractIcon = ({ musicSeq }) => {
   const [toastError, setToastError] = useState(false);
   const [toastSuccess, setToastSuccess] = useState(false);
 
+  const setShowNew = useSetRecoilState(_show_new);
+  const setNewMusicList = useSetRecoilState(_new_music_list);
+
   const onClick = () => {
     console.log(musicSeq);
 
     setLoading(true);
     setToastInfo(true);
 
+    setShowNew(false);
+
     splitMusic(musicSeq)
       .then((response) => {
         console.log(response);
+        setNewMusicList([response.data]);
+        setShowNew(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
         setToastSuccess(true);
       })
@@ -34,18 +44,10 @@ const MusicExtractIcon = ({ musicSeq }) => {
 
   return (
     <div>
-      {!loading ? (
-        <IconBtn onClick={onClick} icon={ExtractIcon} iconName='Inst.' fontSize='15px'></IconBtn>
-      ) : (
-        <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />
-      )}
+      {!loading ? <IconBtn onClick={onClick} icon={ExtractIcon} iconName='Inst.' fontSize='15px'></IconBtn> : <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />}
 
-      {toastInfo ? (
-        <CustomToast res='info' text='보컬 제거 중...' toggle={setToastInfo} time={10000} />
-      ) : null}
-      {toastSuccess ? (
-        <CustomToast res='success' text='보컬 제거 성공' toggle={setToastSuccess} />
-      ) : null}
+      {toastInfo ? <CustomToast res='info' text='보컬 제거 중...' toggle={setToastInfo} time={10000} /> : null}
+      {toastSuccess ? <CustomToast res='success' text='보컬 제거 성공' toggle={setToastSuccess} /> : null}
       {toastError ? <CustomToast res='error' text='보컬 제거 실패' toggle={setToastError} /> : null}
     </div>
   );

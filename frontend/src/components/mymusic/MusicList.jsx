@@ -3,20 +3,15 @@ import { getMusicList, getMusicListByCondition } from "api/mymusic";
 import CustomTable from "./CustomTable";
 import upIcon from "assets/up-arrow.png";
 import styled from "styled-components";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userInfo } from "atom/atom";
+import { _show_new } from "atom/mymusic";
 
-const MusicList = ({
-  filter,
-  order,
-  query,
-  radio = false,
-  checkMusic,
-  checkBox = false,
-  checkMusicList,
-}) => {
+const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMusic, checkBox = false, checkMusicList }) => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
+  const setShowNew = useSetRecoilState(_show_new);
 
   // const [musicList, setMusicList] = useState([
   //   {
@@ -75,6 +70,9 @@ const MusicList = ({
   useEffect(() => {
     if (didMount2.current) {
       if (hasCondition.current) return;
+
+      setShowNew(false);
+
       getMusicList({
         userSeq: user ? user.userSeq : 0,
         page: page.current,
@@ -91,6 +89,10 @@ const MusicList = ({
   useEffect(() => {
     if (didMount3.current) {
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
+
+      setSearchText(query);
+      setShowNew(false);
+
       page.current = 1;
       hasCondition.current = true;
       curQuery.current = query;
@@ -116,6 +118,9 @@ const MusicList = ({
     if (didMount4.current) {
       if (!hasCondition.current) return;
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
+
+      setShowNew(false);
+
       getMusicListByCondition({
         userSeq: user ? user.userSeq : 0,
         filter: curFilter.current,
@@ -186,13 +191,7 @@ const MusicList = ({
       ) : musicList.length === 0 ? (
         <div>{noticeNoList}</div>
       ) : (
-        <CustomTable
-          musicList={musicList}
-          radio={radio}
-          checkMusic={checkMusic}
-          checkBox={checkBox}
-          checkMusicList={checkMusicList}
-        ></CustomTable>
+        <CustomTable musicList={musicList} radio={radio} checkMusic={checkMusic} checkBox={checkBox} checkMusicList={checkMusicList}></CustomTable>
       )}
       <Button onClick={onClickUpIcon} visible={showUpIcon ? "visible" : "hidden"}>
         <img src={upIcon} width='55' alt=''></img>
