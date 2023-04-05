@@ -1,6 +1,6 @@
 import styled, { keyframes, css } from "styled-components"
 import { getPlaylistCoverImage } from "api/playlist"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import FavoriteIcon from '@mui/icons-material/Favorite'; // 하트
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // 빈 하트
 import { InsightsOutlined } from "@mui/icons-material";
@@ -9,14 +9,7 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
   const { playlistName } = playlist
   const [coverImage, setCoverImg] = useState('')
   const [isOverflowed, setIsOverflowed] = useState(false);
-
-  console.log(isOverflowed)
-  useEffect(() => {
-    const playlistTitle = document.querySelector('.title');
-    if (playlistTitle) {
-      setIsOverflowed(playlistTitle.offsetWidth < playlistTitle.scrollWidth);
-    }
-  }, [playlistName]);
+  const pRef = useRef(null)
 
   useEffect(() => {
     getPlaylistCoverImage(playlist.playlistSeq)
@@ -24,7 +17,13 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
       // console.log(res);
       setCoverImg(res.data);
     })
-  }, []); 
+  }, [])
+
+  useEffect(() => {
+    if (pRef) {
+      setIsOverflowed(parseInt(pRef.current.offsetWidth) > 250)
+    }
+  }, [pRef]);
 
   return (
     <CardWrapper
@@ -33,7 +32,7 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
       isOverflowed={isOverflowed}
       >
       <StyledFavoriteBorderIcon />
-      <PlaylistTitle className="title">
+      <PlaylistTitle ref={pRef} className="title">
         {playlistName}
       </PlaylistTitle>
     </CardWrapper>
@@ -66,14 +65,11 @@ const CardWrapper = styled.div`
       url(${({coverImage}) => coverImage});
     transform: scale(1.1);
     transition: transform 0.3s ease-out;
-    
-  }
-  ${({isOverflowed}) => {
-    isOverflowed && css`
+
     p {
-      animation: ${marquee} 5s linear infinite
-    }`
-  }}
+      animation: ${({isOverflowed}) => isOverflowed ? '${marquee} 5s linear infinite' : 'none'}
+    }
+  }
   `
 
 const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)`
@@ -83,7 +79,7 @@ const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)`
 `
 
 const PlaylistTitle = styled.p`
-  // border: 1px dotted pink;
+  border: 1px dotted pink;
   align-self: end;
   padding: 15px;
   position: absolute;
