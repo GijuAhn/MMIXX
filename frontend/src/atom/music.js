@@ -2,17 +2,22 @@ import { atom, selector } from 'recoil'
 
 import localStorageEffect from './_local'
 
+export const audioState = atom({
+  key: 'audioState',
+  default: new Audio(),
+})
+
+export const _mix_now = atom({
+  key: '_mix_now',
+  default: new Audio()
+})
+
 export const _now = atom({
   key: '_now_playing',
   default: null,
   effects: [
     localStorageEffect('_now')
   ]
-})
-
-export const _mix_now = atom({
-  key: '_mix_now',
-  default: new Audio()
 })
 
 export const _nowMusic = atom({

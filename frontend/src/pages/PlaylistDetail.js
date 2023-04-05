@@ -11,6 +11,7 @@ import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist
 import { CustomTable } from "components/mymusic"
 import { useRecoilValue } from "recoil";
 import { _now } from "atom/music"
+import { usePlayControl } from "hooks/usePlayControl"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -21,8 +22,8 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
+  const { createNowPlaylist } = usePlayControl()
 
-  const now = useRecoilValue(_now)
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
   const handleChange = () => {
@@ -33,7 +34,7 @@ const PlaylistDetail = () => {
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    // createNowPlaylist(playlistMusic)
+    createNowPlaylist(playlistMusic)
   }
 
   useEffect(() => {
