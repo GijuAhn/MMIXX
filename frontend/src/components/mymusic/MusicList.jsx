@@ -6,15 +6,7 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
 
-const MusicList = ({
-  filter,
-  order,
-  query,
-  radio = false,
-  checkMusic,
-  checkBox = false,
-  checkMusicList,
-}) => {
+const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMusic, checkBox = false, checkMusicList }) => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
 
@@ -91,6 +83,9 @@ const MusicList = ({
   useEffect(() => {
     if (didMount3.current) {
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
+
+      setSearchText(query);
+
       page.current = 1;
       hasCondition.current = true;
       curQuery.current = query;
@@ -186,13 +181,7 @@ const MusicList = ({
       ) : musicList.length === 0 ? (
         <div>{noticeNoList}</div>
       ) : (
-        <CustomTable
-          musicList={musicList}
-          radio={radio}
-          checkMusic={checkMusic}
-          checkBox={checkBox}
-          checkMusicList={checkMusicList}
-        ></CustomTable>
+        <CustomTable musicList={musicList} radio={radio} checkMusic={checkMusic} checkBox={checkBox} checkMusicList={checkMusicList}></CustomTable>
       )}
       <Button onClick={onClickUpIcon} visible={showUpIcon ? "visible" : "hidden"}>
         <img src={upIcon} width='55' alt=''></img>

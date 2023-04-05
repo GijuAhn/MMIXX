@@ -9,6 +9,7 @@ const MyMusic = () => {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("");
   const [order, setOrder] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   // // [Test] 곡 선택하기 (radio)
   // const [selectedMusic, setSelectedMusic] = useState({
@@ -26,7 +27,7 @@ const MyMusic = () => {
       <div>
         <Header title='My Music' desc='내 음악 들어보기' />
         <SearchBarSection>
-          <MusicSearchBar query={query} setQuery={setQuery} />
+          <MusicSearchBar setQuery={setQuery} searchText={searchText} setSearchText={setSearchText} />
         </SearchBarSection>
       </div>
       <Div>
@@ -39,7 +40,7 @@ const MyMusic = () => {
         </SelectSection>
       </Div>
 
-      <MusicList filter={filter} order={order} query={query} />
+      <MusicList filter={filter} order={order} query={query} setSearchText={setSearchText} />
 
       {/* [Test] 곡 선택하기 (radio) */}
       {/* {selectedMusic.musicSeq}
