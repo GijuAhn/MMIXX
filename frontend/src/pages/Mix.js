@@ -21,6 +21,7 @@ const Mix = () => {
   const musicSelected = !location.state
   const [presetSeq, setPresetSeq] = useState('');
   const [presetData, setPresetData] = useState('');
+  const [isPreset, setIsPreset] = useState(false)
 
   const presetSeqFunc = (x) => {
     setPresetSeq(x)
@@ -34,7 +35,7 @@ const Mix = () => {
     console.log(musicianName)
     console.log('****************************')
     getPreset()
-    .then((res) => console.log(res.data))
+    .then((res) => setPresetData(res.data), setIsPreset(true))
     .catch((err) => console.log(err))
   }, [])
 
@@ -66,14 +67,10 @@ const Mix = () => {
       </Music>
       <p> 원하는 프리셋을 선택하세요. </p>
       <Carousel children={PresetCard} height={"40vh"} width={"60vw"} xOrigin={100} yOrigin={0} yRadius={0} autoPlay={false}>
-        {/* // const preset_name = props.preset_name
-            // const preset_summary = props.preset_summary
-            // const preset_info = props.preset_info
-            const preset_image = props.preset_image */}
-
         {/* 컴포넌트 반복 코드 */}
         {/* <div key={1} style={{width: 400, height: 250}}>
-        { presetData && presetData.map((preset) =>  {
+        { isPreset && presetData.map((preset) =>  {
+          console.log(preset)
           return (
             <div onClick={() => setPresetSeq(preset.presetSeq)}>
               <PresetCard
@@ -97,6 +94,12 @@ const Mix = () => {
             presetSeqFunc={presetSeqFunc}
             presetName='밝은'
             presetNum={1}
+            musicName={presetData.musicName}
+            musicLength={presetData.musicLength}
+            musicianName={presetData.musicianName}
+            albumName={presetData.albumName}
+            presetUrl={presetData.presetUrl}
+            converImage={presetData.converImage}
             selNum = {presetSeq}
           ></PresetCard>
         </div>
