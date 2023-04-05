@@ -288,7 +288,7 @@ public class MusicService {
 
 			musicRepository.save(new_music);
 
-			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music_path);
+			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music);
 			return responseDto;
 		} else {
 			return null;
