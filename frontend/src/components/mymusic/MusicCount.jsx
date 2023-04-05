@@ -3,10 +3,13 @@ import { countMusic } from "api/mymusic";
 import styled, { keyframes } from "styled-components";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
+import { _new_music_list } from "atom/mymusic";
 
 const MusicCount = () => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
+  const newMusicList = useRecoilValue(_new_music_list);
 
   const [allCnt, setAllCnt] = useState(0);
   const [mixedCnt, setMixedCnt] = useState(0);
@@ -18,7 +21,7 @@ const MusicCount = () => {
       setMixedCnt(data.mixedCnt);
       setInstCnt(data.instCnt);
     });
-  }, []);
+  }, [newMusicList]);
 
   return (
     <Table>
