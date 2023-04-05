@@ -53,7 +53,7 @@ const PlaylistDetail = () => {
         setIsChecked(res.data.isPrivate)
       })
       .catch(err => console.log(err))
-  }, [playlistSeq]);
+  }, []);
 
   return (
     <StyleWrapper url={coverImage}>
