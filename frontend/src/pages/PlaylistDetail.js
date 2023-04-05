@@ -24,7 +24,7 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const { audioElement, createNowPlaylist, createNowMusic } = usePlayControl()
+  const { audioElement, createNowPlaylist } = usePlayControl()
 
   // user 
   const atomUser = useRecoilValue(userInfo)
@@ -37,7 +37,6 @@ const PlaylistDetail = () => {
    */
   const handlePlaying = () => {
     createNowPlaylist(playlistMusic)
-    createNowMusic()
   }
 
   // 즐겨찾기
