@@ -32,7 +32,7 @@ const PlaylistCreate = () => {
               <input type="text" ref={inputRef} defaultValue="#플레이리스트 제목"></input>
             </InputTitle>
             <InputPrivateToggle>
-              공개여부
+              비공개여부
               <Switch defaultChecked/>
             </InputPrivateToggle>
           </Top>
