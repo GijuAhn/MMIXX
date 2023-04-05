@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components"
 import { useState } from "react";
 import { userInfo } from 'atom/atom';
-import { postPlaylist } from 'api/playlist';
+import { postPlaylist, insertMusicInPlaylist } from 'api/playlist';
 import {MusicList } from "components/mymusic";
 
 
@@ -28,22 +28,34 @@ const PlaylistSelectMusic = () => {
   // 선택 완료 버튼 누르면 플레이리스트 생성
   const onClickLogin = () => {
     console.log(checkedList)
-    postPlaylist(
-      atomUser.userSeq,
-      {
-        playlist_name: playlistTitle,
-        is_private: state.isPrivate,
-        user_seq: atomUser.userSeq,
-        playlist_music: checkedList
-      }
-    ).then(
-      res => navigate(`/playlist/${res.data}`, {
-        state : {
-          playlistTitle: `${playlistTitle}`,
-          isPrivate: `${state.isPrivate}`,
-        } 
-        })
-    );
+    if (type === 'create') {
+      postPlaylist(
+        atomUser.userSeq,
+        {
+          playlist_name: playlistTitle,
+          is_private: state.isPrivate,
+          user_seq: atomUser.userSeq,
+          playlist_music: checkedList
+        }
+      ).then(
+        res => navigate(`/playlist/${res.data}`, {
+          state : {
+            playlistTitle: `${playlistTitle}`,
+            isPrivate: `${state.isPrivate}`,
+          } 
+          })
+      );
+      
+    } else {
+      insertMusicInPlaylist(atomUser.userSeq, state.playlistSeq,
+        {
+          playlist_music: state.playlistMusic,
+          add_music : checkedList
+        }
+      ).then(
+        navigate(`/playlist/${state.playlistSeq}`)
+      )
+    }
 
   };
 
