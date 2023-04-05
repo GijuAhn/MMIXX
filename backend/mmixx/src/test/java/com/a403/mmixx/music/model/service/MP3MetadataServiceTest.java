@@ -20,8 +20,8 @@ public class MP3MetadataServiceTest {
         MultipartFile multipartFile = new MockMultipartFile("typical-trap-loop-2b-130751.mp3", mp3Bytes);
 
         // When
-        MP3MetadataService service = new MP3MetadataService();
-        Map<String, String> metadataMap = service.extractMetadata(multipartFile);
+//        MP3MetadataService service = new MP3MetadataService();
+        Map<String, String> metadataMap = MP3MetadataService.extractMetadata(mp3File, multipartFile);
 
         // Then
         assertNotNull(metadataMap);
