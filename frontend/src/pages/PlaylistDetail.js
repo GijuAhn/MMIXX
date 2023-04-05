@@ -5,7 +5,7 @@ import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import { useRecoilValue } from 'recoil';
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
 import { CustomTable } from "components/mymusic"
@@ -45,8 +45,8 @@ const PlaylistDetail = () => {
     // setIsFavorite(!isFavorite);
     if (!isFavorite) {
       addFavoritePlaylist({
-        user_seq: atomUser.userSeq,
-        playlist_seq: playlistSeq
+        userSeq: atomUser.userSeq,
+        playlistSeq: playlistSeq
       }).then(res => {
         setIsFavorite(true);
       })
@@ -67,12 +67,14 @@ const PlaylistDetail = () => {
       })
       .catch(err => console.log(err))
     
-    // 플레이리스트 정보(제목, 공개여부 등) 가져오기
-    getPlaylistInfo(playlistSeq)
+    // 플레이리스트 정보(제목, 공개여부, 즐겨찾기 여부 등) 가져오기
+    getPlaylistInfo(playlistSeq, atomUser.userSeq)
       .then(res => {
         // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        setIsFavorite(res.data.isFavorite)
+        console.log("000 ",res.data.isFavorite)
       })
       .catch(err => console.log(err))
     

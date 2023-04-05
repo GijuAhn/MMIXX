@@ -16,12 +16,12 @@ const Playlist = () => {
   const mine = 'mine';
   const global = 'global';
   const favorite = 'favorite';
-  const atomUser = useRecoilValue(userInfo)
+  const atomUser = useRecoilValue(userInfo);
 
   useEffect(() => {
     
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
-      console.log('global')
+      // console.log('global')
       globalPlaylists(atomUser.userSeq)
         .then(
           res => {
@@ -31,10 +31,11 @@ const Playlist = () => {
       ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
-      console.log('favorite')
+      // console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
+            // console.log(res.data)
             setData(res.data)
             return res.data
           }
@@ -43,13 +44,14 @@ const Playlist = () => {
       getPlaylists(atomUser.userSeq)
         .then(
           res => {
+            // console.log(res.data)
             setData(res.data)
             return res.data
           }
       ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
-  }, [location, atomUser]);
+  }, [location, playlistType]);
 
 
   return (
@@ -88,12 +90,13 @@ const Playlist = () => {
           <>
             <CardWrapper>
             
-              {data.map((playlist, index) => {
+              {data.map((playlist, index, playlistType) => {
                 return (
                   <MiniPlaylistCard
                     key={index}
                     index={index}
                     playlist={playlist}
+                    playlistType={playlistType}
                     onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
                       state : {
                         playlistTitle: `${playlist.playlistName}`,
