@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 // import PropTypes from "prop-types";
 
 const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
@@ -29,6 +29,15 @@ const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
   );
 };
 
+const fadeIn = keyframes`
+from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const Button = styled.button`
   background: transparent;
   width: 40px;
@@ -42,12 +51,15 @@ const Button = styled.button`
 `;
 
 const IconName = styled.div`
-  font-size: ${(props) => props.fontSize || "11px"};
+  font-size: ${(props) => props.fontSize || "12px"};
   font-weight: 200;
   font-family: "Heebo", sans-serif;
+  animation: ${fadeIn} 0.2s linear forwards;
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  animation: ${fadeIn} 0.2s linear forwards;
+`;
 
 // MusicIcon.propTypes = {
 //   musicSeq: PropTypes.number.isRequired,
