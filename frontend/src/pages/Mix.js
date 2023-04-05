@@ -9,6 +9,8 @@ import { useState, useEffect } from "react";
 import { DefaultBtn } from "components/Common";
 
 import { getPreset } from 'api/genre';
+import { useRecoilValue } from "recoil";
+import { _mix_now } from "atom/music";
 
 const Mix = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Mix = () => {
   const [presetSeq, setPresetSeq] = useState('');
   const [presetData, setPresetData] = useState('');
   const [isPreset, setIsPreset] = useState(false)
+  const mixAudio = useRecoilValue(_mix_now)
 
   const presetSeqFunc = (x) => {
     setPresetSeq(x)
@@ -38,6 +41,11 @@ const Mix = () => {
     getPreset()
     .then((res) => setPresetData(res.data), setIsPreset(true))
     .catch((err) => console.log(err))
+
+    return () => {
+      mixAudio.pause()
+      mixAudio.src = ''
+    }
   }, [])
 
   useEffect(() => {
