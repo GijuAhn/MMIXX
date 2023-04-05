@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -70,7 +71,8 @@ public class AwsS3Service {
 		httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		httpHeaders.setContentLength(bytes.length);
 		httpHeaders.setContentDispositionFormData("attachment", downloadFileName); // 파일 이름 지정
-
+		
+		objectInputStream.close();
 		return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
 	}
 
@@ -89,6 +91,7 @@ public class AwsS3Service {
 			try (InputStream inputStream = file.getInputStream()) {
 				amazonS3.putObject(new PutObjectRequest(bucket + MUSIC_FOLDER, fileName, inputStream, metadata)
 						.withCannedAcl(CannedAccessControlList.PublicRead));
+				inputStream.close();
 			} catch (IOException e) {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "음원 파일 업로드에 실패했습니다.");
 			}
@@ -101,16 +104,24 @@ public class AwsS3Service {
 	}
 
 
-	public List<String> uploadCoverImageToS3(List<MultipartFile> multipartFiles) {
+	public List<String>[] uploadCoverImageToS3(List<MultipartFile> multipartFiles) {
 		System.out.println("uploadCoverImageToS3 START");
+		List<String>[] result = new List[2];
 		List<String> fileList = new ArrayList<>();
-
+		List<String> tempfilepath = new ArrayList<>();
+		
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 		multipartFiles.forEach(file -> {
 			byte[] coverImage = null;
 			// extract cover image from mp3 file using MP3AlbumArtworkService.extractAlbumArtwork()
+			
+			
 			try {
-				coverImage = MP3AlbumArtworkService.extractAlbumArtwork(file);
+				File mp3File = Files.createTempFile("temp", ".mp3").toFile();
+		        file.transferTo(mp3File);
+		        System.out.println("extract Album Art mp3File absolute path : " + mp3File.getAbsolutePath());
+				tempfilepath.add(mp3File.getAbsolutePath());
+		        coverImage = MP3AlbumArtworkService.extractAlbumArtwork(mp3File);
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "커버 이미지 업로드에 실패했습니다.");
@@ -139,14 +150,16 @@ public class AwsS3Service {
 			try(InputStream inputStream = new ByteArrayInputStream(coverImage)) {
 				amazonS3.putObject(new PutObjectRequest(bucket + IMAGE_FOLDER, fileName, inputStream, metadata)
 						.withCannedAcl(CannedAccessControlList.PublicRead));
+				inputStream.close();
 			} catch (IOException e) {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "커버 이미지 업로드에 실패했습니다.");
 			}
 
 			fileList.add(amazonS3.getUrl(bucket + IMAGE_FOLDER, fileName).toString());
 		});
-
-		return fileList;
+		result[0] = fileList;
+		result[1] = tempfilepath;
+		return result;
 	}
 
 

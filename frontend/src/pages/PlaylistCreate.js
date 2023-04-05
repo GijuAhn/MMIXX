@@ -37,7 +37,7 @@ const PlaylistCreate = () => {
             </InputPrivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select", {
+            <AddMusicBtn onClick={() => navigate("/playlist/select/create", {
               state : {
                 playlistTitle: inputRef.current.value,
                 isPrivate: true,

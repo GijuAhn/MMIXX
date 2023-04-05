@@ -53,6 +53,11 @@ public class User {
     public User(Integer user_seq) {
     	this.userSeq = user_seq;
     }
+    
+    public User(Integer user_seq, Role role) {
+    	this.userSeq = user_seq;
+    	this.role = role;
+    }
 
     public User update(String userName, String profileImageUrl){
         this.userName = userName;

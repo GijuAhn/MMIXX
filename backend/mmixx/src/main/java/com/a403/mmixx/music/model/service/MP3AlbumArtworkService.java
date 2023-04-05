@@ -23,13 +23,15 @@ import java.nio.file.Files;
 @Service
 public class MP3AlbumArtworkService {
 
-    public static byte[] extractAlbumArtwork(MultipartFile file) throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
+    public static byte[] extractAlbumArtwork(File file) throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
         // Convert multipart file to MP3 file
-        File mp3File = Files.createTempFile("temp", ".mp3").toFile();
-        file.transferTo(mp3File);
+//    	System.out.println("extract Album Art file size : " + file.getSize());
+//    	System.out.println("extract Album Art file name : " + file.getName());
+    	
+        
 
         // Extract album artwork from MP3 file using JAudioTagger library
-        AudioFile audioFile = AudioFileIO.read(mp3File);
+        AudioFile audioFile = AudioFileIO.read(file);
         Tag tag = audioFile.getTag();
 
         // If tag is null, the default album artwork will be used
@@ -55,6 +57,7 @@ public class MP3AlbumArtworkService {
         ClassLoader classLoader = MP3AlbumArtworkService.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("static/default_cover.jpg");
         byte[] bytes = IOUtils.toByteArray(inputStream);
+        inputStream.close();
         return bytes;
     }
 }

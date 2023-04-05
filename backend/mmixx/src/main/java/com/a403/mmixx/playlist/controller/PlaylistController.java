@@ -43,14 +43,14 @@ public class PlaylistController {
     }
 
     //  전체 플레이리스트 목록을 조회 - public playlist
-    @GetMapping("/global")
-    public List<PlaylistSimpleDto> getGlobalPlaylist() {
-        return playlistService.getGlobalPlaylist();
+    @GetMapping("/global/{userSeq}")
+    public List<PlaylistWithFavoriteSimpleDto> getGlobalPlaylist(@PathVariable int userSeq) {
+        return playlistService.getGlobalPlaylist(userSeq);
     }
 
     //  개인 플레이리스트 목록을 조회 - private playlist
     @GetMapping("/user/{userSeq}")
-    public List<PlaylistSimpleDto> getPrivatePlaylist(@PathVariable int userSeq) {
+    public List<PlaylistWithFavoriteSimpleDto> getPrivatePlaylist(@PathVariable int userSeq) {
         return playlistService.getPrivatePlaylist(userSeq);
     }
 
@@ -83,11 +83,17 @@ public class PlaylistController {
     }
 
 
+    @ApiOperation(value = "플레이리스트 정보 조회")
+    @GetMapping("/info/{playlistSeq}")
+    public PlaylistSimpleDto getPlaylistInfo(@PathVariable int playlistSeq) {
+        return playlistService.getPlaylistInfo(playlistSeq);
+    }
+
 
     @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
-    @DeleteMapping("/detail/{playlistSeq}")
-    public void deletePlaylistMusic(@PathVariable int playlistSeq) {
-        playlistService.deletePlaylist(playlistSeq);
+    @DeleteMapping("/detail/{playlist_music_seq}")
+    public ResponseEntity<?> deletePlaylistMusic(@PathVariable int playlist_music_seq) {
+        return ResponseEntity.ok(playlistService.deleteDetailMusicPlaylist(playlist_music_seq));
     }
     
     @ApiOperation(value = "즐겨찾기한 플레이리스트 목록 조회")
