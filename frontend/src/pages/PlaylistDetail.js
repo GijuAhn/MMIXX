@@ -7,10 +7,14 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { Wrapper, Header } from "components/Common"
-import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
+import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
 import { CustomTable } from "components/mymusic"
 import { useRecoilValue } from "recoil";
 import { _now } from "atom/music"
+import { usePlayControl } from "hooks/usePlayControl"
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { userInfo } from 'atom/atom';
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -21,19 +25,38 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
+  const { createNowPlaylist } = usePlayControl()
 
-  const now = useRecoilValue(_now)
+  // user 
+  const atomUser = useRecoilValue(userInfo)
+
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
-  const handleChange = () => {
-    setIsChecked(!isChecked);
-  };
 
   /**
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    // createNowPlaylist(playlistMusic)
+    createNowPlaylist(playlistMusic)
+  }
+
+  // 즐겨찾기
+  const [isFavorite, setIsFavorite] = useState(false);
+  const heartClick = () => {
+    // setIsFavorite(!isFavorite);
+    if (!isFavorite) {
+      addFavoritePlaylist({
+        user_seq: atomUser.userSeq,
+        playlist_seq: playlistSeq
+      }).then(res => {
+        setIsFavorite(true);
+      })
+    } else {
+      deleteFavoritePlaylist(atomUser.userSeq, playlistSeq).then(res => {
+        setIsFavorite(false);
+      })
+    }
+
   }
 
   useEffect(() => {
@@ -48,11 +71,14 @@ const PlaylistDetail = () => {
     // 플레이리스트 정보(제목, 공개여부 등) 가져오기
     getPlaylistInfo(playlistSeq)
       .then(res => {
+        // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        setIsFavorite(res.data.isFavorite)
       })
       .catch(err => console.log(err))
-  }, [playlistSeq]);
+    
+  }, []);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -68,13 +94,18 @@ const PlaylistDetail = () => {
           }
         </PlaylistCover>
         <RightContent style={{ border: '1px solid blue'}}>
+            {isFavorite ?
+              <StyleFavoriteIcon onClick={heartClick } />
+              :
+              <StyleFavoriteBorderIcon onClick={heartClick } />
+            }
           <Top>
             <PlaylistTitle>
               <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
             <PrivateToggle>
-              공개여부
-              <Switch checked={isChecked } onChange={handleChange}/>
+              비공개여부
+              <Switch checked={isChecked } />
             </PrivateToggle>
           </Top>
           <Bottom style={{ border: '1px solid blue'}}>
@@ -83,7 +114,7 @@ const PlaylistDetail = () => {
               onClick={handlePlaying}
               disabled={playlistMusic.length === 0}
             />
-            <MoreIconDiv playlistSeq={playlistSeq}/>
+            <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
             
             {/* <div>
               <DefaultBtn onClick={confirmDelete}>
@@ -102,7 +133,7 @@ const PlaylistDetail = () => {
   );
 };
 
-const MoreIconDiv = ({ playlistSeq }) => {
+const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
   const wrapperRef = useRef(null)
   const navigate = useNavigate()
   const [ isOpen, setIsOpen ] = useState(false)
@@ -143,7 +174,7 @@ const MoreIconDiv = ({ playlistSeq }) => {
 
   const handleToggle = () => {
     setIsOpen((pre) => !pre)
-    console.log(isOpen)
+    // console.log(isOpen)
   }
 
   useEffect(() => {
@@ -152,7 +183,7 @@ const MoreIconDiv = ({ playlistSeq }) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsOpen(false);
       }
-      console.log(isOpen)
+      // console.log(isOpen)
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -170,6 +201,15 @@ const MoreIconDiv = ({ playlistSeq }) => {
         {isOpen &&
           <CustomSelect>
             <ul>
+              <li onClick={() => navigate(`/playlist/select/update`, {
+                      state : {
+                        playlistSeq: `${playlistSeq}`,
+                        playlistMusic: playlistMusic
+                      }
+                    })}
+                      >
+                곡 추가하기
+              </li>
               <li onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
                 수정하기
               </li>
@@ -222,6 +262,7 @@ const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
+  position: relative;
 `
 
 const Top = styled.div`
@@ -265,13 +306,13 @@ const MoreDiv = styled.div`
 const CustomSelect = styled.div`
   position: absolute;
   left: -95px;
-  top: -25px;
+  top: -35px;
   border: 1px solid pink;
   width: 100px;
   border-radius: 10px;
   border: 2px solid ${({theme}) => theme.palette.secondary};
   background-color: ${({theme}) => theme.palette.dark};
-  height: 50px;
+  height: 75px;
   font-size: 14px;
 
   li {
@@ -311,5 +352,19 @@ const PrivateToggle = styled.div`
 const SelectSection = styled.section`
   display: flex;
 `;
+
+const StyleFavoriteIcon = styled(FavoriteIcon)`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 2rem;
+`
+
+const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 2rem;
+`
 
 export default PlaylistDetail;
