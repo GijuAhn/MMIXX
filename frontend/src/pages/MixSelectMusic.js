@@ -1,43 +1,41 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { testPlaylistMusic } from "atom/atom";
+import { userInfo } from "atom/atom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components"
 
 import { SelectMusicItem } from "components/Mix";
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 
-import { getMusicList } from 'api/playlist';
+import { getMusicList } from 'api/mymusic';
+import { MusicList } from "components/mymusic";
 
 // import { getMusicList } from "api/mymusic";
 
 const MixSelectMusic = () => {
   const navigate = useNavigate();
-  const playList = useRecoilValue(testPlaylistMusic)
+  // const playList = useRecoilValue(testPlaylistMusic)
   // console.log('playList :', playList)
-  const musicList = playList.playlistMusic
-  // console.log('musicList :', musicList)
-  // console.log('music :', musicList[0].music)
+  // const musicList = playList.playlistMusic
+  // const [selMusicSeq, setSelMusicSeq] = useState('')
 
-  const [selMusicSeq, setSelMusicSeq] = useState('')
-  const [selMusicInfo, setSelMusicInfo] = useState([])
-
-  // 음악 데이터 가져오기 api
-  // const [musicList, setMusicList] = useState();
+  // const selectedMusicSeq = (x) => {
+  //   setSelMusicSeq(x)
+  //   console.log('선택한 음악 시퀀스 : ', x)
+  // }
   // useEffect(() => {
-  //   getMusicList(userSeq, page = 1)
-  //   .then( res => setMusicList(res.data) )
-  //   .catch( err => console.log(err) )
-  // },[])
-  const selectedMusicSeq = (x) => {
-    setSelMusicSeq(x)
-    console.log('선택한 음악 시퀀스 : ', x)
-  }
-  useEffect(() => {
-    console.log('선택한 음악 시퀀스 확인',selMusicSeq)
-    console.log('선택한 음악 정보 ', selMusicSeq ? musicList[selMusicSeq].music : null)
-    setSelMusicInfo(selMusicSeq ? musicList[selMusicSeq].music : null)
-  }, [selMusicSeq])
+  //   console.log('선택한 음악 시퀀스 확인',selMusicSeq)
+  //   // console.log('선택한 음악 정보 ', selMusicSeq ? musicList[selMusicSeq].music : null)
+  //   // setSelMusicInfo(selMusicSeq ? musicList[selMusicSeq].music : null)
+  // }, [selMusicSeq])
+
+  // [Test] 곡 선택하기 (radio)
+  const [selectedMusic, setSelectedMusic] = useState({
+    musicSeq: null,
+    coverImage: null,
+    musicName: null,
+    musicianName: null,
+  });
 
   return (
     <MusicItemWrapper>
@@ -45,8 +43,8 @@ const MixSelectMusic = () => {
         title="Music Select"
         desc="믹스할 노래 고르기"
       />
-      {/* <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList> */}
-      { musicList.map((music, index) => {
+      <MusicList radio={true} checkMusic={setSelectedMusic}></MusicList>
+      {/* { musicList && musicList.map((music, index) => {
         // console.log('music :', music, 'index : ',index+1)
         return (
           <SelectMusicItem
@@ -57,17 +55,12 @@ const MixSelectMusic = () => {
             hasIcon='false'
             />
           )
-        })}
+        })} */}
 
       <CreateBtn 
         onClick={() => 
           navigate('/mix', { 
-          state: { 
-            coverImage : selMusicInfo.coverImage, 
-            musicName : selMusicInfo.musicName, 
-            musicianName : selMusicInfo.musicianName, 
-            musicSeq : selMusicInfo.musicSeq 
-          }
+          state: {selectedMusic}
         })
       }>
         선택 완료
