@@ -67,6 +67,12 @@ public class PlaylistController {
     public ResponseEntity<?> deletePlaylist(@PathVariable int playlistSeq) {
         return ResponseEntity.ok(playlistService.deletePlaylist(playlistSeq));
     }
+    
+    @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
+    @DeleteMapping("/detail/{playlist_music_seq}")
+    public ResponseEntity<?> deletePlaylistMusic(@PathVariable int playlist_music_seq) {
+        return ResponseEntity.ok(playlistService.deleteDetailMusicPlaylist(playlist_music_seq));
+    }
 
     //  해당(playlistSeq) 플레이리스트의 첫번째 곡 앨범커버아트 URL 가져오기
     @ApiOperation(value = "플레이리스트 첫번째 곡의 커버 이미지 URL 가져오기")
@@ -89,13 +95,6 @@ public class PlaylistController {
         return playlistService.getPlaylistInfo(playlistSeq);
     }
 
-
-    @ApiOperation(value = "플레이리스트 내의 개별 음악 삭제")
-    @DeleteMapping("/detail/{playlist_music_seq}")
-    public ResponseEntity<?> deletePlaylistMusic(@PathVariable int playlist_music_seq) {
-        return ResponseEntity.ok(playlistService.deleteDetailMusicPlaylist(playlist_music_seq));
-    }
-    
     @ApiOperation(value = "즐겨찾기한 플레이리스트 목록 조회")
     @GetMapping("/favorite/{user_seq}")
     public ResponseEntity<?> findFavorite(@PathVariable int user_seq) {

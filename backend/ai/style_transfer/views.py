@@ -41,7 +41,7 @@ class MusicAPIView(APIView):
         try:
             subprocess.run(args, check=True)
         except subprocess.CalledProcessError:
-            return Response({'status' : 'failure'})
+            return Response({'FAIL'})
 
         # results에는 s3에 업로드한 결과 파일의 path를 JSON 형식으로 저장
         results = {
