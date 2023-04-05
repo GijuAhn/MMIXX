@@ -7,18 +7,36 @@ export const usePlayControl = () => {
   /**
    * 현재 진행중인 곡이 속해있는 리스트 가져오기
    */
-  const audioElement = useRecoilValue(audioState)
+  const [ audioElement, setAudioElement ] = useRecoilState(audioState)
   const [ nowMusic, setNow ] = useRecoilState(_now)
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
 
   /**
-   * 이 플레이리스트를 atom과 로컬에 저장하기
-   * playing 키 값 추가
+   * 현재 실행될 음악값 설정
+   */
+  const createNowMusic = () => {
+    const newNowMusic = queue.find((item) => item.playing)
+    if (newNowMusic) {
+      if (audioElement || !audioElement?.paused) {
+        // audioElement.pause()
+      }
+      const audioSrc = newNowMusic.musicUrl
+      localStorage.setItem('_now', JSON.stringify(audioSrc))
+      setAudioElement(new Audio(audioSrc))
+      localStorage.setItem('_nowMusic', JSON.stringify(newNowMusic))
+      setNow(newNowMusic)
+    }
+  }
+
+  /**
+   * 현재 실행될 음악이 담긴 플레이리스트 값 설정
    */ 
   const createNowPlaylist = async ( playlist, start = 0 ) => {
     const newPlaylist = await playlist.map((item, index) => {
       if (index === start) {
-        // const newItem = {...item, playing: true}
+        const newItem = {...item, playing: true}
+        localStorage.setItem('_nowMusic', JSON.stringify(newItem))
+        setAudioElement(new Audio(item.musicUrl))
         return { ...item, playing: true }
       } else {
         return { ...item, playing: false } 
@@ -29,26 +47,12 @@ export const usePlayControl = () => {
   } 
 
   /**
-   * 현재 실행될 음악값 설정
-   */
-  const createNowMusic = () => {
-    console.log('2')
-    const newNowMuisc = queue.find((item) => item.playing)
-    if (newNowMuisc) {
-      if (audioElement.src || !audioElement.paused) {
-        audioElement.pause()
-      }
-      audioElement.src = newNowMuisc.musicUrl
-      localStorage.setItem('_now', JSON.stringify(newNowMuisc))
-      setNow(newNowMuisc)
-    }
-  }
-
-  /**
    * NowMusic에 값이 생기면 노래 재생하기 
    */
   const playMusic = () => {
     if (audioElement.src) {
+      console.log('playMusic', audioElement)
+      audioElement.play()
     }
   }
 
@@ -67,25 +71,59 @@ export const usePlayControl = () => {
     }
     queue[currentIndex].playing = false
     queue[nextIndex].playing = true
+
+    createNowMusic()
   }
 
-  useEffect(() => {
-    createNowMusic()
-  }, [queue])
- 
-  useEffect(() => {
-    audioElement.addEventListener('ended', () =>{
-      playNext()
-    })
-    
-    return () => {
-      audioElement.removeEventListener('ended', () =>{
-        console.log('꺼졌나?? ')
-      })
-    }
-  }, [audioElement])
+  // useEffect(() => {
+  //   // if (audioElement.src & audioElement.paused) {
+  //   //   audioElement.play()
+  //   // } else {
+  //   //   audioElement.pause()
+  //   // }
 
-  return { nowMusic, queue, createNowPlaylist, playMusic, playNext }
+  //   const handlePlay = () => {
+  //     console.log('재생 시작');
+  //   };
+  
+  //   const handlePause = () => {
+  //     console.log('일시 중지');
+  //   };
+  
+  //   const handleEnded = () => {
+  //     console.log('재생 완료');
+  //   };
+  
+  //   const handleError = () => {
+  //     console.log('오류 발생');
+  //   };
+  
+  //   audioElement.addEventListener('play', handlePlay);
+  //   audioElement.addEventListener('pause', handlePause);
+  //   audioElement.addEventListener('ended', handleEnded);
+  //   audioElement.addEventListener('error', handleError);
+  
+  //   return () => {
+  //     audioElement.removeEventListener('play', handlePlay);
+  //     audioElement.removeEventListener('pause', handlePause);
+  //     audioElement.removeEventListener('ended', handleEnded);
+  //     audioElement.removeEventListener('error', handleError);
+  //   };
+  // }, [audioElement])
+
+  // useEffect(() => {
+  //   audioElement.addEventListener('ended', () =>{
+  //     playNext()
+  //   })
+    
+  //   return () => {
+  //     audioElement.removeEventListener('ended', () =>{
+  //       console.log('꺼졌나?? ')
+  //     })
+  //   }
+  // }, [audioElement])
+
+  return { audioElement, nowMusic, queue, createNowPlaylist, createNowMusic, playMusic, playNext }
 }
 
 

@@ -21,24 +21,24 @@ const Playlist = () => {
   useEffect(() => {
     
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
+      console.log('global')
       globalPlaylists(atomUser.userSeq)
         .then(
           res => {
             setData(res.data)
             return res.data
           }
-          , setType(global)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
+      console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
             setData(res.data)
             return res.data
           }
-          , setType(favorite)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(favorite)).catch(err => console.log(err))
     } else { // 내 플레이리스트
       getPlaylists(atomUser.userSeq)
         .then(
@@ -46,8 +46,7 @@ const Playlist = () => {
             setData(res.data)
             return res.data
           }
-          , setType(mine)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
   }, [location, atomUser]);
