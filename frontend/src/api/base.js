@@ -11,11 +11,8 @@ const instance =  axios.create({
 
 instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('auth')}`
 
-const logout = axios.create({
-  baseURL : 'https://j8a403.p.ssafy.io/api'
-})
 export const handleLogout = async () => {
-  return await logout({
+  return await instance({
     url: `/logout`
   })
 }
