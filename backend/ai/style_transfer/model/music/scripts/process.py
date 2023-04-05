@@ -124,6 +124,16 @@ if __name__ == "__main__":
     target_times = np.arange(len(target_data))/float(target_samplerate)
     preset_samplerate, preset_data = sio.wavfile.read('file/preset.wav')
     preset_times = np.arange(len(preset_data))/float(preset_samplerate)
+    print(target_times)
+    print(preset_times)
+    print(target_times[-1])
+    print(preset_times[-1])
+    print(type(target_times[-1]))
+    print(type(preset_times[-1]))
+    print(type(target_times[-1].astype(int)))
+    print(type(preset_times[-1].astype(int)))
+    print(target_times[-1].astype(int))
+    print(preset_times[-1].astype(int))
 
     x, x_sr = torchaudio.load('file/target.wav')
     r, r_sr = torchaudio.load('file/preset.wav')
@@ -144,13 +154,13 @@ if __name__ == "__main__":
         r_24000 = r
 
     # peak normalize to -12 dBFS
-    x_24000 = x_24000[0:1, : 24000 * target_times[-1]]
+    x_24000 = x_24000[0:1, : 24000 * target_times[-1].astype(int)]
     x_24000 /= x_24000.abs().max()
     x_24000 *= 10 ** (-12 / 20.0)
     x_24000 = x_24000.view(1, 1, -1)
 
     # peak normalize to -12 dBFS
-    r_24000 = r_24000[0:1, : 24000 * preset_times[-1]]
+    r_24000 = r_24000[0:1, : 24000 * preset_times[-1].astype(int)]
     r_24000 /= r_24000.abs().max()
     r_24000 *= 10 ** (-12 / 20.0)
     r_24000 = r_24000.view(1, 1, -1)
