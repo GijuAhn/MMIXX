@@ -5,62 +5,64 @@ import WarningIcon from "@mui/icons-material/WarningAmberOutlined";
 import ErrorrIcon from "@mui/icons-material/ReportGmailerrorredOutlined";
 import SuccessIcon from "@mui/icons-material/CheckBoxOutlined";
 
-const CustomToast = ({ icon, text = "업로드 중..." }) => {
-  // const [state, setState] = useState(slideIn);
+const CustomToast = ({ res, text, toggle, width = "160px", time = 3000 }) => {
   const [state, setState] = useState(slideDown);
 
   useEffect(() => {
+    let timer2;
     let timer = setTimeout(() => {
-      // props.setToastState(false);		// 3초 뒤, toastState가 false가 되면서 알림창이 사라진다
-      //   let timer2 = setTimeout(()=>{
-      //   }, 500)
-      // setState(slideOut);
       setState(slideUp);
-    }, 3000);
+      timer2 = setTimeout(() => {
+        toggle(false);
+      }, 500);
+    }, time);
 
     return () => {
       clearTimeout(timer);
-      //   clearTimeout(timer2);
+      clearTimeout(timer2);
     };
   }, []);
 
   return (
-    <Toast animation={state} forUpload={true}>
-      {icon === "info" ? (
-        <InfoIcon color='primary' />
-      ) : icon === "warning" ? (
-        <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
-      ) : icon === "error" ? (
+    // <Toast animation={state} forUpload={true}>
+    <Toast animation={state} width={width}>
+      {/* <Section> */}
+      {res === "info" ? (
+        <InfoIcon color='primary' style={{ textalign: "left" }} />
+      ) : res === "error" ? (
         <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
-      ) : (
+      ) : res === "success" ? (
         <SuccessIcon color='success' />
-      )}
+      ) : res === "warning" ? (
+        <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
+      ) : null}
       {/* <InfoIcon color='primary' />
       <WarningIcon sx={{ color: "rgb(255, 193, 7)" }} />
       <ErrorrIcon sx={{ color: "rgb(220, 53, 69)" }} />
       <SuccessIcon color='success' /> */}
       <Text>{text}</Text>
+      {/* </Section> */}
     </Toast>
   );
 };
 
-const slideIn = keyframes`
-from {
-    transform: translateX(150%);
-  }
-  to {
-    transform: translateX(0%);
-  }
-`;
+// const slideIn = keyframes`
+// from {
+//     transform: translateX(150%);
+//   }
+//   to {
+//     transform: translateX(0%);
+//   }
+// `;
 
-const slideOut = keyframes`
-from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(150%);
-  }
-`;
+// const slideOut = keyframes`
+// from {
+//     transform: translateX(0%);
+//   }
+//   to {
+//     transform: translateX(150%);
+//   }
+// `;
 
 const slideDown = keyframes`
 from {
@@ -90,24 +92,29 @@ const Toast = styled.div`
   border-radius: 15px;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   height: 40px;
-  width: 250px;
-  padding: 5px;
-  text-align: center;
-  //   text-align: left;
-  //   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  ${({ forUpload }) =>
-    forUpload &&
-    `top: 80px;
-    right: auto;
-  `}
+  width: ${(props) => props.width};
+  padding: 10px;
+  // display: inline-block;
+  // text-align: center;
+  // text-align: left;
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  justify-content: flex-start;
 
-  animation: ${({ animation }) => animation} 0.5s ease-in-out 0s 1 normal
-    forwards;
+  position: fixed;
+  top: 115px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    margin-left: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  animation: ${({ animation }) => animation} 0.5s ease-in-out 0s 1 normal forwards;
 `;
 
 const Text = styled.p`
@@ -115,6 +122,8 @@ const Text = styled.p`
   font-size: 16px;
   font-weight: bold;
   font-family: "Heebo", sans-serif;
+
+  margin-left: 10px;
 `;
 
 export default CustomToast;

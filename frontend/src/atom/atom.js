@@ -1,9 +1,7 @@
 import { atom } from "recoil";
 
 import newJeansImage from "assets/cover_image.jpg"
-import { localStorageEffect } from "./_local";
-import newJeansRetro from 'assets/music/NewJeans-Retro.mp3'
-import newJeansRemix from 'assets/music/NewJeans-Future Funk Remix.mp3'
+import localStorageEffect from './_local'
 
 export const isLogIn = atom({
   key: 'isLogIn',

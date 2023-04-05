@@ -213,39 +213,63 @@ public class PlaylistService {
      * Public 플레이리스트 조회, isPrivate = false 인 모든 항목을 조회한다.
      * ignore userSeq
      */
-    public List<PlaylistSimpleDto> getGlobalPlaylist() {
-        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+    public List<PlaylistWithFavoriteSimpleDto> getGlobalPlaylist(int userSeq) {
+        List<PlaylistWithFavoriteSimpleDto> playlistWithFavoriteSimpleDtoList = new LinkedList<>();
         List<Playlist> playlistList = playlistRepository.findByIsPrivateFalse();
+
+        favoriteRepository.findAll();
+
         for (int i = 0; i < playlistList.size(); i++) {
-            PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
-            playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
-            playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
-            playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
-            playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
-            playlistSimpleDtoList.add(playlistSimpleDto);
+            PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
+
+            playlistWithFavoriteSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+            playlistWithFavoriteSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+            playlistWithFavoriteSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+            playlistWithFavoriteSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+
+            // set favorite status
+            Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistList.get(i).getPlaylistSeq());
+            if (favorite != null) {
+                playlistWithFavoriteSimpleDto.setIsFavorite(true);
+            } else {
+                playlistWithFavoriteSimpleDto.setIsFavorite(false);
+            }
+
+            playlistWithFavoriteSimpleDtoList.add(playlistWithFavoriteSimpleDto);
+
         }
-        return playlistSimpleDtoList;
+        return playlistWithFavoriteSimpleDtoList;
     }
 
 
     /**
      * 유저 ID로 플레이리스트 조회 (userSeq 필요), 해당 user 가 생성한 private + public 플레이리스트를 조회한다.
      */
-    public List<PlaylistSimpleDto> getPrivatePlaylist(int userSeq) {
-        List<PlaylistSimpleDto> playlistSimpleDtoList = new LinkedList<>();
+    public List<PlaylistWithFavoriteSimpleDto> getPrivatePlaylist(int userSeq) {
+        List<PlaylistWithFavoriteSimpleDto> playlistWithFavoriteSimpleDtoList = new LinkedList<>();
 //        List<Playlist> playlistList = playlistRepository.findByIsPrivateTrue();
+
         List<Playlist> playlistList = playlistRepository.findAll();
         for (int i = 0; i < playlistList.size(); i++) {
             if (playlistList.get(i).getUserSeq() == userSeq) {
-                PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
-                playlistSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
-                playlistSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
-                playlistSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
-                playlistSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
-                playlistSimpleDtoList.add(playlistSimpleDto);
+                PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
+                playlistWithFavoriteSimpleDto.setPlaylistSeq(playlistList.get(i).getPlaylistSeq());
+                playlistWithFavoriteSimpleDto.setPlaylistName(playlistList.get(i).getPlaylistName());
+                playlistWithFavoriteSimpleDto.setIsPrivate(playlistList.get(i).getIsPrivate());
+                playlistWithFavoriteSimpleDto.setUserSeq(playlistList.get(i).getUserSeq());
+
+                // set favorite status
+                Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistList.get(i).getPlaylistSeq());
+                if (favorite != null) {
+                    playlistWithFavoriteSimpleDto.setIsFavorite(true);
+                } else {
+                    playlistWithFavoriteSimpleDto.setIsFavorite(false);
+                }
+
+                playlistWithFavoriteSimpleDtoList.add(playlistWithFavoriteSimpleDto);
             }
         }
-        return playlistSimpleDtoList;
+        return playlistWithFavoriteSimpleDtoList;
     }
 
 
@@ -349,6 +373,20 @@ public class PlaylistService {
         playlistRepository.deleteById(playlistSeq);
         return "success";
     }
+    
+    public String deleteDetailMusicPlaylist(int playlist_music_seq) {
+    	log.info("해당 playlist 개별 삭제 시작");
+        log.info("playlistMusicSeq : " + playlist_music_seq + "번호에 해당하는 곡 삭제");
+        PlaylistMusic music = playlistMusicRepository.findById(playlist_music_seq).orElse(null);
+        if(music != null) {
+        	playlistMusicRepository.deleteById(music.getPlaylistMusicSeq());
+        } else {
+        	log.info("곡을 찾을 수 없습니다.");
+        	return "곡을 찾을 수 없습니다.";
+        }
+        
+        return "SUCCESS";
+    }
 
     /**
      * 플레이리스트 첫번째 곡 앨범아트 URL 가져오기
@@ -414,6 +452,9 @@ public class PlaylistService {
     }
 
 
+    /**
+     * 플레이리스트 상세정보 (이름, 공개여부) 수정
+     */
     public String updatePlaylistDetail(PlaylistNameAndPrivateSimpleDto requestDto, int playlistSeq) {
         Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
         if (playlist == null) {
@@ -424,5 +465,29 @@ public class PlaylistService {
         playlist.setIsPrivate(requestDto.getIsPrivate());
         playlistRepository.save(playlist);
         return "successfully updated";
+    }
+
+    /**
+     * 플레이리스트 정보 가져오기
+     */
+    public PlaylistSimpleDto getPlaylistInfo(int playlistSeq) {
+        PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+        if (playlist == null) {
+            log.info("해당 플레이리스트가 존재하지 않습니다.");
+            return null;
+        }
+        playlistSimpleDto.setPlaylistSeq(playlist.getPlaylistSeq());
+        playlistSimpleDto.setUserSeq(playlist.getUser().getUserSeq());
+        playlistSimpleDto.setPlaylistName(playlist.getPlaylistName());
+        playlistSimpleDto.setIsPrivate(playlist.getIsPrivate());
+
+//        log.info("------playlist 정보------");
+//        log.info("playlistSeq : " + playlist.getPlaylistSeq());
+//        log.info("userSeq : " + playlist.getUser().getUserSeq());
+//        log.info("playlistName : " + playlist.getPlaylistName());
+//        log.info("isPrivate : " + playlist.getIsPrivate());
+
+        return playlistSimpleDto;
     }
 }
