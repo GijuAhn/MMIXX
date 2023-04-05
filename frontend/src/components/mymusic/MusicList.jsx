@@ -63,7 +63,7 @@ const MusicList = ({
 
   // 1. 첫 렌더링 시에만 음악 리스트를 가져온다.
   useEffect(() => {
-    getMusicList({ userSeq: 9, page: 1 })
+    getMusicList({ userSeq: user ? user.userSeq : 0, page: 1 })
       .then(({ data }) => {
         // console.log(data.content);
         setMusicList(data.content);
