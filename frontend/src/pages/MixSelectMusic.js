@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userInfo } from "atom/atom";
 import { useRecoilValue } from "recoil";
-import styled from "styled-components"
+import styled from "styled-components";
 
 import { SelectMusicItem } from "components/Mix";
-import { Wrapper, Header, DefaultBtn } from "components/Common"
+import { Wrapper, Header, DefaultBtn } from "components/Common";
 
-import { getMusicList } from 'api/mymusic';
+import { getMusicList } from "api/mymusic";
 import { MusicList } from "components/mymusic";
 
 // import { getMusicList } from "api/mymusic";
@@ -39,10 +39,7 @@ const MixSelectMusic = () => {
 
   return (
     <MusicItemWrapper>
-      <Header 
-        title="Music Select"
-        desc="믹스할 노래 고르기"
-      />
+      <Header title='Music Select' desc='믹스할 노래 고르기' />
       <MusicList radio={true} checkMusic={setSelectedMusic}></MusicList>
       {/* { musicList && musicList.map((music, index) => {
         // console.log('music :', music, 'index : ',index+1)
@@ -57,17 +54,18 @@ const MixSelectMusic = () => {
           )
         })} */}
 
-      <CreateBtn 
-        onClick={() => 
-          navigate('/mix', { 
-          state: {
-            coverImage : selectedMusic.coverImage,
-            musicName : selectedMusic.musicName,
-            musicianName : selectedMusic.musicianName,
-            musicSeq : selectedMusic.musicSeq
-          }
-        })
-      }>
+      <CreateBtn
+        onClick={() =>
+          navigate("/mix", {
+            state: {
+              coverImage: selectedMusic.coverImage,
+              musicName: selectedMusic.musicName,
+              musicianName: selectedMusic.musicianName,
+              musicSeq: selectedMusic.musicSeq,
+            },
+          })
+        }
+      >
         선택 완료
       </CreateBtn>
       {/* <button onClick={() => console.log(checkedList)}>추가하기</button>
@@ -76,14 +74,15 @@ const MixSelectMusic = () => {
   );
 };
 
-
 export default MixSelectMusic;
 
 const MusicItemWrapper = styled(Wrapper)`
-display: flex;
-flex-direction: column;
-width: 80vw;
-padding-left: 3px;
-`
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  padding-left: 3px;
+`;
 const CreateBtn = styled(DefaultBtn)`
-`
+  position: fixed;
+  bottom: -20px;
+`;
