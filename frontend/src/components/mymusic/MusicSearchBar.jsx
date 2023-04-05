@@ -6,16 +6,16 @@ import searchIcon from "assets/search.png";
 const MusicSearchBar = ({ setQuery, searchText, setSearchText }) => {
   const [focus, setFocus] = useState(false);
   // const [input, setInput] = useState("");
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const onChange = (event) => {
     // setInput(event.target.value);
     setSearchText(event.target.value);
-    event.target.value === "" ? setShow(false) : setShow(true);
+    // event.target.value === "" ? setShow(false) : setShow(true);
   };
   const resetInput = () => {
     // setInput("");
     setSearchText("");
-    setShow(false);
+    // setShow(false);
   };
   const onSubmit = (event) => {
     event.preventDefault();
@@ -37,7 +37,7 @@ const MusicSearchBar = ({ setQuery, searchText, setSearchText }) => {
     <Form onSubmit={onSubmit} focus={focus}>
       <img src={searchIcon} alt='' width='14'></img>
       <Input onFocus={onFocus} onBlur={onBlur} type='text' value={searchText} onChange={onChange} placeholder='곡 제목으로 검색' />
-      <IconBtn type='button' onClick={resetInput} show={show}>
+      <IconBtn type='button' onClick={resetInput} show={searchText !== ""}>
         <img src={xIcon} alt='' width='10'></img>
       </IconBtn>
     </Form>
