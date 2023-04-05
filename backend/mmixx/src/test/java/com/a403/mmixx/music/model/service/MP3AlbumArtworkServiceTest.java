@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class MP3AlbumArtworkServiceTest {
 
-    @Autowired
-    private MP3AlbumArtworkService mp3AlbumArtworkService;
+//    @Autowired
+//    private MP3AlbumArtworkService mp3AlbumArtworkService;
 
     @Test
     public void testExtractAlbumArtworkWithArtwork() throws IOException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
@@ -33,7 +33,7 @@ public class MP3AlbumArtworkServiceTest {
         byte[] content = Files.readAllBytes(path);
         MockMultipartFile file = new MockMultipartFile(filename, filename, contentType, content);
 
-        byte[] artworkData = mp3AlbumArtworkService.extractAlbumArtwork(file);
+        byte[] artworkData = MP3AlbumArtworkService.extractAlbumArtwork(path.toFile());
         System.out.println(artworkData);
 
         assertNotNull(artworkData);
@@ -48,7 +48,7 @@ public class MP3AlbumArtworkServiceTest {
         byte[] content = Files.readAllBytes(path);
         MockMultipartFile file = new MockMultipartFile(filename, filename, contentType, content);
 
-        byte[] artworkData = mp3AlbumArtworkService.extractAlbumArtwork(file);
+        byte[] artworkData = MP3AlbumArtworkService.extractAlbumArtwork(path.toFile());
 
         assertNotNull(artworkData);
         assertTrue(artworkData.length > 0);

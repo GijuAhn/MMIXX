@@ -1,63 +1,44 @@
 import styled from 'styled-components'
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation  } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
-import { useRecoilValue } from 'recoil';
-import {  userInfo } from 'atom/atom';
-import { useEffect, useState } from 'react';
+import { userInfo } from 'atom/atom';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
 
 const Playlist = () => {
   const navigate = useNavigate();
-  // const playlists = useRecoilValue(testPlaylist)
-  const [data, setData] = useState(null);
   const location = useLocation();
+  const [data, setData] = useState(null);
+  const [playlistType, setType] = useState('');
   const mine = 'mine';
   const global = 'global';
   const favorite = 'favorite';
-  // console.log(playlistType);
-  
-  // const atomIsLogin = useRecoilValue(isLogIn)
   const atomUser = useRecoilValue(userInfo)
-  
-  // const [playlistType, setType] = useState( location.pathname.includes('global') ? global
-  //   : (location.pathname.includes('favorite') ? favorite : mine));
-    const [playlistType, setType] = useState('');
-  
+
   useEffect(() => {
-<<<<<<< HEAD
-    // getPlaylists(atomUser.userSeq)
-    getPlaylists(10)
-      .then(
-        res => {
-          setData(res.data)
-          return res.data
-        }
-    )
-      .catch(err => console.log(err))
-  }, []);
-=======
     
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
+      console.log('global')
       globalPlaylists(atomUser.userSeq)
         .then(
           res => {
             setData(res.data)
             return res.data
           }
-          , setType(global)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
+      console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
             setData(res.data)
             return res.data
           }
-          , setType(favorite)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(favorite)).catch(err => console.log(err))
     } else { // 내 플레이리스트
       getPlaylists(atomUser.userSeq)
         .then(
@@ -65,12 +46,10 @@ const Playlist = () => {
             setData(res.data)
             return res.data
           }
-          , setType(mine)
-      ).catch(err => console.log(err))
+      ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
   }, [location, atomUser]);
->>>>>>> 364f8e73f2168502381fde9103d8f73d0fb3af35
 
 
   return (
@@ -113,7 +92,8 @@ const Playlist = () => {
                 return (
                   <MiniPlaylistCard
                     key={index}
-                    playlist={playlist}                   
+                    index={index}
+                    playlist={playlist}
                     onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
                       state : {
                         playlistTitle: `${playlist.playlistName}`,
@@ -153,9 +133,13 @@ const Top = styled.div`
 `
 
 const CardWrapper = styled.div`
+  // border: 1px solid pink;
   margin-top: 15px;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-row-gap: 25px; 
+  justify-items: center;
+  align-items: center;
 `
 
 export default Playlist;

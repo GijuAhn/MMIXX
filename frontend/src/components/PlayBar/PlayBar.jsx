@@ -1,21 +1,24 @@
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
 
-import { useRecoilValue } from 'recoil';
-import { testPlaylistMusic } from 'atom/atom';
 import VolumeControl from './VolumeControl'
 import PlayControl from './PlayControl'
+import { usePlayControl } from 'hooks/usePlayControl';
+import { useRecoilValue } from 'recoil';
+import { _nowMusic } from 'atom/music';
 
 const PlayBar = () => {
   const location = useLocation()
-  const playlist = useRecoilValue(testPlaylistMusic)
+  const nowMusic = useRecoilValue(_nowMusic)
+  // const { nowMusic, playMusic, playNext } = usePlayControl()
 
-  const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
+  const { coverImage, musicName, musicianName } = nowMusic
 
   if (location.pathname === '/mix' || location.pathname === '/' || location.pathname === '/mix/result' ) {
     return null
   }
-  
+
   return (
     <Wrapper>
       <PlayMusicInfo>
