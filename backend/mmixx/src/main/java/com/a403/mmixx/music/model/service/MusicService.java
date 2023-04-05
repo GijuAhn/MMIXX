@@ -179,6 +179,9 @@ public class MusicService {
 
 			log.info("***** Music Mix Success *****");
 			log.info("response : " + response);
+			if(response.replace("{\"", "").replace("\"}", "").equals("FAIL")) {
+				return null;
+			}
 			response = response.replace("{\"music\":\"", "");
 			response = response.replace("\"}", "");
 			log.info("response : " + response);
