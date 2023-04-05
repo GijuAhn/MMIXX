@@ -5,14 +5,16 @@ import { useLocation } from 'react-router-dom';
 import VolumeControl from './VolumeControl'
 import PlayControl from './PlayControl'
 import { usePlayControl } from 'hooks/usePlayControl';
+import { useRecoilValue } from 'recoil';
+import { _nowMusic } from 'atom/music';
 
 const PlayBar = () => {
   const location = useLocation()
-  const { nowMusic, playMusic, playNext } = usePlayControl()
+  const nowMusic = useRecoilValue(_nowMusic)
+  // const { nowMusic, playMusic, playNext } = usePlayControl()
 
   const { coverImage, musicName, musicianName } = nowMusic
 
-  
   if (location.pathname === '/mix' || location.pathname === '/' || location.pathname === '/mix/result' ) {
     return null
   }
