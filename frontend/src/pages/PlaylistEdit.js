@@ -69,7 +69,7 @@ const PlaylistEdit = () => {
               <input type="text" ref={inputRef} defaultValue={playlistInfo.playlistName }></input>
             </InputTitle>
             <InputRivateToggle>
-              공개여부
+              비공개여부
               <Switch checked={isChecked } onChange={handleChange} />
             </InputRivateToggle>
           </Top>

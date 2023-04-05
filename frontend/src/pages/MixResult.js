@@ -13,7 +13,6 @@ const MixResult = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [result, setResult] = useState('')
-  // const [responsed, setResponsed] = useState(false)
   const musicSeq = location.state && location.state.musicSeq;
   const presetSeq = location.state && location.state.presetSeq;
 
@@ -45,6 +44,11 @@ const MixResult = () => {
               musicName={result.origin_music.musicName}
               musicianName={result.origin_music.musicianName}
               coverImage={result.origin_music.coverImage}
+              isResult={false}
+              // musicUrl='null'
+              // musicName='Next Level'
+              // musicianName='aespa'
+              // coverImage='next level'
             >
             </ResultCard>
           </Original>
@@ -54,6 +58,11 @@ const MixResult = () => {
               musicName={result.mixed_music.musicName}
               musicianName={result.mixed_music.musicianName}
               coverImage={result.mixed_music.coverImage}
+              isResult={true}
+              // musicUrl='null'
+              // musicName='Next Level_mix'
+              // musicianName='aespa'
+              // coverImage='cover_image'
             >
             </ResultCard>
           </Mixed>
@@ -81,8 +90,8 @@ const ResultWrapper = styled(Wrapper)`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  width: 80vw;
-  height: 75vh;
+  width: 75vw;
+  height: 70vh;
 `
 const Original = styled(ContentWrapper)`
   align-items: start;

@@ -133,7 +133,7 @@ const Mix = () => {
             presetNum={3}
             musicName="Bass"
             musicLength="287629"
-            musicianName="Unknown"
+            musicianName="DJ Unknown"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/203c4359-944b-4820-b3a5-33d708ea1e7e.mp3"
             coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/d099aeb9-0219-4183-8898-742625efd300.jpg"

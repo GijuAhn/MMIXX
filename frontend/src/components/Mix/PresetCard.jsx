@@ -104,14 +104,17 @@ const CoverImage = styled.div`
   }
 `
 const Content = styled.div`
- display: flex;
- flex-direction: column;
- padding-left: 3vw
+  display: flex;
+  flex-direction: column;
+  padding-left: 3vw;
+  align-items: center;
+  pl: 1;
+  pb: 1;
 `
 
 const MusicPlayer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: 'flex-start';
-  padding-top: 1vh;
+  margin: 1px;
 `
