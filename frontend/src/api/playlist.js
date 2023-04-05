@@ -46,3 +46,11 @@ export const deletePlaylist = async (playlistSeq) => {
 export const modifyPlaylist = async (playlistSeq, playlist) => {
   return await instance.put(`/playlist/detail/${playlistSeq}`,  playlist)
 }
+// 플레이리스트 즐겨찾기 등록
+export const addFavoritePlaylist = async (favoritePlaylist) => {
+  return await instance.post(`/playlist/favorite`, favoritePlaylist)
+}
+// 플레이리스트 즐겨찾기 삭제
+export const deleteFavoritePlaylist = async (useSeq, playlistSeq) => {
+  return await instance.delete(`/playlist/favorite/${useSeq}/${playlistSeq}`)
+}
