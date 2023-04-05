@@ -379,7 +379,7 @@ public class PlaylistService {
         log.info("playlistMusicSeq : " + playlist_music_seq + "번호에 해당하는 곡 삭제");
         PlaylistMusic music = playlistMusicRepository.findById(playlist_music_seq).orElse(null);
         if(music != null) {
-        	playlistMusicRepository.deleteById(music.getPlaylistMusicSeq());
+        	playlistMusicRepository.deleteById(playlist_music_seq);
         } else {
         	log.info("곡을 찾을 수 없습니다.");
         	return "곡을 찾을 수 없습니다.";
