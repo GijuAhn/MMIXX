@@ -14,8 +14,8 @@ export const getPlaylistDetail = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}`)
 }
 // 플레이리스트 정보 조회
-export const getPlaylistInfo = async ( playlistSeq ) => {
-  return await instance(`/playlist/info/${playlistSeq}`)
+export const getPlaylistInfo = async ( playlistSeq, userSeq ) => {
+  return await instance(`/playlist/info/${playlistSeq}/${userSeq}`)
 }
 // 플레이리스트 생성
 export const postPlaylist = async (userSeq, playlist) => {
