@@ -5,19 +5,21 @@ import FavoriteIcon from '@mui/icons-material/Favorite'; // 하트
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // 빈 하트
 import { InsightsOutlined } from "@mui/icons-material";
 
-const MiniPlaylistCard = ({ playlist, onClick }) => {
+const MiniPlaylistCard = ({ playlist, playlistType, onClick }) => {
   const { playlistName } = playlist
+  const { type } = playlistType
   const [coverImage, setCoverImg] = useState('')
   const [isOverflowed, setIsOverflowed] = useState(false);
   const pRef = useRef(null)
 
   useEffect(() => {
+    // console.log("****", playlist.playlistSeq)
     getPlaylistCoverImage(playlist.playlistSeq)
       .then(res => {
       // console.log(res);
       setCoverImg(res.data);
     })
-  }, [])
+  }, [playlist, playlistType])
 
   useEffect(() => {
     if (pRef) {
