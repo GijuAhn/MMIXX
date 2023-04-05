@@ -139,9 +139,9 @@ const Mix = () => {
       
       <ButtonStyle>
         <DefaultBtn 
-          onClick={ () => {
+          onClick={ () => 
             navigate('/mix/result', { state: { musicSeq:musicSeq, presetSeq:presetSeq } })
-          }}
+          }
         >변환하기</DefaultBtn>
       </ButtonStyle>
     </StyledWrapper>

@@ -60,7 +60,12 @@ const MixSelectMusic = () => {
       <CreateBtn 
         onClick={() => 
           navigate('/mix', { 
-          state: {selectedMusic}
+          state: {
+            coverImage : selectedMusic.coverImage,
+            musicName : selectedMusic.musicName,
+            musicianName : selectedMusic.musicianName,
+            musicSeq : selectedMusic.musicSeq
+          }
         })
       }>
         선택 완료
