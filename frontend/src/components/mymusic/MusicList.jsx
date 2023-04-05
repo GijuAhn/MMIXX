@@ -90,7 +90,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
     if (didMount3.current) {
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
 
-      setSearchText(query);
+      if (setSearchText) setSearchText(query);
       setShowNew(false);
 
       page.current = 1;
