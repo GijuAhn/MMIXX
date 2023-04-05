@@ -89,9 +89,15 @@ public class PlaylistController {
     }
 
 
+//    @ApiOperation(value = "플레이리스트 정보 조회")
+//    @GetMapping("/info/{playlistSeq}")
+//    public PlaylistSimpleDto getPlaylistInfo(@PathVariable int playlistSeq) {
+//        return playlistService.getPlaylistInfo(playlistSeq);
+//    }
+
     @ApiOperation(value = "플레이리스트 정보 조회")
     @GetMapping("/info/{playlistSeq}")
-    public PlaylistSimpleDto getPlaylistInfo(@PathVariable int playlistSeq) {
+    public PlaylistWithFavoriteSimpleDto getPlaylistInfo(@PathVariable int playlistSeq) {
         return playlistService.getPlaylistInfo(playlistSeq);
     }
 

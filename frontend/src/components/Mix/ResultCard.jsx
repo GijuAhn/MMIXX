@@ -1,59 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
-import { useTheme } from '@mui/material/styles';
-// import { testPlaylistMusic } from 'atom/atom';
-// import { useRecoilValue } from 'recoil';
-import theme from 'styles/theme';
-import { PlaySlider, PlayIcons } from 'components/PlayBar';
+import Box from '@mui/material/Box';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { PlaySlider } from 'components/PlayBar';
+import { _mix_now } from 'atom/music';
+import theme from 'styles/theme.jsx';
+// import ColorThief from '../../../node_modules/colorthief/dist/color-thief.mjs'
 
+// const colorThief = new ColorThief();
 const ResultCard = (props) => {
-  const theme = useTheme();
-
   const musicUrl = props.musicUrl
   const musicName = props.musicName
   const musicianName = props.musicianName
   const coverImage = props.coverImage
+  const isResult = props.isResult
 
-  // const playlist = useRecoilValue(testPlaylistMusic)
-  // const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
+  // useEffect(() => {
+  //   if (coverImage.complete){
+  //     colorThief.getColor(coverImage)
+  //   } else {
+  //     console.log('difesdklfjsijdlkjfsldeifjdsklfjiedsjl')
+  //   }
+  // },[])
+  
+  const [ mixPlay ] = useRecoilState(_mix_now)
+   
+   const handleMixPlay = () => {
+     mixPlay.src = props.musicUrl
+     mixPlay.play()
+   }
   return (
-    <ResultCardWrapper>
-      <Card>
+      <Card isResult={isResult}>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <CoverImage>
           <img src={ coverImage } alt={ musicName } />
         </CoverImage>
         <Content>
-          <h2>{ musicName }</h2>
-          <p>{ musicianName }</p>
+          <div style={{ color: `${theme.palette.light}`, fontSize: '2.5vw', fontWeight: 'bold', justifyContent: 'flex-start' }}>
+            { musicName }
+          </div>
+          <div style={{ color: `${theme.palette.light}`, fontSize: '1vw', fontWeight: 'normal', justifyContent: 'flex-start' }}>
+            { musicianName }
+          </div>
         </Content>
+        </Box>
+        <MusicPlayer>
+          <PlaySlider />
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
+        </MusicPlayer>
       </Card>
-      <MusicPlayer>
-        <PlaySlider />
-        <PlayIcons />
-      </MusicPlayer>
-    </ResultCardWrapper>
   )
 }
 
 export default ResultCard
 
-const ResultCardWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid;
-  border-radius: 5px;
-  width: 30vw;
-  height: 30vh;
-`
-
 const Card = styled.div`
   display: flex;
   flex-direction: row;
+  flex-direction: column;
+  border: 3px solid ${props => (props.isResult ? theme.palette.secondary : theme.palette.light)};
+  border-radius: 10px;
+  width: 30vw;
+  height: 30vh;
   padding: 10px;
 `
 const Content = styled.div`
   display: flex;
   flex-direction: column; 
+  padding-left: 3vw;
   align-items: center;
   pl: 1;
   pb: 1;
