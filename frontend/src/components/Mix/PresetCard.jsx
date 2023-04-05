@@ -1,41 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
-
 import styled from 'styled-components';
-import { testPlaylistMusic } from 'atom/atom';
+import Box from '@mui/material/Box';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import theme from 'styles/theme';
-import { PlayIcons, PlaySlider } from 'components/PlayBar';
 import { _mix_now } from 'atom/music';
+import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
 const PresetCard = (props, {presetSeqFunc}) => {
-  const presetName = props.presetName
-  const presetNum = props.presetNum
-  const musicName = props.musicName
-  const musicLength = props.musicLength
-  const musicianName = props.musicianName
-  const presetUrl = props.presetUrl
-  const coverImage = props.coverImage
+  const {
+    presetName,
+    presetNum,
+    musicName,
+    musicLength,
+    musicianName,
+    presetUrl,
+    coverImage
+  } = props
   const [isSelected, setIsSelected] = useState(true)
-  // const playlist = useRecoilValue(testPlaylistMusic)
-  // const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
-  
+
   const [ mixPlay ] = useRecoilState(_mix_now)
   
   const handleMixPlay = () => {
-    mixPlay.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/ed104a90-e0fb-430b-beea-0a83775a1be4.mp3'
-    mixPlay.play()
+    if (!mixPlay.paused) {
+      mixPlay.pause()
+    } else {
+      mixPlay.src = props.presetUrl
+      mixPlay.play()
+    }
+    if(mixPlay.src === presetUrl) {
+      console.log('일치')
+    }
   }
   
   useEffect(() => {
     if (props.selNum === presetNum) {
       setIsSelected(true)
-      // console.log('선택된 프리셋', props.selNum)
     } else {
       setIsSelected(false)
-      // console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
 
@@ -63,9 +67,13 @@ const PresetCard = (props, {presetSeqFunc}) => {
         {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
           <PlayArrowIcon sx={{ height: 38, width: 38 }} />
         </IconButton> */}
-        <PlaySlider />
+        <PlaySlider audioState={mixPlay}/>
         {/* <PlayIcons /> */}
-        <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
+        {mixPlay.paused ?
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        :
+          <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        }
       </MusicPlayer>
     </Card>
   );

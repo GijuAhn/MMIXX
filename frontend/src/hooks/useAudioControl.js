@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
-import { useRecoilValue } from "recoil"
+import { useRecoilState } from "recoil"
 
-import { _now } from "atom/music"
+import { audioState } from "atom/music"
 
 export const useAudioControl = () => {
-  const audioElement = useRecoilValue(_now)
+  const [audio, setAudio] = useRecoilState(audioState)
 
   useEffect(() => {
     // audioElement.u
   }, [])
-  return { audioElement }
+  return { audio, setAudio }
 }

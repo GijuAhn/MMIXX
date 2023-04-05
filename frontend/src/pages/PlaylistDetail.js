@@ -9,7 +9,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
 import { CustomTable } from "components/mymusic"
-import { useRecoilValue } from "recoil";
 import { _now } from "atom/music"
 import { usePlayControl } from "hooks/usePlayControl"
 
@@ -22,7 +21,7 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const { createNowPlaylist } = usePlayControl()
+  const { audioElement, createNowPlaylist, createNowMusic } = usePlayControl()
 
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
@@ -35,6 +34,7 @@ const PlaylistDetail = () => {
    */
   const handlePlaying = () => {
     createNowPlaylist(playlistMusic)
+    createNowMusic()
   }
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const PlaylistDetail = () => {
         // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
-        console.log('asdfasdfasdf')
       })
       .catch(err => console.log(err))
   }, []);
@@ -81,21 +80,14 @@ const PlaylistDetail = () => {
             </PrivateToggle>
           </Top>
           <Bottom style={{ border: '1px solid blue'}}>
+            {/* 재생하기 */}
             <StylePlayCircleFilledRoundedIcon 
               sx={{ fontSize: '40px'}}
               onClick={handlePlaying}
               disabled={playlistMusic.length === 0}
             />
             <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
-            
-            {/* <div>
-              <DefaultBtn onClick={confirmDelete}>
-                삭제
-              </DefaultBtn>
-              <DefaultBtn onClick={() => navigate("/playlist/edit")}>
-                수정
-              </DefaultBtn>    
-            </div>          */}
+
           </Bottom>
         </RightContent>
       </InfoContent>
