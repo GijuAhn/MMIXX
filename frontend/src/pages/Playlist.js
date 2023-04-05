@@ -16,12 +16,12 @@ const Playlist = () => {
   const mine = 'mine';
   const global = 'global';
   const favorite = 'favorite';
-  const atomUser = useRecoilValue(userInfo)
+  const atomUser = useRecoilValue(userInfo);
 
   useEffect(() => {
     console.log(location)
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
-      console.log('global')
+      // console.log('global')
       globalPlaylists(atomUser.userSeq)
         .then((res) => {
           setData(res.data)
@@ -38,10 +38,11 @@ const Playlist = () => {
       // ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
-      console.log('favorite')
+      // console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
+            // console.log(res.data)
             setData(res.data)
             return res.data
           }
@@ -49,22 +50,16 @@ const Playlist = () => {
     } else { // 내 플레이리스트
       console.log('mine')
       getPlaylists(atomUser.userSeq)
-        .then((res) => {
-          setData(res.data)
-          setType('mine')
-          console.log(res.data)
-          console.log(data)
-        })
-        .catch((err) => console.log(err))
-      //   .then(
-      //     res => {
-      //       setData(res.data)
-      //       return res.data
-      //     }
-      // ).then(_ => setType(mine)).catch(err => console.log(err))
+        .then(
+          res => {
+            // console.log(res.data)
+            setData(res.data)
+            return res.data
+          }
+      ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
-  }, [location, atomUser]);
+  }, [location, playlistType]);
 
 
   return (
@@ -125,12 +120,14 @@ const Playlist = () => {
         {/* {data != null && data.length > 0 ?
           <>
             <CardWrapper>
-              {data.map((playlist, index) => {
+            
+              {data.map((playlist, index, playlistType) => {
                 return (
                   <MiniPlaylistCard
                     key={index}
                     index={index}
                     playlist={playlist}
+                    playlistType={playlistType}
                     onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
                       state : {
                         playlistTitle: `${playlist.playlistName}`,

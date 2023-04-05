@@ -425,10 +425,10 @@ public class PlaylistService {
 
     @Transactional
     public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
-        Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+        Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUserSeq(), favoriteRequestDto.getPlaylistSeq());
         if(favo == null) {
 //    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
-            Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
+            Favorite favorite = new Favorite(new User(favoriteRequestDto.getUserSeq()), new Playlist(favoriteRequestDto.getPlaylistSeq()));
             favoriteRepository.save(favorite);
             return "SUCCESS";
         } else {
@@ -470,7 +470,7 @@ public class PlaylistService {
     /**
      * 플레이리스트 정보 가져오기
      */
-    public PlaylistWithFavoriteSimpleDto getPlaylistInfo(int playlistSeq) {
+    public PlaylistWithFavoriteSimpleDto getPlaylistInfo(int playlistSeq, int userSeq) {
         PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
         Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
         if (playlist == null) {
@@ -484,7 +484,7 @@ public class PlaylistService {
         playlistWithFavoriteSimpleDto.setUserSeq(playlist.getUserSeq());
 
         // set favorite status
-        Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(playlist.getUserSeq(), playlist.getPlaylistSeq());
+        Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistSeq);
         if (favorite != null) {
             playlistWithFavoriteSimpleDto.setIsFavorite(true);
         } else {
