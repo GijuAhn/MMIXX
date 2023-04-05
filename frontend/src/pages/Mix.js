@@ -28,16 +28,15 @@ const Mix = () => {
 
   const presetSeqFunc = (x) => {
     setPresetSeq(x)
-    console.log('선택한 프리셋 번호 : ',x)
   }
 
   useEffect(() => {
-    console.log('******* 믹스할 음악 *******')
-    console.log(musicSelected)
-    console.log(musicName)
-    console.log(musicSeq)
-    console.log(musicianName)
-    console.log('****************************')
+    // console.log('******* 믹스할 음악 *******')
+    // console.log(musicSelected)
+    // console.log(musicName)
+    // console.log(musicSeq)
+    // console.log(musicianName)
+    // console.log('****************************')
     getPreset()
     .then((res) => setPresetData(res.data), setIsPreset(true))
     .catch((err) => console.log(err))
@@ -49,7 +48,7 @@ const Mix = () => {
   }, [])
 
   useEffect(() => {
-    console.log('presetData : ', presetData) 
+    // console.log('presetData : ', presetData) 
   }, [presetData]);
 
   return (
@@ -109,7 +108,7 @@ const Mix = () => {
             musicianName="B.J.Thomas"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/4efeaba5-e758-4015-8bc1-1e4ed502f9b1.wav"
-            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/fbf4bb0f-b87e-4f17-aba6-11a75b20252c.jpg"
+            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/fbf4bb0f-b87e-4f17-aba6-11a75b20252c.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
@@ -123,7 +122,7 @@ const Mix = () => {
             musicLength="404836"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c0a34dff-ec72-4be3-804a-d9bc037da373.wav"
-            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/e8a6dbf9-1def-477b-bd2b-cd9e30e409c6.jpg"
+            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/e8a6dbf9-1def-477b-bd2b-cd9e30e409c6.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
@@ -137,7 +136,7 @@ const Mix = () => {
             musicianName="Unknown"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/203c4359-944b-4820-b3a5-33d708ea1e7e.mp3"
-            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/d099aeb9-0219-4183-8898-742625efd300.jpg"
+            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/d099aeb9-0219-4183-8898-742625efd300.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
@@ -151,7 +150,7 @@ const Mix = () => {
             musicianName="방탄소년단"
             albumName="LOVE YOURSELF 承 `Her`"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/239b93b6-5d68-4d2f-92e1-e1e4390e6dc9.mp3"
-            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/ffa46eba-2ec1-437d-ae49-674e19e2ef2e.jpg"
+            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/ffa46eba-2ec1-437d-ae49-674e19e2ef2e.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
@@ -165,7 +164,7 @@ const Mix = () => {
             musicianName="Brian Tyler"
             albumName="아이언맨 3 OST"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/7926ce00-3f1c-445b-a70f-d20485fdfd98.mp3"
-            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/7c64870d-4f8a-4b8b-a29a-862b59ee60bd.jpg"
+            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/7c64870d-4f8a-4b8b-a29a-862b59ee60bd.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>

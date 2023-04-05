@@ -5,6 +5,9 @@ import localStorageEffect from './_local'
 export const audioState = atom({
   key: 'audioState',
   default: new Audio(),
+  effects: [
+    localStorageEffect('_now')
+  ]
 })
 
 export const _mix_now = atom({
@@ -28,6 +31,9 @@ export const _nowMusic = atom({
     musicianName: '',
     playing: false,
   },
+  effects: [
+    localStorageEffect('_nowMusic')
+  ]
 })
 
 export const playlistQueue = atom({
