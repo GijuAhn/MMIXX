@@ -13,30 +13,29 @@ import { _mix_now } from 'atom/music';
 const PresetCard = (props, {presetSeqFunc}) => {
   const presetName = props.presetName
   const presetNum = props.presetNum
-  // const musicName = props.musicName
-  // const musicLength = props.musicLength
-  // const musicianName = props.musicianName
-  // const presetUrl = props.presetUrl
-  // const coverImage = props.coverImage
+  const musicName = props.musicName
+  const musicLength = props.musicLength
+  const musicianName = props.musicianName
+  const presetUrl = props.presetUrl
+  const coverImage = props.coverImage
   const [isSelected, setIsSelected] = useState(true)
-  const playlist = useRecoilValue(testPlaylistMusic)
-  const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
+  // const playlist = useRecoilValue(testPlaylistMusic)
+  // const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   
   const [ mixPlay ] = useRecoilState(_mix_now)
-
+  
   const handleMixPlay = () => {
     mixPlay.src = props.presetUrl
     mixPlay.play()
   }
-
+  
   useEffect(() => {
-    console.log(props.selNum)
     if (props.selNum === presetNum) {
       setIsSelected(true)
-      console.log('선택된 프리셋', props.selNum)
+      // console.log('선택된 프리셋', props.selNum)
     } else {
       setIsSelected(false)
-      console.log('선택되지 않은 프리셋', props.selNum)
+      // console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
 
