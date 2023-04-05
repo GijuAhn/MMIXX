@@ -5,14 +5,18 @@ import { uploadMusic } from "api/mymusic";
 import upload from "assets/upload.png";
 import musicFile from "assets/music-file.png";
 import cancel from "assets/cancel.png";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userInfo } from "atom/atom";
+import { _show_new, _new_music_list } from "atom/mymusic";
 import CustomToast from "./CustomToast";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const MusicUploadBtn = () => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+
+  const setShowNew = useSetRecoilState(_show_new);
+  const setNewMusicList = useSetRecoilState(_new_music_list);
 
   const wrapperRef = useRef(null);
   const input = useRef(null);
@@ -93,6 +97,8 @@ const MusicUploadBtn = () => {
     setLoading(true);
     setToastInfo(true);
 
+    setShowNew(false);
+
     const formData = new FormData();
     const userInfo = { userSeq: user ? user.userSeq : 0 };
     // const config = { headers: { "content-type": "multipart/form-data" } };
@@ -103,15 +109,9 @@ const MusicUploadBtn = () => {
 
     uploadMusic(formData)
       .then(({ data }) => {
-        // console.log(response);
-        // array
-        // data.coverImage
-        // data.mixed, data.inst
-        // data.musicName
-        // data.musicianName
-        // data.albumName
-        // data.musicSeq
-        // data.musicUrl
+        setNewMusicList(data);
+        setShowNew(true);
+
         setToastSuccess(true);
       })
       .catch((error) => {
