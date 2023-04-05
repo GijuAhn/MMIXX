@@ -192,6 +192,7 @@ const CoverImage = styled.div`
 const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 10px;
+
   width: 87%;
   font-size: 14px;
   font-weight: 400;
@@ -286,12 +287,134 @@ const TdText = styled.td`
     props.padding &&
     `padding-top: 5px;
   padding-right: 10px;`};
-
-  // display: inline-block;
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // vertical-align: middle;
 `;
+
+// const Table = styled.table`
+//   // border-collapse: separate;
+//   // border-spacing: 0 10px;
+//   margin-top: 10px;
+//   display: flex;
+//   flex-direction: column;
+
+//   width: 87%;
+//   font-size: 14px;
+//   font-weight: 400;
+
+//   ${({ isNew }) =>
+//     isNew &&
+//     css`
+//       animation: ${blink} 0.7s linear 2;
+//     `}
+//   ${({ isOut }) =>
+//     isOut &&
+//     css`
+//       animation: ${fadeOut} 0.25s linear forwards;
+//     `}
+// `;
+
+// const Tr = styled.tr`
+//   background-color: ${({ theme }) => theme.palette.darkgray};
+//   &:hover {
+//     background-color: ${({ theme }) => theme.palette.hover};
+//   }
+//   height: 65px;
+
+//   display: flex;
+//   align-items: center;
+//   margin-bottom: 10px;
+// `;
+
+// const Radio = styled.td`
+//   background-color: ${({ theme }) => theme.palette.darkAlt};
+//   width: 5%;
+// `;
+
+// const TdRound = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 2px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+//   `}
+
+//   border-radius: 15px 0 0 15px;
+//   padding-left: 10px;
+// `;
+
+// const Td = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 0px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+
+//   &:last-child {
+//     border-width: 2px 2px 2px 0px;
+//     border-style: solid;
+//     border-color: ${theme.palette.secondary};
+//   }
+//   `}
+
+//   font-size: 14px;
+//   font-weight: ${(props) => props.weight || "200"};
+//   font-family: "Heebo", sans-serif;
+//   width: ${(props) => props.width || "auto"};
+//   text-align: ${(props) => props.align || "left"};
+//   ${(props) =>
+//     props.padding &&
+//     `padding-top: 5px;
+//     padding-right: 10px;`};
+
+//   // &:first-child {
+//   //   border-radius: 15px 0 0 15px;
+//   //   // margin-left: 10px;
+//   // }
+//   &:last-child {
+//     border-radius: 0 15px 15px 0;
+//   }
+
+//   // position: relative;
+//   // &::before {
+//   //   content: "";
+//   //   display: block;
+//   //   position: absolute;
+//   //   top: 0;
+//   //   bottom: 0;
+//   //   left: 0;
+//   //   right: 0;
+//   //   border-radius: 10px;
+//   //   z-index: -1;
+//   // }
+// `;
+
+// const TdText = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 0px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+//   `}
+
+//   font-size: 14px;
+//   font-weight: ${(props) => props.weight || "200"};
+//   font-family: "Heebo", sans-serif;
+//   width: ${(props) => props.width || "auto"};
+//   text-align: ${(props) => props.align || "left"};
+//   ${(props) =>
+//     props.padding &&
+//     `padding-top: 5px;
+//   padding-right: 10px;`};
+
+//   padding-right: 10px;
+
+//   display: inline-block;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   vertical-align: middle;
+// `;
 
 export default CustomTable;
