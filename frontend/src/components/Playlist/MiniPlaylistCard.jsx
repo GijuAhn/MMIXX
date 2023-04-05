@@ -83,7 +83,7 @@ const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)`
 `
 
 const PlaylistTitle = styled.p`
-  border: 1px dotted pink;
+  // border: 1px dotted pink;
   align-self: end;
   padding: 15px;
   position: absolute;
