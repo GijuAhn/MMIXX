@@ -1,9 +1,10 @@
 package com.a403.mmixx.playlist.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
 public class FavoriteRequestDto {
-	private Integer user_seq;
-	private Integer playlist_seq;
+	private Integer userSeq;
+	private Integer playlistSeq;
 }
