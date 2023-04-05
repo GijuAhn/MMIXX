@@ -23,20 +23,19 @@ const PresetCard = (props, {presetSeqFunc}) => {
   // const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   
   const [ mixPlay ] = useRecoilState(_mix_now)
-
+  
   const handleMixPlay = () => {
     mixPlay.src = props.presetUrl
     mixPlay.play()
   }
-
+  
   useEffect(() => {
-    console.log(props.selNum)
     if (props.selNum === presetNum) {
       setIsSelected(true)
-      console.log('선택된 프리셋', props.selNum)
+      // console.log('선택된 프리셋', props.selNum)
     } else {
       setIsSelected(false)
-      console.log('선택되지 않은 프리셋', props.selNum)
+      // console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
 
