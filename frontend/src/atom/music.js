@@ -15,14 +15,6 @@ export const _mix_now = atom({
   default: new Audio()
 })
 
-export const _now = atom({
-  key: '_now_playing',
-  default: null,
-  effects: [
-    localStorageEffect('_now')
-  ]
-})
-
 export const _nowMusic = atom({
   key: '_nowMusic',
   default: {
@@ -30,15 +22,21 @@ export const _nowMusic = atom({
     musicName: '',
     musicianName: '',
     playing: false,
+    currentTime: 0,
   },
   effects: [
     localStorageEffect('_nowMusic')
   ]
 })
 
+export const _isPlaying = atom({
+  key: '_isPlaying',
+  default: false
+})
+
 export const playlistQueue = atom({
   key: 'Queue',
-  default: [],
+  default: {},
   effects: [
     localStorageEffect('_queue')
   ]
@@ -66,8 +64,6 @@ export const _nowSelector = selector({
     set(playlistQueue, newValue)
   },
   effects: [
-    localStorageEffect('_test', _now)
+    localStorageEffect('_test')
   ]
 })
-
-
