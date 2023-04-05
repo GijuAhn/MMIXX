@@ -3,23 +3,27 @@ import styled from "styled-components";
 import xIcon from "assets/reset-search.png";
 import searchIcon from "assets/search.png";
 
-const MusicSearchBar = ({ setQuery }) => {
+const MusicSearchBar = ({ setQuery, searchText, setSearchText }) => {
   const [focus, setFocus] = useState(false);
-  const [input, setInput] = useState("");
+  // const [input, setInput] = useState("");
   const [show, setShow] = useState(false);
   const onChange = (event) => {
-    setInput(event.target.value);
+    // setInput(event.target.value);
+    setSearchText(event.target.value);
     event.target.value === "" ? setShow(false) : setShow(true);
   };
   const resetInput = () => {
-    setInput("");
+    // setInput("");
+    setSearchText("");
     setShow(false);
   };
   const onSubmit = (event) => {
     event.preventDefault();
     // console.log(query);
     // if (input === "" || input.replace(/\s/g, "") === "") return;
-    setQuery(input);
+
+    // setQuery(input);
+    setQuery(searchText);
   };
   const onFocus = () => {
     // console.log("focus!");
@@ -32,14 +36,7 @@ const MusicSearchBar = ({ setQuery }) => {
   return (
     <Form onSubmit={onSubmit} focus={focus}>
       <img src={searchIcon} alt='' width='14'></img>
-      <Input
-        onFocus={onFocus}
-        onBlur={onBlur}
-        type='text'
-        value={input}
-        onChange={onChange}
-        placeholder='곡 제목으로 검색'
-      />
+      <Input onFocus={onFocus} onBlur={onBlur} type='text' value={searchText} onChange={onChange} placeholder='곡 제목으로 검색' />
       <IconBtn type='button' onClick={resetInput} show={show}>
         <img src={xIcon} alt='' width='10'></img>
       </IconBtn>
