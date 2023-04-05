@@ -5,16 +5,17 @@ import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useRecoilValue } from "recoil"
+import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
 import { CustomTable } from "components/mymusic"
-import { _now } from "atom/music"
 import { usePlayControl } from "hooks/usePlayControl"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { userInfo } from 'atom/atom';
-import { useRecoilValue } from "recoil"
+import { getUser } from "api/user"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -25,19 +26,40 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const { audioElement, createNowPlaylist } = usePlayControl()
 
+  const [ playlistUserInfo, setPlaylistUserInfo ] = useState({
+    profileImageUrl: '',
+    userName: '',
+  })
+  const { 
+    audioElement, 
+    nowMusic, 
+    queue, 
+    isPlaying, 
+    setIsPlaying, 
+    createNowPlaylist, 
+    createNowMusic 
+  } = usePlayControl(playlistSeq)
+  
   // user 
   const atomUser = useRecoilValue(userInfo)
 
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
 
+  useEffect(() => {
+  }, [nowMusic])
   /**
    * 플레이리스트 재생
    */
-  const handlePlaying = () => {
-    createNowPlaylist(playlistMusic)
+  const handlePlaying = async () => {
+    if (queue && queue === playlistMusic) {
+      console.log(' same! ')
+      audioElement.paused ? audioElement.play() : audioElement.pause()
+    } else {
+      const res = await createNowPlaylist(playlistMusic)
+      createNowMusic(res)
+    }
   }
 
   // 즐겨찾기
@@ -74,10 +96,15 @@ const PlaylistDetail = () => {
         // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        return res.data.userSeq
+      })
+      .then(res => {
+        getUser(res)
+          .then(res => setPlaylistUserInfo(res.data))
       })
       .catch(err => console.log(err))
     
-  }, []);
+  }, [playlistSeq]);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -92,7 +119,7 @@ const PlaylistDetail = () => {
             <AlbumIcon color="white" fontSize="large"/>
           }
         </PlaylistCover>
-        <RightContent style={{ border: '1px solid blue'}}>
+        <RightContent>
             {isFavorite ?
               <StyleFavoriteIcon onClick={heartClick } />
               :
@@ -102,25 +129,36 @@ const PlaylistDetail = () => {
             <PlaylistTitle>
               <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
+            <PlaylistUser>
+              <img src={playlistUserInfo.profileImageUrl} alt="만든 사람"/>
+              <span>{playlistUserInfo.userName}</span>
+            </PlaylistUser>
             <PrivateToggle>
               비공개여부
               <Switch checked={isChecked } />
             </PrivateToggle>
           </Top>
-          <Bottom style={{ border: '1px solid blue'}}>
+          <Bottom>
             {/* 재생하기 */}
-            <StylePlayCircleFilledRoundedIcon 
-              sx={{ fontSize: '40px'}}
-              onClick={handlePlaying}
-              disabled={playlistMusic.length === 0}
-            />
+            {isPlaying && queue.playlistSeq === playlistSeq? 
+              <StopCircleRoundedIcon 
+                sx={{ fontSize: '40px'}}
+                onClick={handlePlaying}
+              />
+            :
+              <StylePlayCircleFilledRoundedIcon 
+                sx={{ fontSize: '40px'}}
+                onClick={handlePlaying}
+                disabled={playlistMusic.length === 0}
+              />
+            }
             <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
 
           </Bottom>
         </RightContent>
       </InfoContent>
 
-      <CustomTable musicList={ playlistMusic }/>        
+      <CustomTable playlistSeq={playlistSeq} musicList={ playlistMusic }/>        
     </StyleWrapper>
   );
 };
@@ -255,6 +293,7 @@ const RightContent = styled.div`
   flex-direction: column;
   padding: 5px 10px;
   position: relative;
+  margin-left: 20px;
 `
 
 const Top = styled.div`
@@ -333,6 +372,17 @@ const PlaylistTitle = styled.div`
     
     :focus {
       outline: none;
+  }
+`
+
+const PlaylistUser = styled.div`
+  justify-content: start;
+  img {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    border-radius: 50%;
+    margin-right: 10px;
   }
 `
 

@@ -8,9 +8,11 @@ import UnCheck from "assets/check.png";
 import Check from "assets/check-selected.png";
 import More from "assets/more-vertical.png";
 import { useRef, useEffect, useState } from "react";
+import { usePlayControl } from "hooks/usePlayControl";
 
 const CustomTable = ({
   musicList,
+  playlistSeq,
   // hasIcon = true,
   radio = false,
   checkMusic,
@@ -25,6 +27,8 @@ const CustomTable = ({
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
   const checkedList = useRef([]);
+
+  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq)
 
   const onCheck = (event) => {
     if (radio) {
@@ -63,21 +67,22 @@ const CustomTable = ({
 
       const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
 
-      // console.log("deletedIndex", deletedIndex);
       if (deletedIndex === -1) {
-        // console.log("추가!");
         checkedList.current.push({
           music_seq: newMusicSeq,
           sequence: newMusicSeq,
         });
       } else {
-        // console.log("삭제!");
         checkedList.current.splice(deletedIndex, 1);
       }
-      // console.log(checkedList.current);
       checkMusicList(checkedList.current);
     }
   };
+
+  const handlePlayClick = async (start) => {
+    const res = await createNowPlaylist(musicList, start)
+    createNowMusic(res)
+  }
 
   const [isOut, setIsOut] = useState(false);
   useEffect(() => {
@@ -133,7 +138,7 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Play musicSeq={music.musicSeq}></Play>
+                <Play onClick={() => handlePlayClick(index)} musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
             {!radio && !checkBox ? (

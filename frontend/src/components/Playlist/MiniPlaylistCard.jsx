@@ -82,7 +82,7 @@ const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)`
 
 const PlaylistTitle = styled.p`
   align-self: end;
-  padding: 15px;
+  padding: 5px;
   position: absolute;
   left: 15px;
   color: ${({theme}) => theme.palette.light};
@@ -93,7 +93,7 @@ const PlaylistTitle = styled.p`
   // overflow: hidden; // 넘치는 부분을 숨김
   text-overflow: ellipsis;
   transform: translateY(100%);
-  transition: transform 0.3s ease-out;
+  transition: transform 0.1s ease-out;
 
   ${CardWrapper}:hover & {
     transform: translateY(0);
