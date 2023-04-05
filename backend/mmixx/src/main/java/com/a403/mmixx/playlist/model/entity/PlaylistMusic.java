@@ -26,7 +26,7 @@ public class PlaylistMusic {
     @JoinColumn(name = "playlist_seq", referencedColumnName = "playlist_seq", nullable = false)
     private Playlist playlist;
 
-    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Music.class, fetch = FetchType.LAZY)
 //    Unable to find column with logical name: music_seq in org.hibernate.mapping.Table(music) and its related supertables and secondary tables
 //    @JoinColumn(name = "music_seq", referencedColumnName = "music_seq", nullable = false)
     @JoinColumn(name = "music_seq", referencedColumnName = "music_seq", nullable = false)
