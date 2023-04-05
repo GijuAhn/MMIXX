@@ -1,26 +1,19 @@
-<<<<<<< HEAD
-import { atom, selector} from 'recoil'
-
-export const nowPlaying = atom({
-  key: 'nowPlaying',
-  default: [],
-})
-
-export const nowPlayingMusic = selector({
-  key: 'nowPlayingMusic',
-  get: ({ get }) => {
-    const music = get(nowPlaying).map((item, i) => {
-      return {
-        ...item,
-        isPlaying: false,
-      }
-    })
-  }
-})
-=======
 import { atom, selector } from 'recoil'
 
 import localStorageEffect from './_local'
+
+export const audioState = atom({
+  key: 'audioState',
+  default: new Audio(),
+  effects: [
+    localStorageEffect('_now')
+  ]
+})
+
+export const _mix_now = atom({
+  key: '_mix_now',
+  default: new Audio()
+})
 
 export const _now = atom({
   key: '_now_playing',
@@ -38,6 +31,9 @@ export const _nowMusic = atom({
     musicianName: '',
     playing: false,
   },
+  effects: [
+    localStorageEffect('_nowMusic')
+  ]
 })
 
 export const playlistQueue = atom({
@@ -75,4 +71,3 @@ export const _nowSelector = selector({
 })
 
 
->>>>>>> 364f8e73f2168502381fde9103d8f73d0fb3af35

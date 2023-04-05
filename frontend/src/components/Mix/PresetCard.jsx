@@ -1,36 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-
 import styled from 'styled-components';
-import { testPlaylistMusic } from 'atom/atom';
-import { useRecoilValue } from 'recoil';
+import Box from '@mui/material/Box';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import theme from 'styles/theme';
+import { _mix_now } from 'atom/music';
 import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
 const PresetCard = (props, {presetSeqFunc}) => {
-  const presetName = props.presetName
-  const presetNum = props.presetNum
-  // const musicName = props.musicName
-  // const musicLength = props.musicLength
-  // const musicianName = props.musicianName
-  // const presetUrl = props.presetUrl
-  // const coverImage = props.coverImage
+  const {
+    presetName,
+    presetNum,
+    musicName,
+    musicLength,
+    musicianName,
+    presetUrl,
+    coverImage
+  } = props
   const [isSelected, setIsSelected] = useState(true)
-  const playlist = useRecoilValue(testPlaylistMusic)
-  const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
+
+  const [ mixPlay ] = useRecoilState(_mix_now)
+  
+  const handleMixPlay = () => {
+    if (!mixPlay.paused) {
+      mixPlay.pause()
+    } else {
+      mixPlay.src = props.presetUrl
+      mixPlay.play()
+    }
+    if(mixPlay.src === presetUrl) {
+      console.log('일치')
+    }
+  }
   
   useEffect(() => {
-    console.log(props.selNum)
     if (props.selNum === presetNum) {
       setIsSelected(true)
-      console.log('선택된 프리셋', props.selNum)
     } else {
       setIsSelected(false)
-      console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
-
 
   return (
     <Card isSelected={isSelected} onClick={() => props.presetSeqFunc(presetNum) }>
@@ -56,8 +67,13 @@ const PresetCard = (props, {presetSeqFunc}) => {
         {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
           <PlayArrowIcon sx={{ height: 38, width: 38 }} />
         </IconButton> */}
-        <PlaySlider />
-        <PlayIcons />
+        <PlaySlider audioState={mixPlay}/>
+        {/* <PlayIcons /> */}
+        {mixPlay.paused ?
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        :
+          <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        }
       </MusicPlayer>
     </Card>
   );
@@ -88,14 +104,17 @@ const CoverImage = styled.div`
   }
 `
 const Content = styled.div`
- display: flex;
- flex-direction: column;
- padding-left: 3vw
+  display: flex;
+  flex-direction: column;
+  padding-left: 3vw;
+  align-items: center;
+  pl: 1;
+  pb: 1;
 `
 
 const MusicPlayer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: 'flex-start';
-  padding-top: 1vh;
+  margin: 1px;
 `

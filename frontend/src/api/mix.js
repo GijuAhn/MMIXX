@@ -1,9 +1,6 @@
 import instance from './base'
 
-export const musicMix = async ( user_seq, preset_seq ) => {
-  return await instance('/music/mix/', {
-    headers: {
-      "Content-Type": "multipart/json",
-    }
-  })
+export const musicMix = async ( data ) => {
+  return await instance.post('/music/mix', data
+  )
 }

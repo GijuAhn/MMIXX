@@ -34,15 +34,23 @@ export const globalPlaylists = async (userSeq) => {
 export const getPlaylistCoverImage = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}/1`)
 }
-
-export const insertMusicInPlaylist = async ( playlistSeq ) => {
-  return await instance.post(`/playlist/${playlistSeq}`)
+// 해당 플레이리스트에 음악을 추가
+export const insertMusicInPlaylist = async ( useSeq, playlistSeq, musicList ) => {
+  return await instance.post(`/playlist/${useSeq}/${playlistSeq}`, musicList)
 }
 // 플레이리스트 삭제
 export const deletePlaylist = async (playlistSeq) => {
   return await instance.delete(`/playlist/${playlistSeq}`)
 }
-// 플레이리스트 수정
+// 플레이리스트 수정(플레이리스트 이름, 공개여부)
 export const modifyPlaylist = async (playlistSeq, playlist) => {
   return await instance.put(`/playlist/detail/${playlistSeq}`,  playlist)
+}
+// 플레이리스트 즐겨찾기 등록
+export const addFavoritePlaylist = async (favoritePlaylist) => {
+  return await instance.post(`/playlist/favorite`, favoritePlaylist)
+}
+// 플레이리스트 즐겨찾기 삭제
+export const deleteFavoritePlaylist = async (useSeq, playlistSeq) => {
+  return await instance.delete(`/playlist/favorite/${useSeq}/${playlistSeq}`)
 }

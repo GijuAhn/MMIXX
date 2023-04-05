@@ -40,9 +40,7 @@ const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
         // };
         // link.download = injectFilename(res);
 
-        let title = musicName.includes(".")
-          ? musicName.substr(0, musicName.lastIndexOf("."))
-          : musicName;
+        let title = musicName.includes(".") ? musicName.substr(0, musicName.lastIndexOf(".")) : musicName;
         let type = musicUrl.substring(musicUrl.lastIndexOf("."), musicUrl.length).toLowerCase();
 
         link.download = `${title}${type}`;
@@ -65,16 +63,10 @@ const MusicDownloadIcon = ({ musicSeq, musicName, musicUrl }) => {
 
   return (
     <div>
-      {!loading ? (
-        <IconBtn onClick={onClick} icon={DownloadIcon} iconName='DOWNLOAD' />
-      ) : (
-        <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />
-      )}
+      {!loading ? <IconBtn onClick={onClick} icon={DownloadIcon} iconName='DOWNLOAD' fontSize='11px' /> : <CircularProgress size='1.8rem' sx={{ color: "rgb(209, 211, 212)" }} />}
 
       {toastInfo ? <CustomToast res='info' text='다운로드 중...' toggle={setToastInfo} /> : null}
-      {toastSuccess ? (
-        <CustomToast res='success' text='다운로드 성공' toggle={setToastSuccess} />
-      ) : null}
+      {toastSuccess ? <CustomToast res='success' text='다운로드 성공' toggle={setToastSuccess} /> : null}
       {toastError ? <CustomToast res='error' text='다운로드 실패' toggle={setToastError} /> : null}
     </div>
   );
