@@ -3,11 +3,10 @@ import Box from '@mui/material/Box';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 
 import styled from 'styled-components';
-import { testPlaylistMusic } from 'atom/atom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import theme from 'styles/theme';
-import { PlayIcons, PlaySlider } from 'components/PlayBar';
+import { PlaySlider } from 'components/PlayBar';
 import { _mix_now } from 'atom/music';
 
 const PresetCard = (props, {presetSeqFunc}) => {
@@ -19,8 +18,6 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const presetUrl = props.presetUrl
   const coverImage = props.coverImage
   const [isSelected, setIsSelected] = useState(true)
-  // const playlist = useRecoilValue(testPlaylistMusic)
-  // const { coverImage, musicName, musicianName } = playlist.playlistMusic[0].music
   
   const [ mixPlay ] = useRecoilState(_mix_now)
   
@@ -32,10 +29,8 @@ const PresetCard = (props, {presetSeqFunc}) => {
   useEffect(() => {
     if (props.selNum === presetNum) {
       setIsSelected(true)
-      // console.log('선택된 프리셋', props.selNum)
     } else {
       setIsSelected(false)
-      // console.log('선택되지 않은 프리셋', props.selNum)
     }
   }, [props.selNum])
 
@@ -60,11 +55,7 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
       {/* 프리셋 음악 재생 */}
       <MusicPlayer>
-        {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
-          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-        </IconButton> */}
         <PlaySlider />
-        {/* <PlayIcons /> */}
         <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
       </MusicPlayer>
     </Card>
@@ -96,14 +87,17 @@ const CoverImage = styled.div`
   }
 `
 const Content = styled.div`
- display: flex;
- flex-direction: column;
- padding-left: 3vw
+  display: flex;
+  flex-direction: column;
+  padding-left: 3vw;
+  align-items: center;
+  pl: 1;
+  pb: 1;
 `
 
 const MusicPlayer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: 'flex-start';
-  padding-top: 1vh;
+  margin: 1px;
 `
