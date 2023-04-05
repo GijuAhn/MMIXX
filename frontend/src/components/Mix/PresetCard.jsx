@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
-
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import Box from '@mui/material/Box';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import theme from 'styles/theme';
-import { PlaySlider } from 'components/PlayBar';
 import { _mix_now } from 'atom/music';
+import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
 const PresetCard = (props, {presetSeqFunc}) => {
-  const presetName = props.presetName
-  const presetNum = props.presetNum
-  const musicName = props.musicName
-  const musicLength = props.musicLength
-  const musicianName = props.musicianName
-  const presetUrl = props.presetUrl
-  const coverImage = props.coverImage
+  const {
+    presetName,
+    presetNum,
+    musicName,
+    musicLength,
+    musicianName,
+    presetUrl,
+    coverImage
+  } = props
   const [isSelected, setIsSelected] = useState(true)
-  
+
   const [ mixPlay ] = useRecoilState(_mix_now)
   
   const handleMixPlay = () => {
-    mixPlay.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/ed104a90-e0fb-430b-beea-0a83775a1be4.mp3'
-    mixPlay.play()
+    if (!mixPlay.paused) {
+      mixPlay.pause()
+    } else {
+      mixPlay.src = props.presetUrl
+      mixPlay.play()
+    }
+    if(mixPlay.src === presetUrl) {
+      console.log('일치')
+    }
   }
   
   useEffect(() => {
@@ -55,8 +64,16 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
       {/* 프리셋 음악 재생 */}
       <MusicPlayer>
-        <PlaySlider />
-        <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
+        {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
+          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+        </IconButton> */}
+        <PlaySlider audioState={mixPlay}/>
+        {/* <PlayIcons /> */}
+        {mixPlay.paused ?
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        :
+          <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        }
       </MusicPlayer>
     </Card>
   );
