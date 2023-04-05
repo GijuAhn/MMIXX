@@ -23,6 +23,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -60,7 +62,7 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource())
                 .and()
-//                .httpBasic().disable() // rest 방식이므로 http 기본 설정 disable
+                .httpBasic().disable() // rest 방식이므로 http 기본 설정 disable
                 .csrf().disable() // token 방식이기 때문에 csrf disable
                 .formLogin().disable() // form 로그인 형식 disable
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 x
@@ -108,7 +110,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("*");
+//        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 
         configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-Type");
