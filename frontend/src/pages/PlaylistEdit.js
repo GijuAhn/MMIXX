@@ -37,7 +37,7 @@ const PlaylistEdit = () => {
   }, [])
 
   // 수정 완료
-  const modifySubmit = () => {
+  const modifySubmit =  () => {
     // console.log(isChecked);
     // console.log(inputRef.current.value);
     modifyPlaylist(
@@ -46,8 +46,10 @@ const PlaylistEdit = () => {
         playlist_name: inputRef.current.value,
         is_private: isChecked,
       }
-    ).then(
+    ).then(_ => {
+      // console.log('?????', res)
       navigate(`/playlist/${playlistSeq}`)
+    }
     )
   }
 
@@ -67,7 +69,7 @@ const PlaylistEdit = () => {
               <input type="text" ref={inputRef} defaultValue={playlistInfo.playlistName }></input>
             </InputTitle>
             <InputRivateToggle>
-              공개여부
+              비공개여부
               <Switch checked={isChecked } onChange={handleChange} />
             </InputRivateToggle>
           </Top>

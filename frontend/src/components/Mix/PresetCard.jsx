@@ -22,7 +22,7 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const [ mixPlay ] = useRecoilState(_mix_now)
   
   const handleMixPlay = () => {
-    mixPlay.src = props.presetUrl
+    mixPlay.src = 'https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/ed104a90-e0fb-430b-beea-0a83775a1be4.mp3'
     mixPlay.play()
   }
   

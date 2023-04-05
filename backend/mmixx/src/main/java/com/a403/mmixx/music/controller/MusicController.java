@@ -53,7 +53,8 @@ public class MusicController {
 		if(response != null) {
 			return ResponseEntity.ok(response);
 		} else {
-			return ResponseEntity.notFound().build();
+//			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok("FAIL");
 		}
 	}
 
