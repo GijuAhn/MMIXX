@@ -82,7 +82,8 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/") // 로그아웃 이후 연결 페이지
+                .logoutSuccessUrl("https://j8a403.p.ssafy.io") // 로그아웃 이후 연결 페이지
+//                .logoutSuccessUrl("http://localhost:3000") // 로그아웃 이후 연결 페이지
                 .invalidateHttpSession(true)
 
                 .and()
