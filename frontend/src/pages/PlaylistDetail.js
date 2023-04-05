@@ -49,8 +49,10 @@ const PlaylistDetail = () => {
     // 플레이리스트 정보(제목, 공개여부 등) 가져오기
     getPlaylistInfo(playlistSeq)
       .then(res => {
+        // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        console.log('asdfasdfasdf')
       })
       .catch(err => console.log(err))
   }, []);
@@ -84,7 +86,7 @@ const PlaylistDetail = () => {
               onClick={handlePlaying}
               disabled={playlistMusic.length === 0}
             />
-            <MoreIconDiv playlistSeq={playlistSeq}/>
+            <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
             
             {/* <div>
               <DefaultBtn onClick={confirmDelete}>
@@ -103,7 +105,7 @@ const PlaylistDetail = () => {
   );
 };
 
-const MoreIconDiv = ({ playlistSeq }) => {
+const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
   const wrapperRef = useRef(null)
   const navigate = useNavigate()
   const [ isOpen, setIsOpen ] = useState(false)
@@ -171,6 +173,15 @@ const MoreIconDiv = ({ playlistSeq }) => {
         {isOpen &&
           <CustomSelect>
             <ul>
+              <li onClick={() => navigate(`/playlist/select/update`, {
+                      state : {
+                        playlistSeq: `${playlistSeq}`,
+                        playlistMusic: playlistMusic
+                      }
+                    })}
+                      >
+                곡 추가하기
+              </li>
               <li onClick={() => navigate(`/playlist/edit/${playlistSeq}`)}>
                 수정하기
               </li>
@@ -266,13 +277,13 @@ const MoreDiv = styled.div`
 const CustomSelect = styled.div`
   position: absolute;
   left: -95px;
-  top: -25px;
+  top: -35px;
   border: 1px solid pink;
   width: 100px;
   border-radius: 10px;
   border: 2px solid ${({theme}) => theme.palette.secondary};
   background-color: ${({theme}) => theme.palette.dark};
-  height: 50px;
+  height: 75px;
   font-size: 14px;
 
   li {
