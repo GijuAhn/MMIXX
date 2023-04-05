@@ -11,22 +11,6 @@ export const usePlayControl = () => {
   const [ nowMusic, setNow ] = useRecoilState(_now)
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
 
-  /**
-   * 현재 실행될 음악값 설정
-   */
-  const createNowMusic = () => {
-    const newNowMusic = queue.find((item) => item.playing)
-    if (newNowMusic) {
-      if (audioElement || !audioElement?.paused) {
-        // audioElement.pause()
-      }
-      const audioSrc = newNowMusic.musicUrl
-      localStorage.setItem('_now', JSON.stringify(audioSrc))
-      setAudioElement(new Audio(audioSrc))
-      localStorage.setItem('_nowMusic', JSON.stringify(newNowMusic))
-      setNow(newNowMusic)
-    }
-  }
 
   /**
    * 현재 실행될 음악이 담긴 플레이리스트 값 설정
@@ -37,6 +21,7 @@ export const usePlayControl = () => {
         const newItem = {...item, playing: true}
         localStorage.setItem('_nowMusic', JSON.stringify(newItem))
         setAudioElement(new Audio(item.musicUrl))
+        setNow(newItem)
         return { ...item, playing: true }
       } else {
         return { ...item, playing: false } 
@@ -72,7 +57,7 @@ export const usePlayControl = () => {
     queue[currentIndex].playing = false
     queue[nextIndex].playing = true
 
-    createNowMusic()
+    setNow(queue.find((item) => item.playing))
   }
 
   // useEffect(() => {
@@ -123,7 +108,7 @@ export const usePlayControl = () => {
   //   }
   // }, [audioElement])
 
-  return { audioElement, nowMusic, queue, createNowPlaylist, createNowMusic, playMusic, playNext }
+  return { audioElement, nowMusic, queue, createNowPlaylist, playMusic, playNext }
 }
 
 
