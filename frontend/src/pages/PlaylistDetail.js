@@ -21,7 +21,7 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const { audioElement, createNowPlaylist, createNowMusic } = usePlayControl()
+  const { audioElement, createNowPlaylist } = usePlayControl()
 
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
@@ -34,7 +34,6 @@ const PlaylistDetail = () => {
    */
   const handlePlaying = () => {
     createNowPlaylist(playlistMusic)
-    createNowMusic()
   }
 
   useEffect(() => {
