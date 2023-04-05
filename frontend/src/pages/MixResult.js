@@ -19,7 +19,7 @@ const MixResult = () => {
 
   useEffect(() => {
     console.log('Mix Result : ', musicSeq, presetSeq)
-    musicMix(musicSeq, presetSeq).then(
+    musicMix({music_seq: musicSeq, preset_seq: presetSeq}).then(
       response => setResult(response.data)
     ).catch( error => console.log(error))
   }, [musicSeq, presetSeq])
