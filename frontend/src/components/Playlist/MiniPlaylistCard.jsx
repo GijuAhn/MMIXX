@@ -66,9 +66,11 @@ const CardWrapper = styled.div`
     transform: scale(1.1);
     transition: transform 0.3s ease-out;
 
-    p {
-      animation: ${({isOverflowed}) => isOverflowed ? '${marquee} 5s linear infinite' : 'none'}
-    }
+    ${props => props.isOverflowed && css`
+      p {
+        animation: ${marquee} 5s linear infinite;
+      }
+    `}
   }
   `
 
@@ -79,11 +81,10 @@ const StyledFavoriteBorderIcon = styled(FavoriteBorderIcon)`
 `
 
 const PlaylistTitle = styled.p`
-  border: 1px dotted pink;
   align-self: end;
   padding: 15px;
   position: absolute;
-  left: 10px;
+  left: 15px;
   color: ${({theme}) => theme.palette.light};
   font-size: 24px;
   letter-spacing: -1px;
