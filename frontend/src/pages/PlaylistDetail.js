@@ -11,6 +11,7 @@ import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist
 import { CustomTable } from "components/mymusic"
 import { useRecoilValue } from "recoil";
 import { _now } from "atom/music"
+import { usePlayControl } from "hooks/usePlayControl"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -21,9 +22,8 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const [ playlistTitle, setPlaylistTitle ] = useState('')
+  const { createNowPlaylist } = usePlayControl()
 
-  const now = useRecoilValue(_now)
   // 공개 여부 체크
   const [isChecked, setIsChecked] = useState(false);
   const handleChange = () => {
@@ -34,7 +34,7 @@ const PlaylistDetail = () => {
    * 플레이리스트 재생
    */
   const handlePlaying = () => {
-    // createNowPlaylist(playlistMusic)
+    createNowPlaylist(playlistMusic)
   }
 
   useEffect(() => {
@@ -49,13 +49,13 @@ const PlaylistDetail = () => {
     // 플레이리스트 정보(제목, 공개여부 등) 가져오기
     getPlaylistInfo(playlistSeq)
       .then(res => {
-        setPlaylistTitle(res.data.playlistName)
+        // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
         console.log('asdfasdfasdf')
       })
       .catch(err => console.log(err))
-  }, [playlistTitle, isChecked]);
+  }, []);
 
   return (
     <StyleWrapper url={coverImage}>
@@ -73,7 +73,7 @@ const PlaylistDetail = () => {
         <RightContent style={{ border: '1px solid blue'}}>
           <Top>
             <PlaylistTitle>
-              <p>{playlistTitle}</p>
+              <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
             <PrivateToggle>
               공개여부
@@ -277,13 +277,13 @@ const MoreDiv = styled.div`
 const CustomSelect = styled.div`
   position: absolute;
   left: -95px;
-  top: -25px;
+  top: -35px;
   border: 1px solid pink;
   width: 100px;
   border-radius: 10px;
   border: 2px solid ${({theme}) => theme.palette.secondary};
   background-color: ${({theme}) => theme.palette.dark};
-  height: 50px;
+  height: 75px;
   font-size: 14px;
 
   li {
