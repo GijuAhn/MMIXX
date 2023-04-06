@@ -1,19 +1,20 @@
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom';
+import AlbumIcon from '@mui/icons-material/Album'
 
 import VolumeControl from './VolumeControl'
 import PlayControl from './PlayControl'
 import { usePlayControl } from 'hooks/usePlayControl';
-import { useRecoilValue } from 'recoil';
-import { _nowMusic } from 'atom/music';
 
 const PlayBar = () => {
   const location = useLocation()
-  const nowMusic = useRecoilValue(_nowMusic)
-  // const { nowMusic, playMusic, playNext } = usePlayControl()
-
+  const { nowMusic } = usePlayControl()
   const { coverImage, musicName, musicianName } = nowMusic
+
+  useEffect(() => {
+    // playMusic()
+  }, [nowMusic])
 
   if (location.pathname === '/mix' || location.pathname === '/' || location.pathname === '/mix/result' ) {
     return null
@@ -22,15 +23,21 @@ const PlayBar = () => {
   return (
     <Wrapper>
       <PlayMusicInfo>
-        <CoverImage>
-          <img src={coverImage} alt={musicName} />
-        </CoverImage>
+        {coverImage ?
+          <CoverImage>
+              <img src={coverImage} alt={musicName} />
+          </CoverImage>
+        :
+          <DefaultCoverImage>
+            <AlbumIcon />
+          </DefaultCoverImage>
+        }
         <MusicInfo>
           <p>{musicName}</p>
           <p>{musicianName}</p>
         </MusicInfo>
       </PlayMusicInfo>
-      <PlayControl style={{ border: '1px solid red'}}/>
+      <PlayControl nowMusic={nowMusic}/>
       <VolumeWrapper>
         <VolumeControl />
       </VolumeWrapper>
@@ -87,6 +94,12 @@ const CoverImage = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+
+const DefaultCoverImage = styled.div`
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(to bottom right, ${({theme}) => theme.palette.darkgray} 30%, ${({theme}) => theme.palette.dark});
 `
 
 const MusicInfo = styled.div`

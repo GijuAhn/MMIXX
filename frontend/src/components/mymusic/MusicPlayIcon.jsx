@@ -1,10 +1,7 @@
 import IconBtn from "./IconBtn";
 import PlayIcon from "assets/play.png";
 
-const MusicPlayIcon = ({ musicSeq }) => {
-  const onClick = () => {
-    console.log(musicSeq);
-  };
+const MusicPlayIcon = ({ onClick }) => {
 
   return <IconBtn onClick={onClick} icon={PlayIcon} iconName="PLAY"></IconBtn>;
 };

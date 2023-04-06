@@ -1,15 +1,14 @@
 import PlaySlider from './PlaySlider'
 import styled from 'styled-components'
 import { PlayIcons } from '.'
-import { useRecoilValue } from 'recoil'
-import { _now } from 'atom/music'
 
-const PlayControl = () => {
-  const audioState = useRecoilValue(_now)
+const PlayControl = ({ nowMusic }) => {
+  const { isPlaying } = nowMusic 
+
   return (
     <Wrapper>
-      <PlayIcons width="50%"/>
-      <PlaySlider audioState={audioState}/>
+      <PlayIcons width="50%" isPlaying={isPlaying}/>
+      <PlaySlider />
     </Wrapper>
   )
 }

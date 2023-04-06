@@ -48,6 +48,8 @@ const PlaylistSelectMusic = () => {
     }
   };
 
+  console.log('playlistTitle :', playlistTitle)
+
   return (
     <Wrapper>
       <Header title='Music Select' desc='노래 고르기' />
