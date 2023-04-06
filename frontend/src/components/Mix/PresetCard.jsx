@@ -6,7 +6,7 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import theme from 'styles/theme';
-import { _mix_now } from 'atom/music';
+import { _mixPlaying, _mix_now } from 'atom/music';
 import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
 const PresetCard = (props, {presetSeqFunc}) => {
@@ -22,16 +22,36 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const [isSelected, setIsSelected] = useState(true)
 
   const [ mixPlay ] = useRecoilState(_mix_now)
-  
+  const [ mixPlaying, setMixPlaying ] = useRecoilState(_mixPlaying)
+
   const handleMixPlay = () => {
-    if (!mixPlay.paused) {
+    // 현재 진행중인 노래가 있고, 
+    console.log(presetNum)
+    if (mixPlay.src == presetUrl) {
+      console.log('??')
+      if(mixPlaying) {
+        mixPlay.pause()
+        setMixPlaying(false)
+      } else {
+        mixPlay.play()
+        setMixPlaying(true)
+      }
+    } else {
+      if (mixPlaying) {
+        mixPlay.pause()
+        mixPlay.src = presetUrl
+      } else {
+        mixPlay.src = presetUrl
+      }
+      mixPlay.play()
+    }
+    if (mixPlaying) {
       mixPlay.pause()
+      setMixPlaying(false)
     } else {
       mixPlay.src = props.presetUrl
       mixPlay.play()
-    }
-    if(mixPlay.src === presetUrl) {
-      console.log('일치')
+      setMixPlaying(true)
     }
   }
   
@@ -69,10 +89,10 @@ const PresetCard = (props, {presetSeqFunc}) => {
         </IconButton> */}
         <PlaySlider audioState={mixPlay}/>
         {/* <PlayIcons /> */}
-        {mixPlay.paused ?
-          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
-        :
+        {mixPlaying && mixPlay.src == presetUrl ?
           <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        :
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
         }
       </MusicPlayer>
     </Card>

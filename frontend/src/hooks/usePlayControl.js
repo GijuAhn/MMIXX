@@ -17,6 +17,7 @@ export const usePlayControl = (playlistSeq) => {
       localStorage.setItem("_nowMusic", JSON.stringify({
         ...newMusic,
         currentTime: 0,
+        duration: nowMusic.musicLength
       }))
       setIsPlaying(true)
     }
@@ -87,7 +88,7 @@ export const usePlayControl = (playlistSeq) => {
       playNext()
     })
     audioElement.addEventListener('playing', () => {
-      console.log(audioElement.currentTime)
+      // console.log(audioElement.currentTime)
     })
   }, [audioElement])
 

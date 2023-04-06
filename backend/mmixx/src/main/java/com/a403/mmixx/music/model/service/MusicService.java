@@ -220,7 +220,7 @@ public class MusicService {
 		new_music.setMusicUrl(new_music_path);
 		new_music.setMusicianName(music.getMusicianName());
 		new_music.setUser(music.getUser());
-		new_music.setPresetSeq(music.getPresetSeq());
+		new_music.setPresetSeq(preset_seq);
 
 		musicRepository.save(new_music);
 
@@ -230,7 +230,7 @@ public class MusicService {
 	}
 
 	@Transactional
-	public MusicSplitResponseDto splitMusic(Integer music_seq) {
+	public Music splitMusic(Integer music_seq) {
 		Music music = musicRepository.findById(music_seq).orElse(null);
 		if(music != null) {
 			RestTemplate restTemplate = new RestTemplate();
@@ -288,12 +288,12 @@ public class MusicService {
 			new_music.setMusicUrl(new_music_path);
 			new_music.setMusicianName(music.getMusicianName());
 			new_music.setUser(music.getUser());
-			new_music.setPresetSeq(music.getPresetSeq());
+			new_music.setPresetSeq(null);
 
-			musicRepository.save(new_music);
+			
 
-			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music);
-			return responseDto;
+//			MusicSplitResponseDto responseDto = new MusicSplitResponseDto(new_music);
+			return musicRepository.save(new_music);
 		} else {
 			return null;
 		}

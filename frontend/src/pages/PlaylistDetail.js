@@ -156,8 +156,12 @@ const PlaylistDetail = () => {
                 disabled={playlistMusic.length === 0}
               />
             }
-            <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
-
+            {playlistUserInfo.userSeq === atomUser.userSeq &&
+              <MoreIconDiv 
+                playlistMusic={playlistMusic} 
+                playlistSeq={playlistSeq}
+              />
+            }
           </Bottom>
         </RightContent>
       </InfoContent>

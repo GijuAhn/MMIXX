@@ -48,12 +48,13 @@ const PlaylistSelectMusic = () => {
     }
   };
 
-  console.log('playlistTitle :', playlistTitle)
+  console.log("playlistTitle :", playlistTitle);
 
   return (
     <Wrapper>
       <Header title='Music Select' desc='노래 고르기' />
       <MusicList checkBox={true} checkMusicList={setCheckedList}></MusicList>
+      <div style={{ height: "200px" }}></div>
       <CreateBtn onClick={onClickLogin}>선택 완료</CreateBtn>
     </Wrapper>
   );
