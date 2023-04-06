@@ -135,6 +135,7 @@ const MusicInfo = styled.div`
   p:nth-child(2) {
     font-weight: lighter;
     font-size: 12px;
+    white-space: nowrap;
   }
 `
 

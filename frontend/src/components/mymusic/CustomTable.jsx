@@ -122,7 +122,7 @@ const CustomTable = ({
             <TdText width='27.5%' isNew={isNew}>
               {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
             </TdText>
-            <TdText width='15%' isNew={isNew}>
+            <TdText width='15%' isNew={isNew} sx={{ width: '50px'}}>
               {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
             </TdText>
             <TdText width='15%' isNew={isNew}>
@@ -283,6 +283,8 @@ const TdText = styled.td`
   border-color: ${theme.palette.secondary};
   `}
 
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;
@@ -292,6 +294,10 @@ const TdText = styled.td`
     props.padding &&
     `padding-top: 5px;
   padding-right: 10px;`};
+
+  &:nth-child(2) {
+    color: red;
+  }
 `;
 
 // const Table = styled.table`
