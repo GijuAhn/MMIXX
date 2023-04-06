@@ -5,7 +5,8 @@ import CustomToast from "./CustomToast";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSetRecoilState } from "recoil";
-import { _show_new, _new_music_list } from "atom/mymusic";
+// import { _show_new, _new_music_list } from "atom/mymusic";
+import { _new } from "atom/mymusic";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const MusicExtractIcon = ({ musicSeq }) => {
@@ -14,8 +15,9 @@ const MusicExtractIcon = ({ musicSeq }) => {
   const [toastError, setToastError] = useState(false);
   const [toastSuccess, setToastSuccess] = useState(false);
 
-  const setShowNew = useSetRecoilState(_show_new);
-  const setNewMusicList = useSetRecoilState(_new_music_list);
+  // const setShowNew = useSetRecoilState(_show_new);
+  // const setNewMusicList = useSetRecoilState(_new_music_list);
+  const setReload = useSetRecoilState(_new);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,19 +28,20 @@ const MusicExtractIcon = ({ musicSeq }) => {
     setLoading(true);
     setToastInfo(true);
 
-    setShowNew(false);
+    // setShowNew(false);
 
     splitMusic(musicSeq)
       .then((response) => {
         console.log(response);
-        setNewMusicList([response.data]);
-        setShowNew(true);
+        // setNewMusicList([response.data]);
+        // setShowNew(true);
 
         setToastSuccess(true);
 
         if (location.pathname.includes("/playlist")) {
           navigate("/mymusic");
         } else {
+          setReload((current) => !current);
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       })
