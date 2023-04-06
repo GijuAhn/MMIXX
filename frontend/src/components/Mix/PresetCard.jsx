@@ -22,13 +22,16 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const [isSelected, setIsSelected] = useState(true)
 
   const [ mixPlay ] = useRecoilState(_mix_now)
-  
+  const [ mixPlaying, setMixPlaying ] = useState(false)
+
   const handleMixPlay = () => {
     if (!mixPlay.paused) {
       mixPlay.pause()
+      setMixPlaying(false)
     } else {
       mixPlay.src = props.presetUrl
       mixPlay.play()
+      setMixPlaying(true)
     }
     if(mixPlay.src === presetUrl) {
       console.log('일치')
@@ -69,10 +72,10 @@ const PresetCard = (props, {presetSeqFunc}) => {
         </IconButton> */}
         <PlaySlider audioState={mixPlay}/>
         {/* <PlayIcons /> */}
-        {mixPlay.paused ?
-          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
-        :
+        {mixPlaying && mixPlay.src === props.presetUrl ?
           <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        :
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
         }
       </MusicPlayer>
     </Card>
