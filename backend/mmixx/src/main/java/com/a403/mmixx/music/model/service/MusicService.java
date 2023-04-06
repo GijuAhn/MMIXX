@@ -268,7 +268,10 @@ public class MusicService {
 			}
 
 			String new_music_path = "https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/" + response;
-			String format = music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+			String format = ""; 
+			if(music.getMusicName().length() > 4) {
+				music.getMusicName().substring(music.getMusicName().length() - 3, music.getMusicName().length());
+			}
 			System.out.println("format : " + format);
 			String new_music_name = "";
 			if(format.equals("mp3")) {
