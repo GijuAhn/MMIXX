@@ -74,7 +74,7 @@
 <img src="readme_contents/spleeter_architecture.jpg" width="1280">
 
 ## **서비스 아키텍처**
-<img src="readme_contents/MMIXX 시스템아키텍처 - 진짜 진짜 진짜 최종.png" width="1280">
+<img src="readme_contents/MMIXX_system_architecture_real_final.png" width="1280">
 
 ## **사용 기술**
 
@@ -103,9 +103,9 @@
 |  | Jenkins | 2.387.1 | Latest Docker Image |
 
 ## **API 명세**
-<img src="readme_contents/api명세1.png" width="1280">
+<img src="readme_contents/api1.png" width="1280">
 
-<img src="readme_contents/api명세2.png" width="1280">
+<img src="readme_contents/api2.png" width="1280">
 
 ## **화면 설계**
 <img src="readme_contents/mmixx_figma.png" width="1280">
