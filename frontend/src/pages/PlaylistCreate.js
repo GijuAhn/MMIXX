@@ -1,10 +1,11 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import styled, { css } from "styled-components"
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { useNavigate } from 'react-router-dom'
+import CustomToast from "components/mymusic/CustomToast";
 
 const PlaylistCreate = () => {
   const inputRef = useRef(null)
@@ -16,10 +17,12 @@ const PlaylistCreate = () => {
     console.log(inputRef.current.value)
   })
 
+  const [toastCheck, setToastCheck] = useState(false);
   const addBtnClick = (e) => { 
     var title = inputRef.current.value;
     if (title.replace(/\s/g, "") === "") {
-      alert("제목을 입력해주세요!!")
+      // alert("제목을 입력해주세요!!")
+      setToastCheck(true)
     } else {
       navigate("/playlist/select/create", {
         state : {
@@ -36,6 +39,7 @@ const PlaylistCreate = () => {
         title="New Playlist"
         desc="새 플레이리스트 만들기"
       />
+      {toastCheck ? <CustomToast res='error' text='제목을 입력해주세요!' toggle={setToastCheck} width='230px' /> : null}
       <InputContent>
         <DefaultCover>
           <AlbumIcon color="white" fontSize="large"/>
