@@ -38,7 +38,7 @@ const PlaylistDetail = () => {
   const atomUser = useRecoilValue(userInfo);
 
   // 공개 여부 체크
-  const [isChecked, setIsChecked] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const { state } = useLocation();
   const [toastSuccess, setToastSuccess] = useState(state && state.success);
@@ -64,8 +64,10 @@ const PlaylistDetail = () => {
 
   // 즐겨찾기
   const [isFavorite, setIsFavorite] = useState(false);
-  const heartClick = () => {
+  const heartClick = (e) => {
     // setIsFavorite(!isFavorite);
+    // e.stopPropagation();
+    // console.log("heartClick")
     if (!isFavorite) {
       addFavoritePlaylist({
         userSeq: atomUser.userSeq,
@@ -94,7 +96,7 @@ const PlaylistDetail = () => {
       .then((res) => {
         // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data);
-        setIsChecked(res.data.isPrivate);
+        setIsPrivate(res.data.isPrivate);
         setIsFavorite(res.data.isFavorite);
         return res.data.userSeq;
       })
@@ -114,7 +116,7 @@ const PlaylistDetail = () => {
         <RightContent>
           {isFavorite ? <StyleFavoriteIcon onClick={heartClick} /> : <StyleFavoriteBorderIcon onClick={heartClick} />}
           <Top>
-            {playlistUserInfo.userSeq === atomUser.userSeq && <p style={{ color: "gray", position: "absolute", top: 0 }}>비공개 처리된 플레이리스트 입니다</p>}
+            {playlistUserInfo.userSeq === atomUser.userSeq && isPrivate && <p style={{ color: "gray", position: "absolute", top: 0 }}>비공개 처리된 플레이리스트 입니다</p>}
             <PlaylistTitle>
               <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
@@ -402,10 +404,12 @@ const SelectSection = styled.section`
 
 const StyleFavoriteIcon = styled(FavoriteIcon)`
   position: absolute;
-  right: 20px;
-  top: 10px;
+  right: 30px;
+  top: 30px;
   font-size: 2rem;
   color: red;
+  cursor: pointer;
+  z-index: 1000;
 `;
 
 const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
@@ -414,6 +418,8 @@ const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
   top: 30px;
   font-size: 2rem;
   color: red;
+  cursor: pointer;
+  z-index: 1000;
 `;
 
 export default PlaylistDetail;
