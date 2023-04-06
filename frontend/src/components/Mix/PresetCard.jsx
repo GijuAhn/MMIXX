@@ -54,7 +54,6 @@ const PresetCard = (props, {presetSeqFunc}) => {
       setMixPlaying(true)
     }
   }
-  
   useEffect(() => {
     if (props.selNum === presetNum) {
       setIsSelected(true)
@@ -66,9 +65,9 @@ const PresetCard = (props, {presetSeqFunc}) => {
   return (
     <Card isSelected={isSelected} onClick={() => props.presetSeqFunc(presetNum) }>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <CoverImage>
-          <img src={coverImage} alt={musicName} />
-        </CoverImage>
+        <CoverImg>
+          <img src={ coverImage } alt={musicName} />
+        </CoverImg>
         <Content>
           <div style={{ color: `${theme.palette.secondary}`, fontSize: '3vw', fontWeight: 'bolder', justifyContent: 'flex-start' }}>
             { presetName }
@@ -111,7 +110,7 @@ const Card = styled.div`
   background-color: ${theme.palette.dark};
   padding: 3vw;
 `
-const CoverImage = styled.div`
+const CoverImg = styled.div`
   object-fit: cover;
   width: 25vw;
   height: 23vh;
