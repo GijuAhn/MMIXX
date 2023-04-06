@@ -8,9 +8,11 @@ import UnCheck from "assets/check.png";
 import Check from "assets/check-selected.png";
 import More from "assets/more-vertical.png";
 import { useRef, useEffect, useState } from "react";
+import { usePlayControl } from "hooks/usePlayControl";
 
 const CustomTable = ({
   musicList,
+  playlistSeq,
   // hasIcon = true,
   radio = false,
   checkMusic,
@@ -25,6 +27,8 @@ const CustomTable = ({
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
   const checkedList = useRef([]);
+
+  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -63,20 +67,21 @@ const CustomTable = ({
 
       const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
 
-      // console.log("deletedIndex", deletedIndex);
       if (deletedIndex === -1) {
-        // console.log("추가!");
         checkedList.current.push({
           music_seq: newMusicSeq,
           sequence: newMusicSeq,
         });
       } else {
-        // console.log("삭제!");
         checkedList.current.splice(deletedIndex, 1);
       }
-      // console.log(checkedList.current);
       checkMusicList(checkedList.current);
     }
+  };
+
+  const handlePlayClick = async (start) => {
+    const res = await createNowPlaylist(musicList, start);
+    createNowMusic(res);
   };
 
   const [isOut, setIsOut] = useState(false);
@@ -108,7 +113,7 @@ const CustomTable = ({
             <TdRound width='5%' isNew={isNew}>
               <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
-            <Td weight='400' width='7%' align='center' isNew={isNew}>
+            <Td weight='400' width='5%' align='center' isNew={isNew}>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
@@ -117,7 +122,7 @@ const CustomTable = ({
             <TdText width='27.5%' isNew={isNew}>
               {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
             </TdText>
-            <TdText width='15%' isNew={isNew}>
+            <TdText width='15%' isNew={isNew} sx={{ width: '50px'}}>
               {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
             </TdText>
             <TdText width='15%' isNew={isNew}>
@@ -133,12 +138,17 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Play musicSeq={music.musicSeq}></Play>
+                <Play onClick={() => handlePlayClick(index)} musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
@@ -278,6 +288,8 @@ const TdText = styled.td`
   border-color: ${theme.palette.secondary};
   `}
 
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
   font-family: "Heebo", sans-serif;
@@ -287,6 +299,10 @@ const TdText = styled.td`
     props.padding &&
     `padding-top: 5px;
   padding-right: 10px;`};
+
+  &:nth-child(2) {
+    color: red;
+  }
 `;
 
 // const Table = styled.table`
