@@ -87,7 +87,7 @@ export const usePlayControl = (playlistSeq) => {
       playNext()
     })
     audioElement.addEventListener('playing', () => {
-      console.log(audioElement.currentTime)
+      // console.log(audioElement.currentTime)
     })
   }, [audioElement])
 
