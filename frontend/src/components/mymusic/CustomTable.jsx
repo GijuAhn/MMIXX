@@ -113,7 +113,7 @@ const CustomTable = ({
             <TdRound width='5%' isNew={isNew}>
               <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
-            <Td weight='400' width='7%' align='center' isNew={isNew}>
+            <Td weight='400' width='5%' align='center' isNew={isNew}>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
