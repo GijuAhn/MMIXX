@@ -34,11 +34,24 @@ export const _isPlaying = atom({
   default: false
 })
 
+export const _mixPlaying = atom({
+  key: '_mixPlaying',
+  default: false
+})
+
 export const playlistQueue = atom({
   key: 'Queue',
   default: {},
   effects: [
     localStorageEffect('_queue')
+  ]
+})
+
+export const volumeState = atom({
+  key: 'volumeState',
+  default: 1,
+  effects: [
+    localStorageEffect('_volume')
   ]
 })
 
