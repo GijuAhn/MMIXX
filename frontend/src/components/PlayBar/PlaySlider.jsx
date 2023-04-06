@@ -4,7 +4,7 @@ import { usePlayControl } from 'hooks/usePlayControl';
 
 const PlaySlider = () => {
   const { audioElement, isPlaying, nowMusic } = usePlayControl()
-  const [ position, setPosition ] = useState(nowMusic.currentTime)
+  const [ position, setPosition ] = useState(0)
   const sliderRef = useRef(null)
 
   const formatDuration = (value) => {
@@ -12,14 +12,17 @@ const PlaySlider = () => {
     const secondLeft = value - minute * 60
     return `${minute} : ${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`
   }
-  // setInterval(() => {
-  //   const newCurrentTime = audioElement.currentTime
-  //   if (position !== newCurrentTime) {
-  //     setPosition(newCurrentTime)
-  //   }
-  // }, 1000)
+
+  setInterval(() => {
+    console.log(parseInt(audioElement.currentTime))
+    const newCurrentTime = parseInt(audioElement.currentTime)
+    if (position !== newCurrentTime) {
+      setPosition(newCurrentTime)
+    }
+  }, 1000)
 
   useEffect(() => {
+    console.log(nowMusic)
     audioElement.src = nowMusic.musicUrl
   }, [])
 
@@ -30,9 +33,8 @@ const PlaySlider = () => {
       ref={sliderRef}
       value={position}
       // value={0}
-      max={100}
-      onChange={(_, value) => position(value)}
-      // onChangeCommitted={() => console.log('slider committed')}
+      max={nowMusic.musicLength}
+      onChange={(_, value) => setPosition(value)}
       sx={{
         // color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
         height: 4,
