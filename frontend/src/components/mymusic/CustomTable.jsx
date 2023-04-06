@@ -12,7 +12,7 @@ import { usePlayControl } from "hooks/usePlayControl";
 
 const CustomTable = ({
   musicList,
-  playlistSeq,
+  playlistSeq = 0,
   // hasIcon = true,
   radio = false,
   checkMusic,
@@ -28,8 +28,9 @@ const CustomTable = ({
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
   const checkedList = useRef([]);
-
-  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq);
+  const [isOut, setIsOut] = useState(false);
+  console.log('customtable', playlistSeq)
+  const { createNowMusic, createNowPlaylist, setNow } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -81,13 +82,14 @@ const CustomTable = ({
   };
 
   const handlePlayClick = async (start) => {
+    console.log(musicList) 
+    
     const res = await createNowPlaylist(musicList, start);
     createNowMusic(res);
   };
 
-  const [isOut, setIsOut] = useState(false);
   useEffect(() => {
-    return () => {
+    return () => { 
       if (isNew) setIsOut(true);
     };
   });
@@ -263,7 +265,7 @@ const Td = styled.td`
 
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>
@@ -293,7 +295,7 @@ const TdText = styled.td`
   overflow: hidden;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>
