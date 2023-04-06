@@ -205,7 +205,8 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       ) : musicList.length === 0 ? (
         <div>{noticeNoList}</div>
       ) : (
-        <CustomTable musicList={musicList} radio={radio} checkMusic={checkMusic} checkBox={checkBox} checkMusicList={checkMusicList}></CustomTable>
+            <CustomTable musicList={musicList} radio={radio} checkMusic={checkMusic}
+              checkBox={checkBox} checkMusicList={checkMusicList} isPlaylistUser={true}></CustomTable>
       )}
       <Button onClick={onClickUpIcon} visible={showUpIcon ? "visible" : "hidden"}>
         <img src={upIcon} width='55' alt=''></img>
