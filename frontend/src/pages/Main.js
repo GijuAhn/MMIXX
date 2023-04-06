@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+import Main1 from 'assets/main1.jpg'
 import { Wrapper, DefaultBtn } from 'components/Common';
 
 const Main = () => {
@@ -13,7 +14,7 @@ const Main = () => {
 
   return (
     <StyleWrapper>
-      <First data-aos="fade-up" data-aos-duration="1000" data-aos-anchor-placement="bottom-bottom">
+      <First bcImg={Main1} data-aos="fade-up" data-aos-duration="1000" data-aos-anchor-placement="bottom-bottom">
         MUSIC<br />
         MIXING<br />
         FOR WHOLE NEW EXPERIENCE<br />
@@ -43,6 +44,7 @@ const Main = () => {
 };
 
 const StyleWrapper = styled(Wrapper)`
+  font-family: 'Pretendard-Regular';
   flex-direction: column;
   height: calc(${({ children }) => {
     const childCount = React.Children.count(children);

@@ -123,13 +123,13 @@ const MusicInfo = styled.div`
   p:first-child {
     font-size: 16px;
     font-weight: 800;
-    height: 20px;
+    // height: 20px;
     width: auto;
     white-space: nowrap;
-    animation: ${marquee} 8s linear infinite;
-    position: absolute;
-    left: 10px;
-    bottom: 20px;
+    // animation: ${marquee} 8s linear infinite;
+    // position: absolute;
+    // right: 0;
+    // bottom: 20px;
   }
 
   p:nth-child(2) {
