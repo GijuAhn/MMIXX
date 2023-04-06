@@ -6,23 +6,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { PlaySlider } from 'components/PlayBar';
 import { _mix_now } from 'atom/music';
 import theme from 'styles/theme.jsx';
-// import ColorThief from '../../../node_modules/colorthief/dist/color-thief.mjs'
+// import cover from '../../assets/cover_image.jpg'
 
-// const colorThief = new ColorThief();
 const ResultCard = (props) => {
   const musicUrl = props.musicUrl
   const musicName = props.musicName
   const musicianName = props.musicianName
   const coverImage = props.coverImage
   const isResult = props.isResult
-
-  // useEffect(() => {
-  //   if (coverImage.complete){
-  //     colorThief.getColor(coverImage)
-  //   } else {
-  //     console.log('difesdklfjsijdlkjfsldeifjdsklfjiedsjl')
-  //   }
-  // },[])
   
   const [ mixPlay ] = useRecoilState(_mix_now)
    
@@ -33,6 +24,7 @@ const ResultCard = (props) => {
   return (
       <Card isResult={isResult}>
         <CoverImage>
+          {/* <img src={ cover } alt={ musicName } /> */}
           <img src={ coverImage } alt={ musicName } />
         </CoverImage>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -77,7 +69,7 @@ const Content = styled.div`
 const CoverImage = styled.div`
   object-fit: cover;
   width: 17vw;
-  height: 20vh;
+  height: 33vh;
   overflow: hidden;
   border-radius: 1vw;
   img {
