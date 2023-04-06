@@ -15,13 +15,15 @@ const MixResult = () => {
   const [result, setResult] = useState('')
   const musicSeq = location.state && location.state.musicSeq;
   const presetSeq = location.state && location.state.presetSeq;
-
+  const presetName = location.state && location.state.presetName;
+  
   useEffect(() => {
     console.log('Mix Result : ', musicSeq, presetSeq)
     musicMix({music_seq: musicSeq, preset_seq: presetSeq}).then(
       response => setResult(response.data)
     ).catch( error => console.log(error))
   }, [musicSeq, presetSeq])
+  
   return (
     <ResultWrapper>
       <Header 
@@ -29,29 +31,30 @@ const MixResult = () => {
         desc="음악 믹스 결과"  
         />
       { !result && (
+        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
         <InProgress>
           <CircularProgress 
-            style={{ alignItems: 'center', justifyContent: 'center'}}
+            style={{ alignItems: 'center', justifyContent: 'center', padding: '2vh',  width: '10vh', height: '10vh', color: theme.palette.secondary }}
             />
           <p>음악을 변환하고 있습니다. 잠시만 기다려주세요.</p>
         </InProgress>
+        </div>
       )}
       { result && (
+        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
+          {/* <h2 style={{ padding: '1vh' }}>"아무노래아무노래"을 {presetName}로 변환한 결과입니다.</h2> */}
+          <h2 style={{ padding: '1vh' }}>{result.origin_music.musicName}을 {presetName}로 변환한 결과입니다.</h2>
         <ContentWrapper>
-          <Original>
+          {/* <Original>
             <ResultCard 
               musicUrl={result.origin_music.musicUrl}
               musicName={result.origin_music.musicName}
               musicianName={result.origin_music.musicianName}
               coverImage={result.origin_music.coverImage}
               isResult={false}
-              // musicUrl='null'
-              // musicName='Next Level'
-              // musicianName='aespa'
-              // coverImage='next level'
-            >
+              >
             </ResultCard>
-          </Original>
+          </Original> */}
           <Mixed>
             <ResultCard 
               musicUrl={result.mixed_music.musicUrl}
@@ -59,20 +62,22 @@ const MixResult = () => {
               musicianName={result.mixed_music.musicianName}
               coverImage={result.mixed_music.coverImage}
               isResult={true}
-              // musicUrl='null'
-              // musicName='Next Level_mix'
-              // musicianName='aespa'
-              // coverImage='cover_image'
-            >
+              // musicUrl='아무 노래나 아무노래'
+              // musicName='아무노래아무노래_mix'
+              // musicianName='아무아무'
+              // coverImage='아무이미지'
+              >
             </ResultCard>
           </Mixed>
         </ContentWrapper>
+          <DefaultBtn
+            style={{ margin: "2vh" }}
+            onClick={ () => navigate('/mymusic') }
+          >
+            확인
+          </DefaultBtn>
+        </div>
       )}
-      { result && (<DefaultBtn
-        onClick={ () => navigate('/mymusic') }
-      >
-        확인
-      </DefaultBtn>)}
 
     </ResultWrapper>
   )
@@ -93,13 +98,13 @@ const ContentWrapper = styled.div`
   width: 75vw;
   height: 70vh;
 `
-const Original = styled(ContentWrapper)`
-  align-items: start;
-  justify-content: flex-start;
-`
+// const Original = styled(ContentWrapper)`
+//   align-items: start;
+//   justify-content: flex-start;
+// `
 const Mixed = styled(ContentWrapper)`
-  align-items: end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
 `
 const InProgress = styled.div`
   display: flex;
