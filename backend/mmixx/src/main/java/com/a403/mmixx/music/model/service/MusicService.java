@@ -220,7 +220,7 @@ public class MusicService {
 		new_music.setMusicUrl(new_music_path);
 		new_music.setMusicianName(music.getMusicianName());
 		new_music.setUser(music.getUser());
-		new_music.setPresetSeq(music.getPresetSeq());
+		new_music.setPresetSeq(preset_seq);
 
 		musicRepository.save(new_music);
 
@@ -288,7 +288,7 @@ public class MusicService {
 			new_music.setMusicUrl(new_music_path);
 			new_music.setMusicianName(music.getMusicianName());
 			new_music.setUser(music.getUser());
-			new_music.setPresetSeq(music.getPresetSeq());
+			new_music.setPresetSeq(null);
 
 			
 
