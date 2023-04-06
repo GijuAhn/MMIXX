@@ -405,6 +405,7 @@ const StyleFavoriteIcon = styled(FavoriteIcon)`
   right: 20px;
   top: 10px;
   font-size: 2rem;
+  color: red;
 `
 
 const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
@@ -412,6 +413,7 @@ const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
   right: 30px;
   top: 30px;
   font-size: 2rem;
+  color: red;
 `
 
 export default PlaylistDetail;
