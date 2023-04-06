@@ -17,6 +17,7 @@ export const usePlayControl = (playlistSeq) => {
       localStorage.setItem("_nowMusic", JSON.stringify({
         ...newMusic,
         currentTime: 0,
+        duration: nowMusic.musicLength
       }))
       setIsPlaying(true)
     }
