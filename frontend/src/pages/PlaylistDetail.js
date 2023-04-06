@@ -96,12 +96,12 @@ const PlaylistDetail = () => {
         // setPlaylistTitle(res.data.playlistName)
         setPlaylistInfo(res.data)
         setIsChecked(res.data.isPrivate)
+        setIsFavorite(res.data.isFavorite)
         return res.data.userSeq
       })
       .then(res => {
         getUser(res)
           .then(res => setPlaylistUserInfo(res.data))
-        setIsFavorite(res.data.isFavorite)
         console.log("000 ",res.data.isFavorite)
       })
       .catch(err => console.log(err))
@@ -135,10 +135,12 @@ const PlaylistDetail = () => {
               <img src={playlistUserInfo.profileImageUrl} alt="만든 사람"/>
               <span>{playlistUserInfo.userName}</span>
             </PlaylistUser>
-            <PrivateToggle>
-              비공개여부
-              <Switch checked={isChecked } />
-            </PrivateToggle>
+            {playlistUserInfo.userSeq === atomUser.userSeq &&
+              <PrivateToggle>
+                비공개여부
+                <Switch checked={isChecked } />
+              </PrivateToggle>
+            }
           </Top>
           <Bottom>
             {/* 재생하기 */}
@@ -334,6 +336,7 @@ const MoreDiv = styled.div`
   margin-bottom: 5px;
   cursor: pointer;
   position: relative;
+  margin-right: 10px;
 `
 
 const CustomSelect = styled.div`
@@ -399,15 +402,15 @@ const SelectSection = styled.section`
 
 const StyleFavoriteIcon = styled(FavoriteIcon)`
   position: absolute;
-  right: 10px;
+  right: 20px;
   top: 10px;
   font-size: 2rem;
 `
 
 const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 30px;
+  top: 30px;
   font-size: 2rem;
 `
 
