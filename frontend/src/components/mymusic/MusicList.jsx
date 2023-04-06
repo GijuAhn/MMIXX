@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userInfo } from "atom/atom";
 import { _show_new } from "atom/mymusic";
+import { throttle } from "lodash";
 
 const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMusic, checkBox = false, checkMusicList }) => {
   const atomUser = useRecoilValue(userInfo);
@@ -73,6 +74,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
 
       setShowNew(false);
 
+      page.current += 1;
       getMusicList({
         userSeq: user ? user.userSeq : 0,
         page: page.current,
@@ -121,6 +123,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
 
       setShowNew(false);
 
+      page.current += 1;
       getMusicListByCondition({
         userSeq: user ? user.userSeq : 0,
         filter: curFilter.current,
@@ -137,7 +140,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
   }, [scroll]);
   // 스크롤 이벤트
   useEffect(() => {
-    const onScroll = () => {
+    const onScroll = throttle(() => {
       // console.log("scroll...");
       // 기능 1. up-arrow icon 나타나기/사라지기
       if (window.scrollY > 100) {
@@ -153,15 +156,26 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       }
       console.log("scroll2...");
 
-      const { scrollHeight } = document.documentElement;
-      const { scrollTop } = document.documentElement;
-      const { clientHeight } = document.documentElement;
+      // // (2)
+      // const { scrollHeight } = document.documentElement;
+      // const { scrollTop } = document.documentElement;
+      // const { clientHeight } = document.documentElement;
 
-      if (scrollTop >= scrollHeight - clientHeight) {
-        console.log("[new] scroll down!");
-        page.current += 1;
+      // if (scrollTop >= scrollHeight - clientHeight) {
+      //   console.log("[new2] scroll down!");
+      //   // page.current += 1;
+      //   setScroll((current) => current + 1);
+      // }
+
+      // (3)
+      const { scrollTop, offsetHeight } = document.documentElement;
+      if (window.innerHeight + scrollTop >= offsetHeight) {
+        console.log("[new3] scroll down...!!");
+        // page.current += 1;
         setScroll((current) => current + 1);
       }
+
+      // // (1)
       // if (
       //   window.scrollY + document.documentElement.clientHeight >
       //   document.documentElement.scrollHeight
@@ -170,7 +184,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       //   // page.current += 1;
       //   // setScroll((current) => current + 1);
       // }
-    };
+    }, 200);
 
     window.addEventListener("scroll", onScroll);
 
