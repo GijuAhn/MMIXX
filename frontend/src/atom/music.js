@@ -23,6 +23,7 @@ export const _nowMusic = atom({
     musicianName: '',
     playing: false,
     currentTime: 0,
+    duration: 30000,
   },
   effects: [
     localStorageEffect('_nowMusic')
