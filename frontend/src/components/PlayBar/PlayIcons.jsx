@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
@@ -11,8 +11,19 @@ import { useAudioControl } from 'hooks/useAudioControl';
 import { usePlayControl } from 'hooks/usePlayControl';
 
 const PlayControl = ({ width, height }) => {
+  const theme = useTheme()
   const { audio } = useAudioControl()
-  const { isPlaying, playMusic, audioElement, handlePlay, handlePause } = usePlayControl()
+  const { 
+    isPlaying, 
+    playMusic, 
+    audioElement, 
+    handlePlay, 
+    handlePause, 
+    playPrev, 
+    playNext,
+    onShuffle,
+    setOnShuffle
+  } = usePlayControl()
 
   const handlePlayMusic = () => {
     if (audioElement.paused) {
@@ -22,8 +33,13 @@ const PlayControl = ({ width, height }) => {
 
   return (
     <IconWrapper width={width} height={height}>
-      <ShuffleRoundedIcon fontSize="small"/>
-      <SkipPreviousRoundedIcon />
+      <ShuffleRoundedIcon 
+        fontSize="small" 
+        onShuffle={onShuffle} 
+        onClick={() => setOnShuffle((pre) => !pre)}
+        style={{ color: onShuffle && theme.palette.secondary }}
+        />
+      <SkipPreviousRoundedIcon onClick={playPrev}/>
       {!isPlaying ? 
         <StylePlayCircleFilledRoundedIcon 
           color="color"
@@ -32,7 +48,7 @@ const PlayControl = ({ width, height }) => {
       :
         <PauseCircleRoundedIcon onClick={handlePause}/>
       }
-      <SkipNextRoundedIcon />
+      <SkipNextRoundedIcon onClick={playNext}/>
       <RepeatOneRoundedIcon />
     </IconWrapper>
   )
@@ -46,6 +62,7 @@ const IconWrapper = styled.div`
   
   * {
     // border: 1px dotted pink;
+    cursor: pointer;
   }
 
   > :nth-child(3) {

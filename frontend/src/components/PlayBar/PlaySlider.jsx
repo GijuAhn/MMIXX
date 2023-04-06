@@ -57,8 +57,6 @@ const PlaySlider = () => {
   }, [])
 
   useEffect(() => {
-    console.log(audioElement.currentTime)
-    console.log(duration)
   }, [position])
 
   return (
