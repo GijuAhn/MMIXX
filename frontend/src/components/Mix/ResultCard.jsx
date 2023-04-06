@@ -2,10 +2,12 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import Box from '@mui/material/Box';
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PlaySlider } from 'components/PlayBar';
-import { _mix_now } from 'atom/music';
+import { _mix_now, _mixPlaying } from 'atom/music';
 import theme from 'styles/theme.jsx';
+import { usePlayControl } from 'hooks/usePlayControl';
 // import cover from '../../assets/cover_image.jpg'
 
 const ResultCard = (props) => {
@@ -16,10 +18,22 @@ const ResultCard = (props) => {
   const isResult = props.isResult
   
   const [ mixPlay ] = useRecoilState(_mix_now)
-   
+  const [ mixPlaying ] = useRecoilState(_mixPlaying)
+  const { handlePlay, handlePause } = usePlayControl()
+  const [ isPlaying, setIsPlaying ] = React.useState(false)
+
    const handleMixPlay = () => {
-     mixPlay.src = props.musicUrl
-     mixPlay.play()
+    if (mixPlaying) {
+      mixPlay.pause()
+    } 
+    mixPlay.src = props.musicUrl
+    mixPlay.play()
+    setIsPlaying(true)
+   }
+
+   const handleMixPause = () => {
+    mixPlay.pause()
+    setIsPlaying(false)
    }
   return (
       <Card isResult={isResult}>
@@ -38,8 +52,11 @@ const ResultCard = (props) => {
           </Content>
         </Box>
         <MusicPlayer>
-          <PlayCircleFilledRoundedIcon style={{ width: '8vh', height: '8vh' }} onClick={handleMixPlay}/>
-          <PlaySlider />
+          {!isPlaying ? 
+            <PlayCircleFilledRoundedIcon style={{ width: '8vh', height: '8vh' }} onClick={handleMixPlay} />
+          :
+            <PauseCircleRoundedIcon style={{ width: '8vh', height: '8vh' }} onClick={handleMixPause} />
+          }
         </MusicPlayer>
       </Card>
   )

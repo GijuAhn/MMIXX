@@ -83,12 +83,12 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
       {/* 프리셋 음악 재생 */}
       <MusicPlayer>
-        <PlaySlider audioState={mixPlay}/>
+        {/* <PlaySlider audioState={mixPlay}/> */}
         {/* <PlayIcons /> */}
         {mixPlaying && mixPlay.src == presetUrl ?
-          <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+          <StopCircleRoundedIcon onClick={handleMixPlay} sx={{ fontSize: '60px'}}/>
         :
-          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} sx={{ fontSize: '60px'}}/>
         }
       </MusicPlayer>
     </Card>
