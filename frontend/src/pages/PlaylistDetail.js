@@ -6,7 +6,7 @@ import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRecoilValue } from "recoil"
-import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
@@ -62,6 +62,11 @@ const PlaylistDetail = () => {
     }
   }
 
+  const handlePause = () => {
+    setIsPlaying(false)
+    audioElement.pause()
+  }
+
   // 즐겨찾기
   const [isFavorite, setIsFavorite] = useState(false);
   const heartClick = () => {
@@ -111,7 +116,7 @@ const PlaylistDetail = () => {
   return (
     <StyleWrapper url={coverImage}>
       <Header 
-        title="플레이리스트 상세 보기"
+        title={playlistInfo.playlistName}
         desc=""
         fontSize="24px"
       />
@@ -128,6 +133,9 @@ const PlaylistDetail = () => {
               <StyleFavoriteBorderIcon onClick={heartClick } />
             }
           <Top>
+            {playlistUserInfo.userSeq === atomUser.userSeq &&
+              <p style={{ color: 'gray', position: 'absolute', top: 0}}>비공개 처리된 플레이리스트 입니다</p>
+            }
             <PlaylistTitle>
               <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
@@ -135,23 +143,23 @@ const PlaylistDetail = () => {
               <img src={playlistUserInfo.profileImageUrl} alt="만든 사람"/>
               <span>{playlistUserInfo.userName}</span>
             </PlaylistUser>
-            {playlistUserInfo.userSeq === atomUser.userSeq &&
+            {/* {playlistUserInfo.userSeq === atomUser.userSeq &&
               <PrivateToggle>
                 비공개여부
                 <Switch checked={isChecked } />
               </PrivateToggle>
-            }
+            } */}
           </Top>
           <Bottom>
             {/* 재생하기 */}
             {isPlaying && queue.playlistSeq === playlistSeq? 
-              <StopCircleRoundedIcon 
-                sx={{ fontSize: '40px'}}
-                onClick={handlePlaying}
+              <StylePauseCircleRoundedIcon 
+                sx={{ fontSize: '60px'}}
+                onClick={handlePause}
               />
             :
               <StylePlayCircleFilledRoundedIcon 
-                sx={{ fontSize: '40px'}}
+                sx={{ fontSize: '60px'}}
                 onClick={handlePlaying}
                 disabled={playlistMusic.length === 0}
               />
@@ -295,7 +303,7 @@ const PlaylistCover = styled.div`
 ` 
 
 const RightContent = styled.div`
-  width: 830px;
+  width: 810px;
   height: 300px;
   display: flex;
   flex-direction: column;
@@ -308,6 +316,7 @@ const Top = styled.div`
   flex-direction: column;
   flex-grow: 4;
   align-items: start;
+  position: relative;
 `
 
 const Bottom = styled.div`
@@ -317,7 +326,25 @@ const Bottom = styled.div`
 `
 
 const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
+  color: ${({theme}) => theme.palette.secondary};
   
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  ${({disabled}) => disabled && `
+    color: gray;
+    
+    :hover {
+      transform: scale(1);
+      cursor: default;
+    }
+  `}
+`
+
+const StylePauseCircleRoundedIcon = styled(PauseCircleRoundedIcon)`
+  color: ${({theme}) => theme.palette.secondary};
   :hover {
     transform: scale(1.1);
     cursor: pointer;
