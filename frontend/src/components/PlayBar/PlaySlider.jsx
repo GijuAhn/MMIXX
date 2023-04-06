@@ -39,20 +39,26 @@ const PlaySlider = () => {
       start: '0:00',
       end: displayString
     })
+    setDuration(minutes * 60 + seconds)
   };
 
   setInterval(() => {
-    console.log(parseInt(audioElement.currentTime))
-    const newCurrentTime = parseInt(audioElement.currentTime)
-    if (position !== newCurrentTime) {
-      setPosition(newCurrentTime)
+    if (isPlaying){
+      const newCurrentTime = parseInt(audioElement.currentTime)
+      if (position !== newCurrentTime) {
+        setPosition(newCurrentTime)
+      }
     }
   }, 1000)
 
   useEffect(() => {
-    console.log(nowMusic.duration, '-', audioElement.duration)
     audioElement.src = nowMusic.musicUrl
   }, [])
+
+  useEffect(() => {
+    console.log(audioElement.currentTime)
+    console.log(duration)
+  }, [position])
 
   return (
     <div style={{ position: 'relative'}}>
@@ -61,8 +67,9 @@ const PlaySlider = () => {
         size="small"
         ref={sliderRef}
         value={position}
-        // value={0}
-        max={nowMusic.musicLength}
+        min={0}
+        step={1}
+        max={duration}
         onChange={(_, value) => setPosition(value)}
         sx={{
           // color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
