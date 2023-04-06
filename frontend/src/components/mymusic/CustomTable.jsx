@@ -19,6 +19,7 @@ const CustomTable = ({
   checkBox = false,
   checkMusicList,
   isNew = false,
+  isPlaylistUser = false
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -95,7 +96,7 @@ const CustomTable = ({
     <Table isNew={isNew} isOut={isOut}>
       <tbody>
         {musicList.map((music, index) => (
-          <Tr key={index}>
+          <Tr key={index}>            
             {radio || checkBox ? (
               <Radio>
                 <img
@@ -141,7 +142,7 @@ const CustomTable = ({
                 <Play onClick={() => handlePlayClick(index)} musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
                 <Mix
                   musicSeq={music.musicSeq}
@@ -151,12 +152,12 @@ const CustomTable = ({
                 ></Mix>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser ? (
               <Td width='5%' isNew={isNew}>
                 <Download musicSeq={music.musicSeq} musicName={music.musicName} musicUrl={music.musicUrl}></Download>
               </Td>
