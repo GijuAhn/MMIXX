@@ -12,7 +12,7 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
   const { playlistName } = playlist
   const [coverImage, setCoverImg] = useState('')
   const [isOverflowed, setIsOverflowed] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(playlist.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(false);
   const pRef = useRef(null)
   const location = useLocation();
   const atomUser = useRecoilValue(userInfo);
