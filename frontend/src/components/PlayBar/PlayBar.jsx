@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { useLocation } from 'react-router-dom';
 import AlbumIcon from '@mui/icons-material/Album'
 
@@ -44,6 +44,15 @@ const PlayBar = () => {
     </Wrapper>
   );
 };
+
+const marquee = keyframes`
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+`
 
 const Wrapper = styled.div`
   backdrop-filter: blur(10px);
@@ -108,9 +117,19 @@ const MusicInfo = styled.div`
   flex-direction: column;
   justify-content: end;
   margin-left: 10px;
+  overflow: hidden;
+  position: relative;
 
   p:first-child {
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    height: 20px;
+    width: auto;
+    white-space: nowrap;
+    animation: ${marquee} 8s linear infinite;
+    position: absolute;
+    left: 10px;
+    bottom: 20px;
   }
 
   p:nth-child(2) {
