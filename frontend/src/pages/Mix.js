@@ -9,8 +9,6 @@ import { useState, useEffect } from "react";
 import { DefaultBtn } from "components/Common";
 
 import { getPreset } from 'api/genre';
-import { useRecoilValue } from "recoil";
-import { _mix_now } from "atom/music";
 
 const Mix = () => {
   const navigate = useNavigate();
@@ -23,32 +21,31 @@ const Mix = () => {
   const musicSelected = !location.state
   const [presetSeq, setPresetSeq] = useState('');
   const [presetData, setPresetData] = useState('');
-  const [isPreset, setIsPreset] = useState(false)
-  const mixAudio = useRecoilValue(_mix_now)
 
   const presetSeqFunc = (x) => {
     setPresetSeq(x)
+    console.log('선택한 프리셋 번호 : ',x)
+    console.log('선택한 프리셋 이름 : ', presetData[x-1].presetName)
   }
 
   useEffect(() => {
-    // console.log('******* 믹스할 음악 *******')
-    // console.log(musicSelected)
-    // console.log(musicName)
-    // console.log(musicSeq)
-    // console.log(musicianName)
-    // console.log('****************************')
+    console.log('******* 믹스할 음악 *******')
+    console.log(musicSelected)
+    console.log(musicName)
+    console.log(musicSeq)
+    console.log(musicianName)
+    console.log('****************************')
     getPreset()
-    .then((res) => setPresetData(res.data), setIsPreset(true))
+    .then((res) => {
+      setPresetData(res.data)
+      return res
+    })
+    // .then(res => console.log('데이터 확인?',res.data[1]))
     .catch((err) => console.log(err))
-
-    return () => {
-      mixAudio.pause()
-      mixAudio.src = ''
-    }
   }, [])
 
   useEffect(() => {
-    // console.log('presetData : ', presetData) 
+    console.log('presetData : ', presetData) 
   }, [presetData]);
 
   return (
@@ -98,73 +95,73 @@ const Mix = () => {
               )
             })} */}
         {/* </div> */}
-        <div key={1} style={presetStyle}>
+        <div key={2} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
             presetName='편안한'
-            presetNum={1}
+            presetNum={2}
             musicName="Raindrops falling on my head"
             musicLength='442862'
             musicianName="B.J.Thomas"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/4efeaba5-e758-4015-8bc1-1e4ed502f9b1.wav"
-            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/fbf4bb0f-b87e-4f17-aba6-11a75b20252c.jpg"
-            selNum = {presetSeq}
-          ></PresetCard>
-        </div>
-        <div key={2} style={presetStyle}>
-          <PresetCard
-            presetSeqFunc={presetSeqFunc}
-            presetName='밝은'
-            presetNum={2}
-            musicName="Pop"
-            musicianName="나연"
-            musicLength="404836"
-            albumName="Unknown"
-            presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c0a34dff-ec72-4be3-804a-d9bc037da373.wav"
-            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/e8a6dbf9-1def-477b-bd2b-cd9e30e409c6.jpg"
+            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/8b5fb8a8-ec09-40d5-8aff-a5b6ad30791e.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
         <div key={3} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
-            presetName='강렬한'
+            presetName='밝은'
             presetNum={3}
+            musicName="Pop"
+            musicianName="나연"
+            musicLength="404836"
+            albumName="Unknown"
+            presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/c0a34dff-ec72-4be3-804a-d9bc037da373.wav"
+            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/c6d2f1de-bad7-4517-b52c-84536c1060b9.jpg"
+            selNum = {presetSeq}
+          ></PresetCard>
+        </div>
+        <div key={4} style={presetStyle}>
+          <PresetCard
+            presetSeqFunc={presetSeqFunc}
+            presetName='강렬한'
+            presetNum={4}
             musicName="Bass"
             musicLength="287629"
             musicianName="DJ Unknown"
             albumName="Unknown"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/203c4359-944b-4820-b3a5-33d708ea1e7e.mp3"
-            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/d099aeb9-0219-4183-8898-742625efd300.jpg"
+            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/3724be88-ec26-4944-b215-87312c7af6f7.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
-        <div key={4} style={presetStyle}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        <div key={5} style={presetStyle}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
           <PresetCard
             presetSeqFunc={presetSeqFunc}
             presetName='신나는'
-            presetNum={4}
+            presetNum={5}
             musicName="DNA"
             musicLength="223179"
             musicianName="방탄소년단"
             albumName="LOVE YOURSELF 承 `Her`"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/239b93b6-5d68-4d2f-92e1-e1e4390e6dc9.mp3"
-            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/ffa46eba-2ec1-437d-ae49-674e19e2ef2e.jpg"
+            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/ffa46eba-2ec1-437d-ae49-674e19e2ef2e.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
-        <div key={5} style={presetStyle}>
+        <div key={6} style={presetStyle}>
           <PresetCard
             presetSeqFunc={presetSeqFunc}
             presetName='웅장한'
-            presetNum={5}
+            presetNum={6}
             musicName="Iron Man 3"
             musicLength="143550"
             musicianName="Brian Tyler"
             albumName="아이언맨 3 OST"
             presetUrl="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/music/7926ce00-3f1c-445b-a70f-d20485fdfd98.mp3"
-            coverImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/7c64870d-4f8a-4b8b-a29a-862b59ee60bd.jpg"
+            converImage="https://s3.ap-northeast-2.amazonaws.com/bucket-mp3-file-for-mmixx/images/7c64870d-4f8a-4b8b-a29a-862b59ee60bd.jpg"
             selNum = {presetSeq}
           ></PresetCard>
         </div>
@@ -173,7 +170,7 @@ const Mix = () => {
       <ButtonStyle>
         <DefaultBtn 
           onClick={ () => 
-            navigate('/mix/result', { state: { musicSeq:musicSeq, presetSeq:presetSeq } })
+            navigate('/mix/result', { state: { musicSeq:musicSeq, presetSeq:presetSeq, presetName:presetData[presetSeq-1].presetName } })
           }
         >변환하기</DefaultBtn>
       </ButtonStyle>
