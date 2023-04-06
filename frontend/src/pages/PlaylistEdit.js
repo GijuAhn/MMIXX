@@ -5,7 +5,9 @@ import AlbumIcon from '@mui/icons-material/Album'
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { getPlaylistInfo, modifyPlaylist} from 'api/playlist'
+import { getPlaylistInfo, modifyPlaylist } from 'api/playlist'
+import { useRecoilValue } from "recoil";
+import { userInfo } from "atom/atom";
 
 const PlaylistEdit = () => {
   const { playlistSeq } = useParams();
@@ -23,9 +25,12 @@ const PlaylistEdit = () => {
     setIsChecked(!isChecked);
   };
 
+  // user
+  const atomUser = useRecoilValue(userInfo);
+
   // 플레이리스트 정보 불러오기
   useEffect(() => {    
-    getPlaylistInfo(playlistSeq)
+    getPlaylistInfo(playlistSeq, atomUser.userSeq)
     .then(res => {
       setPlaylistInfo(res.data)
       setIsChecked(res.data.isPrivate)
@@ -40,18 +45,23 @@ const PlaylistEdit = () => {
   const modifySubmit =  () => {
     // console.log(isChecked);
     // console.log(inputRef.current.value);
-    modifyPlaylist(
-      playlistSeq,
-      {
-        playlist_name: inputRef.current.value,
-        is_private: isChecked,
+    var title = inputRef.current.value;
+    if (title.replace(/\s/g, "") === "") {
+      alert("제목을 입력해주세요!!")
+    } else {
+      modifyPlaylist(
+        playlistSeq,
+        {
+          playlist_name: title,
+          is_private: isChecked,
+        }
+      ).then(_ => {
+        // console.log('?????', res)
+        navigate(`/playlist/${playlistSeq}`)
       }
-    ).then(_ => {
-      // console.log('?????', res)
-      navigate(`/playlist/${playlistSeq}`)
-    }
-    )
-  }
+      )
+    }//else
+  }//modifySubmit
 
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
