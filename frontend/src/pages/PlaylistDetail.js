@@ -173,7 +173,13 @@ const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
   const deleteConfirm = () => {
     deletePlaylist(playlistSeq).then((res) => {
       // alert('삭제되었습니다.')
-      navigate("/playlist");
+      navigate("/playlist", {
+        state: {
+          success: true,
+          msg: "플레이리스트가 삭제되었습니다.",
+          width: "300px",
+      } })
+
     });
   };
   const cancelConfirm = () => console.log("취소했습니다.");

@@ -8,6 +8,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getPlaylistInfo, modifyPlaylist } from 'api/playlist'
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
+import CustomToast from "components/mymusic/CustomToast";
 
 const PlaylistEdit = () => {
   const { playlistSeq } = useParams();
@@ -28,6 +29,8 @@ const PlaylistEdit = () => {
   // user
   const atomUser = useRecoilValue(userInfo);
 
+  const [toastCheck, setToastCheck] = useState(false);
+
   // 플레이리스트 정보 불러오기
   useEffect(() => {    
     getPlaylistInfo(playlistSeq, atomUser.userSeq)
@@ -47,7 +50,8 @@ const PlaylistEdit = () => {
     // console.log(inputRef.current.value);
     var title = inputRef.current.value;
     if (title.replace(/\s/g, "") === "") {
-      alert("제목을 입력해주세요!!")
+      // alert("제목을 입력해주세요!!")
+      setToastCheck(true)
     } else {
       modifyPlaylist(
         playlistSeq,
@@ -57,7 +61,12 @@ const PlaylistEdit = () => {
         }
       ).then(_ => {
         // console.log('?????', res)
-        navigate(`/playlist/${playlistSeq}`)
+        navigate(`/playlist/${playlistSeq}`, {
+          state: {
+            success: true,
+            msg: "플레이리스트 수정 성공",
+            width: "250px",
+        }})
       }
       )
     }//else
@@ -69,6 +78,7 @@ const PlaylistEdit = () => {
         title="Edit Playlist"
         desc="플레이리스트 수정"
       />
+      {toastCheck ? <CustomToast res='error' text='제목을 입력해주세요!' toggle={setToastCheck} width='230px' /> : null}
       <InputContent>
         <DefaultCover>
           <AlbumIcon color="white" fontSize="large"/>
