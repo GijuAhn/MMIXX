@@ -7,6 +7,7 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { userInfo } from 'atom/atom';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
+import CustomToast from "components/mymusic/CustomToast";
 
 const Playlist = () => {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const Playlist = () => {
   const global = 'global';
   const favorite = 'favorite';
   const atomUser = useRecoilValue(userInfo);
+
+  const { state } = useLocation();
+  const [toastSuccess, setToastSuccess] = useState(state && state.success);
 
   useEffect(() => {
     // console.log(location)
@@ -83,6 +87,7 @@ const Playlist = () => {
           />    
       ))
       }
+      {toastSuccess ? <CustomToast res='success' text={state.msg} toggle={setToastSuccess} width={state.width} /> : null}
       <Content>
         <Top>
           {playlistType === mine ? (
