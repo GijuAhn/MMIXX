@@ -93,10 +93,11 @@ export const usePlayControl = (playlistSeq) => {
   }
 
   useEffect(() => {
-    audioElement.addEventListener('ended', () => {
+    const handleNext = () => {
       setIsPlaying(false)
       playNext()
-    })
+    }
+    audioElement.addEventListener('ended', handleNext)
     audioElement.addEventListener('playing', () => {
       // console.log(audioElement.currentTime)
     })

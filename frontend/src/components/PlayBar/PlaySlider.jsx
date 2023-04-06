@@ -1,9 +1,10 @@
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { useState, useEffect, useRef } from 'react'
 import Slider from '@mui/material/Slider';
 import { usePlayControl } from 'hooks/usePlayControl';
 
 const PlaySlider = () => {
+  const theme = useTheme()
   const { audioElement, isPlaying, nowMusic } = usePlayControl()
   const [ position, setPosition ] = useState(0)
   const [ duration, setDuration ] = useState(0)
@@ -62,6 +63,16 @@ const PlaySlider = () => {
 
   return (
     <div style={{ position: 'relative'}}>
+      {/* <Slider 
+        value={position}
+        min={0}
+        step={1}
+        max={duration}
+        sx={{
+          
+        }}
+      /> */}
+
       <Slider
         aria-label="time-indicator"
         size="small"
@@ -70,7 +81,6 @@ const PlaySlider = () => {
         min={0}
         step={1}
         max={duration}
-        onChange={(_, value) => setPosition(value)}
         sx={{
           // color: theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
           height: 4,
