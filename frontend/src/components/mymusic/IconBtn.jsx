@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 // import PropTypes from "prop-types";
+import { debounce } from "lodash";
 
 const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
   const [isHover, setIsHover] = useState(false);
@@ -10,12 +11,18 @@ const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
   // const onMouseLeave = () => {
   //   setIsHover(false);
   // };
-  const onMouseOver = () => {
+  // const onMouseOver = () => {
+  //   setIsHover(true);
+  // };
+  // const onMouseOut = () => {
+  //   setIsHover(false);
+  // };
+  const onMouseOver = debounce(() => {
     setIsHover(true);
-  };
-  const onMouseOut = () => {
+  }, 50);
+  const onMouseOut = debounce(() => {
     setIsHover(false);
-  };
+  }, 50);
   return (
     <Button
       // onMouseEnter={onMouseEnter}
