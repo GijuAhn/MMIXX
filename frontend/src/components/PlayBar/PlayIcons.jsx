@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
-import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded';
 import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded';
 import SkipNextRoundedIcon from '@mui/icons-material/SkipNextRounded';
@@ -12,7 +12,7 @@ import { usePlayControl } from 'hooks/usePlayControl';
 
 const PlayControl = ({ width, height }) => {
   const { audio } = useAudioControl()
-  const { isPlaying, playMusic, audioElement } = usePlayControl()
+  const { isPlaying, playMusic, audioElement, handlePlay, handlePause } = usePlayControl()
 
   const handlePlayMusic = () => {
     if (audioElement.paused) {
@@ -27,10 +27,10 @@ const PlayControl = ({ width, height }) => {
       {!isPlaying ? 
         <StylePlayCircleFilledRoundedIcon 
           color="color"
-          onClick={handlePlayMusic}
+          onClick={handlePlay}
         />
       :
-        <StopCircleRoundedIcon onClick={() => audio.play()}/>
+        <PauseCircleRoundedIcon onClick={handlePause}/>
       }
       <SkipNextRoundedIcon />
       <RepeatOneRoundedIcon />

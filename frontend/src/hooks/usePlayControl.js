@@ -17,7 +17,7 @@ export const usePlayControl = (playlistSeq) => {
       localStorage.setItem("_nowMusic", JSON.stringify({
         ...newMusic,
         currentTime: 0,
-        duration: nowMusic.musicLength
+        duration: audioElement.duration
       }))
       setIsPlaying(true)
     }
@@ -82,6 +82,16 @@ export const usePlayControl = (playlistSeq) => {
     // createNowMusic(newQueue)
   }
 
+  const handlePlay = () => {
+    audioElement.play()
+    setIsPlaying(true)
+  }
+
+  const handlePause = () => {
+    audioElement.pause()
+    setIsPlaying(false)
+  }
+
   useEffect(() => {
     audioElement.addEventListener('ended', () => {
       setIsPlaying(false)
@@ -101,6 +111,8 @@ export const usePlayControl = (playlistSeq) => {
     createNowPlaylist, 
     createNowMusic, 
     playMusic,
-    playNext 
+    playNext,
+    handlePlay,
+    handlePause
   }
 }

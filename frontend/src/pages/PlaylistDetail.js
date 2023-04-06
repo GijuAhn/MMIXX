@@ -6,7 +6,7 @@ import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRecoilValue } from "recoil"
-import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 
 import { Wrapper, Header } from "components/Common"
 import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
@@ -60,6 +60,11 @@ const PlaylistDetail = () => {
       const res = await createNowPlaylist(playlistMusic)
       createNowMusic(res)
     }
+  }
+
+  const handlePause = () => {
+    setIsPlaying(false)
+    audioElement.pause()
   }
 
   // 즐겨찾기
@@ -145,9 +150,9 @@ const PlaylistDetail = () => {
           <Bottom>
             {/* 재생하기 */}
             {isPlaying && queue.playlistSeq === playlistSeq? 
-              <StopCircleRoundedIcon 
+              <StylePauseCircleRoundedIcon 
                 sx={{ fontSize: '40px'}}
-                onClick={handlePlaying}
+                onClick={handlePause}
               />
             :
               <StylePlayCircleFilledRoundedIcon 
@@ -317,6 +322,23 @@ const Bottom = styled.div`
 `
 
 const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
+  
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  ${({disabled}) => disabled && `
+    color: gray;
+    
+    :hover {
+      transform: scale(1);
+      cursor: default;
+    }
+  `}
+`
+
+const StylePauseCircleRoundedIcon = styled(PauseCircleRoundedIcon)`
   
   :hover {
     transform: scale(1.1);
