@@ -1,5 +1,4 @@
 import { Wrapper, Header, DefaultBtn } from "components/Common";
-import { testPlaylistMusic } from "atom/atom";
 import { useRecoilValue } from "recoil";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
