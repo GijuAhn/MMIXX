@@ -3,16 +3,18 @@ import { getMusicList, getMusicListByCondition } from "api/mymusic";
 import CustomTable from "./CustomTable";
 import upIcon from "assets/up-arrow.png";
 import styled from "styled-components";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
-import { _show_new } from "atom/mymusic";
+// import { _show_new } from "atom/mymusic";
+import { _new } from "atom/mymusic";
 import { throttle } from "lodash";
 
 const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMusic, checkBox = false, checkMusicList }) => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
+  const reload = useRecoilValue(_new);
 
-  const setShowNew = useSetRecoilState(_show_new);
+  // const setShowNew = useSetRecoilState(_show_new);
 
   // const [musicList, setMusicList] = useState([
   //   {
@@ -52,31 +54,70 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
   const curFilter = useRef(null);
   const curOrder = useRef(null);
 
-  // const didMount1 = useRef(false);
+  const didMount1 = useRef(false);
   const didMount2 = useRef(false);
   const didMount3 = useRef(false);
   const didMount4 = useRef(false);
 
+  // // 1. 첫 렌더링 시에만 음악 리스트를 가져온다.
+  // useEffect(() => {
+  //   getMusicList({ userSeq: user ? user.userSeq : 0, page: 1 })
+  //     .then(({ data }) => {
+  //       // console.log(data.content);
+  //       setMusicList(data.content);
+  //       isLastPage.current = data.last;
+  //     })
+  //     .then(() => setIsLoading(false));
+  // }, [reload]);
+  // // 2. 첫 렌더링을 제외하고, 페이징 된 음악 리스트를 가져온다. 조건 검색이 아니다.
+  // useEffect(() => {
+  //   if (didMount2.current) {
+  //     if (hasCondition.current) return;
+
+  //     // setShowNew(false);
+
+  //     page.current += 1;
+  //     getMusicList({
+  //       userSeq: user ? user.userSeq : 0,
+  //       page: page.current,
+  //     }).then(({ data }) => {
+  //       // console.log(data.content);
+  //       setMusicList((currentArray) => [...currentArray, ...data.content]);
+  //       isLastPage.current = data.last;
+  //     });
+  //   } else {
+  //     didMount2.current = true;
+  //   }
+  // }, [scroll]);
   // 1. 첫 렌더링 시에만 음악 리스트를 가져온다.
   useEffect(() => {
-    getMusicList({ userSeq: user ? user.userSeq : 0, page: 1 })
+    if (didMount1.current && hasCondition.current) return;
+
+    getMusicListByCondition({
+      userSeq: user ? user.userSeq : 0,
+      order: "date2",
+      page: page.current,
+    })
       .then(({ data }) => {
         // console.log(data.content);
         setMusicList(data.content);
         isLastPage.current = data.last;
       })
       .then(() => setIsLoading(false));
-  }, []);
+
+    didMount1.current = true;
+  }, [reload]);
   // 2. 첫 렌더링을 제외하고, 페이징 된 음악 리스트를 가져온다. 조건 검색이 아니다.
   useEffect(() => {
     if (didMount2.current) {
       if (hasCondition.current) return;
 
-      setShowNew(false);
+      // setShowNew(false);
 
       page.current += 1;
-      getMusicList({
+      getMusicListByCondition({
         userSeq: user ? user.userSeq : 0,
+        order: "date2",
         page: page.current,
       }).then(({ data }) => {
         // console.log(data.content);
@@ -93,7 +134,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
 
       if (setSearchText) setSearchText(query);
-      setShowNew(false);
+      // setShowNew(false);
 
       page.current = 1;
       hasCondition.current = true;
@@ -121,7 +162,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       if (!hasCondition.current) return;
       // console.log(`query: ${query}, filter: ${filter}, order: ${order}`);
 
-      setShowNew(false);
+      // setShowNew(false);
 
       page.current += 1;
       getMusicListByCondition({
@@ -156,24 +197,32 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       }
       console.log("scroll2...");
 
-      // // (2)
-      // const { scrollHeight } = document.documentElement;
-      // const { scrollTop } = document.documentElement;
-      // const { clientHeight } = document.documentElement;
+      // (2)
+      const { scrollHeight } = document.documentElement;
+      const { scrollTop } = document.documentElement;
+      const { clientHeight } = document.documentElement;
 
       // if (scrollTop >= scrollHeight - clientHeight) {
-      //   console.log("[new2] scroll down!");
+      if (scrollTop + 10 >= scrollHeight - clientHeight) {
+        console.log("[new2] scroll down!");
+        // page.current += 1;
+        // setScroll((current) => current + 1);
+      }
+
+      // // (4)
+      // if (document.documentElement.scrollTop + window.innerHeight + 300 >= document.documentElement.scrollHeight) {
+      //   console.log("[new4] scroll down...!!");
+      //   // page.current += 1;
+      //   // setScroll((current) => current + 1);
+      // }
+
+      // // (3)
+      // const { scrollTop, offsetHeight } = document.documentElement;
+      // if (window.innerHeight + scrollTop >= offsetHeight) {
+      //   console.log("[new3] scroll down...!!");
       //   // page.current += 1;
       //   setScroll((current) => current + 1);
       // }
-
-      // (3)
-      const { scrollTop, offsetHeight } = document.documentElement;
-      if (window.innerHeight + scrollTop >= offsetHeight) {
-        console.log("[new3] scroll down...!!");
-        // page.current += 1;
-        setScroll((current) => current + 1);
-      }
 
       // // (1)
       // if (
