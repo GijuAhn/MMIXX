@@ -32,22 +32,22 @@ const ResultCard = (props) => {
    }
   return (
       <Card isResult={isResult}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <CoverImage>
           <img src={ coverImage } alt={ musicName } />
         </CoverImage>
-        <Content>
-          <div style={{ color: `${theme.palette.light}`, fontSize: '2.5vw', fontWeight: 'bold', justifyContent: 'flex-start' }}>
-            { musicName }
-          </div>
-          <div style={{ color: `${theme.palette.light}`, fontSize: '1vw', fontWeight: 'normal', justifyContent: 'flex-start' }}>
-            { musicianName }
-          </div>
-        </Content>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Content>
+            <div style={{ color: `${theme.palette.light}`, fontSize: '2.5vw', fontWeight: 'bold', justifyContent: 'flex-start' }}>
+              { musicName }
+            </div>
+            <div style={{ color: `${theme.palette.light}`, fontSize: '1vw', fontWeight: 'normal', justifyContent: 'flex-start' }}>
+              { musicianName }
+            </div>
+          </Content>
         </Box>
         <MusicPlayer>
+          <PlayCircleFilledRoundedIcon style={{ width: '8vh', height: '8vh' }} onClick={handleMixPlay}/>
           <PlaySlider />
-          <PlayCircleFilledRoundedIcon onClick={handleMixPlay}/>
         </MusicPlayer>
       </Card>
   )
@@ -57,23 +57,23 @@ export default ResultCard
 
 const Card = styled.div`
   display: flex;
-  flex-direction: row;
+  // flex-direction: row;
   flex-direction: column;
-  border: 3px solid ${props => (props.isResult ? theme.palette.secondary : theme.palette.light)};
+  border: 5px solid ${props => (props.isResult ? theme.palette.secondary : theme.palette.light)};
+  background-color: ${theme.palette.darkgray};
   border-radius: 10px;
-  width: 30vw;
-  height: 30vh;
-  padding: 10px;
+  width: 28vw;
+  height: 70vh;
+  padding: 1vw;
 `
 const Content = styled.div`
   display: flex;
   flex-direction: column; 
-  padding-left: 3vw;
+  padding: 1vw;
   align-items: center;
   pl: 1;
   pb: 1;
 `
-
 const CoverImage = styled.div`
   object-fit: cover;
   width: 17vw;
@@ -88,6 +88,7 @@ const CoverImage = styled.div`
 const MusicPlayer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: 'flex-start';
+  align-items: start;
+  justify-content: flex-start;
   margin: 1px;
 `
