@@ -19,6 +19,8 @@ const MyMusic = () => {
   const showNew = useRecoilValue(_show_new);
   const newMusicList = useRecoilValue(_new_music_list);
 
+  console.log("[new]", showNew, newMusicList);
+
   // // [Test] 곡 선택하기 (radio)
   // const [selectedMusic, setSelectedMusic] = useState({
   //   musicSeq: null,
