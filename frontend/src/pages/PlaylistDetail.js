@@ -143,7 +143,7 @@ const PlaylistDetail = () => {
         </RightContent>
       </InfoContent>
 
-      <CustomTable playlistSeq={playlistSeq} musicList={playlistMusic} />
+      <CustomTable playlistSeq={playlistSeq} musicList={playlistMusic} isPlaylistUser={playlistUserInfo.userSeq === atomUser.userSeq} />
     </StyleWrapper>
   );
 };
