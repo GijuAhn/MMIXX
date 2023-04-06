@@ -13,7 +13,6 @@ export const usePlayControl = (playlistSeq) => {
   const mixPlaying = useRecoilValue(_mixPlaying)
 
   const createNowMusic = async (props) => {
-    console.log(props)
     if (props && props?.musicUrl) {
       localStorage.setItem("_nowMusic", JSON.stringify({
         ...props,
@@ -27,6 +26,8 @@ export const usePlayControl = (playlistSeq) => {
   }
 
   const createNowPlaylist = async ( playlist, start = 0 ) => {
+    audioElement.pause()
+
     const newPlaylist = await playlist.map((item, index) => {
       if (index === start) {
         const newItem = {...item, playing: true }
@@ -46,6 +47,7 @@ export const usePlayControl = (playlistSeq) => {
     setQueue(newObj)
     audioElement.src = newPlaylist[start].musicUrl
     audioElement.currentTime = 0
+    audioElement.load()
     audioElement.play()
     setIsPlaying(true)
     return newPlaylist[start]
@@ -74,6 +76,7 @@ export const usePlayControl = (playlistSeq) => {
       audioElement.pause()
     }
     audioElement.play()
+    console.log(nextIndex)
   }
 
   const handlePlay = () => {
@@ -98,13 +101,10 @@ export const usePlayControl = (playlistSeq) => {
     ? false : true
 
   useEffect(() => {
-    audioElement.addEventListener('ended', playNext)
+    audioElement.addEventListener('ended', () => console.log('ended'))
     audioElement.addEventListener('playing', () => {
     })
-    audioElement.addEventListener('pause', () => {
-      console.log('pause')
-      setIsPlaying(false)
-    })
+    
 
   }, [audioElement, nowMusic])
 

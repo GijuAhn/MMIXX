@@ -26,14 +26,13 @@ const PlayControl = ({ width, height }) => {
     playNext,
     onShuffle,
     setOnShuffle,
-    isNext
+    isNext,
   } = usePlayControl(queue?.playlistSeq)
 
   const handlePlayMusic = () => {
 
   }
   
-  console.log(isPlaying)
   return (
     <IconWrapper width={width} height={height}>
       <ShuffleRoundedIcon 
