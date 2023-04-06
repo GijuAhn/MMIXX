@@ -78,30 +78,30 @@
 
 ## **사용 기술**
 
-| Category | Tech          | Version | Dockerization |
-| --- |---------------| --- | --- |
-| Version Control | GitLab        |  |  |
-|  | JIRA          |  |  |
-| Documentation | Notion        |  |  |
-| Front-End | HTML5         |  |  |
-|  | CSS3          |  |  |
-|  | JavaScript    | ES6 |  |
-|  | React         | 18.2.0 |  |
-|  | Recoil        |  |  |
-|  | Node.js       | 18.15.0 |  |
-| Back-End | Java          | 11 |  |
-|  | Gradle        | 7.6.1 |  |
-|  | Spring Boot   | 2.7.10 |  |
-|  | QueryDSL |  | 5.0.0 |
-|  | JPA Hibernate |  |  |
-|  | Python        | 3.8 |  |
-|  | Django        | 3.2.13 |  |
-| DataBase | MySQL         | 8.0.32 |  |
-| Server | AWS EC2       |  |  |
-|  | AWS S3        |  |  |
-|  | NginX         | nginx/1.18.0 (Ubuntu) | Latest Docker Image |
-| CI/CD | Docker        | 23.0.1 |  |
-|  | Jenkins       | 2.387.1 | Latest Docker Image |
+| Category | Tech         | Version                 | Dockerization       |
+| --- |--------------|-------------------------|---------------------|
+| Version Control | GitLab       |                         |                     |
+|  | JIRA         |                         |                     |
+| Documentation | Notion       |                         |                     |
+| Front-End | HTML5        |                         |                     |
+|  | CSS3         |                         |                     |
+|  | JavaScript   | ES6                     |                     |
+|  | React        | 18.2.0                  |                     |
+|  | Recoil       |                         |                     |
+|  | Node.js      | 18.15.0                 |                     |
+| Back-End | Java         | 11                      |                     |
+|  | Gradle       | 7.6.1                   |                     |
+|  | Spring Boot  | 2.7.10                  |                     |
+|  | QueryDSL | 5.0.0                   |                     |
+|  | JPA Hibernate |                         |                     |
+|  | Python       | 3.8                     |                     |
+|  | Django       | 3.2.13                  |                     |
+| DataBase | MySQL        | 8.0.32                  |                     |
+| Server | AWS EC2      |                         |                     |
+|  | AWS S3       |                         |                     |
+|  | NginX        | nginx/1.18.0 (Ubuntu)   | Latest Docker Image |
+| CI/CD | Docker       | 23.0.1                  |                     |
+|  | Jenkins      | 2.387.1                 | Latest Docker Image |
 
 ## **API 명세**
 <img src="readme_contents/api1.png" width="1280">
