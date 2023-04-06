@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components"
+import styled from "styled-components";
 
-import { Wrapper, Header, DefaultBtn } from "components/Common"
+import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MusicList } from "components/mymusic";
 
 const MixSelectMusic = () => {
@@ -20,7 +20,7 @@ const MixSelectMusic = () => {
     <MusicItemWrapper>
       <Header title='Music Select' desc='믹스할 노래 고르기' />
       <MusicList radio={true} checkMusic={setSelectedMusic}></MusicList>
-
+      <div style={{ height: "200px" }}></div>
       <CreateBtn
         onClick={() =>
           navigate("/mix", {
