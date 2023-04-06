@@ -1,10 +1,11 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import styled, { css } from "styled-components"
 import AlbumIcon from '@mui/icons-material/Album'
 import { Switch } from '@mui/material'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { useNavigate } from 'react-router-dom'
+import CustomToast from "components/mymusic/CustomToast";
 
 const PlaylistCreate = () => {
   const inputRef = useRef(null)
@@ -16,12 +17,29 @@ const PlaylistCreate = () => {
     console.log(inputRef.current.value)
   })
 
+  const [toastCheck, setToastCheck] = useState(false);
+  const addBtnClick = (e) => { 
+    var title = inputRef.current.value;
+    if (title.replace(/\s/g, "") === "") {
+      // alert("제목을 입력해주세요!!")
+      setToastCheck(true)
+    } else {
+      navigate("/playlist/select/create", {
+        state : {
+          playlistTitle: title,
+          isPrivate: false,
+        } 
+        })      
+    }//else
+  }//addBtnClick
+
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
       <Header 
         title="New Playlist"
         desc="새 플레이리스트 만들기"
       />
+      {toastCheck ? <CustomToast res='error' text='제목을 입력해주세요!' toggle={setToastCheck} width='230px' /> : null}
       <InputContent>
         <DefaultCover>
           <AlbumIcon color="white" fontSize="large"/>
@@ -37,12 +55,7 @@ const PlaylistCreate = () => {
             </InputPrivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select/create", {
-              state : {
-                playlistTitle: inputRef.current.value,
-                isPrivate: true,
-              } 
-              })}>
+            <AddMusicBtn onClick={addBtnClick}>
               곡 추가
             </AddMusicBtn>
           </Bottom>

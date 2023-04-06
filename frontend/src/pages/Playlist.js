@@ -7,6 +7,7 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { userInfo } from 'atom/atom';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
+import CustomToast from "components/mymusic/CustomToast";
 
 const Playlist = () => {
   const navigate = useNavigate();
@@ -18,16 +19,19 @@ const Playlist = () => {
   const favorite = 'favorite';
   const atomUser = useRecoilValue(userInfo);
 
+  const { state } = useLocation();
+  const [toastSuccess, setToastSuccess] = useState(state && state.success);
+
   useEffect(() => {
-    console.log(location)
+    // console.log(location)
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
       // console.log('global')
       globalPlaylists(atomUser.userSeq)
         .then((res) => {
           setData(res.data)
-          setType('mine')
-          console.log(res.data)
-          console.log(data)
+          setType(global)
+          // console.log(res.data)
+          // console.log(data)
         })
         .catch((err) => console.log(err))
       //   .then(
@@ -38,28 +42,29 @@ const Playlist = () => {
       // ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
-      // console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
             // console.log(res.data)
             setData(res.data)
+            setType(favorite)
             return res.data
           }
       ).then(_ => setType(favorite)).catch(err => console.log(err))
+
     } else { // 내 플레이리스트
-      console.log('mine')
       getPlaylists(atomUser.userSeq)
         .then(
           res => {
             // console.log(res.data)
             setData(res.data)
+            setType(mine)
             return res.data
           }
       ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
-  }, [location, playlistType]);
+  }, [location.pathname]);
 
 
   return (
@@ -82,6 +87,7 @@ const Playlist = () => {
           />    
       ))
       }
+      {toastSuccess ? <CustomToast res='success' text={state.msg} toggle={setToastSuccess} width={state.width} /> : null}
       <Content>
         <Top>
           {playlistType === mine ? (
@@ -121,13 +127,12 @@ const Playlist = () => {
           <>
             <CardWrapper>
             
-              {data.map((playlist, index, playlistType) => {
+              {data.map((playlist, index) => {
                 return (
                   <MiniPlaylistCard
-                    key={index}
-                    index={index}
-                    playlist={playlist}
-                    playlistType={playlistType}
+                  key={index}
+                  index={index}
+                  playlist={playlist}              
                     onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
                       state : {
                         playlistTitle: `${playlist.playlistName}`,

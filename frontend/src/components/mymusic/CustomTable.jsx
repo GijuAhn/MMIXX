@@ -28,7 +28,7 @@ const CustomTable = ({
 
   const checkedList = useRef([]);
 
-  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq)
+  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -65,7 +65,7 @@ const CustomTable = ({
 
       const newMusicSeq = event.target.attributes.getNamedItem("seq") === null ? null : event.target.attributes.getNamedItem("seq").value;
 
-      const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
+      const deletedIndex = checkedList.current.findIndex((item) => item.music_seq === newMusicSeq);
 
       if (deletedIndex === -1) {
         checkedList.current.push({
@@ -80,9 +80,9 @@ const CustomTable = ({
   };
 
   const handlePlayClick = async (start) => {
-    const res = await createNowPlaylist(musicList, start)
-    createNowMusic(res)
-  }
+    const res = await createNowPlaylist(musicList, start);
+    createNowMusic(res);
+  };
 
   const [isOut, setIsOut] = useState(false);
   useEffect(() => {
@@ -113,7 +113,7 @@ const CustomTable = ({
             <TdRound width='5%' isNew={isNew}>
               <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
-            <Td weight='400' width='7%' align='center' isNew={isNew}>
+            <Td weight='400' width='5%' align='center' isNew={isNew}>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
@@ -122,7 +122,7 @@ const CustomTable = ({
             <TdText width='27.5%' isNew={isNew}>
               {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
             </TdText>
-            <TdText width='15%' isNew={isNew} sx={{ width: '50px'}}>
+            <TdText width='15%' isNew={isNew} sx={{ width: "50px" }}>
               {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
             </TdText>
             <TdText width='15%' isNew={isNew}>
@@ -143,7 +143,12 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
