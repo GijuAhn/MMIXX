@@ -6,6 +6,7 @@ import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useSetRecoilState } from "recoil";
 import { _show_new, _new_music_list } from "atom/mymusic";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MusicExtractIcon = ({ musicSeq }) => {
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,9 @@ const MusicExtractIcon = ({ musicSeq }) => {
 
   const setShowNew = useSetRecoilState(_show_new);
   const setNewMusicList = useSetRecoilState(_new_music_list);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const onClick = () => {
     console.log(musicSeq);
@@ -29,9 +33,14 @@ const MusicExtractIcon = ({ musicSeq }) => {
         console.log(response);
         setNewMusicList([response.data]);
         setShowNew(true);
-        window.scrollTo({ top: 0, behavior: "smooth" });
 
         setToastSuccess(true);
+
+        if (location.pathname.includes("/playlist")) {
+          navigate("/mymusic");
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       })
       .catch((error) => {
         // console.log(error);
