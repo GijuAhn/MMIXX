@@ -3,7 +3,7 @@ import { getPlaylistCoverImage, addFavoritePlaylist, deleteFavoritePlaylist } fr
 import { useEffect, useRef, useState } from "react"
 import FavoriteIcon from '@mui/icons-material/Favorite'; // 하트
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // 빈 하트
-import { InsightsOutlined } from "@mui/icons-material";
+// import { InsightsOutlined } from "@mui/icons-material";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userInfo } from 'atom/atom';
@@ -12,7 +12,7 @@ const MiniPlaylistCard = ({ playlist, onClick }) => {
   const { playlistName } = playlist
   const [coverImage, setCoverImg] = useState('')
   const [isOverflowed, setIsOverflowed] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(playlist.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(false);
   const pRef = useRef(null)
   const location = useLocation();
   const atomUser = useRecoilValue(userInfo);
