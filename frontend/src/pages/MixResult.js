@@ -30,7 +30,7 @@ const MixResult = () => {
         title="MIX Result"
         desc="음악 믹스 결과"  
         />
-      { result && (
+      { !result && (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
         <InProgress>
           <CircularProgress 
@@ -40,7 +40,7 @@ const MixResult = () => {
         </InProgress>
         </div>
       )}
-      { !result && (
+      { result && (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
           {/* <h2 style={{ padding: '1vh' }}>"아무노래"를 {presetName}로 변환한 결과입니다.</h2> */}
           <h2 style={{ padding: '1vh' }}>{result.origin_music.musicName}을 {presetName}로 변환한 결과입니다.</h2>
