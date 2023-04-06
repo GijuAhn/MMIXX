@@ -108,17 +108,27 @@ if __name__ == "__main__":
     preset_path = args.reference
 
     # s3에서 파일 다운로드 -> file폴더에 저장
-    s3.download_file(bucket_name, music_path, 'file/target.mp3')
-    s3.download_file(bucket_name, preset_path, 'file/preset.mp3')
+    print("music_path[-3:]", music_path[-3:])
+    print("preset_path[-3:]", preset_path[-3:])
+    if music_path[-3:] == "mp3" : 
+        s3.download_file(bucket_name, music_path, 'file/target.mp3')
+        # mp3 to wav
+        target_sound = AudioSegment.from_mp3('file/target.mp3')
+        target_sound.export('file/target.wav', format = 'wav')
+    elif music_path[-3:] == "wav" :
+        s3.download_file(bucket_name, music_path, 'file/target.wav')
+
+    if preset_path[-3:] == "mp3" : 
+        s3.download_file(bucket_name, preset_path, 'file/preset.mp3')
+        # mp3 to wav
+        preset_sound = AudioSegment.from_mp3('file/preset.mp3')
+        preset_sound.export('file/preset.wav', format = 'wav')
+    elif preset_path[-3:] == "wav" :
+        s3.download_file(bucket_name, preset_path, 'file/preset.wav')
 
     print("current path : ", os.path.abspath(os.path.curdir))
     # mp3 to wav
-    target_sound = AudioSegment.from_mp3('file/target.mp3')
-    target_sound.export('file/target.wav', format = 'wav')
-
-    preset_sound = AudioSegment.from_mp3('file/preset.mp3')
-    preset_sound.export('file/preset.wav', format = 'wav')
-
+    
     # 음악 길이 구하기
     target_samplerate, target_data = sio.wavfile.read('file/target.wav')
     target_times = np.arange(len(target_data))/float(target_samplerate)
