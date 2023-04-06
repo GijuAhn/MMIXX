@@ -19,7 +19,6 @@ export const getPlaylistInfo = async ( playlistSeq, userSeq ) => {
 }
 // 플레이리스트 생성
 export const postPlaylist = async (userSeq, playlist) => {
-  console.log(playlist);
   return await instance.post(`/playlist/${userSeq}`,  playlist )
 }
 // 즐겨찾기한 플레이리스트 목록 조회
