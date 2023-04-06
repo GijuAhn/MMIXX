@@ -1,5 +1,4 @@
 import { Wrapper, Header, DefaultBtn } from "components/Common";
-import { testPlaylistMusic } from "atom/atom";
 import { useRecoilValue } from "recoil";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -22,7 +21,6 @@ const PlaylistSelectMusic = () => {
   const [checkedList, setCheckedList] = useState([]);
 
   const { type } = useParams();
-  console.log(type);
 
   const [errorInfo, setErrorInfo] = useState({ msg: "", width: "" });
   const [isError, setIsError] = useState(false);
@@ -94,10 +92,10 @@ const CreateBtn = styled(DefaultBtn)`
 
 export default PlaylistSelectMusic;
 
-const MusicItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 80vw;
-  padding-left: 3px;
-`;
-const SelectBox = styled.div``;
+// const MusicItemWrapper = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   width: 80vw;
+//   padding-left: 3px;
+// `;
+// const SelectBox = styled.div``;

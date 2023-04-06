@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { _nowMusic, audioState, playlistQueue, _isPlaying, _onShuffle } from "atom/music"
+import { _nowMusic, audioState, playlistQueue, _isPlaying, _onShuffle, _mix_now, _mixPlaying } from "atom/music"
 
 export const usePlayControl = (playlistSeq) => {
   const audioElement = useRecoilValue(audioState)
@@ -9,9 +9,12 @@ export const usePlayControl = (playlistSeq) => {
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
   const [ isPlaying, setIsPlaying ] = useRecoilState(_isPlaying)
   const [ onShuffle, setOnShuffle ] = useRecoilState(_onShuffle)
+  const mixAudio = useRecoilValue(_mix_now)
+  const mixPlaying = useRecoilValue(_mixPlaying)
 
   const createNowMusic = async (props) => {
-    if (props?.musicUrl) {
+    console.log(props)
+    if (props && props?.musicUrl) {
       localStorage.setItem("_nowMusic", JSON.stringify({
         ...props,
         currentTime: 0,
@@ -26,7 +29,7 @@ export const usePlayControl = (playlistSeq) => {
   const createNowPlaylist = async ( playlist, start = 0 ) => {
     const newPlaylist = await playlist.map((item, index) => {
       if (index === start) {
-        const newItem = {...item, playing: true}
+        const newItem = {...item, playing: true }
         // localStorage.setItem('_nowMusic', JSON.stringify(newItem))
         // setAudioElement(new Audio(item.musicUrl))
         setNow(newItem)
@@ -67,37 +70,50 @@ export const usePlayControl = (playlistSeq) => {
     const nextIndex = await queue.playlist.findIndex((item) => item.playing) + 1
     createNowMusic(queue.playlist[nextIndex])
     createNowPlaylist(queue.playlist, nextIndex)
+    if (!audioElement.paused) {
+      audioElement.pause()
+    }
+    audioElement.play()
   }
 
   const handlePlay = () => {
-    audioElement.play()
-    setIsPlaying(true)
+    if (nowMusic.playing) {
+      mixAudio.src = ''
+      // audioElement.src = nowMusic.musicUrl
+      // audioElement.currentTime = nowMusic.currentTime
+      audioElement.play()
+      setIsPlaying(true)
+    }
   }
 
   const handlePause = () => {
-    audioElement.pause()
-    setIsPlaying(false)
+    if (isPlaying && !audioElement.paused){
+      audioElement.pause()
+      setIsPlaying(false)
+      setNow({...nowMusic, currentTime: audioElement.currentTime})
+    }
   }
 
+  const isNext = queue.playlist.findIndex((item) => item.playing) === queue.playlist.length
+    ? false : true
+
   useEffect(() => {
-    const handleNext = () => {
-      setIsPlaying(false)
-      const currentIndex = queue.playlist.findIndex((item) => item.playing)
-      console.log(currentIndex)
-      playNext(false, currentIndex + 1)
-    }
-    audioElement.addEventListener('ended', handleNext)
+    audioElement.addEventListener('ended', playNext)
     audioElement.addEventListener('playing', () => {
-      // console.log(audioElement.currentTime)
+    })
+    audioElement.addEventListener('pause', () => {
+      console.log('pause')
+      setIsPlaying(false)
     })
 
-  }, [audioElement])
+  }, [audioElement, nowMusic])
 
   return { 
     audioElement, 
     isPlaying,
     setIsPlaying,
     nowMusic, 
+    setNow,
     queue, 
     createNowPlaylist, 
     createNowMusic, 
@@ -107,6 +123,7 @@ export const usePlayControl = (playlistSeq) => {
     handlePlay,
     handlePause,
     onShuffle,
-    setOnShuffle
+    setOnShuffle,
+    isNext
   }
 }
