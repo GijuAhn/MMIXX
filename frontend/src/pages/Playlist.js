@@ -94,7 +94,7 @@ const Playlist = () => {
               <> </>
           )}
         </Top>
-        {data?.length > 0 ?
+        {/* {data?.length > 0 ?
           <CardWrapper>
             {data?.map((playlist, index) => {
               return (
@@ -116,8 +116,8 @@ const Playlist = () => {
           <>
             테스트 중
           </>
-        }
-        {/* {data != null && data.length > 0 ?
+        } */}
+        {data != null && data.length > 0 ?
           <>
             <CardWrapper>
             
@@ -142,7 +142,7 @@ const Playlist = () => {
           </> 
           :
           <div>플레이리스트가 없습니다.</div>
-        } */}
+        }
       </Content>
     </StyleWrapper>
   );
