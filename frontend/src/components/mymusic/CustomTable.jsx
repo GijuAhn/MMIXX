@@ -65,7 +65,7 @@ const CustomTable = ({
 
       const newMusicSeq = event.target.attributes.getNamedItem("seq") === null ? null : event.target.attributes.getNamedItem("seq").value;
 
-      const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
+      const deletedIndex = checkedList.current.findIndex((item) => item.music_seq === newMusicSeq);
 
       if (deletedIndex === -1) {
         checkedList.current.push({
@@ -122,7 +122,7 @@ const CustomTable = ({
             <TdText width='27.5%' isNew={isNew}>
               {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
             </TdText>
-            <TdText width='15%' isNew={isNew} sx={{ width: '50px'}}>
+            <TdText width='15%' isNew={isNew} sx={{ width: "50px" }}>
               {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
             </TdText>
             <TdText width='15%' isNew={isNew}>
