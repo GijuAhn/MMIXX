@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import styled from 'styled-components'
 import { VolumeUpRounded } from '@mui/icons-material'
 import { VolumeDownRounded } from '@mui/icons-material'
 import { Slider } from '@mui/material'
@@ -17,7 +18,7 @@ const VolumeControl = () => {
   return (
     <>
       <VolumeDownRounded />
-      <Slider
+      <StyleSlider
         aria-label="Volume"
         value={volume}
         max={1}
@@ -46,5 +47,10 @@ const VolumeControl = () => {
     </>
   )
 }
+
+const StyleSlider = styled(Slider)`
+  margin-left: 5px;
+  margin-right: 5px;
+`
 
 export default VolumeControl;
