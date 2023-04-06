@@ -28,7 +28,7 @@ const CustomTable = ({
 
   const checkedList = useRef([]);
 
-  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq)
+  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -80,9 +80,9 @@ const CustomTable = ({
   };
 
   const handlePlayClick = async (start) => {
-    const res = await createNowPlaylist(musicList, start)
-    createNowMusic(res)
-  }
+    const res = await createNowPlaylist(musicList, start);
+    createNowMusic(res);
+  };
 
   const [isOut, setIsOut] = useState(false);
   useEffect(() => {
@@ -143,7 +143,12 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
             {!radio && !checkBox ? (
