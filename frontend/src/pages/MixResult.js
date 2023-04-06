@@ -23,14 +23,14 @@ const MixResult = () => {
       response => setResult(response.data)
     ).catch( error => console.log(error))
   }, [musicSeq, presetSeq])
-  
+
   return (
     <ResultWrapper>
       <Header 
         title="MIX Result"
         desc="음악 믹스 결과"  
         />
-      { !result && (
+      { result && (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
         <InProgress>
           <CircularProgress 
@@ -40,45 +40,32 @@ const MixResult = () => {
         </InProgress>
         </div>
       )}
-      { result && (
+      { !result && (
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '0px' }}>
-          {/* <h2 style={{ padding: '1vh' }}>"아무노래아무노래"을 {presetName}로 변환한 결과입니다.</h2> */}
+          {/* <h2 style={{ padding: '1vh' }}>"아무노래"를 {presetName}로 변환한 결과입니다.</h2> */}
           <h2 style={{ padding: '1vh' }}>{result.origin_music.musicName}을 {presetName}로 변환한 결과입니다.</h2>
-        <ContentWrapper>
-          {/* <Original>
-            <ResultCard 
-              musicUrl={result.origin_music.musicUrl}
-              musicName={result.origin_music.musicName}
-              musicianName={result.origin_music.musicianName}
-              coverImage={result.origin_music.coverImage}
-              isResult={false}
-              >
-            </ResultCard>
-          </Original> */}
-          <Mixed>
-            <ResultCard 
-              musicUrl={result.mixed_music.musicUrl}
-              musicName={result.mixed_music.musicName}
-              musicianName={result.mixed_music.musicianName}
-              coverImage={result.mixed_music.coverImage}
-              isResult={true}
-              // musicUrl='아무 노래나 아무노래'
-              // musicName='아무노래아무노래_mix'
-              // musicianName='아무아무'
-              // coverImage='아무이미지'
-              >
-            </ResultCard>
-          </Mixed>
-        </ContentWrapper>
+          <ContentWrapper>
+            <Mixed>
+              <ResultCard 
+                musicUrl={result.mixed_music.musicUrl}
+                musicName={result.mixed_music.musicName}
+                musicianName={result.mixed_music.musicianName}
+                coverImage={result.mixed_music.coverImage}
+                // musicUrl='아무노래url'
+                // musicName='아무노래_mix'
+                // musicianName='지아콬'
+                // coverImage='아무이미지'
+                isResult={true}
+                >
+              </ResultCard>
+            </Mixed>
+          </ContentWrapper>
           <DefaultBtn
             style={{ margin: "2vh" }}
             onClick={ () => navigate('/mymusic') }
-          >
-            확인
-          </DefaultBtn>
+          >확인</DefaultBtn>
         </div>
       )}
-
     </ResultWrapper>
   )
 }
@@ -89,7 +76,6 @@ const ResultWrapper = styled(Wrapper)`
   background: linear-gradient(
     135deg, 
     ${theme.palette.dark} 45%, 
-    // ${theme.palette.secondary} 75%, 
     ${theme.palette.light} 100%);
 `
 const ContentWrapper = styled.div`
@@ -98,10 +84,6 @@ const ContentWrapper = styled.div`
   width: 75vw;
   height: 70vh;
 `
-// const Original = styled(ContentWrapper)`
-//   align-items: start;
-//   justify-content: flex-start;
-// `
 const Mixed = styled(ContentWrapper)`
   align-items: center;
   justify-content: center;

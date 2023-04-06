@@ -63,11 +63,7 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
       {/* 프리셋 음악 재생 */}
       <MusicPlayer>
-        {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
-          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-        </IconButton> */}
         <PlaySlider audioState={mixPlay}/>
-        {/* <PlayIcons /> */}
         {mixPlay.paused ?
           <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
         :
