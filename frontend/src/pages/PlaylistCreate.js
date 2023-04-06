@@ -16,6 +16,20 @@ const PlaylistCreate = () => {
     console.log(inputRef.current.value)
   })
 
+  const addBtnClick = (e) => { 
+    var title = inputRef.current.value;
+    if (title.replace(/\s/g, "") === "") {
+      alert("제목을 입력해주세요!!")
+    } else {
+      navigate("/playlist/select/create", {
+        state : {
+          playlistTitle: title,
+          isPrivate: false,
+        } 
+        })      
+    }//else
+  }//addBtnClick
+
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
       <Header 
@@ -37,12 +51,7 @@ const PlaylistCreate = () => {
             </InputPrivateToggle>
           </Top>
           <Bottom>
-            <AddMusicBtn onClick={() => navigate("/playlist/select/create", {
-              state : {
-                playlistTitle: inputRef.current.value,
-                isPrivate: true,
-              } 
-              })}>
+            <AddMusicBtn onClick={addBtnClick}>
               곡 추가
             </AddMusicBtn>
           </Bottom>
