@@ -1,28 +1,26 @@
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { _nowMusic, audioState, playlistQueue, _isPlaying } from "atom/music"
+import { _nowMusic, audioState, playlistQueue, _isPlaying, _onShuffle } from "atom/music"
 
 export const usePlayControl = (playlistSeq) => {
   const audioElement = useRecoilValue(audioState)
   const [ nowMusic, setNow ] = useRecoilState(_nowMusic)
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
   const [ isPlaying, setIsPlaying ] = useRecoilState(_isPlaying)
+  const [ onShuffle, setOnShuffle ] = useRecoilState(_onShuffle)
 
   const createNowMusic = async (props) => {
-    const newMusic = await props.find((item) => item.playing)
-    if (newMusic?.musicUrl) {
-      audioElement.src = newMusic.musicUrl
-      audioElement.play()
+    if (props?.musicUrl) {
       localStorage.setItem("_nowMusic", JSON.stringify({
-        ...newMusic,
+        ...props,
         currentTime: 0,
         duration: audioElement.duration
       }))
       setIsPlaying(true)
     }
-    console.log(newMusic)
-    return newMusic.musicUrl
+    // console.log(newMusic)
+    return props.musicUrl
   }
 
   const createNowPlaylist = async ( playlist, start = 0 ) => {
@@ -32,7 +30,7 @@ export const usePlayControl = (playlistSeq) => {
         // localStorage.setItem('_nowMusic', JSON.stringify(newItem))
         // setAudioElement(new Audio(item.musicUrl))
         setNow(newItem)
-        return { ...item, playing: true }
+        return newItem
       } else {
         return { ...item, playing: false } 
       }
@@ -41,10 +39,13 @@ export const usePlayControl = (playlistSeq) => {
       playlistSeq,
       playlist: newPlaylist,
     }
-    console.log(newObj)
     localStorage.setItem('_queue', JSON.stringify(newObj))
     setQueue(newObj)
-    return newPlaylist
+    audioElement.src = newPlaylist[start].musicUrl
+    audioElement.currentTime = 0
+    audioElement.play()
+    setIsPlaying(true)
+    return newPlaylist[start]
   } 
 
   const playMusic = () => {
@@ -53,33 +54,19 @@ export const usePlayControl = (playlistSeq) => {
     audioElement.play()
   }
 
+  const playPrev = async ( onShuffle = false ) => {
+    const prevIndex = await queue.playlist.findIndex((item) => item.playing) - 1
+    createNowMusic(queue.playlist[prevIndex])
+    createNowPlaylist(queue.playlist, prevIndex)
+  }
+
   /**
    * 다음 노래 재생하기 
    */
   const playNext = async ( onShuffle = false ) => {
-    const playlist = queue.playlist
-    const currentIndex = playlist.findIndex((item) => item.playing)
-    const queueLength = playlist.length
-    let nextIndex = -1
-    if (onShuffle) {
-      nextIndex = Math.floor(Math.random() * queueLength)
-
-    } else if (currentIndex < queueLength) {
-      nextIndex = currentIndex + 1
-    } else {
-      audioElement.src = ''
-    }
-
-    const newQueue = await playlist.map((item, index) => {
-      if (index === nextIndex) {
-        return {...item, playing: true}
-      } else {
-        return {...item, playing: false}
-      }
-    })
-    const res = await createNowPlaylist(newQueue)
-    createNowMusic(res)
-    // createNowMusic(newQueue)
+    const nextIndex = await queue.playlist.findIndex((item) => item.playing) + 1
+    createNowMusic(queue.playlist[nextIndex])
+    createNowPlaylist(queue.playlist, nextIndex)
   }
 
   const handlePlay = () => {
@@ -95,12 +82,15 @@ export const usePlayControl = (playlistSeq) => {
   useEffect(() => {
     const handleNext = () => {
       setIsPlaying(false)
-      playNext()
+      const currentIndex = queue.playlist.findIndex((item) => item.playing)
+      console.log(currentIndex)
+      playNext(false, currentIndex + 1)
     }
     audioElement.addEventListener('ended', handleNext)
     audioElement.addEventListener('playing', () => {
       // console.log(audioElement.currentTime)
     })
+
   }, [audioElement])
 
   return { 
@@ -112,8 +102,11 @@ export const usePlayControl = (playlistSeq) => {
     createNowPlaylist, 
     createNowMusic, 
     playMusic,
+    playPrev,
     playNext,
     handlePlay,
-    handlePause
+    handlePause,
+    onShuffle,
+    setOnShuffle
   }
 }
