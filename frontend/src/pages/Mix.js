@@ -24,17 +24,17 @@ const Mix = () => {
 
   const presetSeqFunc = (x) => {
     setPresetSeq(x)
-    console.log('선택한 프리셋 번호 : ',x)
-    console.log('선택한 프리셋 이름 : ', presetData[x-1].presetName)
+    // console.log('선택한 프리셋 번호 : ',x)
+    // console.log('선택한 프리셋 이름 : ', presetData[x-1].presetName)
   }
 
   useEffect(() => {
-    console.log('******* 믹스할 음악 *******')
-    console.log(musicSelected)
-    console.log(musicName)
-    console.log(musicSeq)
-    console.log(musicianName)
-    console.log('****************************')
+    // console.log('******* 믹스할 음악 *******')
+    // console.log(musicSelected)
+    // console.log(musicName)
+    // console.log(musicSeq)
+    // console.log(musicianName)
+    // console.log('****************************')
     getPreset()
     .then((res) => {
       setPresetData(res.data)
@@ -43,10 +43,6 @@ const Mix = () => {
     // .then(res => console.log('데이터 확인?',res.data[1]))
     .catch((err) => console.log(err))
   }, [])
-
-  useEffect(() => {
-    console.log('presetData : ', presetData) 
-  }, [presetData]);
 
   return (
     <StyledWrapper>
@@ -60,7 +56,6 @@ const Mix = () => {
           />
       </HeadContent>
       <Music>
-        {/* {musicSelected ? 'true' : 'false'} */}
         { !musicSelected ? (<MusicInfo
             // props 보내기
             coverImage={coverImage}
