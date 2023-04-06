@@ -151,7 +151,7 @@ const PlaylistDetail = () => {
           </Top>
           <Bottom>
             {/* 재생하기 */}
-            {(isPlaying && queue.playlistSeq === playlistSeq) || !audioElement.paused? 
+            {(isPlaying || !audioElement.paused) && queue.playlistSeq === playlistSeq? 
               <StylePauseCircleRoundedIcon 
                 sx={{ fontSize: '60px'}}
                 onClick={handlePause}
