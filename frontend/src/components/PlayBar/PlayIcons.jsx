@@ -9,12 +9,15 @@ import SkipPreviousRoundedIcon from '@mui/icons-material/SkipPreviousRounded';
 
 import { useAudioControl } from 'hooks/useAudioControl';
 import { usePlayControl } from 'hooks/usePlayControl';
+import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { playlistQueue } from 'atom/music';
 
 const PlayControl = ({ width, height }) => {
   const theme = useTheme()
-  const { audio } = useAudioControl()
+  const queue = useRecoilValue(playlistQueue)
   const { 
-    isPlaying, 
+    isPlaying,
     playMusic, 
     audioElement, 
     handlePlay, 
@@ -22,25 +25,24 @@ const PlayControl = ({ width, height }) => {
     playPrev, 
     playNext,
     onShuffle,
-    setOnShuffle
-  } = usePlayControl()
+    setOnShuffle,
+    isNext
+  } = usePlayControl(queue?.playlistSeq)
 
   const handlePlayMusic = () => {
-    if (audioElement.paused) {
-      playMusic()
-    }
-  }
 
+  }
+  
+  console.log(isPlaying)
   return (
     <IconWrapper width={width} height={height}>
       <ShuffleRoundedIcon 
         fontSize="small" 
-        onShuffle={onShuffle} 
         onClick={() => setOnShuffle((pre) => !pre)}
         style={{ color: onShuffle && theme.palette.secondary }}
         />
       <SkipPreviousRoundedIcon onClick={playPrev}/>
-      {!isPlaying ? 
+      {!isPlaying || audioElement.paused? 
         <StylePlayCircleFilledRoundedIcon 
           color="color"
           onClick={handlePlay}
@@ -48,7 +50,11 @@ const PlayControl = ({ width, height }) => {
       :
         <PauseCircleRoundedIcon onClick={handlePause}/>
       }
-      <SkipNextRoundedIcon onClick={playNext}/>
+      {isNext ?
+        <SkipNextRoundedIcon onClick={playNext}/>
+        :
+        <SkipNextRoundedIcon sx={{ cursor: 'wait', color: 'gray'}}/>
+      }
       <RepeatOneRoundedIcon />
     </IconWrapper>
   )
@@ -66,7 +72,7 @@ const IconWrapper = styled.div`
   }
 
   > :nth-child(3) {
-    border: 1px dotted green;
+    // border: 1px dotted green;
     transition: all 0.1s ease-in-out;
     color: ${({color, theme}) => color === 'color' ? theme.palette.secondary : 'white'};
     font-size: 40px;

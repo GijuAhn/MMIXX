@@ -126,10 +126,10 @@ const MusicInfo = styled.div`
     // height: 20px;
     width: auto;
     white-space: nowrap;
-    animation: ${marquee} 8s linear infinite;
-    position: absolute;
-    right: 0;
-    bottom: 20px;
+    // animation: ${marquee} 8s linear infinite;
+    // position: absolute;
+    // right: 0;
+    // bottom: 20px;
   }
 
   p:nth-child(2) {

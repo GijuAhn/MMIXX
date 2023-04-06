@@ -22,9 +22,9 @@ export const _nowMusic = atom({
     currentTime: 0,
     duration: 30000,
   },
-  // effects: [
-  //   localStorageEffect('_nowMusic')
-  // ]
+  effects: [
+    localStorageEffect('_nowMusic')
+  ]
 })
 
 export const _isPlaying = atom({

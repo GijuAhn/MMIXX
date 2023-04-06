@@ -8,11 +8,12 @@ const PlaySlider = () => {
   const { audioElement, isPlaying, nowMusic } = usePlayControl()
   const [ position, setPosition ] = useState(0)
   const [ duration, setDuration ] = useState(0)
-  const [ time, setTime ] = useState({
-    start: '0:00',
-    end: '-:--'
-  })
+  const [ startTime, setStartTime ] = useState('0:00')
+  const [ endTime, setEndTime ] = useState('-:--')
   const sliderRef = useRef(null)
+
+  useEffect(() => {
+  }, [sliderRef])
 
   const formatDuration = (value) => {
     const minute = Math.floor(value / 60)
@@ -23,23 +24,15 @@ const PlaySlider = () => {
   audioElement.onloadedmetadata = function() {
     // duration in seconds
     const durationInSeconds = Math.floor(audioElement.duration);
-    const currentInSeconds = Math.floor(audioElement.currentTime);
 
     // calculate minutes and seconds
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = durationInSeconds % 60;
 
-    const minutes2 = Math.floor(currentInSeconds / 60);
-    const seconds2 = currentInSeconds % 60;
-
     // format the display string
     const displayString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    const currentString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-    setTime({
-      start: '0:00',
-      end: displayString
-    })
+    setEndTime(displayString)
     setDuration(minutes * 60 + seconds)
   };
 
@@ -85,7 +78,7 @@ const PlaySlider = () => {
           '& .MuiSlider-thumb': {
             width: 8,
             height: 8,
-            transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+            // transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
             '&:before': {
               boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
             },
@@ -96,10 +89,10 @@ const PlaySlider = () => {
               //     : 'rgb(0 0 0 / 16%)'
               // }`,
             },
-            '&.Mui-active': {
-              width: 20,
-              height: 20,
-            },
+            // '&.Mui-active': {
+            //   width: 20,
+            //   height: 20,
+            // },
           },
           '& .MuiSlider-rail': {
             opacity: 0.28,
@@ -107,8 +100,8 @@ const PlaySlider = () => {
         }}
       />
       <TimeInfo>
-        <span>{time.start}</span>
-        <span>{time.end}</span>
+        <span>{startTime}</span>
+        <span>{endTime}</span>
       </TimeInfo>
     </div>
   )
