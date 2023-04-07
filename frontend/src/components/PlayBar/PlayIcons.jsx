@@ -49,11 +49,12 @@ const PlayControl = ({ width, height }) => {
       :
         <PauseCircleRoundedIcon onClick={handlePause}/>
       }
-      {isNext ?
+      <SkipNextRoundedIcon onClick={playNext}/>
+      {/* {isNext ?
         <SkipNextRoundedIcon onClick={playNext}/>
         :
         <SkipNextRoundedIcon sx={{ cursor: 'wait', color: 'gray'}}/>
-      }
+      } */}
       <RepeatOneRoundedIcon />
     </IconWrapper>
   )
