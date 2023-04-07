@@ -146,7 +146,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       getMusicListByCondition({
         userSeq: user ? user.userSeq : 0,
         filter: filter,
-        order: order,
+        order: order === "" ? "date2" : order,
         query: query,
       }).then(({ data }) => {
         setMusicList(data.content);
@@ -169,7 +169,7 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
       getMusicListByCondition({
         userSeq: user ? user.userSeq : 0,
         filter: curFilter.current,
-        order: curOrder.current,
+        order: curOrder.current === "" ? "date2" : curOrder.current,
         query: curQuery.current,
         page: page.current,
       }).then(({ data }) => {
