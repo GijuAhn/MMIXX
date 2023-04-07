@@ -42,7 +42,7 @@ const MusicExtractIcon = ({ musicSeq }) => {
           navigate("/mymusic");
         } else {
           setReload((current) => !current);
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          // window.scrollTo({ top: 0, behavior: "smooth" });
         }
       })
       .catch((error) => {
