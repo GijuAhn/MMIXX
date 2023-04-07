@@ -45,19 +45,22 @@ export const usePlayControl = () => {
    * 다음 노래 재생하기 
    */
   const playNext = ( onShuffle = false ) => {
-    const currentIndex = queue.findIndex((item) => item.playing)
-    const queueLength = queue.length
-    let nextIndex = -1
-    if (onShuffle) {
-      nextIndex = Math.floor(Math.random() * queueLength)
+    if (queue && queue.playlist.length > 0) {
 
-    } else {
-      nextIndex = currentIndex + 1
+      const currentIndex = queue.findIndex((item) => item.playing)
+      const queueLength = queue.length
+      let nextIndex = -1
+      if (onShuffle) {
+        nextIndex = Math.floor(Math.random() * queueLength)
+  
+      } else {
+        nextIndex = currentIndex + 1
+      }
+      queue[currentIndex].playing = false
+      queue[nextIndex].playing = true
+  
+      setNow(queue.find((item) => item.playing))
     }
-    queue[currentIndex].playing = false
-    queue[nextIndex].playing = true
-
-    setNow(queue.find((item) => item.playing))
   }
 
   // useEffect(() => {
