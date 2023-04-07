@@ -36,11 +36,16 @@ const MusicExtractIcon = ({ musicSeq }) => {
         // setNewMusicList([response.data]);
         // setShowNew(true);
 
-        setToastSuccess(true);
+        // setToastSuccess(true);
 
         if (location.pathname.includes("/playlist")) {
-          navigate("/mymusic");
+          navigate("/mymusic", {
+            state: {
+              success: true,
+            },
+          });
         } else {
+          setToastSuccess(true);
           setReload((current) => !current);
           // window.scrollTo({ top: 0, behavior: "smooth" });
         }
