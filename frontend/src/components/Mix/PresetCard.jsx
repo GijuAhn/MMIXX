@@ -6,7 +6,7 @@ import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRou
 import StopCircleRoundedIcon from '@mui/icons-material/StopCircleRounded';
 
 import theme from 'styles/theme';
-import { _mix_now } from 'atom/music';
+import { _mixPlaying, _mix_now } from 'atom/music';
 import { PlayIcons, PlaySlider } from 'components/PlayBar';
 
 const PresetCard = (props, {presetSeqFunc}) => {
@@ -22,19 +22,38 @@ const PresetCard = (props, {presetSeqFunc}) => {
   const [isSelected, setIsSelected] = useState(true)
 
   const [ mixPlay ] = useRecoilState(_mix_now)
-  
+  const [ mixPlaying, setMixPlaying ] = useRecoilState(_mixPlaying)
+
   const handleMixPlay = () => {
-    if (!mixPlay.paused) {
+    // 현재 진행중인 노래가 있고, 
+    console.log(presetNum)
+    if (mixPlay.src == presetUrl) {
+      console.log('??')
+      if(mixPlaying) {
+        mixPlay.pause()
+        setMixPlaying(false)
+      } else {
+        mixPlay.play()
+        setMixPlaying(true)
+      }
+    } else {
+      if (mixPlaying) {
+        mixPlay.pause()
+        mixPlay.src = presetUrl
+      } else {
+        mixPlay.src = presetUrl
+      }
+      mixPlay.play()
+    }
+    if (mixPlaying) {
       mixPlay.pause()
+      setMixPlaying(false)
     } else {
       mixPlay.src = props.presetUrl
       mixPlay.play()
-    }
-    if(mixPlay.src === presetUrl) {
-      console.log('일치')
+      setMixPlaying(true)
     }
   }
-  
   useEffect(() => {
     if (props.selNum === presetNum) {
       setIsSelected(true)
@@ -46,9 +65,9 @@ const PresetCard = (props, {presetSeqFunc}) => {
   return (
     <Card isSelected={isSelected} onClick={() => props.presetSeqFunc(presetNum) }>
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <CoverImage>
-          <img src={coverImage} alt={musicName} />
-        </CoverImage>
+        <CoverImg>
+          <img src={ coverImage } alt={musicName} />
+        </CoverImg>
         <Content>
           <div style={{ color: `${theme.palette.secondary}`, fontSize: '3vw', fontWeight: 'bolder', justifyContent: 'flex-start' }}>
             { presetName }
@@ -64,15 +83,12 @@ const PresetCard = (props, {presetSeqFunc}) => {
 
       {/* 프리셋 음악 재생 */}
       <MusicPlayer>
-        {/* <IconButton aria-label="play/pause" sx={{ color: theme.palette.light }}>
-          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-        </IconButton> */}
-        <PlaySlider audioState={mixPlay}/>
+        {/* <PlaySlider audioState={mixPlay}/> */}
         {/* <PlayIcons /> */}
-        {mixPlay.paused ?
-          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+        {mixPlaying && mixPlay.src == presetUrl ?
+          <StopCircleRoundedIcon onClick={handleMixPlay} sx={{ fontSize: '60px'}}/>
         :
-          <StopCircleRoundedIcon onClick={handleMixPlay} fontSize="large"/>
+          <PlayCircleFilledRoundedIcon onClick={handleMixPlay} sx={{ fontSize: '60px'}}/>
         }
       </MusicPlayer>
     </Card>
@@ -91,7 +107,7 @@ const Card = styled.div`
   background-color: ${theme.palette.dark};
   padding: 3vw;
 `
-const CoverImage = styled.div`
+const CoverImg = styled.div`
   object-fit: cover;
   width: 25vw;
   height: 23vh;
@@ -104,14 +120,17 @@ const CoverImage = styled.div`
   }
 `
 const Content = styled.div`
- display: flex;
- flex-direction: column;
- padding-left: 3vw
+  display: flex;
+  flex-direction: column;
+  padding-left: 3vw;
+  align-items: center;
+  pl: 1;
+  pb: 1;
 `
 
 const MusicPlayer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: 'flex-start';
-  padding-top: 1vh;
+  margin: 1px;
 `

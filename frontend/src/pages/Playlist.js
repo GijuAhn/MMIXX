@@ -7,6 +7,7 @@ import { Wrapper, Header, DefaultBtn } from "components/Common";
 import { MiniPlaylistCard } from 'components/Playlist';
 import { userInfo } from 'atom/atom';
 import { getPlaylists, favoritePlaylists, globalPlaylists } from 'api/playlist';
+import CustomToast from "components/mymusic/CustomToast";
 
 const Playlist = () => {
   const navigate = useNavigate();
@@ -16,51 +17,65 @@ const Playlist = () => {
   const mine = 'mine';
   const global = 'global';
   const favorite = 'favorite';
-  const atomUser = useRecoilValue(userInfo)
+  const atomUser = useRecoilValue(userInfo);
+
+  const { state } = useLocation();
+  const [toastSuccess, setToastSuccess] = useState(state && state.success);
 
   useEffect(() => {
-    
+    // console.log(location)
     if (location.pathname.includes(global)) { // 글로벌 플레이리스트
-      console.log('global')
+      // console.log('global')
       globalPlaylists(atomUser.userSeq)
-        .then(
-          res => {
-            setData(res.data)
-            return res.data
-          }
-      ).then(_ => setType(global)).catch(err => console.log(err))
+        .then((res) => {
+          setData(res.data)
+          setType(global)
+          // console.log(res.data)
+          // console.log(data)
+        })
+        .catch((err) => console.log(err))
+      //   .then(
+      //     res => {
+      //       setData(res.data)
+      //       return res.data
+      //     }
+      // ).then(_ => setType(global)).catch(err => console.log(err))
       
     } else if (location.pathname.includes(favorite)) { // 즐겨찾기한 플레이리스트
-      console.log('favorite')
       favoritePlaylists(atomUser.userSeq)
         .then(
           res => {
+            // console.log(res.data)
             setData(res.data)
+            setType(favorite)
             return res.data
           }
       ).then(_ => setType(favorite)).catch(err => console.log(err))
+
     } else { // 내 플레이리스트
       getPlaylists(atomUser.userSeq)
         .then(
           res => {
+            // console.log(res.data)
             setData(res.data)
+            setType(mine)
             return res.data
           }
       ).then(_ => setType(mine)).catch(err => console.log(err))
     }
       
-  }, [location, atomUser]);
+  }, [location.pathname]);
 
 
   return (
     <StyleWrapper>
-      {playlistType === mine ? (
+      {playlistType === "mine" ? (
         <Header
           title="My Playlist"
           desc="내 플레이리스트"
         />
       ) : (
-         playlistType === global ? (
+         playlistType === "global" ? (
           <Header
             title="Global Playlist"
             desc="글로벌 플레이리스트"
@@ -72,6 +87,7 @@ const Playlist = () => {
           />    
       ))
       }
+      {toastSuccess ? <CustomToast res='success' text={state.msg} toggle={setToastSuccess} width={state.width} /> : null}
       <Content>
         <Top>
           {playlistType === mine ? (
@@ -84,6 +100,29 @@ const Playlist = () => {
               <> </>
           )}
         </Top>
+        {/* {data?.length > 0 ?
+          <CardWrapper>
+            {data?.map((playlist, index) => {
+              return (
+                <MiniPlaylistCard
+                  key={index}
+                  index={index}
+                  playlist={playlist}
+                  onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
+                    state : {
+                      playlistTitle: `${playlist.playlistName}`,
+                      isPrivate: `${playlist.isPrivate}`,
+                    } 
+                    })}
+                />
+              )
+            })}
+          </CardWrapper>
+          :
+          <>
+            테스트 중
+          </>
+        } */}
         {data != null && data.length > 0 ?
           <>
             <CardWrapper>
@@ -91,9 +130,9 @@ const Playlist = () => {
               {data.map((playlist, index) => {
                 return (
                   <MiniPlaylistCard
-                    key={index}
-                    index={index}
-                    playlist={playlist}
+                  key={index}
+                  index={index}
+                  playlist={playlist}              
                     onClick={() => navigate(`/playlist/${playlist.playlistSeq}`, {
                       state : {
                         playlistTitle: `${playlist.playlistName}`,
@@ -103,9 +142,10 @@ const Playlist = () => {
                   />
                 )
               })}
-          
+
             </CardWrapper>
-          </> :
+          </> 
+          :
           <div>플레이리스트가 없습니다.</div>
         }
       </Content>

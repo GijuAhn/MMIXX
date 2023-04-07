@@ -5,22 +5,11 @@ import localStorageEffect from './_local'
 export const audioState = atom({
   key: 'audioState',
   default: new Audio(),
-  effects: [
-    localStorageEffect('_now')
-  ]
 })
 
 export const _mix_now = atom({
   key: '_mix_now',
   default: new Audio()
-})
-
-export const _now = atom({
-  key: '_now_playing',
-  default: null,
-  effects: [
-    localStorageEffect('_now')
-  ]
 })
 
 export const _nowMusic = atom({
@@ -30,17 +19,45 @@ export const _nowMusic = atom({
     musicName: '',
     musicianName: '',
     playing: false,
+    currentTime: 0,
+    duration: 30000,
   },
   effects: [
     localStorageEffect('_nowMusic')
   ]
 })
 
+export const _isPlaying = atom({
+  key: '_isPlaying',
+  default: false
+})
+
+export const _mixPlaying = atom({
+  key: '_mixPlaying',
+  default: false
+})
+
 export const playlistQueue = atom({
   key: 'Queue',
-  default: [],
+  default: {},
   effects: [
     localStorageEffect('_queue')
+  ]
+})
+
+export const volumeState = atom({
+  key: 'volumeState',
+  default: 1,
+  effects: [
+    localStorageEffect('_volume')
+  ]
+})
+
+export const _onShuffle = atom({
+  key: '_onShuffle',
+  default: false,
+  effects: [
+    localStorageEffect('_onShuffle')
   ]
 })
 
@@ -66,8 +83,6 @@ export const _nowSelector = selector({
     set(playlistQueue, newValue)
   },
   effects: [
-    localStorageEffect('_test', _now)
+    localStorageEffect('_test')
   ]
 })
-
-

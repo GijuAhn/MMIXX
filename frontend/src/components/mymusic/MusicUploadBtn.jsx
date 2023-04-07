@@ -7,7 +7,8 @@ import musicFile from "assets/music-file.png";
 import cancel from "assets/cancel.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userInfo } from "atom/atom";
-import { _show_new, _new_music_list } from "atom/mymusic";
+// import { _show_new, _new_music_list } from "atom/mymusic";
+import { _new } from "atom/mymusic";
 import CustomToast from "./CustomToast";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -15,8 +16,9 @@ const MusicUploadBtn = () => {
   const atomUser = useRecoilValue(userInfo);
   const user = atomUser ? JSON.parse(localStorage.getItem("user")) : null;
 
-  const setShowNew = useSetRecoilState(_show_new);
-  const setNewMusicList = useSetRecoilState(_new_music_list);
+  // const setShowNew = useSetRecoilState(_show_new);
+  // const setNewMusicList = useSetRecoilState(_new_music_list);
+  const setReload = useSetRecoilState(_new);
 
   const wrapperRef = useRef(null);
   const input = useRef(null);
@@ -97,7 +99,7 @@ const MusicUploadBtn = () => {
     setLoading(true);
     setToastInfo(true);
 
-    setShowNew(false);
+    // setShowNew(false);
 
     const formData = new FormData();
     const userInfo = { userSeq: user ? user.userSeq : 0 };
@@ -109,9 +111,9 @@ const MusicUploadBtn = () => {
 
     uploadMusic(formData)
       .then(({ data }) => {
-        setNewMusicList(data);
-        setShowNew(true);
-
+        // setNewMusicList(data);
+        // setShowNew(true);
+        setReload((current) => !current);
         setToastSuccess(true);
       })
       .catch((error) => {
@@ -214,6 +216,8 @@ const DivModal = styled.div`
   // box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(1.5px);
   -webkit-backdrop-filter: blur(1.5px);
+
+  z-index: 1;
 `;
 
 const Modal = styled.div`

@@ -425,10 +425,10 @@ public class PlaylistService {
 
     @Transactional
     public String insertFavorite(FavoriteRequestDto favoriteRequestDto) {
-        Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
+        Favorite favo = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(favoriteRequestDto.getUserSeq(), favoriteRequestDto.getPlaylistSeq());
         if(favo == null) {
 //    		Favorite favorite = new Favorite(favoriteRequestDto.getUser_seq(), favoriteRequestDto.getPlaylist_seq());
-            Favorite favorite = new Favorite(new User(favoriteRequestDto.getUser_seq()), new Playlist(favoriteRequestDto.getPlaylist_seq()));
+            Favorite favorite = new Favorite(new User(favoriteRequestDto.getUserSeq()), new Playlist(favoriteRequestDto.getPlaylistSeq()));
             favoriteRepository.save(favorite);
             return "SUCCESS";
         } else {
@@ -470,24 +470,51 @@ public class PlaylistService {
     /**
      * 플레이리스트 정보 가져오기
      */
-    public PlaylistSimpleDto getPlaylistInfo(int playlistSeq) {
-        PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+    public PlaylistWithFavoriteSimpleDto getPlaylistInfo(int playlistSeq, int userSeq) {
+        PlaylistWithFavoriteSimpleDto playlistWithFavoriteSimpleDto = new PlaylistWithFavoriteSimpleDto();
         Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
         if (playlist == null) {
             log.info("해당 플레이리스트가 존재하지 않습니다.");
             return null;
         }
-        playlistSimpleDto.setPlaylistSeq(playlist.getPlaylistSeq());
-        playlistSimpleDto.setUserSeq(playlist.getUser().getUserSeq());
-        playlistSimpleDto.setPlaylistName(playlist.getPlaylistName());
-        playlistSimpleDto.setIsPrivate(playlist.getIsPrivate());
 
-//        log.info("------playlist 정보------");
-//        log.info("playlistSeq : " + playlist.getPlaylistSeq());
-//        log.info("userSeq : " + playlist.getUser().getUserSeq());
-//        log.info("playlistName : " + playlist.getPlaylistName());
-//        log.info("isPrivate : " + playlist.getIsPrivate());
+        playlistWithFavoriteSimpleDto.setPlaylistSeq(playlist.getPlaylistSeq());
+        playlistWithFavoriteSimpleDto.setPlaylistName(playlist.getPlaylistName());
+        playlistWithFavoriteSimpleDto.setIsPrivate(playlist.getIsPrivate());
+        playlistWithFavoriteSimpleDto.setUserSeq(playlist.getUserSeq());
 
-        return playlistSimpleDto;
+        // set favorite status
+        Favorite favorite = favoriteRepository.findByUser_UserSeqAndPlaylist_PlaylistSeq(userSeq, playlistSeq);
+        if (favorite != null) {
+            playlistWithFavoriteSimpleDto.setIsFavorite(true);
+        } else {
+            playlistWithFavoriteSimpleDto.setIsFavorite(false);
+        }
+
+        return playlistWithFavoriteSimpleDto;
     }
+//    public PlaylistSimpleDto getPlaylistInfo(int playlistSeq) {
+//        PlaylistSimpleDto playlistSimpleDto = new PlaylistSimpleDto();
+//        Playlist playlist = playlistRepository.findById(playlistSeq).orElse(null);
+//        if (playlist == null) {
+//            log.info("해당 플레이리스트가 존재하지 않습니다.");
+//            return null;
+//        }
+//        playlistSimpleDto.setPlaylistSeq(playlist.getPlaylistSeq());
+//        playlistSimpleDto.setUserSeq(playlist.getUser().getUserSeq());
+//        playlistSimpleDto.setPlaylistName(playlist.getPlaylistName());
+//        playlistSimpleDto.setIsPrivate(playlist.getIsPrivate());
+//
+////        log.info("------playlist 정보------");
+////        log.info("playlistSeq : " + playlist.getPlaylistSeq());
+////        log.info("userSeq : " + playlist.getUser().getUserSeq());
+////        log.info("playlistName : " + playlist.getPlaylistName());
+////        log.info("isPrivate : " + playlist.getIsPrivate());
+//
+//        return playlistSimpleDto;
+//    }
+
+    
+
+
 }

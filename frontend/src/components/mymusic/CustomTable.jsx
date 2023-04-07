@@ -8,15 +8,18 @@ import UnCheck from "assets/check.png";
 import Check from "assets/check-selected.png";
 import More from "assets/more-vertical.png";
 import { useRef, useEffect, useState } from "react";
+import { usePlayControl } from "hooks/usePlayControl";
 
 const CustomTable = ({
   musicList,
+  playlistSeq = 0,
   // hasIcon = true,
   radio = false,
   checkMusic,
   checkBox = false,
   checkMusicList,
   isNew = false,
+  isPlaylistUser = false
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -25,6 +28,9 @@ const CustomTable = ({
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
   const checkedList = useRef([]);
+  const [isOut, setIsOut] = useState(false);
+  console.log('customtable', playlistSeq)
+  const { createNowMusic, createNowPlaylist, setNow } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -61,27 +67,29 @@ const CustomTable = ({
 
       const newMusicSeq = event.target.attributes.getNamedItem("seq") === null ? null : event.target.attributes.getNamedItem("seq").value;
 
-      const deletedIndex = checkedList.current.findIndex((item) => item.musicSeq === newMusicSeq);
+      const deletedIndex = checkedList.current.findIndex((item) => item.music_seq === newMusicSeq);
 
-      // console.log("deletedIndex", deletedIndex);
       if (deletedIndex === -1) {
-        // console.log("추가!");
         checkedList.current.push({
           music_seq: newMusicSeq,
           sequence: newMusicSeq,
         });
       } else {
-        // console.log("삭제!");
         checkedList.current.splice(deletedIndex, 1);
       }
-      // console.log(checkedList.current);
       checkMusicList(checkedList.current);
     }
   };
 
-  const [isOut, setIsOut] = useState(false);
+  const handlePlayClick = async (start) => {
+    console.log(musicList) 
+    
+    const res = await createNowPlaylist(musicList, start);
+    createNowMusic(res);
+  };
+
   useEffect(() => {
-    return () => {
+    return () => { 
       if (isNew) setIsOut(true);
     };
   });
@@ -90,7 +98,7 @@ const CustomTable = ({
     <Table isNew={isNew} isOut={isOut}>
       <tbody>
         {musicList.map((music, index) => (
-          <Tr key={index}>
+          <Tr key={index}>            
             {radio || checkBox ? (
               <Radio>
                 <img
@@ -108,7 +116,7 @@ const CustomTable = ({
             <TdRound width='5%' isNew={isNew}>
               <CoverImage coverImage={music.coverImage === null ? DefaultCoverImage : music.coverImage}></CoverImage>
             </TdRound>
-            <Td weight='400' width='7%' align='center' isNew={isNew}>
+            <Td weight='400' width='5%' align='center' isNew={isNew}>
               {music.mixed !== null ? "M" : music.inst !== null ? "Ⅰ" : null}
             </Td>
             {/* <Td width='27.5%'>{music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}</Td>
@@ -117,7 +125,7 @@ const CustomTable = ({
             <TdText width='27.5%' isNew={isNew}>
               {music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
             </TdText>
-            <TdText width='15%' isNew={isNew}>
+            <TdText width='15%' isNew={isNew} sx={{ width: "50px" }}>
               {music.musicianName === null || music.musicianName.replace(/\s/g, "").length === 0 ? "-" : music.musicianName}
             </TdText>
             <TdText width='15%' isNew={isNew}>
@@ -133,20 +141,25 @@ const CustomTable = ({
             ) : null}
             {!radio && !checkBox ? (
               <Td width='5%' isNew={isNew}>
-                <Play musicSeq={music.musicSeq}></Play>
+                <Play onClick={() => handlePlayClick(index)} musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
-                <Mix musicSeq={music.musicSeq} musicName={music.musicName.substr(0, music.musicName.lastIndexOf("."))} coverImage={music.coverImage} musicianName={music.musicianName}></Mix>
+                <Mix
+                  musicSeq={music.musicSeq}
+                  musicName={music.musicName.includes(".") ? music.musicName.substr(0, music.musicName.lastIndexOf(".")) : music.musicName}
+                  coverImage={music.coverImage}
+                  musicianName={music.musicianName}
+                ></Mix>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser ? (
               <Td width='5%' isNew={isNew}>
                 <Download musicSeq={music.musicSeq} musicName={music.musicName} musicUrl={music.musicUrl}></Download>
               </Td>
@@ -192,6 +205,7 @@ const CoverImage = styled.div`
 const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 10px;
+
   width: 87%;
   font-size: 14px;
   font-weight: 400;
@@ -251,7 +265,7 @@ const Td = styled.td`
 
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>
@@ -277,9 +291,11 @@ const TdText = styled.td`
   border-color: ${theme.palette.secondary};
   `}
 
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>
@@ -287,11 +303,137 @@ const TdText = styled.td`
     `padding-top: 5px;
   padding-right: 10px;`};
 
-  // display: inline-block;
-  // white-space: nowrap;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  // vertical-align: middle;
+  &:nth-child(2) {
+    color: red;
+  }
 `;
+
+// const Table = styled.table`
+//   // border-collapse: separate;
+//   // border-spacing: 0 10px;
+//   margin-top: 10px;
+//   display: flex;
+//   flex-direction: column;
+
+//   width: 87%;
+//   font-size: 14px;
+//   font-weight: 400;
+
+//   ${({ isNew }) =>
+//     isNew &&
+//     css`
+//       animation: ${blink} 0.7s linear 2;
+//     `}
+//   ${({ isOut }) =>
+//     isOut &&
+//     css`
+//       animation: ${fadeOut} 0.25s linear forwards;
+//     `}
+// `;
+
+// const Tr = styled.tr`
+//   background-color: ${({ theme }) => theme.palette.darkgray};
+//   &:hover {
+//     background-color: ${({ theme }) => theme.palette.hover};
+//   }
+//   height: 65px;
+
+//   display: flex;
+//   align-items: center;
+//   margin-bottom: 10px;
+// `;
+
+// const Radio = styled.td`
+//   background-color: ${({ theme }) => theme.palette.darkAlt};
+//   width: 5%;
+// `;
+
+// const TdRound = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 2px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+//   `}
+
+//   border-radius: 15px 0 0 15px;
+//   padding-left: 10px;
+// `;
+
+// const Td = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 0px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+
+//   &:last-child {
+//     border-width: 2px 2px 2px 0px;
+//     border-style: solid;
+//     border-color: ${theme.palette.secondary};
+//   }
+//   `}
+
+//   font-size: 14px;
+//   font-weight: ${(props) => props.weight || "200"};
+//   font-family: "Heebo", sans-serif;
+//   width: ${(props) => props.width || "auto"};
+//   text-align: ${(props) => props.align || "left"};
+//   ${(props) =>
+//     props.padding &&
+//     `padding-top: 5px;
+//     padding-right: 10px;`};
+
+//   // &:first-child {
+//   //   border-radius: 15px 0 0 15px;
+//   //   // margin-left: 10px;
+//   // }
+//   &:last-child {
+//     border-radius: 0 15px 15px 0;
+//   }
+
+//   // position: relative;
+//   // &::before {
+//   //   content: "";
+//   //   display: block;
+//   //   position: absolute;
+//   //   top: 0;
+//   //   bottom: 0;
+//   //   left: 0;
+//   //   right: 0;
+//   //   border-radius: 10px;
+//   //   z-index: -1;
+//   // }
+// `;
+
+// const TdText = styled.td`
+//   ${({ isNew, theme }) =>
+//     isNew &&
+//     `
+//   border-width: 2px 0px 2px 0px;
+//   border-style: solid;
+//   border-color: ${theme.palette.secondary};
+//   `}
+
+//   font-size: 14px;
+//   font-weight: ${(props) => props.weight || "200"};
+//   font-family: "Heebo", sans-serif;
+//   width: ${(props) => props.width || "auto"};
+//   text-align: ${(props) => props.align || "left"};
+//   ${(props) =>
+//     props.padding &&
+//     `padding-top: 5px;
+//   padding-right: 10px;`};
+
+//   padding-right: 10px;
+
+//   display: inline-block;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   vertical-align: middle;
+// `;
 
 export default CustomTable;

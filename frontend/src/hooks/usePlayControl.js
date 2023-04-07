@@ -1,44 +1,68 @@
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { _now, audioState, playlistQueue } from "atom/music"
+import { _nowMusic, audioState, playlistQueue, _isPlaying, _onShuffle, _mix_now, _mixPlaying } from "atom/music"
 
-export const usePlayControl = () => {
-  /**
-   * 현재 진행중인 곡이 속해있는 리스트 가져오기
-   */
-  const [ audioElement, setAudioElement ] = useRecoilState(audioState)
-  const [ nowMusic, setNow ] = useRecoilState(_now)
+export const usePlayControl = (playlistSeq) => {
+  const audioElement = useRecoilValue(audioState)
+  const [ nowMusic, setNow ] = useRecoilState(_nowMusic)
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
+  const [ isPlaying, setIsPlaying ] = useRecoilState(_isPlaying)
+  const [ onShuffle, setOnShuffle ] = useRecoilState(_onShuffle)
+  const mixAudio = useRecoilValue(_mix_now)
+  const mixPlaying = useRecoilValue(_mixPlaying)
 
+  const createNowMusic = async (props) => {
+    if (props && props?.musicUrl) {
+      localStorage.setItem("_nowMusic", JSON.stringify({
+        ...props,
+        currentTime: 0,
+        duration: audioElement.duration
+      }))
+      setIsPlaying(true)
+    }
+    // console.log(newMusic)
+    return props.musicUrl
+  }
 
-  /**
-   * 현재 실행될 음악이 담긴 플레이리스트 값 설정
-   */ 
   const createNowPlaylist = async ( playlist, start = 0 ) => {
+    audioElement.pause()
+
     const newPlaylist = await playlist.map((item, index) => {
       if (index === start) {
-        const newItem = {...item, playing: true}
-        localStorage.setItem('_nowMusic', JSON.stringify(newItem))
-        setAudioElement(new Audio(item.musicUrl))
+        const newItem = {...item, playing: true }
+        // localStorage.setItem('_nowMusic', JSON.stringify(newItem))
+        // setAudioElement(new Audio(item.musicUrl))
         setNow(newItem)
-        return { ...item, playing: true }
+        return newItem
       } else {
         return { ...item, playing: false } 
       }
     })
-    localStorage.setItem('_queue', JSON.stringify(newPlaylist))
-    setQueue(newPlaylist)
+    const newObj = {
+      playlistSeq,
+      playlist: newPlaylist,
+    }
+    localStorage.setItem('_queue', JSON.stringify(newObj))
+    setQueue(newObj)
+    audioElement.src = newPlaylist[start].musicUrl
+    audioElement.currentTime = 0
+    audioElement.load()
+    audioElement.play()
+    setIsPlaying(true)
+    return newPlaylist[start]
   } 
 
-  /**
-   * NowMusic에 값이 생기면 노래 재생하기 
-   */
   const playMusic = () => {
-    if (audioElement.src) {
-      console.log('playMusic', audioElement)
-      audioElement.play()
-    }
+    audioElement.src = nowMusic.musicUrl
+    audioElement.currentTime = nowMusic.currentTime
+    audioElement.play()
+  }
+
+  const playPrev = async ( onShuffle = false ) => {
+    const prevIndex = await queue.playlist.findIndex((item) => item.playing) - 1
+    createNowMusic(queue.playlist[prevIndex])
+    createNowPlaylist(queue.playlist, prevIndex)
   }
 
   /**
@@ -63,85 +87,51 @@ export const usePlayControl = () => {
     }
   }
 
-  // useEffect(() => {
-  //   // if (audioElement.src & audioElement.paused) {
-  //   //   audioElement.play()
-  //   // } else {
-  //   //   audioElement.pause()
-  //   // }
+  const handlePlay = () => {
+    if (nowMusic.playing) {
+      mixAudio.src = ''
+      // audioElement.src = nowMusic.musicUrl
+      // audioElement.currentTime = nowMusic.currentTime
+      audioElement.play()
+      setIsPlaying(true)
+    }
+  }
 
-  //   const handlePlay = () => {
-  //     console.log('재생 시작');
-  //   };
-  
-  //   const handlePause = () => {
-  //     console.log('일시 중지');
-  //   };
-  
-  //   const handleEnded = () => {
-  //     console.log('재생 완료');
-  //   };
-  
-  //   const handleError = () => {
-  //     console.log('오류 발생');
-  //   };
-  
-  //   audioElement.addEventListener('play', handlePlay);
-  //   audioElement.addEventListener('pause', handlePause);
-  //   audioElement.addEventListener('ended', handleEnded);
-  //   audioElement.addEventListener('error', handleError);
-  
-  //   return () => {
-  //     audioElement.removeEventListener('play', handlePlay);
-  //     audioElement.removeEventListener('pause', handlePause);
-  //     audioElement.removeEventListener('ended', handleEnded);
-  //     audioElement.removeEventListener('error', handleError);
-  //   };
-  // }, [audioElement])
+  const handlePause = () => {
+    if (isPlaying && !audioElement.paused){
+      audioElement.pause()
+      setIsPlaying(false)
+      setNow({...nowMusic, currentTime: audioElement.currentTime})
+    }
+  }
 
-  // useEffect(() => {
-  //   audioElement.addEventListener('ended', () =>{
-  //     playNext()
-  //   })
+  // const isNext = queue.playlist.findIndex((item) => item.playing) === queue.playlist.length
+  //   ? false : true
+
+  useEffect(() => {
+    audioElement.addEventListener('ended', () => console.log('ended'))
+    audioElement.addEventListener('playing', () => {
+    })
     
-  //   return () => {
-  //     audioElement.removeEventListener('ended', () =>{
-  //       console.log('꺼졌나?? ')
-  //     })
-  //   }
-  // }, [audioElement])
 
-  return { audioElement, nowMusic, queue, createNowPlaylist, playMusic, playNext }
+  }, [audioElement, nowMusic])
+
+  return { 
+    audioElement, 
+    isPlaying,
+    setIsPlaying,
+    nowMusic, 
+    setNow,
+    queue, 
+    createNowPlaylist, 
+    createNowMusic, 
+    playMusic,
+    playPrev,
+    playNext,
+    handlePlay,
+    handlePause,
+    onShuffle,
+    setOnShuffle,
+    isNext
+  }
 }
-
-
-// export const useNowPlaying = () => {
-//   const [audio] = useState(new Audio());
-
-//   const { playlist, playNext } = useNowPlaylist();
-
-//   useEffect(() => {
-//     const handleEnded = () => {
-//       playNext();
-//     };
-
-//     audio.addEventListener('ended', handleEnded);
-
-//     return () => {
-//       audio.removeEventListener('ended', handleEnded);
-//     };
-//   }, [audio, playNext]);
-
-//   useEffect(() => {
-//     const nowMusic = playlist.find((item) => item.playing);
-
-//     if (nowMusic) {
-//       audio.src = nowMusic.musicUrl;
-//       audio.play();
-//     } else {
-//       audio.pause();
-//     }
-//   }, [playlist, audio]);
-
-//   return { audio };
-// };
