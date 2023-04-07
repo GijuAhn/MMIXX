@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Wrapper, Header } from "components/Common";
-import { MusicSearchBar, MusicUploadBtn, MusicList, CustomTable } from "components/mymusic";
+import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+import CustomToast from "components/mymusic/CustomToast";
 
-import { useRecoilValue } from "recoil";
-import { _show_new, _new_music_list } from "atom/mymusic";
+// import { useRecoilValue } from "recoil";
+// import { _show_new, _new_music_list } from "atom/mymusic";
 
 const MyMusic = () => {
   const [query, setQuery] = useState("");
@@ -14,12 +16,15 @@ const MyMusic = () => {
   const [order, setOrder] = useState("");
   const [searchText, setSearchText] = useState("");
 
+  const { state } = useLocation();
+  const [toastSuccess, setToastSuccess] = useState(state && state.success);
+
   // const [showNew, setShowNew] = useState(false);
   // const [newMusicList, setNewMusicList] = useState([]);
-  const showNew = useRecoilValue(_show_new);
-  const newMusicList = useRecoilValue(_new_music_list);
+  // const showNew = useRecoilValue(_show_new);
+  // const newMusicList = useRecoilValue(_new_music_list);
 
-  console.log("[new]", showNew, newMusicList);
+  // console.log("[new]", showNew, newMusicList);
 
   // // [Test] 곡 선택하기 (radio)
   // const [selectedMusic, setSelectedMusic] = useState({
@@ -32,8 +37,17 @@ const MyMusic = () => {
   // // [Test] 곡 선택하기 (check box)
   // const [checkedList, setCheckedList] = useState([]);
 
+  // useEffect(() => {
+  //   localStorage.setItem("_showNew", showNew);
+  // }, [showNew]);
+
+  // useEffect(() => {
+  //   localStorage.setItem("_newMusicList", newMusicList);
+  // }, [newMusicList]);
+
   return (
     <Wrapper>
+      {toastSuccess ? <CustomToast res='success' text='보컬 제거 성공' toggle={setToastSuccess} /> : null}
       <div>
         <Header title='My Music' desc='내 음악 들어보기' />
         <SearchBarSection>
@@ -50,7 +64,7 @@ const MyMusic = () => {
         </SelectSection>
       </Div>
 
-      {showNew ? <CustomTable musicList={newMusicList} isNew={true} /> : null}
+      {/* {showNew ? <CustomTable musicList={newMusicList} isNew={true} /> : null} */}
       {/* <CustomTable
         musicList={[
           {

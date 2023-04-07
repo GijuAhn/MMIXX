@@ -1,37 +1,10 @@
-import { useState } from "react";
 import styled, { keyframes } from "styled-components";
-// import PropTypes from "prop-types";
-import { debounce } from "lodash";
 
 const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
-  const [isHover, setIsHover] = useState(false);
-  // const onMouseEnter = () => {
-  //   setIsHover(true);
-  // };
-  // const onMouseLeave = () => {
-  //   setIsHover(false);
-  // };
-  // const onMouseOver = () => {
-  //   setIsHover(true);
-  // };
-  // const onMouseOut = () => {
-  //   setIsHover(false);
-  // };
-  const onMouseOver = debounce(() => {
-    setIsHover(true);
-  }, 50);
-  const onMouseOut = debounce(() => {
-    setIsHover(false);
-  }, 50);
   return (
-    <Button
-      // onMouseEnter={onMouseEnter}
-      // onMouseLeave={onMouseLeave}
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}
-      onClick={onClick}
-    >
-      {isHover ? <IconName fontSize={fontSize}>{iconName}</IconName> : <Icon src={icon} alt='' height={iconHeight} />}
+    <Button onClick={onClick}>
+      <Icon src={icon} alt='' height={iconHeight} />
+      <IconName fontSize={fontSize}>{iconName}</IconName>
     </Button>
   );
 };
@@ -49,12 +22,19 @@ const Button = styled.button`
   background: transparent;
   width: 40px;
   height: 40px;
-  font-size: 12px;
-  font-weight: 200;
-  font-family: "Heebo", sans-serif;
-  // height: 20px;
-  // border: 1.1px solid transparent;
-  // border-radius: 50%;
+
+  &: hover {
+    img {
+      display: none;
+    }
+    div {
+      display: block;
+    }
+  }
+`;
+
+const Icon = styled.img`
+  animation: ${fadeIn} 0.2s linear forwards;
 `;
 
 const IconName = styled.div`
@@ -62,15 +42,7 @@ const IconName = styled.div`
   font-weight: 200;
   font-family: "Heebo", sans-serif;
   animation: ${fadeIn} 0.2s linear forwards;
+  display: none;
 `;
-
-const Icon = styled.img`
-  animation: ${fadeIn} 0.2s linear forwards;
-`;
-
-// MusicIcon.propTypes = {
-//   musicSeq: PropTypes.number.isRequired,
-//   iconName: PropTypes.string.isRequired,
-// };
 
 export default IconBtn;

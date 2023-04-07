@@ -1,38 +1,40 @@
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from "recoil"
 
-import { _nowMusic, audioState, playlistQueue, _isPlaying } from "atom/music"
+import { _nowMusic, audioState, playlistQueue, _isPlaying, _onShuffle, _mix_now, _mixPlaying } from "atom/music"
 
 export const usePlayControl = (playlistSeq) => {
   const audioElement = useRecoilValue(audioState)
   const [ nowMusic, setNow ] = useRecoilState(_nowMusic)
   const [ queue, setQueue ] = useRecoilState(playlistQueue)
   const [ isPlaying, setIsPlaying ] = useRecoilState(_isPlaying)
+  const [ onShuffle, setOnShuffle ] = useRecoilState(_onShuffle)
+  const mixAudio = useRecoilValue(_mix_now)
+  const mixPlaying = useRecoilValue(_mixPlaying)
 
   const createNowMusic = async (props) => {
-    const newMusic = await props.find((item) => item.playing)
-    if (newMusic?.musicUrl) {
-      audioElement.src = newMusic.musicUrl
-      audioElement.play()
+    if (props && props?.musicUrl) {
       localStorage.setItem("_nowMusic", JSON.stringify({
-        ...newMusic,
+        ...props,
         currentTime: 0,
         duration: audioElement.duration
       }))
       setIsPlaying(true)
     }
-    console.log(newMusic)
-    return newMusic.musicUrl
+    // console.log(newMusic)
+    return props.musicUrl
   }
 
   const createNowPlaylist = async ( playlist, start = 0 ) => {
+    audioElement.pause()
+
     const newPlaylist = await playlist.map((item, index) => {
       if (index === start) {
-        const newItem = {...item, playing: true}
+        const newItem = {...item, playing: true }
         // localStorage.setItem('_nowMusic', JSON.stringify(newItem))
         // setAudioElement(new Audio(item.musicUrl))
         setNow(newItem)
-        return { ...item, playing: true }
+        return newItem
       } else {
         return { ...item, playing: false } 
       }
@@ -41,10 +43,14 @@ export const usePlayControl = (playlistSeq) => {
       playlistSeq,
       playlist: newPlaylist,
     }
-    console.log(newObj)
     localStorage.setItem('_queue', JSON.stringify(newObj))
     setQueue(newObj)
-    return newPlaylist
+    audioElement.src = newPlaylist[start].musicUrl
+    audioElement.currentTime = 0
+    audioElement.load()
+    audioElement.play()
+    setIsPlaying(true)
+    return newPlaylist[start]
   } 
 
   const playMusic = () => {
@@ -53,67 +59,72 @@ export const usePlayControl = (playlistSeq) => {
     audioElement.play()
   }
 
+  const playPrev = async ( onShuffle = false ) => {
+    const prevIndex = await queue.playlist.findIndex((item) => item.playing) - 1
+    createNowMusic(queue.playlist[prevIndex])
+    createNowPlaylist(queue.playlist, prevIndex)
+  }
+
   /**
    * 다음 노래 재생하기 
    */
   const playNext = async ( onShuffle = false ) => {
-    const playlist = queue.playlist
-    const currentIndex = playlist.findIndex((item) => item.playing)
-    const queueLength = playlist.length
-    let nextIndex = -1
-    if (onShuffle) {
-      nextIndex = Math.floor(Math.random() * queueLength)
-
-    } else if (currentIndex < queueLength) {
-      nextIndex = currentIndex + 1
-    } else {
-      audioElement.src = ''
+    const nextIndex = await queue.playlist.findIndex((item) => item.playing) + 1
+    createNowMusic(queue.playlist[nextIndex])
+    createNowPlaylist(queue.playlist, nextIndex)
+    if (!audioElement.paused) {
+      audioElement.pause()
     }
-
-    const newQueue = await playlist.map((item, index) => {
-      if (index === nextIndex) {
-        return {...item, playing: true}
-      } else {
-        return {...item, playing: false}
-      }
-    })
-    const res = await createNowPlaylist(newQueue)
-    createNowMusic(res)
-    // createNowMusic(newQueue)
+    audioElement.play()
+    console.log(nextIndex)
   }
 
   const handlePlay = () => {
-    audioElement.play()
-    setIsPlaying(true)
+    if (nowMusic.playing) {
+      mixAudio.src = ''
+      // audioElement.src = nowMusic.musicUrl
+      // audioElement.currentTime = nowMusic.currentTime
+      audioElement.play()
+      setIsPlaying(true)
+    }
   }
 
   const handlePause = () => {
-    audioElement.pause()
-    setIsPlaying(false)
+    if (isPlaying && !audioElement.paused){
+      audioElement.pause()
+      setIsPlaying(false)
+      setNow({...nowMusic, currentTime: audioElement.currentTime})
+    }
   }
 
+  // const isNext = queue.playlist.findIndex((item) => item.playing) === queue.playlist.length
+  //   ? false : true
+
   useEffect(() => {
-    const handleNext = () => {
-      setIsPlaying(false)
-      playNext()
-    }
-    audioElement.addEventListener('ended', handleNext)
-    audioElement.addEventListener('playing', () => {
-      // console.log(audioElement.currentTime)
+    audioElement.addEventListener('ended', () => {
+
     })
-  }, [audioElement])
+    audioElement.addEventListener('playing', () => {
+    })
+    
+
+  }, [audioElement, nowMusic])
 
   return { 
     audioElement, 
     isPlaying,
     setIsPlaying,
     nowMusic, 
+    setNow,
     queue, 
     createNowPlaylist, 
     createNowMusic, 
     playMusic,
+    playPrev,
     playNext,
     handlePlay,
-    handlePause
+    handlePause,
+    onShuffle,
+    setOnShuffle,
   }
 }

@@ -4,7 +4,7 @@ import AlbumIcon from '@mui/icons-material/Album'
 
 import { Wrapper, Header, DefaultBtn } from "components/Common"
 import { Switch } from '@mui/material'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getPlaylistInfo, modifyPlaylist } from 'api/playlist'
 import { useRecoilValue } from "recoil";
 import { userInfo } from "atom/atom";
