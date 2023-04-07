@@ -68,13 +68,13 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 x
 
 
-//                .and()
-//                // URL 별 권한 접근 제어 관리 옵션 시작점
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.OPTIONS, "/*/**").permitAll() // Preflight Request 허용해주기
-//                .antMatchers(PERMIT_URL_ARRAY).permitAll()
-//                .antMatchers(HttpMethod.POST, "/user").permitAll()
-//                .anyRequest().authenticated()
+                .and()
+                // URL 별 권한 접근 제어 관리 옵션 시작점
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/*/**").permitAll() // Preflight Request 허용해주기
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
+                .antMatchers(HttpMethod.POST, "/user").permitAll()
+                .anyRequest().authenticated()
 
 //                .and()
 //                .apply(new JwtSecurityConfig(tokenProvider))

@@ -27,11 +27,16 @@ const PlaylistCreate = () => {
       navigate("/playlist/select/create", {
         state : {
           playlistTitle: title,
-          isPrivate: false,
+          isPrivate: isChecked,
         } 
         })      
     }//else
   }//addBtnClick
+
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   return (
     <StyleWrapper url="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzaWN8ZW58MHx8MHx8&w=1000&q=80">
@@ -51,7 +56,7 @@ const PlaylistCreate = () => {
             </InputTitle>
             <InputPrivateToggle>
               비공개여부
-              <Switch defaultChecked/>
+              <Switch checked={isChecked } onChange={handleChange}/>
             </InputPrivateToggle>
           </Top>
           <Bottom>
