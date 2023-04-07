@@ -32,6 +32,7 @@
 6. [API 명세](#API-명세)
 7. [화면 설계](#화면-설계)
 8. [데이터베이스 설계](#데이터베이스-설계)
+9. [유저 가이드](#유저-가이드)
 
 
 ## **서비스 소개**
@@ -114,3 +115,60 @@
 ## **데이터베이스 설계**
 <img src="readme_contents/mmixx_erd.png" width="1280">
 
+## **유저 가이드**
+### 로그인
+![01-login.png](readme_contents%2Fuser_guide_instruction%2F01-login.png)
+
+### 메인 페이지
+![02-mainpage.png](readme_contents%2Fuser_guide_instruction%2F02-mainpage.png)
+
+### 파일 업로드
+![03-upload1.png](readme_contents%2Fuser_guide_instruction%2F03-upload1.png)
+
+![04-upload2.png](readme_contents%2Fuser_guide_instruction%2F04-upload2.png)
+
+![05-upload3.png](readme_contents%2Fuser_guide_instruction%2F05-upload3.png)
+
+### 마이뮤직 기능
+![00-feature-bar.png](readme_contents%2Fuser_guide_instruction%2F00-feature-bar.png)
+
+![000-filter+sort.png](readme_contents%2Fuser_guide_instruction%2F000-filter%2Bsort.png)
+
+### 플레이리스트
+![06-pl1.png](readme_contents%2Fuser_guide_instruction%2F06-pl1.png)
+
+![07-pl2.png](readme_contents%2Fuser_guide_instruction%2F07-pl2.png)
+
+![08-pl3.png](readme_contents%2Fuser_guide_instruction%2F08-pl3.png)
+
+![09-pl4.png](readme_contents%2Fuser_guide_instruction%2F09-pl4.png)
+
+![10-pl5.png](readme_contents%2Fuser_guide_instruction%2F10-pl5.png)
+
+![11-pl6.png](readme_contents%2Fuser_guide_instruction%2F11-pl6.png)
+
+![12-pl7.png](readme_contents%2Fuser_guide_instruction%2F12-pl7.png)
+
+![13-pl8.png](readme_contents%2Fuser_guide_instruction%2F13-pl8.png)
+
+### 믹스 (분위기 변환)
+
+![14-mix1.png](readme_contents%2Fuser_guide_instruction%2F14-mix1.png)
+
+![15-mix2.png](readme_contents%2Fuser_guide_instruction%2F15-mix2.png)
+
+![16-mix3.png](readme_contents%2Fuser_guide_instruction%2F16-mix3.png)
+
+![17-mix4.png](readme_contents%2Fuser_guide_instruction%2F17-mix4.png)
+
+![18-mix5.png](readme_contents%2Fuser_guide_instruction%2F18-mix5.png)
+
+![19-mix6.png](readme_contents%2Fuser_guide_instruction%2F19-mix6.png)
+
+### 스플릿 (보컬 제거, MR 추출)
+
+![20-split1.png](readme_contents%2Fuser_guide_instruction%2F20-split1.png)
+
+![21-split2.png](readme_contents%2Fuser_guide_instruction%2F21-split2.png)
+
+![22-split3.png](readme_contents%2Fuser_guide_instruction%2F22-split3.png)
