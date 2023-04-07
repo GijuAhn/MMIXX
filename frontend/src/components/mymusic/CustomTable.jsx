@@ -12,13 +12,14 @@ import { usePlayControl } from "hooks/usePlayControl";
 
 const CustomTable = ({
   musicList,
-  playlistSeq,
+  playlistSeq = 0,
   // hasIcon = true,
   radio = false,
   checkMusic,
   checkBox = false,
   checkMusicList,
   isNew = false,
+  isPlaylistUser = false
 }) => {
   const musicSeq = useRef(null);
   const coverImage = useRef(null);
@@ -27,8 +28,9 @@ const CustomTable = ({
   // const [musicSeqState, setMusicSeqState] = useState(-1);
 
   const checkedList = useRef([]);
-
-  const { createNowMusic, createNowPlaylist } = usePlayControl(playlistSeq);
+  const [isOut, setIsOut] = useState(false);
+  console.log('customtable', playlistSeq)
+  const { createNowMusic, createNowPlaylist, setNow } = usePlayControl(playlistSeq);
 
   const onCheck = (event) => {
     if (radio) {
@@ -80,13 +82,14 @@ const CustomTable = ({
   };
 
   const handlePlayClick = async (start) => {
+    console.log(musicList) 
+    
     const res = await createNowPlaylist(musicList, start);
     createNowMusic(res);
   };
 
-  const [isOut, setIsOut] = useState(false);
   useEffect(() => {
-    return () => {
+    return () => { 
       if (isNew) setIsOut(true);
     };
   });
@@ -95,7 +98,7 @@ const CustomTable = ({
     <Table isNew={isNew} isOut={isOut}>
       <tbody>
         {musicList.map((music, index) => (
-          <Tr key={index}>
+          <Tr key={index}>            
             {radio || checkBox ? (
               <Radio>
                 <img
@@ -141,7 +144,7 @@ const CustomTable = ({
                 <Play onClick={() => handlePlayClick(index)} musicSeq={music.musicSeq}></Play>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
                 <Mix
                   musicSeq={music.musicSeq}
@@ -151,12 +154,12 @@ const CustomTable = ({
                 ></Mix>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser? (
               <Td width='5%' isNew={isNew}>
                 <Extract musicSeq={music.musicSeq}></Extract>
               </Td>
             ) : null}
-            {!radio && !checkBox ? (
+            {!radio && !checkBox && isPlaylistUser ? (
               <Td width='5%' isNew={isNew}>
                 <Download musicSeq={music.musicSeq} musicName={music.musicName} musicUrl={music.musicUrl}></Download>
               </Td>
@@ -262,7 +265,7 @@ const Td = styled.td`
 
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>
@@ -292,7 +295,7 @@ const TdText = styled.td`
   overflow: hidden;
   font-size: 14px;
   font-weight: ${(props) => props.weight || "200"};
-  font-family: "Heebo", sans-serif;
+  // font-family: "Heebo", sans-serif;
   width: ${(props) => props.width || "auto"};
   text-align: ${(props) => props.align || "left"};
   ${(props) =>

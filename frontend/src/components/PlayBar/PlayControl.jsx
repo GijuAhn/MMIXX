@@ -16,6 +16,7 @@ const PlayControl = ({ nowMusic }) => {
 const Wrapper = styled.div`
   flex-direction: column;
   width: 700px;
+  padding: 0 20px;
 `
 
 export default PlayControl;
