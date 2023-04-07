@@ -93,10 +93,11 @@ const MusicList = ({ filter, order, query, setSearchText, radio = false, checkMu
   useEffect(() => {
     if (didMount1.current && hasCondition.current) return;
 
+    page.current = 1;
+
     getMusicListByCondition({
       userSeq: user ? user.userSeq : 0,
       order: "date2",
-      page: page.current,
     })
       .then(({ data }) => {
         // console.log(data.content);
