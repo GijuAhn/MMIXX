@@ -97,11 +97,13 @@ export const usePlayControl = (playlistSeq) => {
     }
   }
 
-  const isNext = queue.playlist.findIndex((item) => item.playing) === queue.playlist.length
-    ? false : true
+  // const isNext = queue.playlist.findIndex((item) => item.playing) === queue.playlist.length
+  //   ? false : true
 
   useEffect(() => {
-    audioElement.addEventListener('ended', () => console.log('ended'))
+    audioElement.addEventListener('ended', () => {
+
+    })
     audioElement.addEventListener('playing', () => {
     })
     
@@ -124,6 +126,5 @@ export const usePlayControl = (playlistSeq) => {
     handlePause,
     onShuffle,
     setOnShuffle,
-    isNext
   }
 }
