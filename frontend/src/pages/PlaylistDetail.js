@@ -2,15 +2,19 @@ import { useState, useEffect, useRef } from "react"
 import styled, { css } from "styled-components"
 import { useNavigate, useParams } from 'react-router-dom'
 import AlbumIcon from '@mui/icons-material/Album'
-import { Switch } from '@mui/material'
 import PlayCircleFilledRoundedIcon from '@mui/icons-material/PlayCircleFilledRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useRecoilValue } from "recoil"
+import PauseCircleRoundedIcon from '@mui/icons-material/PauseCircleRounded';
 
 import { Wrapper, Header } from "components/Common"
-import { getPlaylistDetail, deletePlaylist, getPlaylistInfo } from "api/playlist"
+import { getPlaylistDetail, deletePlaylist, getPlaylistInfo, addFavoritePlaylist, deleteFavoritePlaylist } from "api/playlist"
 import { CustomTable } from "components/mymusic"
-import { _now } from "atom/music"
 import { usePlayControl } from "hooks/usePlayControl"
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { userInfo } from 'atom/atom';
+import { getUser } from "api/user"
 
 const PlaylistDetail = () => {
   const { playlistSeq } = useParams()
@@ -21,19 +25,66 @@ const PlaylistDetail = () => {
       isPrivate: true,
       userSeq: -1
   })
-  const { audioElement, createNowPlaylist } = usePlayControl()
+
+  const [ playlistUserInfo, setPlaylistUserInfo ] = useState({
+    profileImageUrl: '',
+    userName: '',
+  })
+  const { 
+    audioElement, 
+    nowMusic, 
+    queue, 
+    isPlaying, 
+    setIsPlaying, 
+    createNowPlaylist, 
+    createNowMusic 
+  } = usePlayControl(playlistSeq)
+  
+  // user 
+  const atomUser = useRecoilValue(userInfo)
 
   // 공개 여부 체크
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChange = () => {
-    setIsChecked(!isChecked);
-  };
+  const [isPrivate, setIsPrivate] = useState(false);
 
+  useEffect(() => {
+  }, [nowMusic])
   /**
    * 플레이리스트 재생
    */
-  const handlePlaying = () => {
-    createNowPlaylist(playlistMusic)
+  const handlePlaying = async () => {
+    if (queue && queue === playlistMusic) {
+      console.log(' same! ')
+      audioElement.paused ? audioElement.play() : audioElement.pause()
+    } else {
+      const res = await createNowPlaylist(playlistMusic)
+      createNowMusic(res)
+    }
+  }
+
+  const handlePause = () => {
+    setIsPlaying(false)
+    audioElement.pause()
+  }
+
+  // 즐겨찾기
+  const [isFavorite, setIsFavorite] = useState(false);
+  const heartClick = (e) => {
+    // setIsFavorite(!isFavorite);
+    // e.stopPropagation();
+    // console.log("heartClick")
+    if (!isFavorite) {
+      addFavoritePlaylist({
+        userSeq: atomUser.userSeq,
+        playlistSeq: playlistSeq
+      }).then(res => {
+        setIsFavorite(true);
+      })
+    } else {
+      deleteFavoritePlaylist(atomUser.userSeq, playlistSeq).then(res => {
+        setIsFavorite(false);
+      })
+    }
+
   }
 
   useEffect(() => {
@@ -45,20 +96,28 @@ const PlaylistDetail = () => {
       })
       .catch(err => console.log(err))
     
-    // 플레이리스트 정보(제목, 공개여부 등) 가져오기
-    getPlaylistInfo(playlistSeq)
+    // 플레이리스트 정보(제목, 공개여부, 즐겨찾기 여부 등) 가져오기
+    getPlaylistInfo(playlistSeq, atomUser.userSeq)
       .then(res => {
         // setPlaylistTitle(res.data.playlistName)
-        setPlaylistInfo(res.data)
-        setIsChecked(res.data.isPrivate)
+        setPlaylistInfo(res.data);
+        setIsPrivate(res.data.isPrivate);
+        setIsFavorite(res.data.isFavorite);
+        return res.data.userSeq;
+      })
+      .then(res => {
+        getUser(res)
+          .then(res => setPlaylistUserInfo(res.data))
+        console.log("000 ",res.data.isFavorite)
       })
       .catch(err => console.log(err))
-  }, []);
+    
+  }, [playlistSeq]);
 
   return (
     <StyleWrapper url={coverImage}>
       <Header 
-        title="플레이리스트 상세 보기"
+        title={playlistInfo.playlistName}
         desc=""
         fontSize="24px"
       />
@@ -68,30 +127,53 @@ const PlaylistDetail = () => {
             <AlbumIcon color="white" fontSize="large"/>
           }
         </PlaylistCover>
-        <RightContent style={{ border: '1px solid blue'}}>
+        <RightContent>
+            {isFavorite ?
+              <StyleFavoriteIcon onClick={heartClick } />
+              :
+              <StyleFavoriteBorderIcon onClick={heartClick } />
+            }
           <Top>
+            {playlistUserInfo.userSeq === atomUser.userSeq && isPrivate && <p style={{ color: "gray", position: "absolute", top: 0 }}>비공개 처리된 플레이리스트 입니다</p>}
             <PlaylistTitle>
               <p>{playlistInfo.playlistName}</p>
             </PlaylistTitle>
-            <PrivateToggle>
-              공개여부
-              <Switch checked={isChecked } onChange={handleChange}/>
-            </PrivateToggle>
+            <PlaylistUser>
+              <img src={playlistUserInfo.profileImageUrl} alt="만든 사람"/>
+              <span>{playlistUserInfo.userName}</span>
+            </PlaylistUser>
+            {/* {playlistUserInfo.userSeq === atomUser.userSeq &&
+              <PrivateToggle>
+                비공개여부
+                <Switch checked={isChecked } />
+              </PrivateToggle>
+            } */}
           </Top>
-          <Bottom style={{ border: '1px solid blue'}}>
+          <Bottom>
             {/* 재생하기 */}
-            <StylePlayCircleFilledRoundedIcon 
-              sx={{ fontSize: '40px'}}
-              onClick={handlePlaying}
-              disabled={playlistMusic.length === 0}
-            />
-            <MoreIconDiv playlistMusic={playlistMusic} playlistSeq={playlistSeq}/>
-
+            {(isPlaying || !audioElement.paused) && queue.playlistSeq === playlistSeq? 
+              <StylePauseCircleRoundedIcon 
+                sx={{ fontSize: '60px'}}
+                onClick={handlePause}
+              />
+            :
+              <StylePlayCircleFilledRoundedIcon 
+                sx={{ fontSize: '60px'}}
+                onClick={handlePlaying}
+                disabled={playlistMusic.length === 0}
+              />
+            }
+            {playlistUserInfo.userSeq === atomUser.userSeq &&
+              <MoreIconDiv 
+                playlistMusic={playlistMusic} 
+                playlistSeq={playlistSeq}
+              />
+            }
           </Bottom>
         </RightContent>
       </InfoContent>
 
-      <CustomTable musicList={ playlistMusic }/>        
+      <CustomTable playlistSeq={playlistSeq} musicList={playlistMusic} isPlaylistUser={playlistUserInfo.userSeq === atomUser.userSeq} />
     </StyleWrapper>
   );
 };
@@ -137,7 +219,7 @@ const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
 
   const handleToggle = () => {
     setIsOpen((pre) => !pre)
-    console.log(isOpen)
+    // console.log(isOpen)
   }
 
   useEffect(() => {
@@ -146,7 +228,7 @@ const MoreIconDiv = ({ playlistMusic, playlistSeq }) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsOpen(false);
       }
-      console.log(isOpen)
+      // console.log(isOpen)
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -220,17 +302,20 @@ const PlaylistCover = styled.div`
 ` 
 
 const RightContent = styled.div`
-  width: 830px;
+  width: 810px;
   height: 300px;
   display: flex;
   flex-direction: column;
   padding: 5px 10px;
+  position: relative;
+  margin-left: 20px;
 `
 
 const Top = styled.div`
   flex-direction: column;
   flex-grow: 4;
   align-items: start;
+  position: relative;
 `
 
 const Bottom = styled.div`
@@ -240,7 +325,25 @@ const Bottom = styled.div`
 `
 
 const StylePlayCircleFilledRoundedIcon = styled(PlayCircleFilledRoundedIcon)`
+  color: ${({theme}) => theme.palette.secondary};
   
+  :hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+
+  ${({disabled}) => disabled && `
+    color: gray;
+    
+    :hover {
+      transform: scale(1);
+      cursor: default;
+    }
+  `}
+`
+
+const StylePauseCircleRoundedIcon = styled(PauseCircleRoundedIcon)`
+  color: ${({theme}) => theme.palette.secondary};
   :hover {
     transform: scale(1.1);
     cursor: pointer;
@@ -263,6 +366,7 @@ const MoreDiv = styled.div`
   margin-bottom: 5px;
   cursor: pointer;
   position: relative;
+  margin-right: 10px;
 `
 
 const CustomSelect = styled.div`
@@ -306,6 +410,17 @@ const PlaylistTitle = styled.div`
   }
 `
 
+const PlaylistUser = styled.div`
+  justify-content: start;
+  img {
+    width: 30px;
+    height: 30px;
+    padding: 5px 0;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+`
+
 const PrivateToggle = styled.div`
   font-weight: light;
   display: inline-block;
@@ -313,6 +428,26 @@ const PrivateToggle = styled.div`
 
 const SelectSection = styled.section`
   display: flex;
+`;
+
+const StyleFavoriteIcon = styled(FavoriteIcon)`
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  font-size: 2rem;
+  color: red;
+  cursor: pointer;
+  z-index: 1000;
+`;
+
+const StyleFavoriteBorderIcon = styled(FavoriteBorderIcon)`
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  font-size: 2rem;
+  color: red;
+  cursor: pointer;
+  z-index: 1000;
 `;
 
 export default PlaylistDetail;

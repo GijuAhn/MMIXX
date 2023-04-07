@@ -67,9 +67,9 @@ public class MusicController {
 	@ApiOperation(value = "음악 배경음 추출(보컬 제거)")
 	@GetMapping("/inst/{music_seq}")
 	public ResponseEntity<?> splitMusic(@PathVariable Integer music_seq) throws Exception {
-		MusicSplitResponseDto responseDto = musicService.splitMusic(music_seq);
-		if(responseDto != null) {
-			return ResponseEntity.ok(responseDto);
+		Music response = musicService.splitMusic(music_seq);
+		if(response != null) {
+			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

@@ -9,3 +9,8 @@ export const _show_new = atom({
   key: "_show_new",
   default: false,
 });
+
+export const _new = atom({
+  key: "_new",
+  default: false,
+});

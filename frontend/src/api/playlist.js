@@ -14,12 +14,11 @@ export const getPlaylistDetail = async ( playlistSeq ) => {
   return await instance(`/playlist/${playlistSeq}`)
 }
 // 플레이리스트 정보 조회
-export const getPlaylistInfo = async ( playlistSeq ) => {
-  return await instance(`/playlist/info/${playlistSeq}`)
+export const getPlaylistInfo = async ( playlistSeq, userSeq ) => {
+  return await instance(`/playlist/info/${playlistSeq}/${userSeq}`)
 }
 // 플레이리스트 생성
 export const postPlaylist = async (userSeq, playlist) => {
-  console.log(playlist);
   return await instance.post(`/playlist/${userSeq}`,  playlist )
 }
 // 즐겨찾기한 플레이리스트 목록 조회
@@ -45,4 +44,12 @@ export const deletePlaylist = async (playlistSeq) => {
 // 플레이리스트 수정(플레이리스트 이름, 공개여부)
 export const modifyPlaylist = async (playlistSeq, playlist) => {
   return await instance.put(`/playlist/detail/${playlistSeq}`,  playlist)
+}
+// 플레이리스트 즐겨찾기 등록
+export const addFavoritePlaylist = async (favoritePlaylist) => {
+  return await instance.post(`/playlist/favorite`, favoritePlaylist)
+}
+// 플레이리스트 즐겨찾기 삭제
+export const deleteFavoritePlaylist = async (useSeq, playlistSeq) => {
+  return await instance.delete(`/playlist/favorite/${useSeq}/${playlistSeq}`)
 }

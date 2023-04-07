@@ -1,19 +1,20 @@
 import { useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { useLocation } from 'react-router-dom';
+import AlbumIcon from '@mui/icons-material/Album'
 
 import VolumeControl from './VolumeControl'
 import PlayControl from './PlayControl'
 import { usePlayControl } from 'hooks/usePlayControl';
-import { useRecoilValue } from 'recoil';
-import { _nowMusic } from 'atom/music';
 
 const PlayBar = () => {
   const location = useLocation()
-  const nowMusic = useRecoilValue(_nowMusic)
-  // const { nowMusic, playMusic, playNext } = usePlayControl()
-
+  const { nowMusic } = usePlayControl()
   const { coverImage, musicName, musicianName } = nowMusic
+
+  useEffect(() => {
+    // playMusic()
+  }, [nowMusic])
 
   if (location.pathname === '/mix' || location.pathname === '/' || location.pathname === '/mix/result' ) {
     return null
@@ -22,21 +23,36 @@ const PlayBar = () => {
   return (
     <Wrapper>
       <PlayMusicInfo>
-        <CoverImage>
-          <img src={coverImage} alt={musicName} />
-        </CoverImage>
+        {coverImage ?
+          <CoverImage>
+              <img src={coverImage} alt={musicName} />
+          </CoverImage>
+        :
+          <DefaultCoverImage>
+            <AlbumIcon />
+          </DefaultCoverImage>
+        }
         <MusicInfo>
           <p>{musicName}</p>
           <p>{musicianName}</p>
         </MusicInfo>
       </PlayMusicInfo>
-      <PlayControl style={{ border: '1px solid red'}}/>
+      <PlayControl nowMusic={nowMusic}/>
       <VolumeWrapper>
         <VolumeControl />
       </VolumeWrapper>
     </Wrapper>
   );
 };
+
+const marquee = keyframes`
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+`
 
 const Wrapper = styled.div`
   backdrop-filter: blur(10px);
@@ -89,20 +105,37 @@ const CoverImage = styled.div`
   }
 `
 
+const DefaultCoverImage = styled.div`
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(to bottom right, ${({theme}) => theme.palette.darkgray} 30%, ${({theme}) => theme.palette.dark});
+`
+
 const MusicInfo = styled.div`
   height: 80px;
   align-items: start;
   flex-direction: column;
   justify-content: end;
   margin-left: 10px;
+  overflow: hidden;
+  position: relative;
 
   p:first-child {
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 800;
+    // height: 20px;
+    width: auto;
+    white-space: nowrap;
+    // animation: ${marquee} 8s linear infinite;
+    // position: absolute;
+    // right: 0;
+    // bottom: 20px;
   }
 
   p:nth-child(2) {
     font-weight: lighter;
     font-size: 12px;
+    white-space: nowrap;
   }
 `
 

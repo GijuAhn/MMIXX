@@ -1,6 +1,7 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 // import PropTypes from "prop-types";
+import { debounce } from "lodash";
 
 const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
   const [isHover, setIsHover] = useState(false);
@@ -10,12 +11,18 @@ const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
   // const onMouseLeave = () => {
   //   setIsHover(false);
   // };
-  const onMouseOver = () => {
+  // const onMouseOver = () => {
+  //   setIsHover(true);
+  // };
+  // const onMouseOut = () => {
+  //   setIsHover(false);
+  // };
+  const onMouseOver = debounce(() => {
     setIsHover(true);
-  };
-  const onMouseOut = () => {
+  }, 50);
+  const onMouseOut = debounce(() => {
     setIsHover(false);
-  };
+  }, 50);
   return (
     <Button
       // onMouseEnter={onMouseEnter}
@@ -28,6 +35,15 @@ const IconBtn = ({ icon, iconName, iconHeight = 22, fontSize, onClick }) => {
     </Button>
   );
 };
+
+const fadeIn = keyframes`
+from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const Button = styled.button`
   background: transparent;
@@ -42,12 +58,15 @@ const Button = styled.button`
 `;
 
 const IconName = styled.div`
-  font-size: ${(props) => props.fontSize || "11px"};
+  font-size: ${(props) => props.fontSize || "12px"};
   font-weight: 200;
   font-family: "Heebo", sans-serif;
+  animation: ${fadeIn} 0.2s linear forwards;
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  animation: ${fadeIn} 0.2s linear forwards;
+`;
 
 // MusicIcon.propTypes = {
 //   musicSeq: PropTypes.number.isRequired,
