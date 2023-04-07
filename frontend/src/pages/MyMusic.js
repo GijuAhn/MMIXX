@@ -4,6 +4,8 @@ import { MusicSearchBar, MusicUploadBtn, MusicList } from "components/mymusic";
 import { CustomSelect } from "components/mymusic";
 import { filterOptions, orderOptions } from "components/mymusic/options";
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
+import CustomToast from "components/mymusic/CustomToast";
 
 // import { useRecoilValue } from "recoil";
 // import { _show_new, _new_music_list } from "atom/mymusic";
@@ -13,6 +15,9 @@ const MyMusic = () => {
   const [filter, setFilter] = useState("");
   const [order, setOrder] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  const { state } = useLocation();
+  const [toastSuccess, setToastSuccess] = useState(state && state.success);
 
   // const [showNew, setShowNew] = useState(false);
   // const [newMusicList, setNewMusicList] = useState([]);
@@ -42,6 +47,7 @@ const MyMusic = () => {
 
   return (
     <Wrapper>
+      {toastSuccess ? <CustomToast res='success' text='보컬 제거 성공' toggle={setToastSuccess} /> : null}
       <div>
         <Header title='My Music' desc='내 음악 들어보기' />
         <SearchBarSection>
