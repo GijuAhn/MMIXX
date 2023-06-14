@@ -13,8 +13,8 @@
 
 ## **MMIXX 팀**
 
-| 프로필                                                    | 이름 | 역할                                                                                                                                                                       | GitHub                                   |
-|--------------------------------------------------------|----|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|
+| 프로필                                                 | 이름   | 역할                                                                                                                                                                     | GitHub                                   |
+| ------------------------------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
 | <img src="https://github.com/SuhyungK.png" width="50"> | 김수형 | <img src="https://img.shields.io/badge/-FRONTEND-lightblue"> <img src="https://img.shields.io/badge/-PRESENTOR-yellow">                                                  | [@SuhyungK](https://github.com/SuhyungK) |
 | <img src="https://github.com/castleis.png" width="50"> | 김성은 | <img src="https://img.shields.io/badge/-FRONTEND-lightblue"> <img src="https://img.shields.io/badge/-ML/DL-orange"> <img src="https://img.shields.io/badge/-CI/CD-gray"> | [@castleis](https://github.com/castleis) |
 | <img src="https://github.com/ealswjd.png" width="50">  | 이민정 | <img src="https://img.shields.io/badge/-FRONTEND-lightblue"> <img src="https://img.shields.io/badge/-BACKEND-green">                                                     | [@ealswjd](https://github.com/ealswjd)   |
@@ -26,8 +26,8 @@
 ## **목차**
 1. [서비스 소개](#서비스-소개)
 2. [서비스 특징](#서비스-특징)
-3. [딥러닝 아키텍처](#핵심-기능)
-4. [서비스 아키텍처](#서비스-아키텍처)
+3. [시스템 아키텍처](#시스템-아키텍처)
+4. [딥러닝 아키텍처](#핵심-기능)
 5. [사용 기술](#사용-기술)
 6. [API 명세](#API-명세)
 7. [화면 설계](#화면-설계)
@@ -62,6 +62,9 @@
 * 간편한 로그인
   * 구글 아이디로 간편하게 로그인해서 모든 서비스를 즐겨보세요.
 
+## **시스템 아키텍처**
+<img src="readme_contents/new-mmixx-system-architecture.png" width="1280">
+
 ## **딥러닝 아키텍처**
 ### Audio Style Transfer: DeepAFx-ST
  
@@ -74,35 +77,32 @@
 
 <img src="readme_contents/spleeter_architecture.jpg" width="1280">
 
-## **서비스 아키텍처**
-<img src="readme_contents/MMIXX_system_architecture_real_final.png" width="1280">
-
 ## **사용 기술**
 
-| Category | Tech         | Version                 | Dockerization       |
-| --- |--------------|-------------------------|---------------------|
-| Version Control | GitLab       |                         |                     |
-|  | JIRA         |                         |                     |
-| Documentation | Notion       |                         |                     |
-| Front-End | HTML5        |                         |                     |
-|  | CSS3         |                         |                     |
-|  | JavaScript   | ES6                     |                     |
-|  | React        | 18.2.0                  |                     |
-|  | Recoil       |                         |                     |
-|  | Node.js      | 18.15.0                 |                     |
-| Back-End | Java         | 11                      |                     |
-|  | Gradle       | 7.6.1                   |                     |
-|  | Spring Boot  | 2.7.10                  |                     |
-|  | QueryDSL | 5.0.0                   |                     |
-|  | JPA Hibernate |                         |                     |
-|  | Python       | 3.8                     |                     |
-|  | Django       | 3.2.13                  |                     |
-| DataBase | MySQL        | 8.0.32                  |                     |
-| Server | AWS EC2      |                         |                     |
-|  | AWS S3       |                         |                     |
-|  | NginX        | nginx/1.18.0 (Ubuntu)   | Latest Docker Image |
-| CI/CD | Docker       | 23.0.1                  |                     |
-|  | Jenkins      | 2.387.1                 | Latest Docker Image |
+| Category        | Tech          | Version               | Dockerization       |
+| --------------- | ------------- | --------------------- | ------------------- |
+| Version Control | GitLab        |                       |                     |
+|                 | JIRA          |                       |                     |
+| Documentation   | Notion        |                       |                     |
+| Front-End       | HTML5         |                       |                     |
+|                 | CSS3          |                       |                     |
+|                 | JavaScript    | ES6                   |                     |
+|                 | React         | 18.2.0                |                     |
+|                 | Recoil        |                       |                     |
+|                 | Node.js       | 18.15.0               |                     |
+| Back-End        | Java          | 11                    |                     |
+|                 | Gradle        | 7.6.1                 |                     |
+|                 | Spring Boot   | 2.7.10                |                     |
+|                 | QueryDSL      | 5.0.0                 |                     |
+|                 | JPA Hibernate |                       |                     |
+|                 | Python        | 3.8                   |                     |
+|                 | Django        | 3.2.13                |                     |
+| DataBase        | MySQL         | 8.0.32                |                     |
+| Server          | AWS EC2       |                       |                     |
+|                 | AWS S3        |                       |                     |
+|                 | NginX         | nginx/1.18.0 (Ubuntu) | Latest Docker Image |
+| CI/CD           | Docker        | 23.0.1                |                     |
+|                 | Jenkins       | 2.387.1               | Latest Docker Image |
 
 ## **API 명세**
 <img src="readme_contents/api1.png" width="1280">
